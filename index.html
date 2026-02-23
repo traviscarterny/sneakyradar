@@ -572,7 +572,7 @@ function ChatWidget() {
 }
 
 function DropRadarPage() {
-  const [drops, setDrops] = useState(DEFAULT_DROPS);
+  const [drops, setDrops] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [brandFilter, setBrandFilter] = useState("All");
@@ -580,7 +580,8 @@ function DropRadarPage() {
   const [query, setQuery] = useState("");
   const [updated, setUpdated] = useState(null);
   const [steps, setSteps] = useState([]);
-  const [selectedSources, setSelectedSources] = useState(ALL_SOURCES.map(s=>s.id));
+  const [selectedSources, setSelectedSources] = useState(ALL_SOURCES.map(s=>s.id)); 
+  useEffect(() => { search(); }, []);
 
   const search = async (q="")=>{
     if(!selectedSources.length){setError("Select at least one source.");return;}
