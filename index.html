@@ -372,12 +372,19 @@ function fmtMsg(t) { return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').re
 const BADGE_MAP = {hot:"badge-hot",upcoming:"badge-upcoming",limited:"badge-limited"};
 const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
 
-function DropImage({src, name, source, onClick}) {
+function getSneakerImage(name, brand) {
+  if (!name) return null;
+  const slug = ((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name)).toLowerCase().replace(/['']/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+  return `https://images.stockx.com/images/${slug.split("-").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join("-")}-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90`;
+}
+function DropImage({src, name, brand, source, onClick}) {
+  const [imgSrc, setImgSrc] = useState(src || getSneakerImage(name, brand));
   const [err, setErr] = useState(false);
+  const handleError = () => { const gen = getSneakerImage(name, brand); if (!err && imgSrc !== gen && gen) { setImgSrc(gen); } else { setErr(true); } };
   return (
     <div className="card-img-wrap" onClick={onClick}>
-      {(!src||err) ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
-        : <img className="card-img" src={src} alt={name} onError={()=>setErr(true)} loading="lazy"/>}
+      {err ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
+        : <img className="card-img" src={imgSrc} alt={name} onError={handleError} loading="lazy"/>}
       {source && <div className="card-source-tag">{source}</div>}
     </div>
   );
