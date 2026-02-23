@@ -388,13 +388,14 @@ function DropImage({src, name, brand, source, onClick}) {
   const [err, setErr] = useState(false);
 
  useEffect(() => {
-  if (!imgSrc && name) {
-    const timer = setTimeout(() => {
-      fetchSneakerImage(name, brand).then(url => { if (url) setImgSrc(url); });
-    }, Math.random() * 2000);
-    return () => clearTimeout(timer);
-  }
-}, [name, brand]);
+    const cached = localStorage.getItem("sneakyradar_drops");
+    const cachedTime = localStorage.getItem("sneakyradar_drops_time");
+    const oneHour = 60 * 60 * 1000;
+    if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
+      try { setDrops(JSON.parse(cached)); return; } catch(e) {}
+    }
+    setTimeout(() => search(), 100);
+  }, []);
   
   return (
     <div className="card-img-wrap" onClick={onClick}>
