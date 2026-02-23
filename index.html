@@ -366,15 +366,17 @@ const BADGE_MAP = {hot:"badge-hot",upcoming:"badge-upcoming",limited:"badge-limi
 const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
 
 async function fetchSneakerImage(name, brand) {
-  // Try StockX URL pattern first (free, no API needed)
-  const fullName = (brand && !name.toLowerCase().includes(brand.toLowerCase()) 
-    ? brand + " " + name : name);
-  const slug = fullName
-    .toLowerCase()
-    .replace(/[''""]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-  const stockxUrl = `https://images.stockx.com/images/${slug.split("-").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join("-")}-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90`;
+  try {
+    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " site:stockx.com");
+    const r = await fetch("/.netlify/functions/anthropic", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "sneaker_image", query })
+    });
+    const d = await r.json();
+    return d.thumbnail || null;
+  } catch(e) { return null; }
+}
   
   // Test if the image loads by trying RapidAPI as fallback
   try {
