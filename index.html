@@ -585,11 +585,12 @@ function DropRadarPage() {
     const srcs = ALL_SOURCES.filter(s=>selectedSources.includes(s.id));
     setSteps(srcs.map(s=>({label:s.label,status:"pending"})));
     const all=[];
-    await Promise.all(srcs.map(async(src,idx)=>{
+    for (let idx = 0; idx < srcs.length; idx++) {
+      const src = srcs[idx];
       setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"active"}:s));
       try{const r=await fetchSource(src,q);all.push(...r);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:r.length}:s));}
       catch(e){console.error(src.label,e);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:0}:s));}
-    }));
+    }
     const d=dedupeDrops(all);
     setDrops(d.length>0?d:DEFAULT_DROPS);
     if(!d.length)setError("Could not fetch live data. Showing cached drops.");
