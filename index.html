@@ -387,16 +387,14 @@ function DropImage({src, name, brand, source, onClick}) {
   const [imgSrc, setImgSrc] = useState(src || null);
   const [err, setErr] = useState(false);
 
-  useEffect(() => {
-  const cached = localStorage.getItem("sneakyradar_drops");
-  const cachedTime = localStorage.getItem("sneakyradar_drops_time");
-  const oneHour = 60 * 60 * 1000;
-  if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
-    try { setDrops(JSON.parse(cached)); return; } catch(e) {}
+ useEffect(() => {
+  if (!imgSrc && name) {
+    const timer = setTimeout(() => {
+      fetchSneakerImage(name, brand).then(url => { if (url) setImgSrc(url); });
+    }, Math.random() * 2000);
+    return () => clearTimeout(timer);
   }
-  setSelectedSources(["stockx", "goat"]);
-  setTimeout(() => search(), 100);
-}, []);
+}, [name, brand]);
   
   return (
     <div className="card-img-wrap" onClick={onClick}>
@@ -577,7 +575,7 @@ function ChatWidget() {
 }
 
 function DropRadarPage() {
-  const [drops, setDrops] = useState([]);
+  const [drops, setDrops] = useState(DEFAULT_DROPS);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [brandFilter, setBrandFilter] = useState("All");
@@ -585,29 +583,37 @@ function DropRadarPage() {
   const [query, setQuery] = useState("");
   const [updated, setUpdated] = useState(null);
   const [steps, setSteps] = useState([]);
-  const [selectedSources, setSelectedSources] = useState(ALL_SOURCES.map(s=>s.id)); 
-  useEffect(() => {
-  const cached = localStorage.getItem("sneakyradar_drops");
-  const cachedTime = localStorage.getItem("sneakyradar_drops_time");
-  const oneHour = 60 * 60 * 1000;
-  if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
-    try { setDrops(JSON.parse(cached)); return; } catch(e) {}
-  }
-  search();
-}, []);
+  const [selectedSources, setSelectedSources] = useState(ALL_SOURCES.map(s=>s.id));
 
-  const search = async (q="")=>{
+  const search = async (q="") => {
+    // ... your existing search function
+  };
+
+  useEffect(() => {
+    const cached = localStorage.getItem("sneakyradar_drops");
+    const cachedTime = localStorage.getItem("sneakyradar_drops_time");
+    const oneHour = 60 * 60 * 1000;
+    if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
+      try { setDrops(JSON.parse(cached)); return; } catch(e) {}
+    }
+    search();
+  }, []);
+
+  }, []);
+  const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
+
+const search = async (q="")=>{
     if(!selectedSources.length){setError("Select at least one source.");return;}
     setLoading(true); setError(null);
     const srcs = ALL_SOURCES.filter(s=>selectedSources.includes(s.id));
     setSteps(srcs.map(s=>({label:s.label,status:"pending"})));
     const all=[];
-   await Promise.all(srcs.map(async(src,idx)=>{
+    await Promise.all(srcs.map(async(src,idx)=>{
       setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"active"}:s));
       try{const r=await fetchSource(src,q);all.push(...r);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:r.length}:s));}
       catch(e){console.error(src.label,e);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:0}:s));}
     }));
-  const d=dedupeDrops(all);
+    const d=dedupeDrops(all);
     setDrops(d.length>0?d:DEFAULT_DROPS);
     if(!d.length)setError("Could not fetch live data. Showing cached drops.");
     setUpdated(new Date().toLocaleTimeString());
@@ -616,7 +622,18 @@ function DropRadarPage() {
       localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
     }
     setLoading(false);
-};
+  };
+
+  useEffect(() => {
+    const cached = localStorage.getItem("sneakyradar_drops");
+    const cachedTime = localStorage.getItem("sneakyradar_drops_time");
+    const oneHour = 60 * 60 * 1000;
+    if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
+      try { setDrops(JSON.parse(cached)); return; } catch(e) {}
+    }
+    search();
+  }, []);
+
   const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
