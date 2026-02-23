@@ -19,7 +19,10 @@ exports.handler = async function(event) {
       console.log("Calling Google:", url.replace(googleKey, "REDACTED"));
       const r = await fetch(url);
       const data = await r.json();
-      console.log("Google response status:", r.status, "items:", data.items?.length);
+      console.log("Google response status:", r.status, "items:", data.items?.length, "error:", JSON.stringify(data.error || null));
+      if (!data.items?.length) {
+        console.log("Google full response:", JSON.stringify(data).substring(0, 500));
+      }
       const thumbnail = data.items?.[0]?.link || null;
       return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail }) };
     } catch(err) {
