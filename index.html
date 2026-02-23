@@ -329,7 +329,7 @@ const DEFAULT_DROPS = [
   {brand:"ASICS",name:"Gel-Kayano 14 Ivory",date:"Mar 22, 2025",retail:"$130",resell:"$180+",hype:79,badge:"upcoming",colorway:"Ivory/Sage",method:"StockX",source:"StockX",image:null,prices:[{store:"StockX",storeId:"stockx",price:"$130",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$175",url:"https://goat.com"}]},
 ];
 
-const DROP_SYSTEM_PROMPT = (sl) => `You are a sneaker release data extractor for ${sl}. Search the web for upcoming sneaker drops. Return ONLY a valid JSON array. Each item: {"brand":"Nike","name":"Exact Name","date":"Mar 15, 2025","retail":"$150","resell":"$200+","hype":85,"badge":"hot","colorway":"Color","method":"Method","image":"url or null","source":"${sl}","sourceUrl":"https://url"} hype 1-100. badge: hot|upcoming|limited. Return 4-8 items. ONLY the JSON array, no other text.`;
+const DROP_SYSTEM_PROMPT = (sl) => `Search ${sl} for upcoming sneaker drops. Return ONLY a JSON array, max 4 items: [{"brand":"Nike","name":"Name","date":"Mar 15 2025","retail":"$150","resell":"$200+","hype":85,"badge":"hot","colorway":"Color","method":"Method","image":null,"source":"${sl}","sourceUrl":"https://url"}] ONLY the array.`;
 const CHAT_SYSTEM_PROMPT = `You are SOLE — elite sneaker expert on SNEAKYRADAR. Deep knowledge of brands, drops, resell market, authentication, styling, collabs, history. Confident, street-savvy tone. Format shoe names **bold** and prices *italic*.`;
 const SUGGESTED_QUESTIONS = ["What's the most hyped drop right now?","Best sneakers under $150?","How do I win SNKRS draws?","Which Jordans should I flip?"];
 
@@ -351,7 +351,7 @@ function dedupeDrops(drops) {
 }
 async function fetchSource(src, q) {
   const prompt = q ? `Search ${src.label} (${src.url}) for sneaker releases related to: "${q}".` : `Search ${src.label} (${src.url}) for the most anticipated upcoming sneaker drops.`;
-  const res = await fetch(API_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-haiku-4-5-20251001", max_tokens:800, system:DROP_SYSTEM_PROMPT(src.label), tools:[{type:"web_search_20250305",name:"web_search"}], messages:[{role:"user",content:prompt}] }) });
+  const res = await fetch(API_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:800, system:DROP_SYSTEM_PROMPT(src.label), tools:[{type:"web_search_20250305",name:"web_search"}], messages:[{role:"user",content:prompt}] }) });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error?.message || JSON.stringify(data));
   const text = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("\n")||"";
