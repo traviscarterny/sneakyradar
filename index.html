@@ -379,21 +379,6 @@ async function fetchSneakerImage(name, brand) {
     return null;
   }
 }
-  
-  // Test if the image loads by trying RapidAPI as fallback
-  try {
-    const query = fullName.replace(/['"]/g, "");
-    const r = await fetch("/.netlify/functions/anthropic", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "sneaker_image", query })
-    });
-    const d = await r.json();
-    return d.thumbnail || stockxUrl;
-  } catch(e) { 
-    return stockxUrl; 
-  }
-}
 
 function DropImage({src, name, brand, source, onClick}) {
   const [imgSrc, setImgSrc] = useState(src || null);
