@@ -1,5 +1,3 @@
 json{
-  "rewrites": [
-    { "source": "/api/anthropic", "destination": "/api/anthropic" }
-  ]
+  "version": 2
 }
