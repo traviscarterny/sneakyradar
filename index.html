@@ -581,7 +581,15 @@ function DropRadarPage() {
   const [updated, setUpdated] = useState(null);
   const [steps, setSteps] = useState([]);
   const [selectedSources, setSelectedSources] = useState(ALL_SOURCES.map(s=>s.id)); 
-  useEffect(() => { search(); }, []);
+  useEffect(() => {
+  const cached = localStorage.getItem("sneakyradar_drops");
+  const cachedTime = localStorage.getItem("sneakyradar_drops_time");
+  const oneHour = 60 * 60 * 1000;
+  if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
+    try { setDrops(JSON.parse(cached)); return; } catch(e) {}
+  }
+  search();
+}, []);
 
   const search = async (q="")=>{
     if(!selectedSources.length){setError("Select at least one source.");return;}
@@ -594,11 +602,15 @@ function DropRadarPage() {
       try{const r=await fetchSource(src,q);all.push(...r);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:r.length}:s));}
       catch(e){console.error(src.label,e);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:0}:s));}
     }));
-    const d=dedupeDrops(all);
+  const d=dedupeDrops(all);
     setDrops(d.length>0?d:DEFAULT_DROPS);
     if(!d.length)setError("Could not fetch live data. Showing cached drops.");
-    setUpdated(new Date().toLocaleTimeString()); setLoading(false);
-  };
+    setUpdated(new Date().toLocaleTimeString());
+    if (d.length > 0) {
+      localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
+      localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
+    }
+    setLoading(false);
 
   const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
   const allDrops=[...SPONSORED_DROPS,...drops];
