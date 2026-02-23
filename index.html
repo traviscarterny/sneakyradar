@@ -364,7 +364,7 @@ const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
 
 async function fetchSneakerImage(name, brand) {
   try {
-    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker product image site:stockx.com");
+    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker");onst query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker product image site:stockx.com");
     const r = await fetch("/.netlify/functions/anthropic", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
