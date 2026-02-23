@@ -588,7 +588,7 @@ function DropRadarPage() {
     for (let idx = 0; idx < srcs.length; idx++) {
       const src = srcs[idx];
       setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"active"}:s));
-      if(idx>0) await new Promise(res=>setTimeout(res,1000));
+      if(idx>0) await new Promise(res=>setTimeout(res,5000));
       try{const r=await fetchSource(src,q);all.push(...r);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:r.length}:s));}
       catch(e){console.error(src.label,e);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:0}:s));}
     }
