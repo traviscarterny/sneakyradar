@@ -12,19 +12,30 @@ exports.handler = async function(event) {
   if (body.action === "sneaker_image") {
     const googleKey = process.env.GOOGLE_API_KEY;
     const cseId = process.env.GOOGLE_CSE_ID;
-    if (!googleKey || !cseId) return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: null }) };
+    console.log("Image request for:", body.query, "keys present:", !!googleKey, !!cseId);
+    if (!googleKey || !cseId) return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: null, debug: "missing_keys" }) };
     try {
       // Try image search
-      const r = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${cseId}&q=${encodeURIComponent(body.query + " sneaker")}&searchType=image&num=1`);
+      const imgQuery = body.query + " sneaker";
+      const r = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${cseId}&q=${encodeURIComponent(imgQuery)}&searchType=image&num=1`);
       const d = await r.json();
-      if (d.items?.[0]?.link) return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: d.items[0].link }) };
+      console.log("Google image search status:", r.status, "items:", d.items?.length, "error:", d.error?.message || "none");
+      if (d.items?.[0]?.link) {
+        console.log("Image found:", d.items[0].link.substring(0, 80));
+        return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: d.items[0].link }) };
+      }
       // Fallback: regular search for og:image
-      const r2 = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${cseId}&q=${encodeURIComponent(body.query + " sneaker")}&num=3`);
+      const r2 = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${cseId}&q=${encodeURIComponent(imgQuery)}&num=3`);
       const d2 = await r2.json();
+      console.log("Google web search status:", r2.status, "items:", d2.items?.length, "error:", d2.error?.message || "none");
       for (const item of (d2.items || [])) {
         const img = item.pagemap?.cse_image?.[0]?.src || item.pagemap?.metatags?.[0]?.["og:image"];
-        if (img) return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: img }) };
+        if (img) {
+          console.log("OG image found:", img.substring(0, 80));
+          return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: img }) };
+        }
       }
+      console.log("No images found in either search");
     } catch(e) { console.error("Image search error:", e.message); }
     return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: null }) };
   }
