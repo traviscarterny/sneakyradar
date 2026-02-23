@@ -625,14 +625,6 @@ function DropRadarPage() {
            (srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
   });
 
-  const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
-  const allDrops=[...SPONSORED_DROPS,...drops];
-  const filtered=allDrops.filter(d=>{
-    if(d.sponsored)return true;
-    return(brandFilter==="All"||d.brand?.toLowerCase()===brandFilter.toLowerCase())&&
-           (srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
-  });
-
   return (
     <div className="page">
       <div className="section-wrap">
