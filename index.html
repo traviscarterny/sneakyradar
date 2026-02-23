@@ -504,7 +504,7 @@ async function processImageQueue() {
         imageCache[key] = d.thumbnail;
         resolve(d.thumbnail);
       } else {
-        console.warn("[SNEAKYRADAR] No thumbnail returned for:", key, "error:", d.error);
+        console.warn("[SNEAKYRADAR] No thumbnail for:", key, "response:", JSON.stringify(d).substring(0, 200));
         imageFailed[key] = Date.now();
         resolve(null);
       }
