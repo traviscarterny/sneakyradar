@@ -9,23 +9,18 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body); }
   catch(e) { return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON" }) }; }
 
-  if (body.action === "sneaker_image") {
-    const rapidKey = process.env.RAPIDAPI_KEY;
-    if (!rapidKey) return { statusCode: 500, body: JSON.stringify({ error: "RAPIDAPI_KEY not configured" }) };
+ if (body.action === "sneaker_image") {
+    const googleKey = process.env.GOOGLE_API_KEY;
+    const cseId = process.env.GOOGLE_CSE_ID;
+    if (!googleKey || !cseId) return { statusCode: 500, body: JSON.stringify({ error: "Google API not configured" }) };
     try {
-      const q = encodeURIComponent(body.query);
-      const r = await fetch(`https://sneaker-database-stockx.p.rapidapi.com/getProducts/${q}`, {
-        headers: {
-          "X-RapidAPI-Key": rapidKey,
-          "X-RapidAPI-Host": "sneaker-database-stockx.p.rapidapi.com"
-        }
-      });
+      const query = encodeURIComponent(body.query + " sneaker product image");
+      const r = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${cseId}&q=${query}&searchType=image&num=1&imgType=photo&imgSize=medium`);
       const data = await r.json();
-      const results = Array.isArray(data) ? data : (data.results || []);
-      const thumbnail = results[0]?.thumbnail || null;
+      const thumbnail = data.items?.[0]?.link || null;
       return {
         statusCode: 200,
-        headers: { "Access-Control-Allow-Origin": allowedOrigin, "Content-Type": "application/json" },
+        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
         body: JSON.stringify({ thumbnail })
       };
     } catch(err) {
