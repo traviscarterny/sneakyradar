@@ -12,19 +12,19 @@ exports.handler = async function(event) {
  if (body.action === "sneaker_image") {
     const googleKey = process.env.GOOGLE_API_KEY;
     const cseId = process.env.GOOGLE_CSE_ID;
-    if (!googleKey || !cseId) return { statusCode: 500, body: JSON.stringify({ error: "Google API not configured" }) };
+    console.log("Google key exists:", !!googleKey, "CSE ID exists:", !!cseId);
+    if (!googleKey || !cseId) return { statusCode: 500, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ error: "Google API not configured", thumbnail: null }) };
     try {
-      const query = encodeURIComponent(body.query + " sneaker product image");
-      const r = await fetch(`https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${cseId}&q=${query}&searchType=image&num=1&imgType=photo&imgSize=medium`);
+      const url = `https://www.googleapis.com/customsearch/v1?key=${googleKey}&cx=${cseId}&q=${encodeURIComponent(body.query)}&searchType=image&num=1`;
+      console.log("Calling Google:", url.replace(googleKey, "REDACTED"));
+      const r = await fetch(url);
       const data = await r.json();
+      console.log("Google response status:", r.status, "items:", data.items?.length);
       const thumbnail = data.items?.[0]?.link || null;
-      return {
-        statusCode: 200,
-        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
-        body: JSON.stringify({ thumbnail })
-      };
+      return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail }) };
     } catch(err) {
-      return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+      console.error("Google error:", err.message);
+      return { statusCode: 500, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ error: err.message, thumbnail: null }) };
     }
   }
 
