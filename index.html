@@ -362,16 +362,23 @@ function fmtMsg(t) { return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').re
 const BADGE_MAP = {hot:"badge-hot",upcoming:"badge-upcoming",limited:"badge-limited"};
 const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
 
+const imageCache = {};
 async function fetchSneakerImage(name, brand) {
+  const key = `${brand||""}-${name||""}`.toLowerCase();
+  if (imageCache[key]) return imageCache[key];
+  if (imageCache[key] === null) return null;
   try {
-    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker");    const r = await fetch("/.netlify/functions/anthropic", {
+    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker");
+    const r = await fetch("/.netlify/functions/anthropic", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "sneaker_image", query })
     });
     const d = await r.json();
-    return d.thumbnail || null;
+    imageCache[key] = d.thumbnail || null;
+    return imageCache[key];
   } catch(e) {
+    imageCache[key] = null;
     return null;
   }
 }
