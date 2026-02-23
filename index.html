@@ -611,7 +611,7 @@ function DropRadarPage() {
       localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
     }
     setLoading(false);
-
+};
   const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
