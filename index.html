@@ -636,7 +636,7 @@ function DropRadarPage() {
             {filtered.map((drop,i)=>(
               <div key={i} className={`card ${drop.sponsored?"sponsored":""}`}>
                 {drop.sponsored&&<div className="sponsor-banner"><span>{drop.sponsorLabel||"Featured"}</span><span style={{fontSize:"0.45rem",opacity:0.6}}>Sponsored</span></div>}
-                <DropImage src={drop.image} name={drop.name} source={drop.source} onClick={()=>{if(drop.sourceUrl){trackClick(drop,drop.source?.toLowerCase());window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}}/>
+                <DropImage src={drop.image} name={drop.name} brand={drop.brand} source={drop.source} onClick={()=>{if(drop.sourceUrl){trackClick(drop,drop.source?.toLowerCase());window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}}/>
                 <div className="card-body">
                   {drop.badge&&<div className={`badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}`}>{BADGE_LABELS[drop.badge]||drop.badge}</div>}
                   <div className="card-brand">{drop.brand}</div>
