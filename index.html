@@ -247,7 +247,6 @@
 <script type="text/babel">
 const { useState, useRef, useEffect } = React;
 
-// ── CONFIG ────────────────────────────────────────────────────
 const API_URL = "/.netlify/functions/anthropic";
 
 const AFFILIATE = {
@@ -266,11 +265,11 @@ function affLink(url, sourceId) {
   if (!aff || aff.tag.startsWith("YOUR_")) return url;
   try { const u = new URL(url); u.searchParams.set(aff.param, aff.tag); u.searchParams.set("utm_campaign", "sneakyradar"); return u.toString(); } catch { return url; }
 }
-function trackClick(drop, storeId) { console.log(`[SNEAKYRADAR] click — ${drop.name} → ${storeId}`); }
+function trackClick(drop, storeId) { console.log(`[SNEAKYRADAR] click — ${drop.name} -> ${storeId}`); }
 
 const SPONSORED_DROPS = [
   { sponsored: true, sponsorLabel: "Featured Drop", brand: "Nike", name: "Air Jordan 1 Retro High OG", date: "Mar 29, 2025", retail: "$180", resell: "$320+", hype: 98, badge: "hot", colorway: "University Blue/White", method: "SNKRS Draw", source: "SNKRS", image: null, sourceUrl: "https://nike.com/launch",
-    prices: [{ store:"SNKRS",storeId:"snkrs",price:"$180",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$290",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$305",url:"https://goat.com"}]},
+    prices: [{store:"SNKRS",storeId:"snkrs",price:"$180",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$290",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$305",url:"https://goat.com"}]},
 ];
 
 const RESELL_DATA = [
@@ -301,7 +300,7 @@ const AUTH_GUIDES = [
   ]},
   { model:"Yeezy 350 V2",difficulty:"Very Hard",fakeScore:96,checks:[
     {area:"Primeknit Pattern",real:"Consistent 3-stripe weave, no loose threads, pattern aligns at seams",fake:"Slightly off-pattern weave, threads visible, misaligned at seam joins",tip:"Under bright light, check that weave pattern flows seamlessly across every seam"},
-    {area:"SPLY-350 Text",real:"Consistent font, correct 45° lean angle, slightly reflective",fake:"Wrong font weight, doesn't reflect correctly, or angle is off",tip:"SPLY-350 should be at exactly 45 degrees — use a protractor app if unsure"},
+    {area:"SPLY-350 Text",real:"Consistent font, correct 45 degree lean angle, slightly reflective",fake:"Wrong font weight, doesn't reflect correctly, or angle is off",tip:"SPLY-350 should be at exactly 45 degrees — use a protractor app if unsure"},
     {area:"Boost Sole",real:"Hundreds of uniform beads, consistent translucency, firm but springy",fake:"Inconsistent bead size, too opaque or too clear, feels harder",tip:"Squeeze the Boost midsole — it should spring back instantly"},
     {area:"Heel Patch",real:"Perfectly adhered, no lifting edges, correct font and spacing",fake:"Lifting at edges, adhesive visible, font slightly too bold or light",tip:"Press down on all four corners of the heel patch — any lift = fake"},
     {area:"Inner Label",real:"Correct Adidas font, clean print, QR code resolves to Adidas",fake:"Slightly blurry print, QR code leads nowhere",tip:"Scan the QR code — it should go directly to the Adidas product page"},
@@ -321,12 +320,12 @@ const ALL_SOURCES = [
 const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
 
 const DEFAULT_DROPS = [
-  {brand:"Nike",name:"Air Jordan 4 Military Blue",date:"Mar 8, 2025",retail:"$215",resell:"$350+",hype:95,badge:"hot",colorway:"Military Blue/White",method:"SNKRS Draw",source:"SNKRS",image:null,prices:[{store:"SNKRS",storeId:"snkrs",price:"$215",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$340",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$355",url:"https://goat.com"}]},
-  {brand:"Nike",name:"Dunk Low Panda",date:"Apr 1, 2025",retail:"$110",resell:"$150+",hype:88,badge:"hot",colorway:"White/Black",method:"Foot Locker",source:"Foot Locker",image:null,prices:[{store:"Foot Locker",storeId:"footlocker",price:"$110",url:"https://footlocker.com"},{store:"StockX",storeId:"stockx",price:"$148",url:"https://stockx.com"}]},
-  {brand:"Adidas",name:"Samba OG Cloud White",date:"Feb 28, 2025",retail:"$100",resell:"$140+",hype:85,badge:"hot",colorway:"Cloud White/Core Black",method:"JD Sports",source:"JD Sports",image:null,prices:[{store:"JD Sports",storeId:"jd",price:"$100",url:"https://jdsports.com"},{store:"StockX",storeId:"stockx",price:"$135",url:"https://stockx.com"}]},
-  {brand:"Nike",name:"Air Max Dn8",date:"Mar 1, 2025",retail:"$160",resell:"$220+",hype:72,badge:"upcoming",colorway:"Triple Black",method:"GOAT",source:"GOAT",image:null,prices:[{store:"GOAT",storeId:"goat",price:"$160",url:"https://goat.com"},{store:"StockX",storeId:"stockx",price:"$215",url:"https://stockx.com"}]},
-  {brand:"New Balance",name:"990v4 Made in USA",date:"Mar 15, 2025",retail:"$185",resell:"$210+",hype:68,badge:"upcoming",colorway:"Grey/White",method:"Hibbett",source:"Hibbett",image:null,prices:[{store:"Hibbett",storeId:"hibbett",price:"$185",url:"https://hibbett.com"},{store:"StockX",storeId:"stockx",price:"$205",url:"https://stockx.com"}]},
-  {brand:"ASICS",name:"Gel-Kayano 14 Ivory",date:"Mar 22, 2025",retail:"$130",resell:"$180+",hype:79,badge:"upcoming",colorway:"Ivory/Sage",method:"StockX",source:"StockX",image:null,prices:[{store:"StockX",storeId:"stockx",price:"$130",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$175",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Teyana Taylor x Air Jordan 3 Concrete Rose",date:"Mar 7, 2026",retail:"$280",resell:"$450+",hype:96,badge:"hot",colorway:"Fir/Gorge Green-Cement Grey",method:"SNKRS Draw",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$280",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$450",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$460",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Air Jordan 4 Lakers",date:"Mar 7, 2026",retail:"$220",resell:"$380+",hype:94,badge:"hot",colorway:"Imperial Purple/Multi-Color",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$220",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$380",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$390",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Air Jordan 13 Chicago",date:"Mar 13, 2026",retail:"$215",resell:"$320+",hype:91,badge:"hot",colorway:"White/Black-True Red",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$215",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$320",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$330",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Air Jordan 14 Black University Blue",date:"Mar 21, 2026",retail:"$205",resell:"$280+",hype:82,badge:"upcoming",colorway:"Black/University Blue",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$205",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$280",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$290",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Virgil Abloh x Air Jordan 1 High Alaska",date:"Mar 28, 2026",retail:"$230",resell:"$600+",hype:99,badge:"limited",colorway:"White/White",method:"SNKRS Draw",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$230",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$600",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$620",url:"https://goat.com"}]},
+  {brand:"Nike",name:"Air Max 95 OG Neon",date:"Mar 5, 2026",retail:"$190",resell:"$250+",hype:88,badge:"hot",colorway:"Black/Cool Grey-Neon Yellow",method:"Nike.com",source:"Nike",image:null,sourceUrl:"https://nike.com",prices:[{store:"Nike",storeId:"nike",price:"$190",url:"https://nike.com"},{store:"StockX",storeId:"stockx",price:"$250",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$260",url:"https://goat.com"}]},
 ];
 
 const DROP_SYSTEM_PROMPT = (sl) => `Search ${sl} for upcoming sneaker drops. Return ONLY a JSON array, max 4 items: [{"brand":"Nike","name":"Name","date":"Mar 15 2025","retail":"$150","resell":"$200+","hype":85,"badge":"hot","colorway":"Color","method":"Method","image":null,"source":"${sl}","sourceUrl":"https://url"}] ONLY the array.`;
@@ -387,16 +386,15 @@ function DropImage({src, name, brand, source, onClick}) {
   const [imgSrc, setImgSrc] = useState(src || null);
   const [err, setErr] = useState(false);
 
- useEffect(() => {
-    const cached = localStorage.getItem("sneakyradar_drops");
-    const cachedTime = localStorage.getItem("sneakyradar_drops_time");
-    const oneHour = 60 * 60 * 1000;
-    if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
-      try { setDrops(JSON.parse(cached)); return; } catch(e) {}
+  useEffect(() => {
+    if (!imgSrc && name) {
+      const timer = setTimeout(() => {
+        fetchSneakerImage(name, brand).then(url => { if (url) setImgSrc(url); });
+      }, Math.random() * 2000);
+      return () => clearTimeout(timer);
     }
-    setTimeout(() => search(), 100);
-  }, []);
-  
+  }, [name, brand]);
+
   return (
     <div className="card-img-wrap" onClick={onClick}>
       {(!imgSrc || err) ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
