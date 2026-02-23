@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SneakyRadar — Drop Radar, Resell Tracker, Auth Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0a; --surface: #111; --border: #222;
+      --accent: #ff3c00; --accent2: #ffd200; --text: #f0f0f0; --muted: #555; --card: #141414;
+      --green: #00e676; --purple: #cc44ff;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+    .grain { position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmer { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+    @keyframes dropDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes typingBounce { 0%, 100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(-5px); opacity: 1; } }
+    .page { animation: fadeIn 0.2s ease; }
+    .nav { border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: stretch; justify-content: space-between; position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.97); backdrop-filter: blur(12px); height: 60px; }
+    .nav-left { display: flex; align-items: center; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 4px; padding-right: 32px; border-right: 1px solid var(--border); display: flex; align-items: center; }
+    .nav-logo .sneaky { color: var(--text); }
+    .nav-logo .radar { color: var(--accent); }
+    .nav-tabs { display: flex; align-items: stretch; }
+    .nav-tab { display: flex; align-items: center; gap: 7px; padding: 0 22px; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--muted); transition: all 0.15s; border-right: 1px solid var(--border); border-bottom: 2px solid transparent; background: transparent; border-top: none; border-left: none; font-family: 'DM Mono', monospace; }
+    .nav-tab:hover { color: var(--text); background: #111; }
+    .nav-tab.active { color: var(--text); border-bottom-color: var(--accent); background: #0e0e0e; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .alert-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
+    .alert-btn:hover { background: var(--accent); color: white; }
+    .alert-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
+    .section-wrap { max-width: 1200px; margin: 0 auto; padding: 60px 40px 100px; }
+    .section-eyebrow { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); line-height: 0.9; letter-spacing: 2px; margin-bottom: 6px; }
+    .section-title .outline { -webkit-text-stroke: 1px var(--text); color: transparent; }
+    .section-title .filled { color: var(--accent); }
+    .section-sub { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.5px; line-height: 1.7; margin-bottom: 40px; max-width: 520px; }
+    .search-row { display: flex; max-width: 900px; margin: 0 0 24px; }
+    .search-bar { flex: 1; display: flex; border: 1px solid var(--border); background: var(--surface); border-right: none; }
+    .search-bar input { flex: 1; background: transparent; border: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.85rem; padding: 16px 20px; outline: none; letter-spacing: 1px; }
+    .search-bar input::placeholder { color: var(--muted); }
+    .src-dropdown-wrap { position: relative; }
+    .src-dropdown-btn { height: 100%; background: #1a1a1a; border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; padding: 0 20px; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px; transition: background 0.15s; text-transform: uppercase; min-width: 160px; justify-content: space-between; }
+    .src-dropdown-btn:hover { background: #222; }
+    .chevron { transition: transform 0.2s; font-size: 0.6rem; }
+    .chevron.open { transform: rotate(180deg); }
+    .count-badge { background: var(--accent); color: white; font-size: 0.55rem; padding: 1px 5px; min-width: 18px; text-align: center; }
+    .src-dropdown-menu { position: absolute; top: calc(100% + 1px); left: 0; right: 0; min-width: 240px; background: #111; border: 1px solid var(--border); z-index: 200; animation: dropDown 0.15s ease; max-height: 420px; overflow-y: auto; scrollbar-width: thin; }
+    .src-menu-header { padding: 10px 14px; font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .src-menu-header button { background: none; border: none; color: var(--accent); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; }
+    .src-menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid #1a1a1a; font-size: 0.7rem; letter-spacing: 1px; }
+    .src-menu-item:hover { background: #1a1a1a; }
+    .src-checkbox { width: 14px; height: 14px; border: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .src-checkbox.checked { border-color: var(--accent2); background: var(--accent2); }
+    .src-checkbox.checked::after { content: '✓'; color: #000; font-size: 0.6rem; font-weight: bold; }
+    .src-color-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .src-label { color: var(--text); flex: 1; }
+    .src-url { font-size: 0.55rem; color: var(--muted); }
+    .search-go-btn { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 3px; padding: 0 32px; cursor: pointer; transition: background 0.15s; }
+    .search-go-btn:hover { background: #ff5a20; }
+    .search-go-btn:disabled { background: var(--muted); cursor: not-allowed; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
+    .result-source-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
+    .rsf-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+    .rsf-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+    .rsf-btn:hover, .rsf-btn.active { border-color: var(--accent2); color: var(--accent2); }
+    .progress-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; margin-bottom: 24px; }
+    .progress-step { display: flex; align-items: center; gap: 8px; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; }
+    .step-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .step-dot.done { background: var(--accent2); } .step-dot.active { background: var(--accent); animation: pulse 1s infinite; } .step-dot.pending { background: var(--border); }
+    .step-label.done { color: var(--accent2); } .step-label.active { color: var(--text); } .step-label.pending { color: var(--muted); }
+    .status-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+    .error-msg { margin: 0 0 24px; padding: 16px 20px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; letter-spacing: 1px; line-height: 1.6; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.3s; z-index: 2; }
+    .card:hover { background: #1a1a1a; }
+    .card:hover::before { height: 100%; }
+    .card.sponsored { outline: 1px solid var(--accent2); }
+    .card.sponsored::before { background: var(--accent2); }
+    .sponsor-banner { background: var(--accent2); color: #000; font-size: 0.5rem; letter-spacing: 3px; text-transform: uppercase; padding: 4px 14px; display: flex; justify-content: space-between; }
+    .card-img-wrap { width: 100%; height: 200px; background: #191919; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); position: relative; cursor: pointer; }
+    .card-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: transform 0.35s ease; }
+    .card:hover .card-img { transform: scale(1.06); }
+    .card-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: #2a2a2a; }
+    .card-source-tag { position: absolute; bottom: 8px; right: 8px; font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; background: rgba(0,0,0,0.8); border: 1px solid var(--border); color: var(--muted); }
+    .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .card-brand { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; line-height: 1.1; margin-bottom: 6px; cursor: pointer; }
+    .card-name:hover { color: var(--accent2); }
+    .card-colorway { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; }
+    .card-meta { display: flex; flex-direction: column; gap: 6px; }
+    .meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; letter-spacing: 1px; }
+    .meta-label { color: var(--muted); text-transform: uppercase; }
+    .meta-value { color: var(--text); }
+    .price { color: var(--accent2); font-size: 0.85rem; }
+    .hype-bar { margin-top: 12px; height: 2px; background: var(--border); overflow: hidden; }
+    .hype-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .hype-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 5px; display: flex; justify-content: space-between; }
+    .badge { display: inline-block; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 3px 8px; border: 1px solid; margin-bottom: 8px; }
+    .badge-hot { border-color: var(--accent); color: var(--accent); }
+    .badge-upcoming { border-color: var(--accent2); color: var(--accent2); }
+    .badge-limited { border-color: #a0f; color: #a0f; }
+    .price-compare { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .price-compare-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+    .price-compare-rows { display: flex; flex-direction: column; gap: 5px; }
+    .price-row { display: flex; align-items: center; gap: 8px; }
+    .price-row-store { font-size: 0.6rem; letter-spacing: 1px; color: var(--muted); flex: 1; text-transform: uppercase; }
+    .price-row-amount { font-size: 0.75rem; color: var(--accent2); min-width: 48px; text-align: right; }
+    .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
+    .price-row-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .price-row-btn.best { border-color: var(--accent2); color: #000; background: var(--accent2); }
+    .loading-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .loading-card { background: var(--card); animation: shimmer 1.5s ease-in-out infinite; }
+    .loading-img { width: 100%; height: 200px; background: #1a1a1a; border-bottom: 1px solid var(--border); }
+    .loading-body { padding: 20px; }
+    .skeleton { background: var(--border); margin-bottom: 12px; }
+    .empty-state { text-align: center; padding: 80px 40px; color: var(--muted); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--border); }
+    .empty-state h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--border); letter-spacing: 4px; margin-bottom: 16px; }
+    .resell-table { width: 100%; border: 1px solid var(--border); border-collapse: collapse; }
+    .resell-table th { background: #111; padding: 12px 16px; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); font-weight: 400; cursor: pointer; }
+    .resell-table td { padding: 14px 16px; font-size: 0.72rem; letter-spacing: 0.5px; border-bottom: 1px solid #1a1a1a; vertical-align: middle; }
+    .resell-table tr:hover td { background: #161616; }
+    .resell-brand { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+    .resell-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
+    .resell-price-avg { color: var(--accent2); font-size: 0.85rem; }
+    .resell-price-low { color: var(--muted); font-size: 0.7rem; }
+    .resell-price-high { color: var(--text); font-size: 0.7rem; }
+    .trend-up { color: var(--green); font-size: 0.7rem; }
+    .trend-down { color: var(--accent); font-size: 0.7rem; }
+    .hot-tag { background: var(--accent); color: white; font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; }
+    .vol-tag { font-size: 0.6rem; color: var(--muted); }
+    .resell-buy-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; white-space: nowrap; }
+    .resell-buy-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .resell-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
+    .resell-stat { background: var(--card); padding: 24px; }
+    .resell-stat-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .resell-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--accent2); }
+    .resell-stat-sub { font-size: 0.6rem; color: var(--muted); margin-top: 4px; }
+    .auth-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+    .auth-card { background: var(--card); padding: 24px; cursor: pointer; transition: background 0.15s; position: relative; overflow: hidden; }
+    .auth-card:hover { background: #1a1a1a; }
+    .auth-card.selected { background: #1a1a1a; outline: 1px solid var(--accent); }
+    .auth-model { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 6px; }
+    .auth-diff { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+    .auth-diff.easy { color: var(--green); } .auth-diff.medium { color: var(--accent2); } .auth-diff.hard { color: var(--accent); } .auth-diff.veryhard { color: var(--purple); }
+    .fake-score-label { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; }
+    .fake-score-bar { height: 3px; background: var(--border); overflow: hidden; }
+    .fake-score-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--accent2), var(--accent)); }
+    .auth-cta { font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-top: 12px; }
+    .auth-detail { border: 1px solid var(--border); animation: fadeIn 0.2s ease; }
+    .auth-detail-header { background: #111; padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .auth-detail-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; }
+    .auth-detail-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+    .auth-detail-close:hover { color: var(--text); }
+    .auth-check { padding: 20px 28px; border-bottom: 1px solid #1a1a1a; display: grid; grid-template-columns: 160px 1fr 1fr 1fr; gap: 20px; align-items: start; }
+    .auth-check:last-child { border-bottom: none; }
+    .auth-check-area { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; padding-top: 2px; }
+    .auth-check-real { font-size: 0.68rem; color: var(--green); line-height: 1.5; }
+    .auth-check-fake { font-size: 0.68rem; color: var(--accent); line-height: 1.5; }
+    .auth-check-tip { font-size: 0.68rem; color: var(--accent2); line-height: 1.5; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.2s; }
+    .modal { background: #0e0e0e; border: 1px solid var(--border); width: 480px; max-width: 95vw; animation: fadeIn 0.25s ease; }
+    .modal-header { padding: 24px 28px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; }
+    .modal-title span { color: var(--accent); }
+    .modal-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; line-height: 1; }
+    .modal-body { padding: 16px 28px 28px; }
+    .modal-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+    .modal-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .modal-feature { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; color: var(--text); }
+    .modal-feature-dot { width: 5px; height: 5px; background: var(--accent2); border-radius: 50%; flex-shrink: 0; }
+    .modal-form { display: flex; }
+    .modal-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.8rem; padding: 13px 16px; outline: none; }
+    .modal-input:focus { border-color: var(--accent); }
+    .modal-input::placeholder { color: var(--muted); }
+    .modal-submit { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; padding: 13px 24px; cursor: pointer; }
+    .modal-submit:hover { background: #ff5a20; }
+    .modal-success { text-align: center; padding: 40px 28px; }
+    .modal-fine { font-size: 0.55rem; color: var(--muted); margin-top: 12px; line-height: 1.5; opacity: 0.7; }
+    .chat-fab { position: fixed; bottom: 32px; right: 32px; z-index: 200; width: 60px; height: 60px; background: var(--accent); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px #ff3c0044, 0 8px 32px rgba(255,60,0,0.4); transition: transform 0.2s; font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: white; flex-direction: column; gap: 2px; }
+    .chat-fab:hover { transform: scale(1.06); }
+    .chat-fab svg { width: 22px; height: 22px; }
+    .chat-window { position: fixed; bottom: 108px; right: 32px; z-index: 200; width: 400px; max-height: 600px; background: #0e0e0e; border: 1px solid var(--border); display: flex; flex-direction: column; box-shadow: 0 24px 80px rgba(0,0,0,0.8); animation: fadeIn 0.25s ease; }
+    .chat-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #111; }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; }
+    .chat-avatar { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: white; flex-shrink: 0; }
+    .chat-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; }
+    .chat-subtitle { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 1px; display: flex; align-items: center; gap: 5px; }
+    .chat-online { width: 7px; height: 7px; background: #00e676; border-radius: 50%; animation: pulse 2s infinite; }
+    .chat-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; padding: 4px; line-height: 1; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; }
+    .msg { display: flex; gap: 10px; animation: fadeIn 0.2s ease; }
+    .msg.user { flex-direction: row-reverse; }
+    .msg-avatar { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; }
+    .msg-avatar.bot { background: var(--accent); color: white; }
+    .msg-avatar.user { background: var(--border); color: var(--muted); }
+    .msg-bubble { max-width: calc(100% - 44px); padding: 10px 14px; font-size: 0.75rem; line-height: 1.6; border: 1px solid var(--border); }
+    .msg.bot .msg-bubble { background: #161616; }
+    .msg.user .msg-bubble { background: #1a0a00; border-color: #ff3c0044; }
+    .msg-bubble strong { color: var(--accent2); font-weight: 500; }
+    .msg-bubble em { color: var(--accent); font-style: normal; }
+    .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+    .typing-dot { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typingBounce 1.2s ease-in-out infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    .chat-suggestions { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .suggestion-chip { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; padding: 5px 10px; cursor: pointer; transition: all 0.15s; }
+    .suggestion-chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chat-input-row { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; background: #111; }
+    .chat-input { flex: 1; background: transparent; border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 10px 14px; outline: none; resize: none; max-height: 80px; line-height: 1.4; }
+    .chat-input::placeholder { color: var(--muted); }
+    .chat-send { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 10px 16px; cursor: pointer; }
+    .chat-send:hover { background: #ff5a20; }
+    .chat-send:disabled { background: var(--muted); cursor: not-allowed; }
+    .chat-clear { background: transparent; border: none; color: var(--muted); font-size: 0.6rem; letter-spacing: 1px; cursor: pointer; font-family: 'DM Mono', monospace; text-transform: uppercase; }
+    .site-footer { max-width: 1200px; margin: 0 auto; padding: 20px 40px 40px; font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 4px; }
+    .footer-logo .radar { color: var(--accent); }
+    @media (max-width: 768px) {
+      .nav { padding: 0 16px; }
+      .nav-logo { font-size: 1.2rem; padding-right: 16px; }
+      .nav-tab { padding: 0 12px; font-size: 0.55rem; }
+      .section-wrap { padding: 40px 16px 80px; }
+      .resell-stats { grid-template-columns: repeat(2, 1fr); }
+      .auth-check { grid-template-columns: 1fr; }
+      .chat-window { width: calc(100vw - 32px); right: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<div class="grain"></div>
+
+<script type="text/babel">
+const { useState, useRef, useEffect } = React;
+
+const API_URL = "/.netlify/functions/anthropic";
+
+const AFFILIATE = {
+  stockx:      { tag: "YOUR_STOCKX_CODE",  param: "utm_source" },
+  goat:        { tag: "YOUR_GOAT_CODE",    param: "ref" },
+  footlocker:  { tag: "YOUR_FL_CODE",      param: "AID" },
+  jd:          { tag: "YOUR_JD_CODE",      param: "affil" },
+  hibbett:     { tag: "YOUR_HIBBETT_CODE", param: "ref" },
+  champssports:{ tag: "YOUR_CHAMPS_CODE",  param: "AID" },
+  eastbay:     { tag: "YOUR_EASTBAY_CODE", param: "AID" },
+  kickscrew:   { tag: "YOUR_KC_CODE",      param: "ref" },
+};
+function affLink(url, sourceId) {
+  if (!url) return "#";
+  const aff = AFFILIATE[sourceId];
+  if (!aff || aff.tag.startsWith("YOUR_")) return url;
+  try { const u = new URL(url); u.searchParams.set(aff.param, aff.tag); u.searchParams.set("utm_campaign", "sneakyradar"); return u.toString(); } catch { return url; }
+}
+function trackClick(drop, storeId) { console.log(`[SNEAKYRADAR] click — ${drop.name} -> ${storeId}`); }
+
+const SPONSORED_DROPS = [
+  { sponsored: true, sponsorLabel: "Featured Drop", brand: "Nike", name: "Air Jordan 1 Retro High OG", date: "Mar 29, 2025", retail: "$180", resell: "$320+", hype: 98, badge: "hot", colorway: "University Blue/White", method: "SNKRS Draw", source: "SNKRS", image: null, sourceUrl: "https://nike.com/launch",
+    prices: [{store:"SNKRS",storeId:"snkrs",price:"$180",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$290",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$305",url:"https://goat.com"}]},
+];
+
+const RESELL_DATA = [
+  { brand:"Nike",name:"Air Jordan 4 Military Blue",retail:"$215",low:"$310",avg:"$348",high:"$420",trend:"+12%",hot:true,vol:"2.4k sales/wk"},
+  { brand:"Nike",name:"Dunk Low Panda",retail:"$110",low:"$140",avg:"$158",high:"$185",trend:"+4%",hot:false,vol:"5.1k sales/wk"},
+  { brand:"Adidas",name:"Samba OG Cloud White",retail:"$100",low:"$128",avg:"$142",high:"$165",trend:"+8%",hot:true,vol:"3.7k sales/wk"},
+  { brand:"Nike",name:"Travis Scott Air Max 1",retail:"$150",low:"$420",avg:"$510",high:"$640",trend:"+22%",hot:true,vol:"890 sales/wk"},
+  { brand:"New Balance",name:"990v4 Made in USA",retail:"$185",low:"$195",avg:"$208",high:"$240",trend:"+3%",hot:false,vol:"1.2k sales/wk"},
+  { brand:"ASICS",name:"Gel-Kayano 14 Ivory",retail:"$130",low:"$165",avg:"$182",high:"$210",trend:"+6%",hot:true,vol:"1.8k sales/wk"},
+  { brand:"Nike",name:"Off-White Dunk Low Lot 1",retail:"$170",low:"$800",avg:"$980",high:"$1300",trend:"+18%",hot:true,vol:"340 sales/wk"},
+  { brand:"Adidas",name:"Yeezy Foam Runner MXT",retail:"$80",low:"$95",avg:"$115",high:"$145",trend:"-2%",hot:false,vol:"2.1k sales/wk"},
+];
+
+const AUTH_GUIDES = [
+  { model:"Nike Dunk Low",difficulty:"Medium",fakeScore:87,checks:[
+    {area:"Swoosh Shape",real:"Clean taper, consistent thickness end-to-end",fake:"Swoosh often too thick at toe end or uneven width",tip:"Hold at eye level — the Swoosh tip should come to a sharp, clean point"},
+    {area:"Toe Box Stitching",real:"8-10 tight, even stitches per inch, no loose threads",fake:"Irregular spacing, loose threads, or glue visible at seams",tip:"Count the stitches — fakes usually have 5-7 sloppy stitches per inch"},
+    {area:"Heel Tab",real:"Nike text perfectly centered, firm rubber, no flex",fake:"Text offset or blurry, softer rubber that bends easily",tip:"Press the heel tab — legit pairs feel dense and don't flex at all"},
+    {area:"Size Tag",real:"Clean laser print, correct font weight, barcode scans correctly",fake:"Blurry or off-color print, barcode often doesn't scan",tip:"Scan the barcode — if it doesn't resolve to Nike, walk away"},
+    {area:"Box Label",real:"Font matches Nike spec, SKU matches shoe colorway exactly",fake:"Slightly wrong font, SKU doesn't match the actual shoe",tip:"Cross-reference the SKU on the box with StockX or Nike's site"},
+  ]},
+  { model:"Air Jordan 1",difficulty:"Hard",fakeScore:94,checks:[
+    {area:"Collar Stitching",real:"Single-row stitching, tight and consistent around full ankle collar",fake:"Double stitching or inconsistent tension — often puckers at the back",tip:"Run your finger around the collar — any puckering or double rows = fake"},
+    {area:"Jumpman Logo",real:"Clean silhouette, arms and legs proportional, no bleed",fake:"Stubby legs, thick arms, or ink bleed into surrounding material",tip:"Compare against Nike SNKRS product photo — any proportion difference is a red flag"},
+    {area:"Tongue Tag",real:"Bold clean font, correct thread color for colorway, no fraying",fake:"Lighter font weight, wrong thread color, fraying at edges",tip:"Thread color on tongue tag should exactly match the colorway's accent color"},
+    {area:"Outsole",real:"Clean herringbone pattern, consistent depth, firm rubber",fake:"Shallow tread, softer rubber, or uneven depth across the sole",tip:"Press your thumbnail into the outsole — legit rubber resists; fakes dent"},
+    {area:"Wings Logo",real:"Perfectly debossed into leather, uniform depth, no smearing",fake:"Stamped too shallow or unevenly — one wing often higher than the other",tip:"Check both wings are at identical height — uneven wings = likely fake"},
+  ]},
+  { model:"Yeezy 350 V2",difficulty:"Very Hard",fakeScore:96,checks:[
+    {area:"Primeknit Pattern",real:"Consistent 3-stripe weave, no loose threads, pattern aligns at seams",fake:"Slightly off-pattern weave, threads visible, misaligned at seam joins",tip:"Under bright light, check that weave pattern flows seamlessly across every seam"},
+    {area:"SPLY-350 Text",real:"Consistent font, correct 45 degree lean angle, slightly reflective",fake:"Wrong font weight, doesn't reflect correctly, or angle is off",tip:"SPLY-350 should be at exactly 45 degrees — use a protractor app if unsure"},
+    {area:"Boost Sole",real:"Hundreds of uniform beads, consistent translucency, firm but springy",fake:"Inconsistent bead size, too opaque or too clear, feels harder",tip:"Squeeze the Boost midsole — it should spring back instantly"},
+    {area:"Heel Patch",real:"Perfectly adhered, no lifting edges, correct font and spacing",fake:"Lifting at edges, adhesive visible, font slightly too bold or light",tip:"Press down on all four corners of the heel patch — any lift = fake"},
+    {area:"Inner Label",real:"Correct Adidas font, clean print, QR code resolves to Adidas",fake:"Slightly blurry print, QR code leads nowhere",tip:"Scan the QR code — it should go directly to the Adidas product page"},
+  ]},
+  { model:"New Balance 550",difficulty:"Easy",fakeScore:71,checks:[
+    {area:"N Logo Stitching",real:"Clean multi-layer embroidery, correct stitch count, firm backing",fake:"Single layer, floppy logo, visible backing through the N stitches",tip:"Pinch the N logo — on legit pairs it feels thick and structured"},
+    {area:"Toe Cap Shape",real:"Slightly rounded, consistent curve, leather meets mesh cleanly",fake:"Too flat or too pointed, leather and mesh don't meet evenly",tip:"View from directly above — toe cap curve should be perfectly symmetrical"},
+    {area:"Outsole Color",real:"Off-white or cream on most colorways, consistent across full length",fake:"Bright white on colorways that should be cream, or uneven coloring",tip:"Outsole color should always match product photos exactly"},
+  ]},
+];
+
+const ALL_SOURCES = [
+  {id:"stockx",label:"StockX",url:"stockx.com",color:"#00ff94"},
+  {id:"goat",label:"GOAT",url:"goat.com",color:"#ffffff"},
+];
+
+const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
+
+const DEFAULT_DROPS = [
+  {brand:"Jordan",name:"Teyana Taylor x Air Jordan 3 Concrete Rose",date:"Mar 7, 2026",retail:"$280",resell:"$450+",hype:96,badge:"hot",colorway:"Fir/Gorge Green-Cement Grey",method:"SNKRS Draw",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$280",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$450",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$460",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Air Jordan 4 Lakers",date:"Mar 7, 2026",retail:"$220",resell:"$380+",hype:94,badge:"hot",colorway:"Imperial Purple/Multi-Color",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$220",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$380",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$390",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Air Jordan 13 Chicago",date:"Mar 13, 2026",retail:"$215",resell:"$320+",hype:91,badge:"hot",colorway:"White/Black-True Red",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$215",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$320",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$330",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Air Jordan 14 Black University Blue",date:"Mar 21, 2026",retail:"$205",resell:"$280+",hype:82,badge:"upcoming",colorway:"Black/University Blue",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$205",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$280",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$290",url:"https://goat.com"}]},
+  {brand:"Jordan",name:"Virgil Abloh x Air Jordan 1 High Alaska",date:"Mar 28, 2026",retail:"$230",resell:"$600+",hype:99,badge:"limited",colorway:"White/White",method:"SNKRS Draw",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$230",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$600",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$620",url:"https://goat.com"}]},
+  {brand:"Nike",name:"Air Max 95 OG Neon",date:"Mar 5, 2026",retail:"$190",resell:"$250+",hype:88,badge:"hot",colorway:"Black/Cool Grey-Neon Yellow",method:"Nike.com",source:"Nike",image:null,sourceUrl:"https://nike.com",prices:[{store:"Nike",storeId:"nike",price:"$190",url:"https://nike.com"},{store:"StockX",storeId:"stockx",price:"$250",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$260",url:"https://goat.com"}]},
+];
+
+const DROP_SYSTEM_PROMPT = (sl) => `Search ${sl} for upcoming sneaker drops. Return ONLY a JSON array, max 4 items: [{"brand":"Nike","name":"Name","date":"Mar 15 2025","retail":"$150","resell":"$200+","hype":85,"badge":"hot","colorway":"Color","method":"Method","image":"https://direct-image-url.jpg","source":"${sl}","sourceUrl":"https://url"}] For "image", provide a direct URL to a product image if you find one in search results, or null if not found. ONLY the array.`;
+const CHAT_SYSTEM_PROMPT = `You are SOLE — elite sneaker expert on SNEAKYRADAR. Deep knowledge of brands, drops, resell market, authentication, styling, collabs, history. Confident, street-savvy tone. Format shoe names **bold** and prices *italic*.`;
+const SUGGESTED_QUESTIONS = ["What's the most hyped drop right now?","Best sneakers under $150?","How do I win SNKRS draws?","Which Jordans should I flip?"];
+
+function parseDrops(text, sl) {
+  const j = text.match(/```json\n([\s\S]*?)\n```/);
+  if (j) { try { const d = JSON.parse(j[1]); if (Array.isArray(d)) return d.map(x=>({...x,source:x.source||sl})); } catch(e){} }
+  const a = text.match(/\[[\s\S]*\]/);
+  if (a) { try { const d = JSON.parse(a[0]); if (Array.isArray(d)) return d.map(x=>({...x,source:x.source||sl})); } catch(e){} }
+  return [];
+}
+function dedupeDrops(drops) {
+  const seen = new Map();
+  for (const d of drops) {
+    const key = `${d.brand?.toLowerCase()}-${d.name?.toLowerCase().replace(/\s+/g,'')}`;
+    if (!seen.has(key)) { seen.set(key,{...d,sources:[d.source].filter(Boolean)}); }
+    else { const e=seen.get(key); if(d.source&&!e.sources.includes(d.source))e.sources.push(d.source); if(d.hype>e.hype)e.hype=d.hype; }
+  }
+  return Array.from(seen.values()).sort((a,b)=>b.hype-a.hype);
+}
+async function fetchSource(src, q) {
+  const prompt = q ? `Search ${src.label} (${src.url}) for sneaker releases related to: "${q}".` : `Search ${src.label} (${src.url}) for the most anticipated upcoming sneaker drops.`;
+  const res = await fetch(API_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:800, system:DROP_SYSTEM_PROMPT(src.label), tools:[{type:"web_search_20250305",name:"web_search"}], messages:[{role:"user",content:prompt}] }) });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || JSON.stringify(data));
+  const text = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("\n")||"";
+  const drops = parseDrops(text, src.label);
+  // Pre-populate image cache for drops that have images from search
+  drops.forEach(d => {
+    if (d.image) {
+      const key = `${d.brand||""}-${d.name||""}`.toLowerCase();
+      imageCache[key] = d.image;
+    }
+  });
+  return drops;
+}
+function fmtMsg(t) { return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br/>'); }
+
+const BADGE_MAP = {hot:"badge-hot",upcoming:"badge-upcoming",limited:"badge-limited"};
+const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
+
+const imageCache = {};
+const imageFailed = {};
+async function fetchSneakerImage(name, brand) {
+  const key = `${brand||""}-${name||""}`.toLowerCase();
+  if (imageCache[key]) return imageCache[key];
+  if (imageFailed[key] && Date.now() - imageFailed[key] < 60000) return null;
+  try {
+    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker");
+    const r = await fetch("/.netlify/functions/anthropic", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "sneaker_image", query })
+    });
+    const d = await r.json();
+    if (d.thumbnail) {
+      imageCache[key] = d.thumbnail;
+      return d.thumbnail;
+    }
+    imageFailed[key] = Date.now();
+    return null;
+  } catch(e) {
+    imageFailed[key] = Date.now();
+    return null;
+  }
+}
+
+function DropImage({src, name, brand, source, onClick}) {
+  const [imgSrc, setImgSrc] = useState(src || null);
+  const [err, setErr] = useState(false);
+  const [retries, setRetries] = useState(0);
+
+  useEffect(() => {
+    if (src) { setImgSrc(src); setErr(false); }
+  }, [src]);
+
+  useEffect(() => {
+    if (!imgSrc && !err && name) {
+      const delay = 200 + Math.random() * 1500 + retries * 3000;
+      const timer = setTimeout(() => {
+        fetchSneakerImage(name, brand).then(url => {
+          if (url) { setImgSrc(url); setErr(false); }
+          else if (retries < 2) setRetries(r => r + 1);
+        });
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+  }, [name, brand, retries, imgSrc, err]);
+
+  return (
+    <div className="card-img-wrap" onClick={onClick}>
+      {(!imgSrc || err) ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
+        : <img className="card-img" src={imgSrc} alt={name} onError={()=>setErr(true)} loading="lazy"/>}
+      {source && <div className="card-source-tag">{source}</div>}
+    </div>
+  );
+}
+
+function PriceCompare({prices, drop}) {
+  if (!prices?.length) return null;
+  const sorted = [...prices].sort((a,b)=>parseFloat(a.price.replace(/[^0-9.]/g,''))-parseFloat(b.price.replace(/[^0-9.]/g,'')));
+  return (
+    <div className="price-compare">
+      <div className="price-compare-label">Best Price</div>
+      <div className="price-compare-rows">
+        {sorted.map((p,i)=>(
+          <div key={p.store} className="price-row">
+            <span className="price-row-store">{p.store}</span>
+            <span className="price-row-amount">{p.price}</span>
+            <a href={affLink(p.url,p.storeId)} target="_blank" rel="noopener noreferrer"
+              className={`price-row-btn ${i===0?"best":""}`}
+              onClick={e=>{e.stopPropagation();trackClick(drop,p.storeId);}}>
+              {i===0?"Best Deal":"Buy"}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SourceDropdown({selected, onChange}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(()=>{
+    const h = e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false);};
+    document.addEventListener("mousedown",h);
+    return()=>document.removeEventListener("mousedown",h);
+  },[]);
+  const toggle = id => onChange(selected.includes(id)?selected.filter(s=>s!==id):[...selected,id]);
+  return (
+    <div className="src-dropdown-wrap" ref={ref}>
+      <button className="src-dropdown-btn" onClick={()=>setOpen(o=>!o)}>
+        <span>{selected.length===0?"No Sources":selected.length===ALL_SOURCES.length?"All Sources":`${selected.length} Sources`}</span>
+        <span style={{display:"flex",alignItems:"center",gap:8}}>
+          {selected.length>0&&selected.length<ALL_SOURCES.length&&<span className="count-badge">{selected.length}</span>}
+          <span className={`chevron ${open?"open":""}`}>▼</span>
+        </span>
+      </button>
+      {open&&(
+        <div className="src-dropdown-menu">
+          <div className="src-menu-header">
+            <span>{ALL_SOURCES.length} Sources</span>
+            <div style={{display:"flex",gap:12}}>
+              <button onClick={()=>onChange(ALL_SOURCES.map(s=>s.id))}>All</button>
+              <button onClick={()=>onChange([])}>Clear</button>
+            </div>
+          </div>
+          {ALL_SOURCES.map(s=>(
+            <div key={s.id} className={`src-menu-item ${selected.includes(s.id)?"checked":""}`} onClick={()=>toggle(s.id)}>
+              <div className={`src-checkbox ${selected.includes(s.id)?"checked":""}`}/>
+              <div className="src-color-dot" style={{background:s.color}}/>
+              <span className="src-label">{s.label}</span>
+              <span className="src-url">{s.url}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AlertModal({onClose}) {
+  const [email, setEmail] = useState("");
+  const [done, setDone] = useState(false);
+  const submit = ()=>{ if(!email.includes("@"))return; console.log("[SNEAKYRADAR] subscriber:",email); setDone(true); };
+  return (
+    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal">
+        {done?(
+          <div className="modal-success" style={{textAlign:"center",padding:"40px 28px"}}>
+            <div style={{fontSize:"2.5rem",marginBottom:12}}>🔥</div>
+            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"1.8rem",letterSpacing:"3px",color:"var(--accent2)"}}>You're In</div>
+            <div style={{fontSize:"0.7rem",color:"var(--muted)",marginTop:8}}>Drop alerts locked in for {email}</div>
+          </div>
+        ):(
+          <>
+            <div className="modal-header">
+              <div className="modal-title">SNEAKY<span>ALERTS</span></div>
+              <button className="modal-close" onClick={onClose}>✕</button>
+            </div>
+            <div className="modal-body">
+              <div className="modal-desc">Get in before everyone else. 48hr advance notice, restocks, exclusive raffle links — straight to your inbox.</div>
+              <div className="modal-features">
+                {["48hr advance drop notices","Restock alerts on sold-out grails","Exclusive raffle links before public","Weekly resell market digest"].map(f=>(
+                  <div key={f} className="modal-feature"><div className="modal-feature-dot"/>{f}</div>
+                ))}
+              </div>
+              <div className="modal-form">
+                <input className="modal-input" type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>
+                <button className="modal-submit" onClick={submit}>ALERT ME</button>
+              </div>
+              <div className="modal-fine">No spam. Unsubscribe anytime.</div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ChatWidget() {
+  const [open, setOpen] = useState(false);
+  const [msgs, setMsgs] = useState([{role:"assistant",content:"Yo, I'm **SOLE** — your sneaker expert on SNEAKYRADAR. Ask me about drops, resell, authentication, anything."}]);
+  const [input, setInput] = useState("");
+  const [thinking, setThinking] = useState(false);
+  const [showSug, setShowSug] = useState(true);
+  const bottomRef = useRef(null);
+  const inputRef = useRef(null);
+  useEffect(()=>{bottomRef.current?.scrollIntoView({behavior:"smooth"});},[msgs,thinking]);
+  useEffect(()=>{if(open)setTimeout(()=>inputRef.current?.focus(),100);},[open]);
+  const send = async (text)=>{
+    const t=text||input.trim(); if(!t||thinking)return;
+    setInput(""); setShowSug(false);
+    const newMsgs=[...msgs,{role:"user",content:t}];
+    setMsgs(newMsgs); setThinking(true);
+    try {
+      const res = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:600,system:CHAT_SYSTEM_PROMPT,messages:newMsgs.map(m=>({role:m.role,content:typeof m.content==="string"?m.content.replace(/<[^>]+>/g,""):m.content}))})});
+      const data = await res.json();
+      if(!res.ok)throw new Error(JSON.stringify(data.error)||JSON.stringify(data));
+      const reply = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"No response";
+      setMsgs(p=>[...p,{role:"assistant",content:reply}]);
+    } catch(e){setMsgs(p=>[...p,{role:"assistant",content:`Error: ${e.message}`}]);}
+    finally{setThinking(false);}
+  };
+  return (
+    <>
+      {open&&(
+        <div className="chat-window">
+          <div className="chat-header">
+            <div className="chat-header-left">
+              <div className="chat-avatar">S</div>
+              <div>
+                <div className="chat-title">SOLE EXPERT</div>
+                <div className="chat-subtitle"><span className="chat-online"/>Online · Sneaker AI</div>
+              </div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <button className="chat-clear" onClick={()=>{setMsgs([{role:"assistant",content:"Fresh start. What do you want to know?"}]);setShowSug(true);}}>Clear</button>
+              <button className="chat-close" onClick={()=>setOpen(false)}>✕</button>
+            </div>
+          </div>
+          <div className="chat-messages">
+            {msgs.map((m,i)=>(
+              <div key={i} className={`msg ${m.role==="user"?"user":"bot"}`}>
+                <div className={`msg-avatar ${m.role==="user"?"user":"bot"}`}>{m.role==="user"?"U":"S"}</div>
+                <div className="msg-bubble" dangerouslySetInnerHTML={{__html:fmtMsg(m.content)}}/>
+              </div>
+            ))}
+            {thinking&&<div className="msg bot"><div className="msg-avatar bot">S</div><div className="msg-bubble"><div className="typing-indicator"><div className="typing-dot"/><div className="typing-dot"/><div className="typing-dot"/></div></div></div>}
+            <div ref={bottomRef}/>
+          </div>
+          {showSug&&<div className="chat-suggestions">{SUGGESTED_QUESTIONS.map((q,i)=><button key={i} className="suggestion-chip" onClick={()=>send(q)}>{q}</button>)}</div>}
+          <div className="chat-input-row">
+            <textarea ref={inputRef} className="chat-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}} placeholder="Ask about any sneaker..." rows={1}/>
+            <button className="chat-send" onClick={()=>send()} disabled={thinking||!input.trim()}>SEND</button>
+          </div>
+        </div>
+      )}
+      <button className="chat-fab" onClick={()=>setOpen(o=>!o)}>
+        {open?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          :<><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>ASK SOLE</span></>}
+      </button>
+    </>
+  );
+}
+
+function DropRadarPage() {
+  const [drops, setDrops] = useState(DEFAULT_DROPS);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [brandFilter, setBrandFilter] = useState("All");
+  const [srcFilter, setSrcFilter] = useState("All");
+  const [query, setQuery] = useState("");
+  const [updated, setUpdated] = useState(null);
+  const [steps, setSteps] = useState([]);
+  const [selectedSources, setSelectedSources] = useState(ALL_SOURCES.map(s=>s.id));
+
+  const search = async (q="")=>{
+    if(!selectedSources.length){setError("Select at least one source.");return;}
+    setLoading(true); setError(null);
+    const srcs = ALL_SOURCES.filter(s=>selectedSources.includes(s.id));
+    setSteps(srcs.map(s=>({label:s.label,status:"pending"})));
+    const all=[];
+    await Promise.all(srcs.map(async(src,idx)=>{
+      setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"active"}:s));
+      try{const r=await fetchSource(src,q);all.push(...r);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:r.length}:s));}
+      catch(e){console.error(src.label,e);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:0}:s));}
+    }));
+    const d=dedupeDrops(all);
+    setDrops(d.length>0?d:DEFAULT_DROPS);
+    if(!d.length)setError("Could not fetch live data. Showing cached drops.");
+    setUpdated(new Date().toLocaleTimeString());
+    if (d.length > 0) {
+      localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
+      localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const cached = localStorage.getItem("sneakyradar_drops");
+    const cachedTime = localStorage.getItem("sneakyradar_drops_time");
+    const oneHour = 60 * 60 * 1000;
+    if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
+      try { setDrops(JSON.parse(cached)); return; } catch(e) {}
+    }
+    search();
+  }, []);
+
+  const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
+  const allDrops=[...SPONSORED_DROPS,...drops];
+  const filtered=allDrops.filter(d=>{
+    if(d.sponsored)return true;
+    return(brandFilter==="All"||d.brand?.toLowerCase()===brandFilter.toLowerCase())&&
+           (srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
+  });
+
+  return (
+    <div className="page">
+      <div className="section-wrap">
+        <div className="section-eyebrow">Live Intelligence</div>
+        <h1 className="section-title"><span className="filled">DROP</span> <span className="outline">RADAR</span></h1>
+        <p className="section-sub">Release tracking across every major retailer. Every upcoming drop, deduplicated and ranked by hype score.</p>
+        <div className="search-row">
+          <div className="search-bar">
+            <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search brand, colorway, silhouette..." onKeyDown={e=>e.key==="Enter"&&search(query)}/>
+          </div>
+          <SourceDropdown selected={selectedSources} onChange={setSelectedSources}/>
+          <button className="search-go-btn" onClick={()=>search(query)} disabled={loading}>{loading?"SCANNING...":"SEARCH"}</button>
+        </div>
+        <div className="filters">
+          {BRAND_FILTERS.map(f=><button key={f} className={`filter-btn ${brandFilter===f?"active":""}`} onClick={()=>setBrandFilter(f)}>{f}</button>)}
+        </div>
+        {allSrcLabels.length>0&&(
+          <div className="result-source-filters">
+            <button className={`rsf-btn ${srcFilter==="All"?"active":""}`} onClick={()=>setSrcFilter("All")}><span className="dot" style={{background:"var(--muted)"}}/>All Results</button>
+            {allSrcLabels.map(s=>{const src=ALL_SOURCES.find(x=>x.label===s);return(
+              <button key={s} className={`rsf-btn ${srcFilter===s?"active":""}`} style={srcFilter===s?{borderColor:src?.color,color:src?.color}:{}} onClick={()=>setSrcFilter(s===srcFilter?"All":s)}>
+                <span className="dot" style={{background:src?.color||"var(--muted)"}}/>{s}
+              </button>
+            );})}
+          </div>
+        )}
+        {error&&<div className="error-msg">⚠ {error}</div>}
+        {loading&&steps.length>0&&(
+          <div className="progress-steps">
+            {steps.map((s,i)=><div key={i} className="progress-step"><div className={`step-dot ${s.status}`}/><span className={`step-label ${s.status}`}>{s.status==="done"?`✓ ${s.label}${s.count!=null?` (${s.count})`:""}`:s.status==="active"?`scanning ${s.label}...`:s.label}</span></div>)}
+          </div>
+        )}
+        <div className="status-bar">
+          <div className="pulse-dot"/>
+          {loading?`Scanning ${selectedSources.length} sources...`:`${filtered.length} drops tracked`}
+          {updated&&<span style={{marginLeft:"auto"}}>Updated {updated}</span>}
+        </div>
+        {loading?(
+          <div className="loading-grid">
+            {[1,2,3,4,5,6].map(i=><div key={i} className="loading-card"><div className="loading-img"/><div className="loading-body"><div className="skeleton" style={{width:"60px",height:"10px"}}/><div className="skeleton" style={{width:"70%",height:"24px",marginTop:"8px"}}/><div className="skeleton" style={{width:"100%",height:"8px",marginTop:"12px"}}/></div></div>)}
+          </div>
+        ):filtered.length===0?(
+          <div className="empty-state"><h2>NO DROPS</h2>adjust your filters</div>
+        ):(
+          <div className="grid">
+            {filtered.map((drop,i)=>(
+              <div key={i} className={`card ${drop.sponsored?"sponsored":""}`}>
+                {drop.sponsored&&<div className="sponsor-banner"><span>{drop.sponsorLabel||"Featured"}</span><span style={{fontSize:"0.45rem",opacity:0.6}}>Sponsored</span></div>}
+                <DropImage src={drop.image} name={drop.name} brand={drop.brand} source={drop.source} onClick={()=>{if(drop.sourceUrl){trackClick(drop,drop.source?.toLowerCase());window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}}/>
+                <div className="card-body">
+                  {drop.badge&&<div className={`badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}`}>{BADGE_LABELS[drop.badge]||drop.badge}</div>}
+                  <div className="card-brand">{drop.brand}</div>
+                  <div className="card-name" onClick={()=>{if(drop.sourceUrl)window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}>{drop.name}</div>
+                  {drop.colorway&&<div className="card-colorway">{drop.colorway}</div>}
+                  <div className="card-meta">
+                    <div className="meta-row"><span className="meta-label">Release</span><span className="meta-value">{drop.date||"TBD"}</span></div>
+                    <div className="meta-row"><span className="meta-label">Retail</span><span className="price">{drop.retail||"—"}</span></div>
+                    {drop.resell&&<div className="meta-row"><span className="meta-label">Est. Resell</span><span className="meta-value">{drop.resell}</span></div>}
+                    {drop.method&&<div className="meta-row"><span className="meta-label">Method</span><span className="meta-value" style={{fontSize:"0.65rem"}}>{drop.method}</span></div>}
+                  </div>
+                  {drop.hype&&<><div className="hype-bar"><div className="hype-fill" style={{width:`${drop.hype}%`}}/></div><div className="hype-label"><span>Hype Index</span><span>{drop.hype}/100</span></div></>}
+                  <PriceCompare prices={drop.prices} drop={drop}/>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ResellPage() {
+  const [sortCol, setSortCol] = useState("avg");
+  const [brandFilter, setBrandFilter] = useState("All");
+  const brands=["All",...new Set(RESELL_DATA.map(d=>d.brand))];
+  const sorted=[...RESELL_DATA].filter(d=>brandFilter==="All"||d.brand===brandFilter).sort((a,b)=>{
+    const p=v=>parseFloat(v.replace(/[^0-9.]/g,''));
+    if(sortCol==="avg")return p(b.avg)-p(a.avg);
+    if(sortCol==="trend")return parseFloat(b.trend)-parseFloat(a.trend);
+    return 0;
+  });
+  return (
+    <div className="page">
+      <div className="section-wrap">
+        <div className="section-eyebrow">Market Intelligence</div>
+        <h1 className="section-title"><span className="filled">RESELL</span> <span className="outline">TRACKER</span></h1>
+        <p className="section-sub">Retail vs. market price, trend direction, and weekly sales volume — everything you need to buy, hold, or flip.</p>
+        <div className="resell-stats">
+          <div className="resell-stat"><div className="resell-stat-label">Avg Premium</div><div className="resell-stat-value">+87%</div><div className="resell-stat-sub">above retail across tracked models</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Hottest Model</div><div className="resell-stat-value">AJ1</div><div className="resell-stat-sub">Air Jordan 1 collab avg +$340</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Best Flip</div><div className="resell-stat-value">OW</div><div className="resell-stat-sub">Off-White Dunk avg 476% ROI</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Weekly Vol</div><div className="resell-stat-value">16k</div><div className="resell-stat-sub">verified sales tracked this week</div></div>
+        </div>
+        <div className="filters" style={{marginBottom:20}}>
+          {brands.map(b=><button key={b} className={`filter-btn ${brandFilter===b?"active":""}`} onClick={()=>setBrandFilter(b)}>{b}</button>)}
+        </div>
+        <table className="resell-table">
+          <thead><tr>
+            <th>Model</th><th>Retail</th>
+            <th style={{color:sortCol==="avg"?"var(--accent2)":"var(--muted)"}} onClick={()=>setSortCol("avg")}>Avg {sortCol==="avg"?"↓":""}</th>
+            <th>Low / High</th>
+            <th style={{color:sortCol==="trend"?"var(--accent2)":"var(--muted)"}} onClick={()=>setSortCol("trend")}>Trend {sortCol==="trend"?"↓":""}</th>
+            <th>Volume</th><th>Buy</th>
+          </tr></thead>
+          <tbody>
+            {sorted.map((d,i)=>(
+              <tr key={i}>
+                <td><div style={{display:"flex",alignItems:"center",gap:10}}>{d.hot&&<span className="hot-tag">HOT</span>}<div><div className="resell-brand">{d.brand}</div><div className="resell-name">{d.name}</div></div></div></td>
+                <td><span className="resell-price-low">{d.retail}</span></td>
+                <td><span className="resell-price-avg">{d.avg}</span></td>
+                <td><span className="resell-price-low">{d.low}</span><span style={{color:"var(--border)",margin:"0 4px"}}>/</span><span className="resell-price-high">{d.high}</span></td>
+                <td><span className={d.trend.startsWith("-")?"trend-down":"trend-up"}>{d.trend}</span></td>
+                <td><span className="vol-tag">{d.vol}</span></td>
+                <td><div style={{display:"flex",gap:6}}>
+                  <a href={`https://stockx.com/search?s=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer" className="resell-buy-btn">StockX</a>
+                  <a href={`https://goat.com/search?query=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer" className="resell-buy-btn">GOAT</a>
+                </div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function AuthPage() {
+  const [selected, setSelected] = useState(null);
+  return (
+    <div className="page">
+      <div className="section-wrap">
+        <div className="section-eyebrow">Know Before You Buy</div>
+        <h1 className="section-title"><span className="filled">AUTH</span> <span className="outline">GUIDE</span></h1>
+        <p className="section-sub">Spot fakes before you get burned. Expert check-by-check authentication guides for the most-faked silhouettes.</p>
+        <div className="auth-grid">
+          {AUTH_GUIDES.map((g,i)=>(
+            <div key={i} className={`auth-card ${selected===i?"selected":""}`} onClick={()=>setSelected(selected===i?null:i)}>
+              <div className="auth-model">{g.model}</div>
+              <div className={`auth-diff ${g.difficulty.toLowerCase().replace(" ","")}`}>{g.difficulty} to Fake</div>
+              <div><div className="fake-score-label"><span>Fake Prevalence</span><span>{g.fakeScore}%</span></div><div className="fake-score-bar"><div className="fake-score-fill" style={{width:`${g.fakeScore}%`}}/></div></div>
+              <div className="auth-cta">{selected===i?"▲ Collapse":"▼ View "+g.checks.length+" checks"}</div>
+            </div>
+          ))}
+        </div>
+        {selected!==null&&(
+          <div className="auth-detail">
+            <div className="auth-detail-header">
+              <div className="auth-detail-title">{AUTH_GUIDES[selected].model} — Authentication Checklist</div>
+              <button className="auth-detail-close" onClick={()=>setSelected(null)}>✕ Close</button>
+            </div>
+            <div style={{padding:"10px 28px",background:"#0e0e0e",borderBottom:"1px solid var(--border)",display:"grid",gridTemplateColumns:"160px 1fr 1fr 1fr",gap:20}}>
+              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--muted)"}}>Check Area</div>
+              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--green)"}}>✓ Legit</div>
+              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>✗ Fake</div>
+              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent2)"}}>💡 Pro Tip</div>
+            </div>
+            <div>
+              {AUTH_GUIDES[selected].checks.map((c,i)=>(
+                <div key={i} className="auth-check">
+                  <div className="auth-check-area">{c.area}</div>
+                  <div className="auth-check-real">{c.real}</div>
+                  <div className="auth-check-fake">{c.fake}</div>
+                  <div className="auth-check-tip">{c.tip}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [activePage, setActivePage] = useState("drops");
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"}];
+  return (
+    <>
+      {showAlertModal&&<AlertModal onClose={()=>setShowAlertModal(false)}/>}
+      <nav className="nav">
+        <div className="nav-left">
+          <div className="nav-logo"><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
+          <div className="nav-tabs">
+            {tabs.map(t=>(
+              <button key={t.id} className={`nav-tab ${activePage===t.id?"active":""}`} onClick={()=>setActivePage(t.id)}>
+                <span>{t.icon}</span>{t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="nav-right">
+          <button className="alert-btn" onClick={()=>setShowAlertModal(true)}>
+            <span className="alert-dot"/> Drop Alerts
+          </button>
+        </div>
+      </nav>
+      {activePage==="drops"&&<DropRadarPage/>}
+      {activePage==="resell"&&<ResellPage/>}
+      {activePage==="auth"&&<AuthPage/>}
+      <footer className="site-footer">
+        <div className="footer-logo"><span>SNEAKY</span><span className="radar">RADAR</span></div>
+        <div>Prices subject to change. Links may be affiliate links. Not affiliated with any retailer.</div>
+      </footer>
+      <ChatWidget/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
