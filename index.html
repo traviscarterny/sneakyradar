@@ -367,7 +367,7 @@ const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
 
 async function fetchSneakerImage(name, brand) {
   try {
-    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " site:stockx.com");
+    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker product image site:stockx.com");
     const r = await fetch("/.netlify/functions/anthropic", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -375,7 +375,9 @@ async function fetchSneakerImage(name, brand) {
     });
     const d = await r.json();
     return d.thumbnail || null;
-  } catch(e) { return null; }
+  } catch(e) {
+    return null;
+  }
 }
   
   // Test if the image loads by trying RapidAPI as fallback
