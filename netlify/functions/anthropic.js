@@ -1,5 +1,11 @@
+// In-memory cache (persists across warm function invocations)
+let imageCache = {};
+let imageCacheTime = 0;
+const CACHE_TTL = 4 * 60 * 60 * 1000; // 4 hours
+
 exports.handler = async function(event) {
   const allowedOrigin = "*";
+  const corsHeaders = { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" };
 
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: JSON.stringify({ error: "Method not allowed" }) };
@@ -9,17 +15,35 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body); }
   catch(e) { return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON" }) }; }
 
-  if (body.action === "sneaker_image") {
+  // Batch image lookup: client sends all drop names at once
+  if (body.action === "sneaker_images") {
+    const drops = body.drops || [];
+    console.log("Batch image request for", drops.length, "drops");
+    
+    // Check cache first
+    if (Date.now() - imageCacheTime < CACHE_TTL && Object.keys(imageCache).length > 0) {
+      console.log("Serving from cache, age:", Math.round((Date.now() - imageCacheTime) / 1000), "s");
+      const results = {};
+      for (const drop of drops) {
+        const key = drop.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+        results[drop.name] = imageCache[key] || { thumbnail: null, productUrl: null };
+      }
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ results, cached: true }) };
+    }
+
     const xaiKey = process.env.XAI_API_KEY;
     if (!xaiKey) {
-      console.log("No XAI_API_KEY set");
-      return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: null, productUrl: null }) };
+      console.log("No XAI_API_KEY");
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ results: {}, cached: false }) };
     }
+
     try {
-      const query = body.query;
-      console.log("Grok image search for:", query);
+      const nameList = drops.map(d => d.name).join("\n- ");
+      console.log("Calling Grok for batch image search...");
+      
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 30000);
+      const timeout = setTimeout(() => controller.abort(), 55000);
+      
       const response = await fetch("https://api.x.ai/v1/responses", {
         method: "POST",
         headers: {
@@ -29,7 +53,14 @@ exports.handler = async function(event) {
         signal: controller.signal,
         body: JSON.stringify({
           model: "grok-4-fast",
-          input: [{ role: "user", content: `Find the StockX or GOAT product page URL and product image URL for this sneaker: "${query}". Return ONLY a JSON object like: {"productUrl":"https://stockx.com/...","imageUrl":"https://..."} If you find a StockX page, use its og:image. If not found, try GOAT or Nike. Return ONLY the JSON, nothing else.` }],
+          input: [{ role: "user", content: `For each sneaker below, find its StockX product page URL and the product image URL. Return ONLY a JSON array.
+
+Sneakers:
+- ${nameList}
+
+Return format: [{"name":"exact shoe name","productUrl":"https://stockx.com/...","imageUrl":"https://images.stockx.com/..."}]
+
+Use StockX URLs when possible. For imageUrl use the actual product image URL. Return ONLY the JSON array, no other text.` }],
           tools: [{ 
             type: "web_search",
             allowed_domains: ["stockx.com", "goat.com", "nike.com", "sneakernews.com", "flightclub.com"]
@@ -38,15 +69,14 @@ exports.handler = async function(event) {
       });
       clearTimeout(timeout);
       const data = await response.json();
-      console.log("Grok response status:", response.status);
+      console.log("Grok batch status:", response.status);
+      
       if (response.status !== 200) {
         console.log("Grok error:", JSON.stringify(data).substring(0, 300));
-      } else {
-        console.log("Grok raw keys:", Object.keys(data).join(","));
-        console.log("Grok raw data:", JSON.stringify(data).substring(0, 500));
+        return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ results: {}, cached: false }) };
       }
-      
-      // Extract text from response - Grok Responses API puts it in data.text or data.output
+
+      // Extract text
       let text = "";
       if (data.text) {
         text = data.text;
@@ -58,31 +88,50 @@ exports.handler = async function(event) {
             }
           }
         }
-      } else if (data.choices) {
-        text = data.choices[0]?.message?.content || "";
       }
-      console.log("Grok text:", text.substring(0, 300));
-      
-      // Parse JSON from response
-      const jsonMatch = text.match(/\{[^{}]*"productUrl"[^{}]*\}/);
-      if (jsonMatch) {
-        try {
-          const result = JSON.parse(jsonMatch[0]);
-          console.log("Found product:", result.productUrl?.substring(0, 60), "image:", result.imageUrl?.substring(0, 60));
-          return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: result.imageUrl || null, productUrl: result.productUrl || null }) };
-        } catch(e) { console.log("JSON parse error:", e.message); }
+      console.log("Grok text length:", text.length, "preview:", text.substring(0, 300));
+
+      // Parse JSON array
+      const results = {};
+      try {
+        const jsonMatch = text.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          const clean = jsonMatch[0].replace(/```json|```/g, "").trim();
+          const items = JSON.parse(clean);
+          for (const item of items) {
+            if (item.name) {
+              const key = item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+              const entry = { thumbnail: item.imageUrl || null, productUrl: item.productUrl || null };
+              results[item.name] = entry;
+              imageCache[key] = entry;
+            }
+          }
+          imageCacheTime = Date.now();
+          console.log("Cached", Object.keys(results).length, "image results");
+        } else {
+          console.log("No JSON array found in Grok response");
+        }
+      } catch(e) {
+        console.log("JSON parse error:", e.message);
       }
-      
-      // Fallback: extract any image URL from response
-      const imgMatch = text.match(/https?:\/\/[^\s"'<>]+\.(jpg|jpeg|png|webp)([?#][^\s"'<>]*)?/i);
-      const urlMatch = text.match(/https?:\/\/(www\.)?(stockx\.com|goat\.com)[^\s"'<>]+/i);
-      return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: imgMatch?.[0] || null, productUrl: urlMatch?.[0] || null }) };
+
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ results, cached: false }) };
     } catch(err) {
-      console.error("Grok search error:", err.message);
+      console.error("Grok batch error:", err.message);
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ results: {}, cached: false }) };
     }
-    return { statusCode: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }, body: JSON.stringify({ thumbnail: null, productUrl: null }) };
   }
 
+  // Single image lookup (uses cache only)
+  if (body.action === "sneaker_image") {
+    const key = (body.query || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    if (imageCache[key]) {
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify(imageCache[key]) };
+    }
+    return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ thumbnail: null, productUrl: null }) };
+  }
+
+  // Anthropic API proxy
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return { statusCode: 500, body: JSON.stringify({ error: "ANTHROPIC_API_KEY not configured" }) };
 
