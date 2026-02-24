@@ -44,7 +44,7 @@ exports.handler = async function(event) {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 25000);
       
-      const response = await fetch("https://api.x.ai/v1/responses", {
+      const response = await fetch("https://api.x.ai/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,19 +52,16 @@ exports.handler = async function(event) {
         },
         signal: controller.signal,
         body: JSON.stringify({
-          model: "grok-4-fast",
-          input: [{ role: "user", content: `For each sneaker below, find its StockX product page URL and the product image URL. Return ONLY a JSON array.
+          model: "grok-3-mini-fast",
+          messages: [{ role: "user", content: `For each sneaker below, provide the StockX product page URL and product image URL. StockX URLs follow the pattern: https://stockx.com/shoe-name-colorway (lowercase, hyphenated). StockX images follow: https://images.stockx.com/images/Shoe-Name-Colorway-Product.jpg (title case, hyphenated).
 
 Sneakers:
 - ${nameList}
 
-Return format: [{"name":"exact shoe name","productUrl":"https://stockx.com/...","imageUrl":"https://images.stockx.com/..."}]
-
-Use StockX URLs when possible. For imageUrl use the actual product image URL. Return ONLY the JSON array, no other text.` }],
-          tools: [{ 
-            type: "web_search",
-            allowed_domains: ["stockx.com", "goat.com", "nike.com", "sneakernews.com", "flightclub.com"]
-          }],
+Return ONLY a JSON array: [{"name":"exact shoe name","productUrl":"https://stockx.com/...","imageUrl":"https://images.stockx.com/images/..."}]
+Return ONLY the JSON array, no explanation.` }],
+          max_tokens: 2000,
+          temperature: 0,
         }),
       });
       clearTimeout(timeout);
@@ -76,9 +73,11 @@ Use StockX URLs when possible. For imageUrl use the actual product image URL. Re
         return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ results: {}, cached: false }) };
       }
 
-      // Extract text
+      // Extract text - chat completions format
       let text = "";
-      if (data.text) {
+      if (data.choices?.[0]?.message?.content) {
+        text = data.choices[0].message.content;
+      } else if (data.text) {
         text = data.text;
       } else if (data.output) {
         for (const block of data.output) {
