@@ -68,7 +68,10 @@ exports.handler = async function(event) {
 
   // === KicksDB Trending/Popular ===
   if (body.action === "trending") {
-    const limit = body.limit || 20;
+    const limit = body.limit || 21;
+    const page = body.page || 1;
+    const perQuery = 8;
+    const offset = (page - 1) * perQuery;
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
@@ -78,7 +81,7 @@ exports.handler = async function(event) {
       
       for (const q of queries) {
         try {
-          const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=8`;
+          const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${perQuery}&offset=${offset}&page=${page}`;
           const res = await fetch(url, {
             headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
           });
@@ -101,8 +104,8 @@ exports.handler = async function(event) {
       // Sort by weekly_orders descending if available
       unique.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
 
-      console.log("KicksDB trending:", unique.length, "unique products from", queries.length, "queries");
-      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: unique.slice(0, limit) }) };
+      console.log("KicksDB trending page", page, ":", unique.length, "unique products from", queries.length, "queries");
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: unique.slice(0, limit), _page: page }) };
     } catch(err) {
       console.error("KicksDB trending error:", err.message);
       return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: err.message }) };
