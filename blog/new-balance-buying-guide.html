@@ -17,6 +17,14 @@
 table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{text-align:left;padding:12px 14px;border-bottom:2px solid #ff3c00;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:2px;color:#ff3c00}td{padding:10px 14px;border-bottom:1px solid #222;color:#ccc}tr:hover td{background:#111}.green{color:#00ff94;font-weight:bold}
 .footer-blog{border-top:1px solid #222;margin-top:60px;padding-top:24px;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#555;text-align:center}
 @media(max-width:600px){h1{font-size:2.2rem}.wrap{padding:16px 14px 60px}.img-row.three{grid-template-columns:1fr}table{font-size:0.65rem}td,th{padding:8px 10px}}
+
+    .sneaker-img{background:#f5f5f5;border:1px solid #222;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:2px;color:#ccc;text-transform:uppercase;overflow:hidden}
+    .sneaker-img.hero{width:100%;aspect-ratio:16/7;border-radius:8px;margin-bottom:32px}
+    .sneaker-img.inline{aspect-ratio:4/3}
+    .sneaker-img.wide{width:100%;aspect-ratio:16/9;margin:24px 0}
+    .sneaker-img-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+    .sneaker-img-row.three{grid-template-columns:1fr 1fr 1fr}
+
 </style>
 </head>
 <body>
@@ -27,9 +35,9 @@ table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{tex
 <div class="meta">Updated February 2026 · By SneakyRadar</div>
 
 <div class="img-row three">
-<div style="background:linear-gradient(135deg,#1a0505,#2a0a0a,#0a0a0a);width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#333;text-transform:uppercase;border-radius:6px;padding:12px;text-align:center;aspect-ratio:4/3">New Balance 990v6</div>
-<div style="background:linear-gradient(135deg,#0a0a1a,#0a1a2a,#0a0a0a);width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#333;text-transform:uppercase;border-radius:6px;padding:12px;text-align:center;aspect-ratio:4/3">New Balance 2002R</div>
-<div style="background:linear-gradient(135deg,#0a1a0a,#0a2a1a,#0a0a0a);width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#333;text-transform:uppercase;border-radius:6px;padding:12px;text-align:center;aspect-ratio:4/3">New Balance 550</div>
+<div class="sneaker-img inline" data-sneaker="New Balance 990v6">New Balance 990v6</div>
+<div class="sneaker-img inline" data-sneaker="New Balance 2002R">New Balance 2002R</div>
+<div class="sneaker-img inline" data-sneaker="New Balance 550">New Balance 550</div>
 </div>
 <div class="img-caption">Left to right: 990v6, 2002R Protection Pack, 550 White Green</div>
 
@@ -50,7 +58,7 @@ table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{tex
 
 <h2>THE 990 SERIES: PREMIUM COMFORT</h2>
 
-<div class="hero-img" style="background:linear-gradient(135deg,#1a0505,#2a0a0a,#0a0a0a);display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:2rem;letter-spacing:4px;color:#333;text-transform:uppercase">New Balance 990v6</div>
+<div class="sneaker-img hero" data-sneaker="New Balance 990v6">New Balance 990v6</div>
 
 <p>The 990 is New Balance's flagship. Made in the USA with premium materials, it's widely considered the most comfortable sneaker you can buy. The current 990v6 features FuelCell midsole technology that makes it feel like walking on clouds.</p>
 
@@ -88,5 +96,52 @@ table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{tex
 
 <div class="footer-blog"><p>© 2026 SneakyRadar · <a href="/">Home</a> · <a href="/blog">Blog</a></p></div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
+    const q = el.getAttribute("data-sneaker");
+    try {
+      const r = await fetch("https://sneakyradar.com/.netlify/functions/anthropic?action=search&query=" + encodeURIComponent(q) + "&limit=1");
+      const j = await r.json();
+      if (j.data && j.data[0] && j.data[0].image) {
+        const img = document.createElement("img");
+        img.src = j.data[0].image;
+        img.alt = q;
+        img.style.cssText = "width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;border-radius:inherit;";
+        el.style.position = "relative";
+        el.style.overflow = "hidden";
+        const overlay = document.createElement("div");
+        overlay.style.cssText = "position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,0.85));z-index:2;font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:#ccc;text-transform:uppercase;";
+        overlay.textContent = q;
+        el.textContent = "";
+        el.appendChild(img);
+        el.appendChild(overlay);
+      }
+    } catch(e) {}
+  });
+});
+</script>
+<!-- data-sneaker-script -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
+    var q = el.getAttribute("data-sneaker");
+    try {
+      var r = await fetch("https://sneakyradar.com/.netlify/functions/anthropic?action=search&query=" + encodeURIComponent(q) + "&limit=1");
+      var j = await r.json();
+      if (j.data && j.data[0] && j.data[0].image) {
+        var img = document.createElement("img");
+        img.src = j.data[0].image;
+        img.alt = q;
+        img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#f5f5f5;padding:8px;";
+        el.style.position = "relative";
+        el.style.overflow = "hidden";
+        el.textContent = "";
+        el.appendChild(img);
+      }
+    } catch(e) { console.log("img load fail:", q); }
+  });
+});
+</script>
 </body>
 </html>

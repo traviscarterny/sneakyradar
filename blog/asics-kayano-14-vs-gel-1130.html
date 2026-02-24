@@ -18,6 +18,14 @@ table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{tex
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0}.vs-card{background:#111;border:1px solid #222;border-radius:8px;overflow:hidden}.vs-card img{width:100%;aspect-ratio:4/3;object-fit:cover}.vs-card-body{padding:16px}.vs-card-body h3{margin:0 0 8px;font-size:1.1rem}.vs-card-body p{font-size:0.75rem;color:#888;margin:0}
 .footer-blog{border-top:1px solid #222;margin-top:60px;padding-top:24px;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#555;text-align:center}
 @media(max-width:600px){h1{font-size:2.2rem}.wrap{padding:16px 14px 60px}.vs{grid-template-columns:1fr}.img-row{grid-template-columns:1fr}table{font-size:0.65rem}td,th{padding:8px 10px}}
+
+    .sneaker-img{background:#f5f5f5;border:1px solid #222;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:2px;color:#ccc;text-transform:uppercase;overflow:hidden}
+    .sneaker-img.hero{width:100%;aspect-ratio:16/7;border-radius:8px;margin-bottom:32px}
+    .sneaker-img.inline{aspect-ratio:4/3}
+    .sneaker-img.wide{width:100%;aspect-ratio:16/9;margin:24px 0}
+    .sneaker-img-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+    .sneaker-img-row.three{grid-template-columns:1fr 1fr 1fr}
+
 </style>
 </head>
 <body>
@@ -29,14 +37,14 @@ table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{tex
 
 <div class="vs">
 <div class="vs-card">
-<div style="background:linear-gradient(135deg,#1a0505,#2a0a0a,#0a0a0a);width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#333;text-transform:uppercase;border-radius:6px;padding:12px;text-align:center;aspect-ratio:4/3">ASICS Gel-Kayano 14</div>
+<div class="sneaker-img inline" data-sneaker="ASICS Gel-Kayano 14">ASICS Gel-Kayano 14</div>
 <div class="vs-card-body">
 <h3><a href="/?search=Gel-Kayano+14" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">Gel-Kayano 14</a></h3>
 <p>The heritage runner. Maximal design, GEL cushioning, Y2K aesthetic. The shoe that put ASICS on the fashion map.</p>
 </div>
 </div>
 <div class="vs-card">
-<div style="background:linear-gradient(135deg,#0a0a1a,#0a1a2a,#0a0a0a);width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#333;text-transform:uppercase;border-radius:6px;padding:12px;text-align:center;aspect-ratio:4/3">ASICS Gel-1130</div>
+<div class="sneaker-img inline" data-sneaker="ASICS Gel-1130">ASICS Gel-1130</div>
 <div class="vs-card-body">
 <h3><a href="/?search=Gel-1130" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">Gel-1130</a></h3>
 <p>The clean runner. Slimmer profile, versatile colorways, easier to style. The everyday ASICS pick.</p>
@@ -64,7 +72,7 @@ table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{tex
 <h2>GEL-KAYANO 14: THE STATEMENT SHOE</h2>
 
 <img class="img-row" style="grid-template-columns:1fr;display:block">
-<div style="background:linear-gradient(135deg,#0a1a0a,#0a2a1a,#0a0a0a);width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:#333;text-transform:uppercase;border-radius:6px;padding:12px;text-align:center;aspect-ratio:4/3">Kayano 14 Black Pure Silver</div>
+<div class="sneaker-img inline" data-sneaker="Kayano 14 Black Pure Silver">Kayano 14 Black Pure Silver</div>
 
 <p>The Kayano 14 is a maximalist runner that looks like it was designed for a sci-fi movie set in 2004 — which is essentially what happened. Originally released as a performance running shoe, it's been adopted by the fashion world for its aggressive, technical aesthetic.</p>
 
@@ -106,5 +114,52 @@ table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.75rem}th{tex
 
 <div class="footer-blog"><p>© 2026 SneakyRadar · <a href="/">Home</a> · <a href="/blog">Blog</a></p></div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
+    const q = el.getAttribute("data-sneaker");
+    try {
+      const r = await fetch("https://sneakyradar.com/.netlify/functions/anthropic?action=search&query=" + encodeURIComponent(q) + "&limit=1");
+      const j = await r.json();
+      if (j.data && j.data[0] && j.data[0].image) {
+        const img = document.createElement("img");
+        img.src = j.data[0].image;
+        img.alt = q;
+        img.style.cssText = "width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;border-radius:inherit;";
+        el.style.position = "relative";
+        el.style.overflow = "hidden";
+        const overlay = document.createElement("div");
+        overlay.style.cssText = "position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,0.85));z-index:2;font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:#ccc;text-transform:uppercase;";
+        overlay.textContent = q;
+        el.textContent = "";
+        el.appendChild(img);
+        el.appendChild(overlay);
+      }
+    } catch(e) {}
+  });
+});
+</script>
+<!-- data-sneaker-script -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
+    var q = el.getAttribute("data-sneaker");
+    try {
+      var r = await fetch("https://sneakyradar.com/.netlify/functions/anthropic?action=search&query=" + encodeURIComponent(q) + "&limit=1");
+      var j = await r.json();
+      if (j.data && j.data[0] && j.data[0].image) {
+        var img = document.createElement("img");
+        img.src = j.data[0].image;
+        img.alt = q;
+        img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#f5f5f5;padding:8px;";
+        el.style.position = "relative";
+        el.style.overflow = "hidden";
+        el.textContent = "";
+        el.appendChild(img);
+      }
+    } catch(e) { console.log("img load fail:", q); }
+  });
+});
+</script>
 </body>
 </html>
