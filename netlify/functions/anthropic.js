@@ -102,7 +102,7 @@ exports.handler = async function(event) {
       const startTime = Date.now();
       const offset = (page - 1) * limit;
       
-      const q = "sneakers";
+      const q = "Jordan retro";
       
       const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${limit}&offset=${offset}&page=${page}`, { headers });
       const data = await res.json();
