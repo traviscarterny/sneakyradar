@@ -102,10 +102,7 @@ exports.handler = async function(event) {
       const startTime = Date.now();
       const offset = (page - 1) * limit;
       
-      // Dynamic query: current year trending
-      const now = new Date();
-      const year = now.getFullYear();
-      const q = `trending sneakers ${year}`;
+      const q = "sneakers";
       
       const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${limit}&offset=${offset}&page=${page}`, { headers });
       const data = await res.json();
