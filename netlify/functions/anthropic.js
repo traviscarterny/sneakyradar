@@ -65,17 +65,37 @@ exports.handler = async function(event) {
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
-      // Free tier doesn't support sort params, so search for popular/trending sneakers
-      const trendingQueries = ["Jordan 2026", "Yeezy", "Nike Dunk", "New Balance 550", "Travis Scott"];
-      const pick = trendingQueries[Math.floor(Math.random() * trendingQueries.length)];
-      const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(pick)}&limit=${limit}`;
-      console.log("KicksDB trending via search:", pick);
-      const res = await fetch(url, {
-        headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
-      });
-      const data = await res.json();
-      console.log("KicksDB trending:", data?.data?.length || 0, "products");
-      return { statusCode: res.status, headers: corsHeaders, body: JSON.stringify(data) };
+      // Fetch from multiple popular categories to build a diverse landing page
+      const queries = ["Jordan 2026", "Nike Dunk 2026", "New Balance 2025", "Yeezy 2025"];
+      const allProducts = [];
+      
+      for (const q of queries) {
+        try {
+          const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=8`;
+          const res = await fetch(url, {
+            headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
+          });
+          const data = await res.json();
+          if (data?.data) allProducts.push(...data.data);
+        } catch(e) {
+          console.error("Trending query failed:", q, e.message);
+        }
+      }
+
+      // Dedupe by slug and take top results
+      const seen = new Set();
+      const unique = [];
+      for (const p of allProducts) {
+        if (p.slug && !seen.has(p.slug)) {
+          seen.add(p.slug);
+          unique.push(p);
+        }
+      }
+      // Sort by weekly_orders descending if available
+      unique.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
+
+      console.log("KicksDB trending:", unique.length, "unique products from", queries.length, "queries");
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: unique.slice(0, limit) }) };
     } catch(err) {
       console.error("KicksDB trending error:", err.message);
       return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: err.message }) };
