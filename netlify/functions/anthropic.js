@@ -102,16 +102,19 @@ exports.handler = async function(event) {
       const startTime = Date.now();
       const offset = (page - 1) * limit;
       
-      // Single broad query instead of 4 parallel — much faster
-      const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=sneakers+2025&limit=${limit}&offset=${offset}&page=${page}`, { headers });
+      // Dynamic query: current year trending
+      const now = new Date();
+      const year = now.getFullYear();
+      const q = `trending sneakers ${year}`;
+      
+      const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${limit}&offset=${offset}&page=${page}`, { headers });
       const data = await res.json();
       const products = data?.data || [];
       
-      // Sort by weekly orders
       products.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
 
       const duration = Date.now() - startTime;
-      console.log("KicksDB trending page", page, ":", products.length, "products in", duration, "ms");
+      console.log("KicksDB trending page", page, ":", products.length, "products for", q, "in", duration, "ms");
       return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: products, _page: page }) };
     } catch(err) {
       console.error("KicksDB trending error:", err.message);
