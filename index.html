@@ -354,14 +354,69 @@ function trackClick(drop, storeId) { console.log(`[SNEAKYRADAR] click — ${drop
 const SPONSORED_DROPS = [];
 
 const RESELL_DATA = [
-  { brand:"Nike",name:"Air Jordan 4 Military Blue",retail:"$215",low:"$310",avg:"$348",high:"$420",trend:"+12%",hot:true,vol:"2.4k sales/wk"},
-  { brand:"Nike",name:"Dunk Low Panda",retail:"$110",low:"$140",avg:"$158",high:"$185",trend:"+4%",hot:false,vol:"5.1k sales/wk"},
-  { brand:"Adidas",name:"Samba OG Cloud White",retail:"$100",low:"$128",avg:"$142",high:"$165",trend:"+8%",hot:true,vol:"3.7k sales/wk"},
-  { brand:"Nike",name:"Travis Scott Air Max 1",retail:"$150",low:"$420",avg:"$510",high:"$640",trend:"+22%",hot:true,vol:"890 sales/wk"},
-  { brand:"New Balance",name:"990v4 Made in USA",retail:"$185",low:"$195",avg:"$208",high:"$240",trend:"+3%",hot:false,vol:"1.2k sales/wk"},
-  { brand:"ASICS",name:"Gel-Kayano 14 Ivory",retail:"$130",low:"$165",avg:"$182",high:"$210",trend:"+6%",hot:true,vol:"1.8k sales/wk"},
+  // === JORDAN ===
+  { brand:"Jordan",name:"Air Jordan 1 Retro High Chicago",retail:"$180",low:"$350",avg:"$420",high:"$520",trend:"+15%",hot:true,vol:"1.8k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 1 High Dark Mocha",retail:"$170",low:"$380",avg:"$493",high:"$580",trend:"+10%",hot:true,vol:"1.4k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 3 White Cement Reimagined",retail:"$200",low:"$210",avg:"$248",high:"$310",trend:"+5%",hot:false,vol:"2.8k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 4 Military Blue",retail:"$215",low:"$310",avg:"$348",high:"$420",trend:"+12%",hot:true,vol:"2.4k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 4 Black Cat",retail:"$190",low:"$280",avg:"$340",high:"$410",trend:"+9%",hot:true,vol:"2.1k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 4 Bred Reimagined",retail:"$210",low:"$290",avg:"$355",high:"$430",trend:"+14%",hot:true,vol:"1.9k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 5 Retro Fire Red",retail:"$208",low:"$174",avg:"$198",high:"$299",trend:"-3%",hot:false,vol:"1.6k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 11 Space Jam",retail:"$225",low:"$320",avg:"$395",high:"$480",trend:"+8%",hot:true,vol:"1.5k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 11 Legend Blue",retail:"$220",low:"$178",avg:"$259",high:"$442",trend:"+2%",hot:false,vol:"1.3k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 12 Taxi",retail:"$200",low:"$180",avg:"$215",high:"$280",trend:"+1%",hot:false,vol:"980 sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 13 Chicago (2026)",retail:"$215",low:"$240",avg:"$320",high:"$390",trend:"+18%",hot:true,vol:"870 sales/wk"},
+  // === TRAVIS SCOTT ===
+  { brand:"Travis Scott",name:"TS x Jordan 1 Low Reverse Mocha",retail:"$150",low:"$980",avg:"$1163",high:"$1400",trend:"+6%",hot:true,vol:"620 sales/wk"},
+  { brand:"Travis Scott",name:"TS x Fragment x Jordan 1 Low",retail:"$150",low:"$1100",avg:"$1450",high:"$1800",trend:"+4%",hot:true,vol:"410 sales/wk"},
+  { brand:"Travis Scott",name:"TS x Jordan 1 Low Black Phantom",retail:"$150",low:"$350",avg:"$440",high:"$550",trend:"+11%",hot:true,vol:"780 sales/wk"},
+  { brand:"Travis Scott",name:"TS x Air Max 1 Baroque Brown",retail:"$150",low:"$420",avg:"$510",high:"$640",trend:"+22%",hot:true,vol:"890 sales/wk"},
+  // === NIKE ===
+  { brand:"Nike",name:"Dunk Low Panda",retail:"$110",low:"$58",avg:"$85",high:"$110",trend:"-8%",hot:false,vol:"5.1k sales/wk"},
+  { brand:"Nike",name:"Dunk Low Grey Fog",retail:"$110",low:"$90",avg:"$115",high:"$140",trend:"+2%",hot:false,vol:"2.2k sales/wk"},
+  { brand:"Nike",name:"SB Dunk Low Stranger Things",retail:"$120",low:"$250",avg:"$340",high:"$420",trend:"+28%",hot:true,vol:"560 sales/wk"},
+  { brand:"Nike",name:"Air Force 1 Low White",retail:"$110",low:"$75",avg:"$95",high:"$120",trend:"-1%",hot:false,vol:"6.8k sales/wk"},
+  { brand:"Nike",name:"Air Max 95 OG Neon",retail:"$190",low:"$200",avg:"$250",high:"$320",trend:"+7%",hot:true,vol:"1.1k sales/wk"},
+  { brand:"Nike",name:"Air Max 1 Obsidian",retail:"$140",low:"$120",avg:"$148",high:"$180",trend:"+3%",hot:false,vol:"1.4k sales/wk"},
+  { brand:"Nike",name:"Mars Yard 3.0",retail:"$275",low:"$750",avg:"$1075",high:"$1400",trend:"+291%",hot:true,vol:"320 sales/wk"},
+  // === NIKE KOBE ===
+  { brand:"Nike",name:"Kobe 6 Protro Reverse Grinch",retail:"$190",low:"$320",avg:"$410",high:"$520",trend:"+35%",hot:true,vol:"680 sales/wk"},
+  { brand:"Nike",name:"Kobe 8 Protro What The",retail:"$190",low:"$280",avg:"$350",high:"$450",trend:"+25%",hot:true,vol:"540 sales/wk"},
+  { brand:"Nike",name:"Kobe 6 Protro Grinch",retail:"$190",low:"$380",avg:"$470",high:"$580",trend:"+18%",hot:true,vol:"720 sales/wk"},
+  { brand:"Nike",name:"Ja 3 Midnight Navy",retail:"$130",low:"$110",avg:"$138",high:"$175",trend:"+9%",hot:true,vol:"1.6k sales/wk"},
+  // === OFF-WHITE ===
   { brand:"Nike",name:"Off-White Dunk Low Lot 1",retail:"$170",low:"$800",avg:"$980",high:"$1300",trend:"+18%",hot:true,vol:"340 sales/wk"},
-  { brand:"Adidas",name:"Yeezy Foam Runner MXT",retail:"$80",low:"$95",avg:"$115",high:"$145",trend:"-2%",hot:false,vol:"2.1k sales/wk"},
+  { brand:"Nike",name:"Off-White Jordan 4 Sail",retail:"$200",low:"$680",avg:"$820",high:"$1000",trend:"+12%",hot:true,vol:"290 sales/wk"},
+  // === SACAI ===
+  { brand:"Nike",name:"Sacai LD Waffle Green Gusto",retail:"$160",low:"$280",avg:"$360",high:"$440",trend:"+5%",hot:false,vol:"380 sales/wk"},
+  // === ADIDAS ===
+  { brand:"Adidas",name:"Samba OG Cloud White",retail:"$100",low:"$128",avg:"$142",high:"$165",trend:"+8%",hot:true,vol:"3.7k sales/wk"},
+  { brand:"Adidas",name:"Campus 00s Core Black",retail:"$100",low:"$85",avg:"$108",high:"$135",trend:"+4%",hot:false,vol:"3.2k sales/wk"},
+  { brand:"Adidas",name:"Bad Bunny Response CL Brown",retail:"$160",low:"$190",avg:"$245",high:"$310",trend:"+15%",hot:true,vol:"680 sales/wk"},
+  // === YEEZY ===
+  { brand:"Yeezy",name:"350 V2 Zebra",retail:"$230",low:"$200",avg:"$245",high:"$300",trend:"+3%",hot:false,vol:"1.8k sales/wk"},
+  { brand:"Yeezy",name:"350 V2 Bred",retail:"$230",low:"$280",avg:"$330",high:"$390",trend:"+5%",hot:true,vol:"920 sales/wk"},
+  { brand:"Yeezy",name:"Slide Onyx",retail:"$60",low:"$80",avg:"$110",high:"$145",trend:"-4%",hot:false,vol:"3.4k sales/wk"},
+  { brand:"Yeezy",name:"Foam Runner Onyx",retail:"$80",low:"$90",avg:"$120",high:"$155",trend:"-2%",hot:false,vol:"2.1k sales/wk"},
+  { brand:"Yeezy",name:"700 Wave Runner",retail:"$300",low:"$240",avg:"$290",high:"$360",trend:"+2%",hot:false,vol:"1.1k sales/wk"},
+  { brand:"Yeezy",name:"350 V1 Turtle Dove (2022)",retail:"$230",low:"$280",avg:"$350",high:"$440",trend:"+10%",hot:true,vol:"380 sales/wk"},
+  { brand:"Yeezy",name:"750 Light Brown",retail:"$350",low:"$800",avg:"$1100",high:"$1500",trend:"+8%",hot:true,vol:"120 sales/wk"},
+  // === NEW BALANCE ===
+  { brand:"New Balance",name:"990v6 Made in USA Grey",retail:"$199",low:"$195",avg:"$215",high:"$250",trend:"+4%",hot:false,vol:"1.6k sales/wk"},
+  { brand:"New Balance",name:"990v4 Made in USA",retail:"$185",low:"$195",avg:"$208",high:"$240",trend:"+3%",hot:false,vol:"1.2k sales/wk"},
+  { brand:"New Balance",name:"2002R Protection Pack Rain Cloud",retail:"$140",low:"$160",avg:"$195",high:"$240",trend:"+7%",hot:true,vol:"1.5k sales/wk"},
+  { brand:"New Balance",name:"550 White Green",retail:"$110",low:"$95",avg:"$118",high:"$150",trend:"+2%",hot:false,vol:"2.8k sales/wk"},
+  { brand:"New Balance",name:"204L Cream",retail:"$130",low:"$145",avg:"$175",high:"$210",trend:"+20%",hot:true,vol:"680 sales/wk"},
+  // === ASICS ===
+  { brand:"ASICS",name:"Gel-1130 Black Pure Silver",retail:"$110",low:"$130",avg:"$155",high:"$190",trend:"+12%",hot:true,vol:"2.9k sales/wk"},
+  { brand:"ASICS",name:"Gel-Kayano 14 Ivory",retail:"$130",low:"$165",avg:"$182",high:"$210",trend:"+6%",hot:true,vol:"1.8k sales/wk"},
+  { brand:"ASICS",name:"Gel-Kayano 14 Black",retail:"$130",low:"$140",avg:"$165",high:"$200",trend:"+8%",hot:true,vol:"1.4k sales/wk"},
+  // === EMERGING BRANDS ===
+  { brand:"Puma",name:"Speedcat OG Black",retail:"$100",low:"$110",avg:"$138",high:"$170",trend:"+15%",hot:true,vol:"780 sales/wk"},
+  { brand:"Salomon",name:"XT-6 Black Phantom",retail:"$190",low:"$195",avg:"$228",high:"$280",trend:"+12%",hot:true,vol:"620 sales/wk"},
+  { brand:"Mizuno",name:"Wave Prophecy LS Black",retail:"$250",low:"$270",avg:"$320",high:"$390",trend:"+30%",hot:true,vol:"340 sales/wk"},
+  { brand:"Onitsuka Tiger",name:"Mexico 66 Cream Sage",retail:"$110",low:"$125",avg:"$148",high:"$180",trend:"+18%",hot:true,vol:"520 sales/wk"},
+  { brand:"Converse",name:"Shai 001 Black White",retail:"$120",low:"$130",avg:"$158",high:"$195",trend:"+22%",hot:true,vol:"480 sales/wk"},
 ];
 
 const AUTH_GUIDES = [
@@ -1016,10 +1071,10 @@ function ResellPage() {
         <h1 className="section-title"><span className="filled">RESELL</span> <span className="outline">TRACKER</span></h1>
         <p className="section-sub">Retail vs. market price, trend direction, and weekly sales volume — everything you need to buy, hold, or flip.</p>
         <div className="resell-stats">
-          <div className="resell-stat"><div className="resell-stat-label">Avg Premium</div><div className="resell-stat-value">+87%</div><div className="resell-stat-sub">above retail across tracked models</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Hottest Model</div><div className="resell-stat-value">AJ1</div><div className="resell-stat-sub">Air Jordan 1 collab avg +$340</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Best Flip</div><div className="resell-stat-value">OW</div><div className="resell-stat-sub">Off-White Dunk avg 476% ROI</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Weekly Vol</div><div className="resell-stat-value">16k</div><div className="resell-stat-sub">verified sales tracked this week</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Models Tracked</div><div className="resell-stat-value">52</div><div className="resell-stat-sub">across 12 brands</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Hottest Model</div><div className="resell-stat-value">TS1</div><div className="resell-stat-sub">Travis Scott Fragment avg $1,450</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Best Flip</div><div className="resell-stat-value">MY3</div><div className="resell-stat-sub">Mars Yard 3.0 avg +291% ROI</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Weekly Vol</div><div className="resell-stat-value">68k</div><div className="resell-stat-sub">verified sales tracked this week</div></div>
         </div>
         <div className="filters" style={{marginBottom:20}}>
           {brands.map(b=><button key={b} className={`filter-btn ${brandFilter===b?"active":""}`} onClick={()=>setBrandFilter(b)}>{b}</button>)}
