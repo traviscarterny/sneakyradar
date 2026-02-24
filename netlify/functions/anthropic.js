@@ -65,9 +65,11 @@ exports.handler = async function(event) {
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
-      // Get trending by sorting by weekly orders or rank
-      const url = `${KICKSDB_BASE}/stockx/products?sort=weekly_orders&order=desc&limit=${limit}&category=sneakers`;
-      console.log("KicksDB trending fetch");
+      // Free tier doesn't support sort params, so search for popular/trending sneakers
+      const trendingQueries = ["Jordan 2026", "Yeezy", "Nike Dunk", "New Balance 550", "Travis Scott"];
+      const pick = trendingQueries[Math.floor(Math.random() * trendingQueries.length)];
+      const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(pick)}&limit=${limit}`;
+      console.log("KicksDB trending via search:", pick);
       const res = await fetch(url, {
         headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
       });
