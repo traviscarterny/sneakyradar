@@ -695,7 +695,7 @@ function DropRadarPage() {
       if (d.length > 0 && !q) {
         localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
         localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
-        localStorage.setItem("sneakyradar_drops_ver", "v17");
+        localStorage.setItem("sneakyradar_drops_ver", "v23");
       }
     } catch(e) {
       console.error("Search error:", e);
@@ -728,7 +728,7 @@ function DropRadarPage() {
   };
 
   useEffect(() => {
-    const CACHE_VERSION = "v17";
+    const CACHE_VERSION = "v23";
     const cached = localStorage.getItem("sneakyradar_drops");
     const cachedTime = localStorage.getItem("sneakyradar_drops_time");
     const cachedVer = localStorage.getItem("sneakyradar_drops_ver");
