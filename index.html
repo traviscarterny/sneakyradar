@@ -500,11 +500,10 @@ function DropImage({src, name, brand, source, productUrl, onClick}) {
 
 function PriceCompare({prices, drop}) {
   if (!prices || prices.length === 0) return null;
-  if (prices.length < 2) return null; // Only show when we have multiple sources to compare
   const sorted = [...prices].sort((a,b)=>parseFloat(a.price.replace(/[^0-9.]/g,''))-parseFloat(b.price.replace(/[^0-9.]/g,'')));
   return (
     <div className="price-compare">
-      <div className="price-compare-label">Compare Prices</div>
+      <div className="price-compare-label">{prices.length > 1 ? "Compare Prices" : "Best Price"}</div>
       <div className="price-compare-rows">
         {sorted.map((p,i)=>(
           <div key={p.store} className="price-row">
