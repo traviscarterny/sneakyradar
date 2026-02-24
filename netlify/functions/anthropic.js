@@ -102,13 +102,20 @@ exports.handler = async function(event) {
       const startTime = Date.now();
       const offset = (page - 1) * limit;
       
-      const q = "Jordan retro";
+      const q = "Jordan";
       
-      const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${limit}&offset=${offset}&page=${page}`, { headers });
+      const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=40&offset=${offset}&page=${page}`, { headers });
       const data = await res.json();
-      const products = data?.data || [];
+      let products = data?.data || [];
+      
+      // Filter to sneakers only (exclude apparel, accessories, etc)
+      products = products.filter(p => {
+        const cat = (p.category || p.product_type || "").toLowerCase();
+        return cat.includes("sneaker") || cat.includes("shoe") || cat.includes("footwear") || cat === "sneakers" || cat === "";
+      });
       
       products.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
+      products = products.slice(0, limit);
 
       const duration = Date.now() - startTime;
       console.log("KicksDB trending page", page, ":", products.length, "products for", q, "in", duration, "ms");
