@@ -91,7 +91,7 @@ exports.handler = async function(event) {
     }
   }
 
-  // === KicksDB Trending/Popular (StockX + GOAT) ===
+  // === KicksDB Trending/Popular (StockX only — GOAT adds too much latency for 4x queries) ===
   if (body.action === "trending") {
     const limit = body.limit || 21;
     const page = body.page || 1;
@@ -102,44 +102,26 @@ exports.handler = async function(event) {
     try {
       const queries = ["Jordan 2026", "Nike Dunk 2026", "New Balance 2025", "Yeezy 2025"];
       const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
-      const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
-      const allStockx = [];
-      const allGoat = [];
+      const allProducts = [];
       
-      const fetches = queries.flatMap(q => [
-        fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${perQuery}&offset=${offset}&page=${page}`, { headers }).then(r => r.json()).then(d => { if (d?.data) allStockx.push(...d.data); }).catch(() => {}),
-        fetch(`${KICKSDB_BASE}/goat/products?query=${encodeURIComponent(q)}&limit=${perQuery}`, { headers }).then(r => r.json()).then(d => { if (d?.data) allGoat.push(...d.data); }).catch(() => {}),
-      ]);
-      await Promise.all(fetches);
-
-      const goatBySku = {};
-      for (const g of allGoat) {
-        const key = normSku(g.sku);
-        if (key) goatBySku[key] = g;
-      }
+      await Promise.all(queries.map(q =>
+        fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${perQuery}&offset=${offset}&page=${page}`, { headers })
+          .then(r => r.json())
+          .then(d => { if (d?.data) allProducts.push(...d.data); })
+          .catch(() => {})
+      ));
 
       const seen = new Set();
       const unique = [];
-      for (const p of allStockx) {
+      for (const p of allProducts) {
         if (p.slug && !seen.has(p.slug)) {
           seen.add(p.slug);
-          const skuKey = normSku(p.sku);
-          const gm = skuKey ? goatBySku[skuKey] : null;
-          unique.push({
-            ...p,
-            _goat: gm ? {
-              slug: gm.slug || null,
-              link: gm.link || null,
-              image_url: gm.image_url || null,
-              release_date: gm.release_date || null,
-            } : null,
-          });
+          unique.push(p);
         }
       }
       unique.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
 
-      const goatMatches = unique.filter(p => p._goat).length;
-      console.log("KicksDB trending page", page, ":", unique.length, "products,", goatMatches, "GOAT matches");
+      console.log("KicksDB trending page", page, ":", unique.length, "products");
       return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: unique.slice(0, limit), _page: page }) };
     } catch(err) {
       console.error("KicksDB trending error:", err.message);
