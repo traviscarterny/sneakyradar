@@ -41,6 +41,13 @@ exports.handler = async function(event) {
       const stockxProducts = stockxRes?.data || [];
       const goatProducts = goatRes?.data || [];
 
+      // Debug: log GOAT fields to understand structure
+      if (goatProducts.length > 0) {
+        const g = goatProducts[0];
+        console.log("GOAT fields:", Object.keys(g).join(", "));
+        console.log("GOAT price fields:", JSON.stringify({min_price:g.min_price, max_price:g.max_price, avg_price:g.avg_price, price:g.price, lowest_price:g.lowest_price, retail_price:g.retail_price}));
+      }
+
       // Build GOAT lookup by SKU (normalize: remove spaces, dashes, slashes, uppercase)
       const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
       const goatBySku = {};
