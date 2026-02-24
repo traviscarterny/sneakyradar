@@ -52,7 +52,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #0a0a0a; --surface: #111; --border: #222;
-      --accent: #ff3c00; --accent2: #ffd200; --text: #f0f0f0; --muted: #555; --card: #141414;
+      --accent: #ff3c00; --accent2: #00ff94; --text: #f0f0f0; --muted: #555; --card: #141414;
       --green: #00e676; --purple: #cc44ff;
     }
     body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
@@ -1030,7 +1030,7 @@ function App() {
   const [activePage, setActivePage] = useState("drops");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
-  const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"}];
+  const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"},{id:"blog",label:"Blog",icon:"📝",href:"/blog"}];
   return (
     <>
       {showAlertModal&&<AlertModal onClose={()=>setShowAlertModal(false)}/>}
@@ -1039,6 +1039,7 @@ function App() {
           <div className="nav-logo" style={{cursor:"pointer"}} onClick={()=>{setActivePage("drops");setMobileMenuOpen(false);}}><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
           <div className="nav-tabs">
             {tabs.map(t=>(
+              t.href ? <a key={t.id} className="nav-tab" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
               <button key={t.id} className={`nav-tab ${activePage===t.id?"active":""}`} onClick={()=>setActivePage(t.id)}>
                 <span>{t.icon}</span>{t.label}
               </button>
@@ -1051,6 +1052,7 @@ function App() {
         {mobileMenuOpen && (
           <div className="mobile-menu">
             {tabs.map(t=>(
+              t.href ? <a key={t.id} className="mobile-menu-item" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
               <button key={t.id} className={`mobile-menu-item ${activePage===t.id?"active":""}`} onClick={()=>{setActivePage(t.id);setMobileMenuOpen(false);}}>
                 <span>{t.icon}</span>{t.label}
               </button>
