@@ -746,7 +746,7 @@ function DropRadarPage() {
     localStorage.removeItem("sneakyradar_drops");
     localStorage.removeItem("sneakyradar_drops_time");
     localStorage.removeItem("sneakyradar_drops_ver");
-    search();
+    search("Jordan");
   }, []);
 
   const CATEGORY_SEARCHES = [
@@ -761,7 +761,7 @@ function DropRadarPage() {
     {label: "NEW BALANCE", query: "New Balance"},
     {label: "ASICS", query: "Asics"},
     {label: "LEBRON", query: "Lebron"},
-    {label: "LUKA", query: "Luka"},
+    {label: "LUKA", query: "Jordan Luka"},
     {label: "TRAVIS SCOTT", query: "Travis Scott"},
   ];
   const [activeCategory, setActiveCategory] = useState("ALL");
@@ -769,9 +769,9 @@ function DropRadarPage() {
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat.label);
     if (cat.query === "") {
-      // ALL — go back to trending
+      // ALL — search Jordan as default landing
       setQuery("");
-      search("");
+      search("Jordan");
     } else {
       setQuery(cat.query);
       search(cat.query);
