@@ -36,6 +36,8 @@
     .nav-tab { display: flex; align-items: center; gap: 7px; padding: 0 22px; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--muted); transition: all 0.15s; border-right: 1px solid var(--border); border-bottom: 2px solid transparent; background: transparent; border-top: none; border-left: none; font-family: 'DM Mono', monospace; }
     .nav-tab:hover { color: var(--text); background: #111; }
     .nav-tab.active { color: var(--text); border-bottom-color: var(--accent); background: #0e0e0e; }
+    .hamburger { display: none; }
+    .mobile-menu { display: none; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .alert-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
     .alert-btn:hover { background: var(--accent); color: white; }
@@ -232,13 +234,17 @@
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 4px; }
     .footer-logo .radar { color: var(--accent); }
     @media (max-width: 768px) {
-      .nav { padding: 0 12px; flex-wrap: wrap; height: auto; min-height: 48px; }
-      .nav-left { width: 100%; padding: 0; }
+      .nav { padding: 0 12px; height: 48px; position: relative; }
+      .nav-left { width: 100%; padding: 0; display: flex; align-items: center; justify-content: space-between; }
       .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; padding: 10px 0; }
-      .nav-tabs { display: flex; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-top: 1px solid var(--border); scrollbar-width: none; }
-      .nav-tabs::-webkit-scrollbar { display: none; }
-      .nav-tab { padding: 10px 14px; font-size: 0.5rem; white-space: nowrap; border-right: 1px solid var(--border); flex-shrink: 0; }
+      .nav-tabs { display: none; }
       .nav-right { display: none; }
+      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 1.2rem; width: 36px; height: 36px; cursor: pointer; border-radius: 4px; font-family: inherit; }
+      .mobile-menu { position: absolute; top: 100%; right: 12px; background: rgba(15,15,15,0.98); border: 1px solid var(--border); border-radius: 6px; z-index: 100; min-width: 200px; overflow: hidden; backdrop-filter: blur(12px); }
+      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
+      .mobile-menu-item:last-child { border-bottom: none; }
+      .mobile-menu-item:hover, .mobile-menu-item.active { color: var(--text); background: rgba(255,255,255,0.05); }
+      .mobile-menu-item.active { color: var(--accent); }
       .result-source-filters { display: none; }
       .section-wrap { padding: 24px 12px 80px; }
       .section-title { font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 48px; }
@@ -985,6 +991,7 @@ function AuthPage() {
 
 function App() {
   const [activePage, setActivePage] = useState("drops");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"}];
   return (
@@ -992,7 +999,7 @@ function App() {
       {showAlertModal&&<AlertModal onClose={()=>setShowAlertModal(false)}/>}
       <nav className="nav">
         <div className="nav-left">
-          <div className="nav-logo" style={{cursor:"pointer"}} onClick={()=>setActivePage("drops")}><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
+          <div className="nav-logo" style={{cursor:"pointer"}} onClick={()=>{setActivePage("drops");setMobileMenuOpen(false);}}><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
           <div className="nav-tabs">
             {tabs.map(t=>(
               <button key={t.id} className={`nav-tab ${activePage===t.id?"active":""}`} onClick={()=>setActivePage(t.id)}>
@@ -1000,6 +1007,19 @@ function App() {
               </button>
             ))}
           </div>
+          <button className="hamburger" onClick={()=>setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? "✕" : "☰"}
+          </button>
+        </div>
+        {mobileMenuOpen && (
+          <div className="mobile-menu">
+            {tabs.map(t=>(
+              <button key={t.id} className={`mobile-menu-item ${activePage===t.id?"active":""}`} onClick={()=>{setActivePage(t.id);setMobileMenuOpen(false);}}>
+                <span>{t.icon}</span>{t.label}
+              </button>
+            ))}
+          </div>
+        )}
         </div>
         <div className="nav-right">
           <button className="alert-btn" onClick={()=>setShowAlertModal(true)}>
