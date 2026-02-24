@@ -91,38 +91,28 @@ exports.handler = async function(event) {
     }
   }
 
-  // === KicksDB Trending/Popular (StockX only — GOAT adds too much latency for 4x queries) ===
+  // === KicksDB Trending ===
   if (body.action === "trending") {
     const limit = body.limit || 21;
     const page = body.page || 1;
-    const perQuery = 8;
-    const offset = (page - 1) * perQuery;
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
-      const queries = ["Jordan 2026", "Nike Dunk 2026", "New Balance 2025", "Yeezy 2025"];
       const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
-      const allProducts = [];
+      const startTime = Date.now();
+      const offset = (page - 1) * limit;
       
-      await Promise.all(queries.map(q =>
-        fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${perQuery}&offset=${offset}&page=${page}`, { headers })
-          .then(r => r.json())
-          .then(d => { if (d?.data) allProducts.push(...d.data); })
-          .catch(() => {})
-      ));
+      // Single broad query instead of 4 parallel — much faster
+      const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=sneakers+2025&limit=${limit}&offset=${offset}&page=${page}`, { headers });
+      const data = await res.json();
+      const products = data?.data || [];
+      
+      // Sort by weekly orders
+      products.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
 
-      const seen = new Set();
-      const unique = [];
-      for (const p of allProducts) {
-        if (p.slug && !seen.has(p.slug)) {
-          seen.add(p.slug);
-          unique.push(p);
-        }
-      }
-      unique.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
-
-      console.log("KicksDB trending page", page, ":", unique.length, "products");
-      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: unique.slice(0, limit), _page: page }) };
+      const duration = Date.now() - startTime;
+      console.log("KicksDB trending page", page, ":", products.length, "products in", duration, "ms");
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: products, _page: page }) };
     } catch(err) {
       console.error("KicksDB trending error:", err.message);
       return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: err.message }) };
