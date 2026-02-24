@@ -391,24 +391,22 @@ function kicksToDrops(products) {
         url: stockxUrl || "https://stockx.com",
       });
     }
-    if (p._goat) {
-      const goatSlug = p._goat.slug || "";
-      const goatUrl = goatSlug ? `https://www.goat.com/sneakers/${goatSlug}` : "https://www.goat.com";
-      const goatPrice = p._goat.min_price || p._goat.avg_price || null;
-      if (goatPrice) {
-        prices.push({
-          store: "GOAT",
-          storeId: "goat",
-          price: `$${Math.round(goatPrice)}`,
-          url: goatUrl,
-        });
-      }
+    // GOAT: no prices on free tier, but has affiliate link
+    if (p._goat && p._goat.link) {
+      prices.push({
+        store: "GOAT",
+        storeId: "goat",
+        price: "Check Price",
+        url: p._goat.link,
+      });
     }
-    // Use lowest price across both sources for the main resell display
-    const allPrices = [p.min_price, p._goat?.min_price].filter(Boolean);
-    const lowestPrice = allPrices.length ? Math.min(...allPrices) : null;
-    const highestPrice = [p.max_price, p._goat?.max_price].filter(Boolean);
-    const maxPrice = highestPrice.length ? Math.max(...highestPrice) : null;
+
+    // Use GOAT release_date if StockX doesn't have one
+    const releaseDate = p.release_date || (p._goat && p._goat.release_date) || null;
+
+    // Price range from StockX (GOAT prices not available on free tier)
+    const lowestPrice = p.min_price || null;
+    const maxPrice = p.max_price || null;
 
     // Build source label
     const sourceNames = ["StockX"];
@@ -417,7 +415,7 @@ function kicksToDrops(products) {
     return {
       brand: p.brand || "Unknown",
       name: p.title || p.name || "Unknown",
-      date: p.release_date ? new Date(p.release_date).toLocaleDateString("en-US", {month:"short",day:"numeric",year:"numeric"}) : (p.upcoming ? "Coming Soon" : "Available"),
+      date: releaseDate ? new Date(releaseDate).toLocaleDateString("en-US", {month:"short",day:"numeric",year:"numeric"}) : (p.upcoming ? "Coming Soon" : "Available"),
       retail: retailPrice ? `$${retailPrice}` : (avgPrice ? `$${Math.round(avgPrice)}` : "—"),
       resell: lowestPrice && maxPrice ? `$${Math.round(lowestPrice)} – $${Math.round(maxPrice)}` : (avgPrice ? `$${Math.round(avgPrice)}+` : null),
       hype: hype,
