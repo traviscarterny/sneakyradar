@@ -231,11 +231,13 @@
     .footer-logo .radar { color: var(--accent); }
     @media (max-width: 768px) {
       .nav { padding: 0 12px; flex-wrap: wrap; height: auto; min-height: 48px; }
-      .nav-left { width: 100%; justify-content: space-between; padding: 10px 0; }
-      .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; }
-      .nav-tabs { display: flex; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-top: 1px solid var(--border); }
+      .nav-left { width: 100%; padding: 0; }
+      .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; padding: 10px 0; }
+      .nav-tabs { display: flex; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-top: 1px solid var(--border); scrollbar-width: none; }
+      .nav-tabs::-webkit-scrollbar { display: none; }
       .nav-tab { padding: 10px 14px; font-size: 0.5rem; white-space: nowrap; border-right: 1px solid var(--border); flex-shrink: 0; }
-      .nav-right { position: absolute; right: 12px; top: 8px; }
+      .nav-right { display: none; }
+      .result-source-filters { display: none; }
       .section-wrap { padding: 24px 12px 80px; }
       .section-title { font-size: clamp(2rem, 10vw, 3.5rem); }
       .section-sub { font-size: 0.7rem; margin-bottom: 24px; }
@@ -258,10 +260,10 @@
       .hype-label { font-size: 0.55rem; }
       .badge { font-size: 0.45rem; padding: 2px 6px; }
       .status-bar { font-size: 0.55rem; }
-      .result-source-filters { gap: 4px; flex-wrap: wrap; }
-      .rsf-btn { font-size: 0.5rem; padding: 4px 8px; }
       .resell-stats { grid-template-columns: repeat(2, 1fr); }
       .auth-check { grid-template-columns: 1fr; }
+      .chat-fab { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 0.5rem; }
+      .chat-fab svg { width: 18px; height: 18px; }
       .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: 60vh; }
       .chat-input-row input { font-size: 0.8rem; }
       .price-compare { gap: 4px; }
