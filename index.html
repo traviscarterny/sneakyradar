@@ -381,22 +381,53 @@ function kicksToDrops(products) {
     if (p.weekly_orders) hype = Math.min(99, Math.round(50 + Math.log2(p.weekly_orders + 1) * 8));
     else if (p.rank) hype = Math.max(30, Math.min(95, 100 - Math.round(p.rank / 100)));
 
+    // Build price comparison array
+    const prices = [];
+    if (p.min_price) {
+      prices.push({
+        store: "StockX",
+        storeId: "stockx",
+        price: `$${Math.round(p.min_price)}`,
+        url: stockxUrl || "https://stockx.com",
+      });
+    }
+    if (p._goat) {
+      const goatSlug = p._goat.slug || "";
+      const goatUrl = goatSlug ? `https://www.goat.com/sneakers/${goatSlug}` : "https://www.goat.com";
+      const goatPrice = p._goat.min_price || p._goat.avg_price || null;
+      if (goatPrice) {
+        prices.push({
+          store: "GOAT",
+          storeId: "goat",
+          price: `$${Math.round(goatPrice)}`,
+          url: goatUrl,
+        });
+      }
+    }
+
+    // Use lowest price across sources for the main resell display
+    const allPrices = [p.min_price, p._goat?.min_price].filter(Boolean);
+    const lowestPrice = allPrices.length ? Math.min(...allPrices) : null;
+    const highestPrice = [p.max_price, p._goat?.max_price].filter(Boolean);
+    const maxPrice = highestPrice.length ? Math.max(...highestPrice) : null;
+
     return {
       brand: p.brand || "Unknown",
       name: p.title || p.name || "Unknown",
       date: p.release_date ? new Date(p.release_date).toLocaleDateString("en-US", {month:"short",day:"numeric",year:"numeric"}) : (p.upcoming ? "Coming Soon" : "Available"),
       retail: retailPrice ? `$${retailPrice}` : (avgPrice ? `$${Math.round(avgPrice)}` : "—"),
-      resell: p.min_price && p.max_price ? `$${Math.round(p.min_price)} – $${Math.round(p.max_price)}` : (avgPrice ? `$${Math.round(avgPrice)}+` : null),
+      resell: lowestPrice && maxPrice ? `$${Math.round(lowestPrice)} – $${Math.round(maxPrice)}` : (avgPrice ? `$${Math.round(avgPrice)}+` : null),
       hype: hype,
       badge: badge,
       colorway: p.colorway || p.color || null,
       method: null,
       image: p.image || null,
-      source: "StockX",
+      source: prices.length > 1 ? "StockX + GOAT" : "StockX",
       sourceUrl: stockxUrl,
       sku: p.sku || null,
       slug: slug,
       weeklyOrders: p.weekly_orders || 0,
+      prices: prices,
     };
   });
 }
