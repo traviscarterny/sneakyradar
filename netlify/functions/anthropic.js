@@ -19,7 +19,7 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body); }
   catch(e) { return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON" }) }; }
 
-  // === KicksDB Product Search ===
+  // === KicksDB Product Search (StockX + GOAT) ===
   if (body.action === "search") {
     const query = body.query || "";
     const limit = body.limit || 21;
@@ -28,20 +28,46 @@ exports.handler = async function(event) {
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
-      // Try both page and offset params — KicksDB docs unclear on which is supported
       const offset = (page - 1) * limit;
-      const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&page=${page}&offset=${offset}`;
-      console.log("KicksDB search:", query, "page:", page, "offset:", offset, "limit:", limit);
+      const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
       const startTime = Date.now();
-      const res = await fetch(url, {
-        headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
+
+      // Fetch StockX and GOAT in parallel
+      const [stockxRes, goatRes] = await Promise.all([
+        fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&page=${page}&offset=${offset}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
+        fetch(`${KICKSDB_BASE}/goat/products?query=${encodeURIComponent(query)}&limit=${limit}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
+      ]);
+
+      const stockxProducts = stockxRes?.data || [];
+      const goatProducts = goatRes?.data || [];
+
+      // Build GOAT lookup by SKU for cross-matching
+      const goatBySku = {};
+      for (const g of goatProducts) {
+        if (g.sku) goatBySku[g.sku.replace(/[\s-]/g, "").toUpperCase()] = g;
+      }
+
+      // Merge GOAT data into StockX products
+      const merged = stockxProducts.map(p => {
+        const skuKey = p.sku ? p.sku.replace(/[\s-]/g, "").toUpperCase() : null;
+        const goatMatch = skuKey ? goatBySku[skuKey] : null;
+        return {
+          ...p,
+          _goat: goatMatch ? {
+            slug: goatMatch.slug || null,
+            min_price: goatMatch.min_price || null,
+            max_price: goatMatch.max_price || null,
+            avg_price: goatMatch.avg_price || null,
+            image: goatMatch.image || null,
+          } : null,
+        };
       });
-      const data = await res.json();
+
       const duration = Date.now() - startTime;
-      const count = data?.data?.length || 0;
-      console.log(`KicksDB results: ${count} products in ${duration}ms (page ${page})`);
-      // Pass back page info so frontend knows if there are more
-      return { statusCode: res.status, headers: corsHeaders, body: JSON.stringify({ ...data, _page: page, _limit: limit }) };
+      const goatMatches = merged.filter(p => p._goat).length;
+      console.log(`KicksDB search: ${query} | StockX: ${stockxProducts.length}, GOAT: ${goatProducts.length}, matched: ${goatMatches} | ${duration}ms`);
+
+      return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: merged, _page: page, _limit: limit }) };
     } catch(err) {
       console.error("KicksDB error:", err.message);
       return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: err.message }) };
@@ -66,7 +92,7 @@ exports.handler = async function(event) {
     }
   }
 
-  // === KicksDB Trending/Popular ===
+  // === KicksDB Trending/Popular (StockX + GOAT) ===
   if (body.action === "trending") {
     const limit = body.limit || 21;
     const page = body.page || 1;
@@ -75,36 +101,48 @@ exports.handler = async function(event) {
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
-      // Fetch from multiple popular categories to build a diverse landing page
       const queries = ["Jordan 2026", "Nike Dunk 2026", "New Balance 2025", "Yeezy 2025"];
-      const allProducts = [];
+      const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
+      const allStockx = [];
+      const allGoat = [];
       
-      for (const q of queries) {
-        try {
-          const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${perQuery}&offset=${offset}&page=${page}`;
-          const res = await fetch(url, {
-            headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
-          });
-          const data = await res.json();
-          if (data?.data) allProducts.push(...data.data);
-        } catch(e) {
-          console.error("Trending query failed:", q, e.message);
-        }
+      // Fetch StockX and GOAT for each category in parallel
+      const fetches = queries.flatMap(q => [
+        fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${perQuery}&offset=${offset}&page=${page}`, { headers }).then(r => r.json()).then(d => { if (d?.data) allStockx.push(...d.data); }).catch(() => {}),
+        fetch(`${KICKSDB_BASE}/goat/products?query=${encodeURIComponent(q)}&limit=${perQuery}`, { headers }).then(r => r.json()).then(d => { if (d?.data) allGoat.push(...d.data); }).catch(() => {}),
+      ]);
+      await Promise.all(fetches);
+
+      // Build GOAT lookup by SKU
+      const goatBySku = {};
+      for (const g of allGoat) {
+        if (g.sku) goatBySku[g.sku.replace(/[\s-]/g, "").toUpperCase()] = g;
       }
 
-      // Dedupe by slug and take top results
+      // Dedupe StockX by slug
       const seen = new Set();
       const unique = [];
-      for (const p of allProducts) {
+      for (const p of allStockx) {
         if (p.slug && !seen.has(p.slug)) {
           seen.add(p.slug);
-          unique.push(p);
+          const skuKey = p.sku ? p.sku.replace(/[\s-]/g, "").toUpperCase() : null;
+          const goatMatch = skuKey ? goatBySku[skuKey] : null;
+          unique.push({
+            ...p,
+            _goat: goatMatch ? {
+              slug: goatMatch.slug || null,
+              min_price: goatMatch.min_price || null,
+              max_price: goatMatch.max_price || null,
+              avg_price: goatMatch.avg_price || null,
+              image: goatMatch.image || null,
+            } : null,
+          });
         }
       }
-      // Sort by weekly_orders descending if available
       unique.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
 
-      console.log("KicksDB trending page", page, ":", unique.length, "unique products from", queries.length, "queries");
+      const goatMatches = unique.filter(p => p._goat).length;
+      console.log("KicksDB trending page", page, ":", unique.length, "products,", goatMatches, "GOAT matches");
       return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: unique.slice(0, limit), _page: page }) };
     } catch(err) {
       console.error("KicksDB trending error:", err.message);
