@@ -25,7 +25,7 @@ exports.handler = async function(event) {
           "Authorization": `Bearer ${xaiKey}`,
         },
         body: JSON.stringify({
-          model: "grok-3-mini-fast",
+          model: "grok-4-fast",
           input: [{ role: "user", content: `Find the StockX or GOAT product page URL and product image URL for this sneaker: "${query}". Return ONLY a JSON object like: {"productUrl":"https://stockx.com/...","imageUrl":"https://..."} If you find a StockX page, use its og:image. If not found, try GOAT or Nike. Return ONLY the JSON, nothing else.` }],
           tools: [{ 
             type: "web_search",
