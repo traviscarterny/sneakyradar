@@ -41,11 +41,31 @@ exports.handler = async function(event) {
       const stockxProducts = stockxRes?.data || [];
       const goatProducts = goatRes?.data || [];
 
-      // GOAT free tier: no prices, but has affiliate links + release dates
+      // Build GOAT lookup by SKU — paid tier has prices in variants
       const goatBySku = {};
       for (const g of goatProducts) {
         const key = normSku(g.sku);
-        if (key) goatBySku[key] = g;
+        if (!key) continue;
+        // Extract prices from variants array
+        let minPrice = null;
+        let maxPrice = null;
+        if (g.variants && g.variants.length > 0) {
+          const vp = g.variants.map(v => v.price || v.lowest_price || v.min_price).filter(p => p && p > 0);
+          if (vp.length) { minPrice = Math.min(...vp); maxPrice = Math.max(...vp); }
+        }
+        // Fallback to sizes array
+        if (!minPrice && g.sizes && g.sizes.length > 0) {
+          const sp = g.sizes.map(s => s.price || s.lowest_price).filter(p => p && p > 0);
+          if (sp.length) { minPrice = Math.min(...sp); maxPrice = Math.max(...sp); }
+        }
+        goatBySku[key] = { ...g, _minPrice: minPrice, _maxPrice: maxPrice };
+      }
+
+      // Log first GOAT match to verify price extraction
+      const firstGoatKey = Object.keys(goatBySku)[0];
+      if (firstGoatKey) {
+        const fg = goatBySku[firstGoatKey];
+        console.log(`GOAT price check: ${fg.name || fg.slug} | min: ${fg._minPrice} | max: ${fg._maxPrice} | variants: ${fg.variants?.length || 0} | sizes: ${fg.sizes?.length || 0}`);
       }
 
       const merged = stockxProducts.map(p => {
@@ -58,6 +78,8 @@ exports.handler = async function(event) {
             link: gm.link || null,
             image_url: gm.image_url || null,
             release_date: gm.release_date || null,
+            min_price: gm._minPrice,
+            max_price: gm._maxPrice,
           } : null,
         };
       });
