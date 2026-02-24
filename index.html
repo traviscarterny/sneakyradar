@@ -776,6 +776,15 @@ function DropRadarPage() {
   };
 
   useEffect(() => {
+    // Check URL for ?search= param (from blog links)
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get("search");
+    if (searchParam) {
+      setQuery(searchParam);
+      search(searchParam);
+      return;
+    }
+
     const CACHE_VERSION = "v25";
     const cached = localStorage.getItem("sneakyradar_drops");
     const cachedTime = localStorage.getItem("sneakyradar_drops_time");
