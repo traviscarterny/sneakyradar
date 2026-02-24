@@ -71,7 +71,7 @@
     .search-go-btn:hover { background: #ff5a20; }
     .search-go-btn:disabled { background: var(--muted); cursor: not-allowed; }
     .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-    .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
     .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
     .result-source-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
     .rsf-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
@@ -757,14 +757,24 @@ function DropRadarPage() {
     {label: "NIKE DUNK", query: "Nike Dunk"},
     {label: "AIR FORCE 1", query: "Air Force 1"},
     {label: "AIR MAX", query: "Nike Air Max"},
+    {label: "NIKE SB", query: "Nike SB"},
+    {label: "KOBE", query: "Nike Kobe"},
+    {label: "FOAMPOSITE", query: "Nike Foamposite"},
     {label: "YEEZY BOOST", query: "Yeezy Boost"},
     {label: "YEEZY", query: "Yeezy"},
     {label: "ADIDAS", query: "Adidas"},
     {label: "NEW BALANCE", query: "New Balance"},
     {label: "ASICS", query: "Asics"},
+    {label: "PUMA", query: "Puma"},
+    {label: "ON RUNNING", query: "On Running"},
+    {label: "ANTA", query: "Anta"},
+    {label: "SAUCONY", query: "Saucony"},
+    {label: "SALOMON", query: "Salomon"},
     {label: "LEBRON", query: "Lebron"},
     {label: "LUKA", query: "Jordan Luka"},
     {label: "TRAVIS SCOTT", query: "Travis Scott"},
+    {label: "BALENCIAGA", query: "Balenciaga sneakers"},
+    {label: "VERSACE", query: "Versace sneakers"},
   ];
   const [activeCategory, setActiveCategory] = useState("ALL");
 
