@@ -43,19 +43,38 @@ exports.handler = async function(event) {
       const goatProducts = goatRes?.data || [];
       const fcProducts = fcRes?.data || [];
 
-      // Build lookups by SKU for cross-matching
+      // Debug: log sample responses
+      if (stockxProducts.length > 0) {
+        console.log("StockX sample fields:", Object.keys(stockxProducts[0]).join(", "));
+        console.log("StockX sample:", JSON.stringify(stockxProducts[0]).substring(0, 400));
+      }
+      if (goatProducts.length > 0) {
+        console.log("GOAT sample:", JSON.stringify(goatProducts[0]).substring(0, 300));
+      } else {
+        console.log("GOAT returned 0 products. Raw:", JSON.stringify(goatRes).substring(0, 200));
+      }
+      if (fcProducts.length > 0) {
+        console.log("FC sample:", JSON.stringify(fcProducts[0]).substring(0, 300));
+      } else {
+        console.log("FC returned 0 products. Raw:", JSON.stringify(fcRes).substring(0, 200));
+      }
+
+      // Build lookups by SKU for cross-matching (normalize: remove spaces, dashes, uppercase)
+      const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
       const goatBySku = {};
       for (const g of goatProducts) {
-        if (g.sku) goatBySku[g.sku.replace(/[\s-]/g, "").toUpperCase()] = g;
+        const key = normSku(g.sku);
+        if (key) goatBySku[key] = g;
       }
       const fcBySku = {};
       for (const f of fcProducts) {
-        if (f.sku) fcBySku[f.sku.replace(/[\s-]/g, "").toUpperCase()] = f;
+        const key = normSku(f.sku);
+        if (key) fcBySku[key] = f;
       }
 
       // Merge GOAT + FC data into StockX products
       const merged = stockxProducts.map(p => {
-        const skuKey = p.sku ? p.sku.replace(/[\s-]/g, "").toUpperCase() : null;
+        const skuKey = normSku(p.sku);
         const goatMatch = skuKey ? goatBySku[skuKey] : null;
         const fcMatch = skuKey ? fcBySku[skuKey] : null;
         return {
@@ -130,14 +149,17 @@ exports.handler = async function(event) {
       ]);
       await Promise.all(fetches);
 
-      // Build lookups by SKU
+      // Build lookups by SKU (normalize: remove spaces, dashes, slashes, uppercase)
+      const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
       const goatBySku = {};
       for (const g of allGoat) {
-        if (g.sku) goatBySku[g.sku.replace(/[\s-]/g, "").toUpperCase()] = g;
+        const key = normSku(g.sku);
+        if (key) goatBySku[key] = g;
       }
       const fcBySku = {};
       for (const f of allFc) {
-        if (f.sku) fcBySku[f.sku.replace(/[\s-]/g, "").toUpperCase()] = f;
+        const key = normSku(f.sku);
+        if (key) fcBySku[key] = f;
       }
 
       // Dedupe StockX by slug and merge
@@ -146,7 +168,7 @@ exports.handler = async function(event) {
       for (const p of allStockx) {
         if (p.slug && !seen.has(p.slug)) {
           seen.add(p.slug);
-          const skuKey = p.sku ? p.sku.replace(/[\s-]/g, "").toUpperCase() : null;
+          const skuKey = normSku(p.sku);
           const goatMatch = skuKey ? goatBySku[skuKey] : null;
           const fcMatch = skuKey ? fcBySku[skuKey] : null;
           unique.push({
