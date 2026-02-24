@@ -48,12 +48,39 @@ exports.handler = async function(event) {
         console.log("GOAT price fields:", JSON.stringify({min_price:g.min_price, max_price:g.max_price, avg_price:g.avg_price, price:g.price, lowest_price:g.lowest_price, retail_price:g.retail_price}));
       }
 
+      // Debug: log GOAT variant structure
+      if (goatProducts.length > 0) {
+        const g = goatProducts[0];
+        console.log("GOAT variant sample:", g.variants ? JSON.stringify(g.variants[0]).substring(0, 200) : "no variants");
+        console.log("GOAT retail_prices:", JSON.stringify(g.retail_prices));
+        console.log("GOAT link:", g.link);
+      }
+
       // Build GOAT lookup by SKU (normalize: remove spaces, dashes, slashes, uppercase)
       const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
       const goatBySku = {};
       for (const g of goatProducts) {
         const key = normSku(g.sku);
-        if (key) goatBySku[key] = g;
+        if (!key) continue;
+        // Extract min price from variants
+        let minPrice = null;
+        let maxPrice = null;
+        if (g.variants && g.variants.length > 0) {
+          const variantPrices = g.variants.map(v => v.price || v.lowest_price || v.min_price).filter(p => p && p > 0);
+          if (variantPrices.length > 0) {
+            minPrice = Math.min(...variantPrices);
+            maxPrice = Math.max(...variantPrices);
+          }
+        }
+        // Also check sizes array for prices
+        if (!minPrice && g.sizes && g.sizes.length > 0) {
+          const sizePrices = g.sizes.map(s => s.price || s.lowest_price).filter(p => p && p > 0);
+          if (sizePrices.length > 0) {
+            minPrice = Math.min(...sizePrices);
+            maxPrice = Math.max(...sizePrices);
+          }
+        }
+        goatBySku[key] = { ...g, _minPrice: minPrice, _maxPrice: maxPrice };
       }
 
       // Merge GOAT data into StockX products
@@ -64,10 +91,13 @@ exports.handler = async function(event) {
           ...p,
           _goat: goatMatch ? {
             slug: goatMatch.slug || null,
-            min_price: goatMatch.min_price || null,
-            max_price: goatMatch.max_price || null,
-            avg_price: goatMatch.avg_price || null,
-            image: goatMatch.image || goatMatch.images?.[0] || null,
+            link: goatMatch.link || null,
+            min_price: goatMatch._minPrice,
+            max_price: goatMatch._maxPrice,
+            avg_price: null,
+            image: goatMatch.image_url || (goatMatch.images && goatMatch.images[0]) || null,
+            release_date: goatMatch.release_date || null,
+            retail_prices: goatMatch.retail_prices || null,
           } : null,
         };
       });
@@ -125,7 +155,18 @@ exports.handler = async function(event) {
       const goatBySku = {};
       for (const g of allGoat) {
         const key = normSku(g.sku);
-        if (key) goatBySku[key] = g;
+        if (!key) continue;
+        let minPrice = null;
+        let maxPrice = null;
+        if (g.variants && g.variants.length > 0) {
+          const vp = g.variants.map(v => v.price || v.lowest_price || v.min_price).filter(p => p && p > 0);
+          if (vp.length) { minPrice = Math.min(...vp); maxPrice = Math.max(...vp); }
+        }
+        if (!minPrice && g.sizes && g.sizes.length > 0) {
+          const sp = g.sizes.map(s => s.price || s.lowest_price).filter(p => p && p > 0);
+          if (sp.length) { minPrice = Math.min(...sp); maxPrice = Math.max(...sp); }
+        }
+        goatBySku[key] = { ...g, _minPrice: minPrice, _maxPrice: maxPrice };
       }
 
       const seen = new Set();
@@ -139,10 +180,12 @@ exports.handler = async function(event) {
             ...p,
             _goat: goatMatch ? {
               slug: goatMatch.slug || null,
-              min_price: goatMatch.min_price || null,
-              max_price: goatMatch.max_price || null,
-              avg_price: goatMatch.avg_price || null,
-              image: goatMatch.image || (goatMatch.images && goatMatch.images[0]) || null,
+              link: goatMatch.link || null,
+              min_price: goatMatch._minPrice,
+              max_price: goatMatch._maxPrice,
+              avg_price: null,
+              image: goatMatch.image_url || (goatMatch.images && goatMatch.images[0]) || null,
+              release_date: goatMatch.release_date || null,
             } : null,
           });
         }
