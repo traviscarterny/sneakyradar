@@ -31,8 +31,8 @@ exports.handler = async function(event) {
       const offset = (page - 1) * limit;
       const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
       const startTime = Date.now();
+      const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
 
-      // Fetch StockX and GOAT in parallel
       const [stockxRes, goatRes] = await Promise.all([
         fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&page=${page}&offset=${offset}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
         fetch(`${KICKSDB_BASE}/goat/products?query=${encodeURIComponent(query)}&limit=${limit}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
@@ -41,63 +41,23 @@ exports.handler = async function(event) {
       const stockxProducts = stockxRes?.data || [];
       const goatProducts = goatRes?.data || [];
 
-      // Debug: log GOAT fields to understand structure
-      if (goatProducts.length > 0) {
-        const g = goatProducts[0];
-        console.log("GOAT fields:", Object.keys(g).join(", "));
-        console.log("GOAT price fields:", JSON.stringify({min_price:g.min_price, max_price:g.max_price, avg_price:g.avg_price, price:g.price, lowest_price:g.lowest_price, retail_price:g.retail_price}));
-      }
-
-      // Debug: log GOAT variant structure
-      if (goatProducts.length > 0) {
-        const g = goatProducts[0];
-        console.log("GOAT variant sample:", g.variants ? JSON.stringify(g.variants[0]).substring(0, 200) : "no variants");
-        console.log("GOAT retail_prices:", JSON.stringify(g.retail_prices));
-        console.log("GOAT link:", g.link);
-      }
-
-      // Build GOAT lookup by SKU (normalize: remove spaces, dashes, slashes, uppercase)
-      const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
+      // GOAT free tier: no prices, but has affiliate links + release dates
       const goatBySku = {};
       for (const g of goatProducts) {
         const key = normSku(g.sku);
-        if (!key) continue;
-        // Extract min price from variants
-        let minPrice = null;
-        let maxPrice = null;
-        if (g.variants && g.variants.length > 0) {
-          const variantPrices = g.variants.map(v => v.price || v.lowest_price || v.min_price).filter(p => p && p > 0);
-          if (variantPrices.length > 0) {
-            minPrice = Math.min(...variantPrices);
-            maxPrice = Math.max(...variantPrices);
-          }
-        }
-        // Also check sizes array for prices
-        if (!minPrice && g.sizes && g.sizes.length > 0) {
-          const sizePrices = g.sizes.map(s => s.price || s.lowest_price).filter(p => p && p > 0);
-          if (sizePrices.length > 0) {
-            minPrice = Math.min(...sizePrices);
-            maxPrice = Math.max(...sizePrices);
-          }
-        }
-        goatBySku[key] = { ...g, _minPrice: minPrice, _maxPrice: maxPrice };
+        if (key) goatBySku[key] = g;
       }
 
-      // Merge GOAT data into StockX products
       const merged = stockxProducts.map(p => {
         const skuKey = normSku(p.sku);
-        const goatMatch = skuKey ? goatBySku[skuKey] : null;
+        const gm = skuKey ? goatBySku[skuKey] : null;
         return {
           ...p,
-          _goat: goatMatch ? {
-            slug: goatMatch.slug || null,
-            link: goatMatch.link || null,
-            min_price: goatMatch._minPrice,
-            max_price: goatMatch._maxPrice,
-            avg_price: null,
-            image: goatMatch.image_url || (goatMatch.images && goatMatch.images[0]) || null,
-            release_date: goatMatch.release_date || null,
-            retail_prices: goatMatch.retail_prices || null,
+          _goat: gm ? {
+            slug: gm.slug || null,
+            link: gm.link || null,
+            image_url: gm.image_url || null,
+            release_date: gm.release_date || null,
           } : null,
         };
       });
@@ -142,6 +102,7 @@ exports.handler = async function(event) {
     try {
       const queries = ["Jordan 2026", "Nike Dunk 2026", "New Balance 2025", "Yeezy 2025"];
       const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
+      const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
       const allStockx = [];
       const allGoat = [];
       
@@ -151,22 +112,10 @@ exports.handler = async function(event) {
       ]);
       await Promise.all(fetches);
 
-      const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
       const goatBySku = {};
       for (const g of allGoat) {
         const key = normSku(g.sku);
-        if (!key) continue;
-        let minPrice = null;
-        let maxPrice = null;
-        if (g.variants && g.variants.length > 0) {
-          const vp = g.variants.map(v => v.price || v.lowest_price || v.min_price).filter(p => p && p > 0);
-          if (vp.length) { minPrice = Math.min(...vp); maxPrice = Math.max(...vp); }
-        }
-        if (!minPrice && g.sizes && g.sizes.length > 0) {
-          const sp = g.sizes.map(s => s.price || s.lowest_price).filter(p => p && p > 0);
-          if (sp.length) { minPrice = Math.min(...sp); maxPrice = Math.max(...sp); }
-        }
-        goatBySku[key] = { ...g, _minPrice: minPrice, _maxPrice: maxPrice };
+        if (key) goatBySku[key] = g;
       }
 
       const seen = new Set();
@@ -175,17 +124,14 @@ exports.handler = async function(event) {
         if (p.slug && !seen.has(p.slug)) {
           seen.add(p.slug);
           const skuKey = normSku(p.sku);
-          const goatMatch = skuKey ? goatBySku[skuKey] : null;
+          const gm = skuKey ? goatBySku[skuKey] : null;
           unique.push({
             ...p,
-            _goat: goatMatch ? {
-              slug: goatMatch.slug || null,
-              link: goatMatch.link || null,
-              min_price: goatMatch._minPrice,
-              max_price: goatMatch._maxPrice,
-              avg_price: null,
-              image: goatMatch.image_url || (goatMatch.images && goatMatch.images[0]) || null,
-              release_date: goatMatch.release_date || null,
+            _goat: gm ? {
+              slug: gm.slug || null,
+              link: gm.link || null,
+              image_url: gm.image_url || null,
+              release_date: gm.release_date || null,
             } : null,
           });
         }
