@@ -42,7 +42,7 @@ exports.handler = async function(event) {
       console.log("Calling Grok for batch image search...");
       
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 55000);
+      const timeout = setTimeout(() => controller.abort(), 25000);
       
       const response = await fetch("https://api.x.ai/v1/responses", {
         method: "POST",
