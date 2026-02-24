@@ -23,12 +23,14 @@ exports.handler = async function(event) {
   if (body.action === "search") {
     const query = body.query || "";
     const limit = body.limit || 20;
+    const page = body.page || 1;
+    const offset = (page - 1) * limit;
     if (!query) return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: [] }) };
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
-      const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}`;
-      console.log("KicksDB search:", query);
+      const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`;
+      console.log("KicksDB search:", query, "page:", page, "offset:", offset);
       const res = await fetch(url, {
         headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
       });
