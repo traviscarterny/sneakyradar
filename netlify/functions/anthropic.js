@@ -104,7 +104,7 @@ exports.handler = async function(event) {
       
       const q = "Jordan";
       
-      const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=40&offset=${offset}&page=${page}`, { headers });
+      const res = await fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=50&offset=${offset}&page=${page}`, { headers });
       const data = await res.json();
       let products = data?.data || [];
       
