@@ -230,13 +230,50 @@
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 4px; }
     .footer-logo .radar { color: var(--accent); }
     @media (max-width: 768px) {
-      .nav { padding: 0 16px; }
-      .nav-logo { font-size: 1.2rem; padding-right: 16px; }
-      .nav-tab { padding: 0 12px; font-size: 0.55rem; }
-      .section-wrap { padding: 40px 16px 80px; }
+      .nav { padding: 0 12px; flex-wrap: wrap; height: auto; min-height: 48px; }
+      .nav-left { width: 100%; justify-content: space-between; padding: 10px 0; }
+      .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; }
+      .nav-tabs { display: flex; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-top: 1px solid var(--border); }
+      .nav-tab { padding: 10px 14px; font-size: 0.5rem; white-space: nowrap; border-right: 1px solid var(--border); flex-shrink: 0; }
+      .nav-right { position: absolute; right: 12px; top: 8px; }
+      .section-wrap { padding: 24px 12px 80px; }
+      .section-title { font-size: clamp(2rem, 10vw, 3.5rem); }
+      .section-sub { font-size: 0.7rem; margin-bottom: 24px; }
+      .search-row { flex-direction: column; gap: 8px; }
+      .search-bar { border-right: 1px solid var(--border); }
+      .search-bar input { font-size: 0.8rem; padding: 14px 14px; }
+      .search-go-btn { padding: 14px 24px; width: 100%; }
+      .filters { gap: 6px; margin-bottom: 16px; justify-content: center; }
+      .filter-btn { font-size: 0.55rem; padding: 5px 10px; letter-spacing: 1px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; }
+      .card-img-wrap { height: 150px; }
+      .card-img { padding: 12px; }
+      .card-body { padding: 12px; }
+      .card-brand { font-size: 0.5rem; letter-spacing: 2px; }
+      .card-name { font-size: 1.1rem; letter-spacing: 1px; }
+      .card-colorway { font-size: 0.55rem; }
+      .card-meta { font-size: 0.6rem; }
+      .meta-row { font-size: 0.6rem; }
+      .price { font-size: 0.65rem; }
+      .hype-label { font-size: 0.55rem; }
+      .badge { font-size: 0.45rem; padding: 2px 6px; }
+      .status-bar { font-size: 0.55rem; }
+      .result-source-filters { gap: 4px; flex-wrap: wrap; }
+      .rsf-btn { font-size: 0.5rem; padding: 4px 8px; }
       .resell-stats { grid-template-columns: repeat(2, 1fr); }
       .auth-check { grid-template-columns: 1fr; }
-      .chat-window { width: calc(100vw - 32px); right: 16px; }
+      .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: 60vh; }
+      .chat-input-row input { font-size: 0.8rem; }
+      .price-compare { gap: 4px; }
+      .price-compare a { font-size: 0.55rem; padding: 4px 6px; }
+    }
+    @media (max-width: 380px) {
+      .grid { grid-template-columns: 1fr; }
+      .card-img-wrap { height: 180px; }
+      .nav-tabs { gap: 0; }
+      .nav-tab { padding: 10px 10px; font-size: 0.45rem; }
+      .filter-btn { font-size: 0.5rem; padding: 4px 8px; }
+      .site-footer { flex-direction: column; gap: 8px; padding: 16px; text-align: center; }
     }
   </style>
 </head>
