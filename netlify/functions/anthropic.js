@@ -35,6 +35,9 @@ exports.handler = async function(event) {
       });
       const data = await response.json();
       console.log("Grok response status:", response.status);
+      if (response.status !== 200) {
+        console.log("Grok error:", JSON.stringify(data).substring(0, 300));
+      }
       
       // Extract text from response
       let text = "";
