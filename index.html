@@ -611,6 +611,7 @@ function DropRadarPage() {
   const search = async (q="")=>{
     setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
     setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
+    setBrandFilter("All");
     try {
       const drops = await fetchDrops(q, 1);
       const d = dedupeDrops(drops);
@@ -669,6 +670,7 @@ function DropRadarPage() {
   }, []);
 
   const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
+  const dynamicBrands = ["All", ...[...new Set(drops.map(d=>d.brand).filter(Boolean))].sort()];
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
     if(d.sponsored)return true;
@@ -688,8 +690,9 @@ function DropRadarPage() {
           </div>
           <button className="search-go-btn" onClick={()=>search(query)} disabled={loading}>{loading?"SCANNING...":"SEARCH"}</button>
         </div>
+        <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--muted)"}}>Filters</div>
         <div className="filters">
-          {BRAND_FILTERS.map(f=><button key={f} className={`filter-btn ${brandFilter===f?"active":""}`} onClick={()=>setBrandFilter(f)}>{f}</button>)}
+          {dynamicBrands.map(f=><button key={f} className={`filter-btn ${brandFilter===f?"active":""}`} onClick={()=>setBrandFilter(f)}>{f}</button>)}
         </div>
         {allSrcLabels.length>0&&(
           <div className="result-source-filters">
