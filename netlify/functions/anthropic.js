@@ -18,12 +18,15 @@ exports.handler = async function(event) {
     try {
       const query = body.query;
       console.log("Grok image search for:", query);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
       const response = await fetch("https://api.x.ai/v1/responses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${xaiKey}`,
         },
+        signal: controller.signal,
         body: JSON.stringify({
           model: "grok-4-fast",
           input: [{ role: "user", content: `Find the StockX or GOAT product page URL and product image URL for this sneaker: "${query}". Return ONLY a JSON object like: {"productUrl":"https://stockx.com/...","imageUrl":"https://..."} If you find a StockX page, use its og:image. If not found, try GOAT or Nike. Return ONLY the JSON, nothing else.` }],
@@ -33,6 +36,7 @@ exports.handler = async function(event) {
           }],
         }),
       });
+      clearTimeout(timeout);
       const data = await response.json();
       console.log("Grok response status:", response.status);
       if (response.status !== 200) {
@@ -42,20 +46,22 @@ exports.handler = async function(event) {
         console.log("Grok raw data:", JSON.stringify(data).substring(0, 500));
       }
       
-      // Extract text from response
+      // Extract text from response - Grok Responses API puts it in data.text or data.output
       let text = "";
-      if (data.output) {
+      if (data.text) {
+        text = data.text;
+      } else if (data.output) {
         for (const block of data.output) {
           if (block.type === "message" && block.content) {
             for (const c of block.content) {
-              if (c.type === "text") text += c.text;
+              if (c.type === "output_text" || c.type === "text") text += c.text || "";
             }
           }
         }
       } else if (data.choices) {
         text = data.choices[0]?.message?.content || "";
       }
-      console.log("Grok text:", text.substring(0, 200));
+      console.log("Grok text:", text.substring(0, 300));
       
       // Parse JSON from response
       const jsonMatch = text.match(/\{[^{}]*"productUrl"[^{}]*\}/);
