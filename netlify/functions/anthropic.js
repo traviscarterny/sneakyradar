@@ -61,11 +61,13 @@ exports.handler = async function(event) {
         goatBySku[key] = { ...g, _minPrice: minPrice, _maxPrice: maxPrice };
       }
 
-      // Log first GOAT match to verify price extraction
+      // Log first GOAT match — dump first size object to find field names
       const firstGoatKey = Object.keys(goatBySku)[0];
       if (firstGoatKey) {
         const fg = goatBySku[firstGoatKey];
+        const firstSize = fg.sizes?.[0] || null;
         console.log(`GOAT price check: ${fg.name || fg.slug} | min: ${fg._minPrice} | max: ${fg._maxPrice} | variants: ${fg.variants?.length || 0} | sizes: ${fg.sizes?.length || 0}`);
+        console.log(`GOAT first size keys: ${firstSize ? JSON.stringify(firstSize) : 'none'}`);
       }
 
       const merged = stockxProducts.map(p => {
