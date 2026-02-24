@@ -366,7 +366,7 @@ async function fetchDrops(q, page = 1) {
   const action = q ? "search" : "trending";
   const payload = q
     ? { action: "search", query: q, limit: 21, page: page }
-    : { action: "trending", limit: 21 };
+    : { action: "trending", limit: 21, page: page };
 
   console.log(`[SNEAKYRADAR] KicksDB ${action}:`, q || "trending", "page:", page);
 
@@ -610,7 +610,7 @@ function DropRadarPage() {
 
   const search = async (q="")=>{
     setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
-    setPage(1); setHasMore(true); setLastQuery(q);
+    setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
     try {
       const drops = await fetchDrops(q, 1);
       const d = dedupeDrops(drops);
@@ -636,9 +636,10 @@ function DropRadarPage() {
     if(!lastQuery || loadingMore || !hasMore) return;
     setLoadingMore(true);
     const nextPage = page + 1;
-    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", lastQuery);
+    const fetchQuery = lastQuery === "__trending__" ? "" : lastQuery;
+    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending");
     try {
-      const moreDrops = await fetchDrops(lastQuery, nextPage);
+      const moreDrops = await fetchDrops(fetchQuery, nextPage);
       console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
       if(moreDrops.length === 0) { setHasMore(false); }
       else {
