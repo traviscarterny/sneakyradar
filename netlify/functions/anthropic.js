@@ -61,13 +61,17 @@ exports.handler = async function(event) {
         goatBySku[key] = { ...g, _minPrice: minPrice, _maxPrice: maxPrice };
       }
 
-      // Log first GOAT match — dump first size object to find field names
+      // Log first GOAT product — dump all top-level keys to find prices
       const firstGoatKey = Object.keys(goatBySku)[0];
       if (firstGoatKey) {
         const fg = goatBySku[firstGoatKey];
-        const firstSize = fg.sizes?.[0] || null;
-        console.log(`GOAT price check: ${fg.name || fg.slug} | min: ${fg._minPrice} | max: ${fg._maxPrice} | variants: ${fg.variants?.length || 0} | sizes: ${fg.sizes?.length || 0}`);
-        console.log(`GOAT first size keys: ${firstSize ? JSON.stringify(firstSize) : 'none'}`);
+        const topKeys = Object.keys(fg).filter(k => k !== 'sizes' && k !== 'variants');
+        console.log(`GOAT top keys: ${topKeys.join(', ')}`);
+        // Log any key that might contain price
+        const priceKeys = topKeys.filter(k => /price|cost|value|retail|avg|min|max|low|high/i.test(k));
+        for (const pk of priceKeys) {
+          console.log(`GOAT ${pk}: ${JSON.stringify(fg[pk])}`);
+        }
       }
 
       const merged = stockxProducts.map(p => {
