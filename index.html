@@ -351,6 +351,7 @@ const AUTH_GUIDES = [
 const ALL_SOURCES = [
   {id:"stockx",label:"StockX",url:"stockx.com",color:"#00ff94"},
   {id:"goat",label:"GOAT",url:"goat.com",color:"#ffffff"},
+  {id:"flightclub",label:"Flight Club",url:"flightclub.com",color:"#f5a623"},
 ];
 
 const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
@@ -404,12 +405,29 @@ function kicksToDrops(products) {
         });
       }
     }
+    if (p._fc) {
+      const fcLink = p._fc.link || (p._fc.slug ? `https://www.flightclub.com/${p._fc.slug}` : "https://www.flightclub.com");
+      const fcPrice = p._fc.min_price || p._fc.avg_price || null;
+      if (fcPrice) {
+        prices.push({
+          store: "Flight Club",
+          storeId: "flightclub",
+          price: `$${Math.round(fcPrice)}`,
+          url: fcLink,
+        });
+      }
+    }
 
-    // Use lowest price across sources for the main resell display
-    const allPrices = [p.min_price, p._goat?.min_price].filter(Boolean);
+    // Use lowest price across all sources for the main resell display
+    const allPrices = [p.min_price, p._goat?.min_price, p._fc?.min_price].filter(Boolean);
     const lowestPrice = allPrices.length ? Math.min(...allPrices) : null;
-    const highestPrice = [p.max_price, p._goat?.max_price].filter(Boolean);
+    const highestPrice = [p.max_price, p._goat?.max_price, p._fc?.max_price].filter(Boolean);
     const maxPrice = highestPrice.length ? Math.max(...highestPrice) : null;
+
+    // Build source label
+    const sourceNames = ["StockX"];
+    if (p._goat) sourceNames.push("GOAT");
+    if (p._fc) sourceNames.push("FC");
 
     return {
       brand: p.brand || "Unknown",
@@ -422,7 +440,7 @@ function kicksToDrops(products) {
       colorway: p.colorway || p.color || null,
       method: null,
       image: p.image || null,
-      source: prices.length > 1 ? "StockX + GOAT" : "StockX",
+      source: sourceNames.join(" + "),
       sourceUrl: stockxUrl,
       sku: p.sku || null,
       slug: slug,
