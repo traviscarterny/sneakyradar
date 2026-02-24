@@ -670,7 +670,6 @@ function DropRadarPage() {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
-  const [brandFilter, setBrandFilter] = useState("Filters: ALL");
   const [srcFilter, setSrcFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [lastQuery, setLastQuery] = useState("");
@@ -682,7 +681,11 @@ function DropRadarPage() {
   const search = async (q="")=>{
     setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
     setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
-    setBrandFilter("Filters: ALL");
+    // Update active category if it matches a category button
+    const matchedCat = CATEGORY_SEARCHES.find(c => c.query.toLowerCase() === q.toLowerCase());
+    if (matchedCat) setActiveCategory(matchedCat.label);
+    else if (q === "") setActiveCategory("ALL");
+    else setActiveCategory("");
     try {
       const drops = await fetchDrops(q, 1);
       const d = dedupeDrops(drops);
@@ -746,13 +749,37 @@ function DropRadarPage() {
     search();
   }, []);
 
+  const CATEGORY_SEARCHES = [
+    {label: "ALL", query: ""},
+    {label: "JORDAN", query: "Jordan"},
+    {label: "NIKE DUNK", query: "Nike Dunk"},
+    {label: "AIR FORCE 1", query: "Air Force 1"},
+    {label: "AIR MAX", query: "Nike Air Max"},
+    {label: "YEEZY BOOST", query: "Yeezy Boost"},
+    {label: "YEEZY", query: "Yeezy"},
+    {label: "ADIDAS", query: "Adidas"},
+    {label: "NEW BALANCE", query: "New Balance"},
+    {label: "ASICS", query: "Asics"},
+  ];
+  const [activeCategory, setActiveCategory] = useState("ALL");
+
+  const handleCategoryClick = (cat) => {
+    setActiveCategory(cat.label);
+    if (cat.query === "") {
+      // ALL — go back to trending
+      setQuery("");
+      search("");
+    } else {
+      setQuery(cat.query);
+      search(cat.query);
+    }
+  };
+
   const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
-  const dynamicBrands = ["Filters: ALL", ...[...new Set(drops.map(d=>d.brand).filter(Boolean))].sort()];
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
     if(d.sponsored)return true;
-    return(brandFilter==="Filters: ALL"||d.brand?.toLowerCase()===brandFilter.toLowerCase())&&
-           (srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
+    return(srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
   });
 
   return (
@@ -767,9 +794,9 @@ function DropRadarPage() {
           </div>
           <button className="search-go-btn" onClick={()=>search(query)} disabled={loading}>{loading?"SCANNING...":"SEARCH"}</button>
         </div>
-        <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Filters</div>
+        <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
         <div className="filters">
-          {dynamicBrands.map(f=><button key={f} className={`filter-btn ${brandFilter===f?"active":""}`} onClick={()=>setBrandFilter(f)}>{f}</button>)}
+          {CATEGORY_SEARCHES.map(cat=><button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
         </div>
         {allSrcLabels.length>0&&(
           <div className="result-source-filters">
