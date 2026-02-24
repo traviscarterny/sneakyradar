@@ -22,21 +22,26 @@ exports.handler = async function(event) {
   // === KicksDB Product Search ===
   if (body.action === "search") {
     const query = body.query || "";
-    const limit = body.limit || 20;
+    const limit = body.limit || 21;
     const page = body.page || 1;
-    const offset = (page - 1) * limit;
     if (!query) return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: [] }) };
     if (!KICKSDB_KEY) return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: "KICKSDB_API_KEY not configured" }) };
 
     try {
-      const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`;
-      console.log("KicksDB search:", query, "page:", page, "offset:", offset);
+      // Try both page and offset params — KicksDB docs unclear on which is supported
+      const offset = (page - 1) * limit;
+      const url = `${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&page=${page}&offset=${offset}`;
+      console.log("KicksDB search:", query, "page:", page, "offset:", offset, "limit:", limit);
+      const startTime = Date.now();
       const res = await fetch(url, {
         headers: { "Authorization": `Bearer ${KICKSDB_KEY}` }
       });
       const data = await res.json();
-      console.log("KicksDB results:", data?.data?.length || 0, "products");
-      return { statusCode: res.status, headers: corsHeaders, body: JSON.stringify(data) };
+      const duration = Date.now() - startTime;
+      const count = data?.data?.length || 0;
+      console.log(`KicksDB results: ${count} products in ${duration}ms (page ${page})`);
+      // Pass back page info so frontend knows if there are more
+      return { statusCode: res.status, headers: corsHeaders, body: JSON.stringify({ ...data, _page: page, _limit: limit }) };
     } catch(err) {
       console.error("KicksDB error:", err.message);
       return { statusCode: 500, headers: corsHeaders, body: JSON.stringify({ error: err.message }) };
