@@ -19,7 +19,7 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body); }
   catch(e) { return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON" }) }; }
 
-  // === KicksDB Product Search (StockX + GOAT) ===
+  // === KicksDB Product Search (StockX + GOAT + Flight Club) ===
   if (body.action === "search") {
     const query = body.query || "";
     const limit = body.limit || 21;
@@ -32,25 +32,32 @@ exports.handler = async function(event) {
       const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
       const startTime = Date.now();
 
-      // Fetch StockX and GOAT in parallel
-      const [stockxRes, goatRes] = await Promise.all([
+      // Fetch StockX, GOAT, and Flight Club in parallel
+      const [stockxRes, goatRes, fcRes] = await Promise.all([
         fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&page=${page}&offset=${offset}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
         fetch(`${KICKSDB_BASE}/goat/products?query=${encodeURIComponent(query)}&limit=${limit}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
+        fetch(`${KICKSDB_BASE}/stadiumgoods/products?query=${encodeURIComponent(query)}&limit=${limit}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
       ]);
 
       const stockxProducts = stockxRes?.data || [];
       const goatProducts = goatRes?.data || [];
+      const fcProducts = fcRes?.data || [];
 
-      // Build GOAT lookup by SKU for cross-matching
+      // Build lookups by SKU for cross-matching
       const goatBySku = {};
       for (const g of goatProducts) {
         if (g.sku) goatBySku[g.sku.replace(/[\s-]/g, "").toUpperCase()] = g;
       }
+      const fcBySku = {};
+      for (const f of fcProducts) {
+        if (f.sku) fcBySku[f.sku.replace(/[\s-]/g, "").toUpperCase()] = f;
+      }
 
-      // Merge GOAT data into StockX products
+      // Merge GOAT + FC data into StockX products
       const merged = stockxProducts.map(p => {
         const skuKey = p.sku ? p.sku.replace(/[\s-]/g, "").toUpperCase() : null;
         const goatMatch = skuKey ? goatBySku[skuKey] : null;
+        const fcMatch = skuKey ? fcBySku[skuKey] : null;
         return {
           ...p,
           _goat: goatMatch ? {
@@ -60,12 +67,20 @@ exports.handler = async function(event) {
             avg_price: goatMatch.avg_price || null,
             image: goatMatch.image || null,
           } : null,
+          _fc: fcMatch ? {
+            slug: fcMatch.slug || null,
+            link: fcMatch.link || null,
+            min_price: fcMatch.min_price || null,
+            max_price: fcMatch.max_price || null,
+            avg_price: fcMatch.avg_price || null,
+          } : null,
         };
       });
 
       const duration = Date.now() - startTime;
       const goatMatches = merged.filter(p => p._goat).length;
-      console.log(`KicksDB search: ${query} | StockX: ${stockxProducts.length}, GOAT: ${goatProducts.length}, matched: ${goatMatches} | ${duration}ms`);
+      const fcMatches = merged.filter(p => p._fc).length;
+      console.log(`KicksDB search: ${query} | StockX: ${stockxProducts.length}, GOAT: ${goatProducts.length}, FC: ${fcProducts.length}, goat-matched: ${goatMatches}, fc-matched: ${fcMatches} | ${duration}ms`);
 
       return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: merged, _page: page, _limit: limit }) };
     } catch(err) {
@@ -92,7 +107,7 @@ exports.handler = async function(event) {
     }
   }
 
-  // === KicksDB Trending/Popular (StockX + GOAT) ===
+  // === KicksDB Trending/Popular (StockX + GOAT + Flight Club) ===
   if (body.action === "trending") {
     const limit = body.limit || 21;
     const page = body.page || 1;
@@ -105,21 +120,27 @@ exports.handler = async function(event) {
       const headers = { "Authorization": `Bearer ${KICKSDB_KEY}` };
       const allStockx = [];
       const allGoat = [];
+      const allFc = [];
       
-      // Fetch StockX and GOAT for each category in parallel
+      // Fetch StockX, GOAT, and Flight Club for each category in parallel
       const fetches = queries.flatMap(q => [
         fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(q)}&limit=${perQuery}&offset=${offset}&page=${page}`, { headers }).then(r => r.json()).then(d => { if (d?.data) allStockx.push(...d.data); }).catch(() => {}),
         fetch(`${KICKSDB_BASE}/goat/products?query=${encodeURIComponent(q)}&limit=${perQuery}`, { headers }).then(r => r.json()).then(d => { if (d?.data) allGoat.push(...d.data); }).catch(() => {}),
+        fetch(`${KICKSDB_BASE}/stadiumgoods/products?query=${encodeURIComponent(q)}&limit=${perQuery}`, { headers }).then(r => r.json()).then(d => { if (d?.data) allFc.push(...d.data); }).catch(() => {}),
       ]);
       await Promise.all(fetches);
 
-      // Build GOAT lookup by SKU
+      // Build lookups by SKU
       const goatBySku = {};
       for (const g of allGoat) {
         if (g.sku) goatBySku[g.sku.replace(/[\s-]/g, "").toUpperCase()] = g;
       }
+      const fcBySku = {};
+      for (const f of allFc) {
+        if (f.sku) fcBySku[f.sku.replace(/[\s-]/g, "").toUpperCase()] = f;
+      }
 
-      // Dedupe StockX by slug
+      // Dedupe StockX by slug and merge
       const seen = new Set();
       const unique = [];
       for (const p of allStockx) {
@@ -127,6 +148,7 @@ exports.handler = async function(event) {
           seen.add(p.slug);
           const skuKey = p.sku ? p.sku.replace(/[\s-]/g, "").toUpperCase() : null;
           const goatMatch = skuKey ? goatBySku[skuKey] : null;
+          const fcMatch = skuKey ? fcBySku[skuKey] : null;
           unique.push({
             ...p,
             _goat: goatMatch ? {
@@ -136,13 +158,21 @@ exports.handler = async function(event) {
               avg_price: goatMatch.avg_price || null,
               image: goatMatch.image || null,
             } : null,
+            _fc: fcMatch ? {
+              slug: fcMatch.slug || null,
+              link: fcMatch.link || null,
+              min_price: fcMatch.min_price || null,
+              max_price: fcMatch.max_price || null,
+              avg_price: fcMatch.avg_price || null,
+            } : null,
           });
         }
       }
       unique.sort((a, b) => (b.weekly_orders || 0) - (a.weekly_orders || 0));
 
       const goatMatches = unique.filter(p => p._goat).length;
-      console.log("KicksDB trending page", page, ":", unique.length, "products,", goatMatches, "GOAT matches");
+      const fcMatches = unique.filter(p => p._fc).length;
+      console.log("KicksDB trending page", page, ":", unique.length, "products,", goatMatches, "GOAT,", fcMatches, "FC matches");
       return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: unique.slice(0, limit), _page: page }) };
     } catch(err) {
       console.error("KicksDB trending error:", err.message);
