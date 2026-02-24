@@ -365,8 +365,8 @@ function kicksToDrops(products) {
 async function fetchDrops(q, page = 1) {
   const action = q ? "search" : "trending";
   const payload = q
-    ? { action: "search", query: q, limit: 20, page: page }
-    : { action: "trending", limit: 20 };
+    ? { action: "search", query: q, limit: 21, page: page }
+    : { action: "trending", limit: 21 };
 
   console.log(`[SNEAKYRADAR] KicksDB ${action}:`, q || "trending", "page:", page);
 
@@ -377,6 +377,7 @@ async function fetchDrops(q, page = 1) {
       body: JSON.stringify(payload),
     });
     const json = await res.json();
+    console.log("[SNEAKYRADAR] Raw API response:", JSON.stringify(json).substring(0, 200));
 
     if (json.error) {
       console.error("[SNEAKYRADAR] KicksDB error:", json.error);
@@ -384,7 +385,7 @@ async function fetchDrops(q, page = 1) {
     }
 
     const products = json.data || [];
-    console.log(`[SNEAKYRADAR] KicksDB returned ${products.length} products`);
+    console.log(`[SNEAKYRADAR] KicksDB returned ${products.length} products for page ${page}`);
     const drops = kicksToDrops(products);
     return drops;
   } catch(err) {
@@ -616,7 +617,7 @@ function DropRadarPage() {
       setSteps([{label:"Searching all sources",status:"done",count:d.length}]);
       setDrops(d.length>0?d:DEFAULT_DROPS);
       if(!d.length) setError("No results found. Showing featured drops.");
-      if(d.length < 20) setHasMore(false);
+      if(d.length < 21) setHasMore(false);
       setUpdated(new Date().toLocaleTimeString());
       // Only cache landing page (non-search) results
       if (d.length > 0 && !q) {
@@ -635,14 +636,16 @@ function DropRadarPage() {
     if(!lastQuery || loadingMore || !hasMore) return;
     setLoadingMore(true);
     const nextPage = page + 1;
+    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", lastQuery);
     try {
       const moreDrops = await fetchDrops(lastQuery, nextPage);
+      console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
       if(moreDrops.length === 0) { setHasMore(false); }
       else {
         const combined = dedupeDrops([...drops, ...moreDrops]);
         setDrops(combined);
         setPage(nextPage);
-        if(moreDrops.length < 20) setHasMore(false);
+        if(moreDrops.length < 21) setHasMore(false);
       }
     } catch(e) {
       console.error("Load more error:", e);
