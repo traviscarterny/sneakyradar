@@ -1287,46 +1287,28 @@ function ReleasesPage(){
   const [view,setView]=useState("list");
   const [brandFilter,setBrandFilter]=useState("ALL");
   const [sel,setSel]=useState(null);
+  const [releases,setReleases]=useState([]);
+  const [relSource,setRelSource]=useState("");
+  const [relUpdated,setRelUpdated]=useState("");
+  const [updating,setUpdating]=useState(false);
   const today=new Date();
-  const releases=[
-    {name:"Air Jordan 5 \"Wolf Grey\"",sku:"DD0587-002",date:"2026-02-28",price:220,brand:"Jordan",color:"Light Graphite/White-Wolf Grey"},
-    {name:"Fragment x Union x AJ1 High",sku:"IO7847-002",date:"2026-02-27",price:200,brand:"Jordan",color:"Black/Varsity Red-Sport Royal",collab:true},
-    {name:"Air Jordan 1 Low \"Lucky Cat\"",sku:"IQ3460-010",date:"2026-03-01",price:145,brand:"Jordan",color:"Black/Multi"},
-    {name:"Nike ACG Ultrafly 3",sku:"IR7317-300",date:"2026-03-02",price:250,brand:"Nike",color:"Green/Multi"},
-    {name:"Nike LeBron 23 \"The Decision\"",sku:"IB9557-601",date:"2026-03-03",price:210,brand:"Nike",color:"Pink/Multi"},
-    {name:"Nike Air Max 95 \"Neon\" Big Bubble",sku:"HM4740-001",date:"2026-03-05",price:190,brand:"Nike",color:"Black/Neon Yellow"},
-    {name:"Teyana Taylor x AJ3 \"Concrete Rose\"",sku:"IF3097-300",date:"2026-03-07",price:280,brand:"Jordan",color:"Fir/Fire Red-Victory Green",collab:true},
-    {name:"Air Jordan 4 OG \"Lakers\"",sku:"FV5029-500",date:"2026-03-07",price:220,brand:"Jordan",color:"Imperial Purple/Multi-Color"},
-    {name:"Air Jordan 1 High OG \"Psychic Blue\" (W)",sku:"FD2596-102",date:"2026-03-07",price:185,brand:"Jordan",color:"Pale Ivory/Psychic Blue"},
-    {name:"Air Jordan 13 \"Chicago\"",sku:"414571-102",date:"2026-03-13",price:215,brand:"Jordan",color:"White/Black-True Red"},
-    {name:"Dashawn Jordan x Nike SB Dunk Low",sku:"IB6208-200",date:"2026-03-14",price:140,brand:"Nike",color:"String/Black-Bright Spruce",collab:true},
-    {name:"Air Jordan 1 Low OG \"Floral Swoosh\"",sku:"IF4391-100",date:"2026-03-18",price:165,brand:"Jordan",color:"Sail/Off White-Coconut Milk"},
-    {name:"Nike KD 6 \"PBJ\"",sku:"IB6903-800",date:"2026-03-20",price:145,brand:"Nike",color:"Laser Orange/Black-Raspberry Red"},
-    {name:"Air Jordan 14 \"University Blue\"",sku:"487471-007",date:"2026-03-21",price:210,brand:"Jordan",color:"Black/University Blue-Silver"},
-    {name:"Swarovski x Air Jordan 1 High OG",sku:"HF6248-002",date:"2026-03-21",price:1005,brand:"Jordan",color:"Vast Grey/Photon Dust",collab:true},
-    {name:"Nike Kobe 5 Protro \"Lower Merion Away\"",sku:"IM0557-001",date:"2026-03-23",price:200,brand:"Nike",color:"Metallic Silver/Team Red"},
-    {name:"Nike Air Foamposite Pro \"UNC\"",sku:"HF0794-400",date:"2026-03-27",price:240,brand:"Nike",color:"University Blue/White"},
-    {name:"Travis Scott x Jumpman Jack \"Green Spark\"",sku:"IM9113-300",date:"2026-03-27",price:205,brand:"Jordan",color:"Green Spark/Vapor Green-Black",collab:true},
-    {name:"Virgil Abloh x Air Jordan 1 \"Alaska\"",sku:"AA3834-100",date:"2026-03-28",price:230,brand:"Jordan",color:"White/White",collab:true},
-    {name:"Air Jordan 3 OG \"Spring is in the Air\"",sku:"IF4396-100",date:"2026-03-28",price:210,brand:"Jordan",color:"Sail/Jade Aura-Iced Carmine"},
-    {name:"NOTE Manchester x Nike SB Dunk Low",sku:"IO9508-200",date:"2026-03-28",price:130,brand:"Nike",color:"Flax/Summit White-Sail",collab:true},
-    {name:"Nike Sabrina 3 \"What The\"",sku:"IO7845-300",date:"2026-04-01",price:145,brand:"Nike",color:"Igloo/Blue Crystal-Pink"},
-    {name:"Air Jordan 3 \"Orange Citrus\" (W)",sku:"CK9246-101",date:"2026-04-04",price:205,brand:"Jordan",color:"White/Cement Grey-Fire Red"},
-    {name:"Nike Ja 3 \"Jurassic Park\"",sku:"IU7240-001",date:"2026-04-10",price:135,brand:"Nike",color:"Anthracite/Yellow Ochre",collab:true},
-    {name:"adidas Anthony Edwards 2",sku:"JR1572",date:"2026-04-12",price:130,brand:"Adidas",color:"Core Black/Lime Burst"},
-    {name:"Air Jordan 11 Low \"University Blue\"",sku:"TBD-UNC11",date:"2026-04-18",price:195,brand:"Jordan",color:"White/University Blue"},
-    {name:"Air Jordan 5 \"White Metallic\"",sku:"TBD-WM5",date:"2026-04-25",price:220,brand:"Jordan",color:"White/Metallic Silver"},
-    {name:"Air Jordan 4 \"Toro Bravo\"",sku:"FQ8138-600",date:"2026-05-02",price:220,brand:"Jordan",color:"Fire Red/White-Black-Cement Grey"},
-    {name:"Nigel Sylvester x Air Jordan 4",sku:"IQ8055-100",date:"2026-05-09",price:230,brand:"Jordan",color:"Sail/Cinnabar-Black",collab:true},
-    {name:"Air Jordan 12 \"Bloodline\"",sku:"CT8013-001",date:"2026-05-23",price:205,brand:"Jordan",color:"Black/Varsity Red"},
-    {name:"Air Jordan 3 OG \"Bin 23\"",sku:"IO7744-600",date:"2026-06-13",price:350,brand:"Jordan",color:"Team Red/Metallic Gold"},
-    {name:"Air Jordan 3 OG \"True Blue\"",sku:"IF4396-102",date:"2026-07-03",price:230,brand:"Jordan",color:"White/True Blue"},
-    {name:"Air Jordan 8 \"Space Jam\"",sku:"HV4794-106",date:"2026-08-08",price:215,brand:"Jordan",color:"Multi",collab:true},
-    {name:"Air Jordan 6 \"Oreo\"",sku:"CT8529-108",date:"2026-08-22",price:215,brand:"Jordan",color:"Black/White-Speckled"},
-    {name:"Air Jordan 1 High OG \"Royal\"",sku:"TBD-ROY1",date:"2026-10-10",price:185,brand:"Jordan",color:"Black/Royal Blue"},
-    {name:"Air Jordan 4 OG \"Bred\"",sku:"TBD-BRED4",date:"2026-11-27",price:220,brand:"Jordan",color:"Black/Cement Grey-Fire Red"},
-    {name:"Air Jordan 11 \"Space Jam\"",sku:"TBD-SJ11",date:"2026-12-20",price:235,brand:"Jordan",color:"Black/Concord-White",collab:true},
-  ];
+
+  useEffect(()=>{
+    fetch("/.netlify/functions/anthropic",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"get_releases"})})
+      .then(r=>r.json()).then(d=>{
+        if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"");setRelUpdated(d.updated||"");}
+      }).catch(()=>{});
+  },[]);
+
+  const triggerUpdate=()=>{
+    if(updating)return;
+    setUpdating(true);
+    fetch("/.netlify/functions/anthropic",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"update_releases"})})
+      .then(r=>r.json()).then(d=>{
+        if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource("live");setRelUpdated(d.updated||new Date().toISOString());}
+        setUpdating(false);
+      }).catch(()=>setUpdating(false));
+  };
   const vd=new Date(today.getFullYear(),today.getMonth()+monthOffset,1);
   const mn=vd.toLocaleString('default',{month:'long'});
   const yr=vd.getFullYear();
@@ -1347,7 +1329,10 @@ function ReleasesPage(){
     <div className="page"><div className="section-wrap">
       <div className="section-eyebrow">Upcoming</div>
       <div className="section-title"><span className="filled">RELEASE</span> <span className="outline">CALENDAR</span></div>
-      <div className="section-sub">Every confirmed sneaker drop. Updated weekly from Nike SNKRS, Sneaker Bar Detroit, House of Heat, and more.</div>
+      <div className="section-sub">Every confirmed sneaker drop. Auto-updated via AI-powered web search.
+        {relSource&&<span style={{marginLeft:8,fontSize:".55rem",color:relSource==="live"?"var(--green)":"var(--muted)"}}>● {relSource==="live"?"LIVE DATA":"CACHED"}{relUpdated&&relUpdated!=="hardcoded"?" · Updated "+new Date(relUpdated).toLocaleDateString():""}</span>}
+      </div>
+      <div style={{marginBottom:24}}><button className="cal-list-btn" onClick={triggerUpdate} style={updating?{opacity:.5}:{}}>{updating?"⏳ UPDATING...":"🔄 REFRESH RELEASES"}</button></div>
       <div className="cal-stats">
         <div className="cal-stat"><div className="cal-stat-label">Drops This Month</div><div className="cal-stat-val accent">{totalDrops}</div></div>
         <div className="cal-stat"><div className="cal-stat-label">Collabs</div><div className="cal-stat-val" style={{color:"#cc44ff"}}>{collabs}</div></div>
