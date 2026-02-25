@@ -171,6 +171,7 @@
     .empty-state { text-align: center; padding: 80px 40px; color: var(--muted); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--border); }
     .empty-state h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--border); letter-spacing: 4px; margin-bottom: 16px; }
     .resell-table { width: 100%; border: 1px solid var(--border); border-collapse: collapse; }
+    .resell-mobile { display: none; }
     .resell-table th { background: #111; padding: 12px 16px; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); font-weight: 400; cursor: pointer; }
     .resell-table td { padding: 14px 16px; font-size: 0.72rem; letter-spacing: 0.5px; border-bottom: 1px solid #1a1a1a; vertical-align: middle; }
     .resell-table tr:hover td { background: #161616; }
@@ -306,6 +307,18 @@
       .badge { font-size: 0.45rem; padding: 2px 6px; }
       .status-bar { font-size: 0.55rem; }
       .resell-stats { grid-template-columns: repeat(2, 1fr); }
+      .resell-table { display: none; }
+      .resell-mobile { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+      .resell-m-card { background: var(--card); padding: 14px; }
+      .resell-m-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+      .resell-m-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; line-height: 1.2; max-width: 65%; }
+      .resell-m-brand { font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+      .resell-m-avg { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--green); }
+      .resell-m-row { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--muted); padding: 4px 0; border-top: 1px solid #1a1a1a; }
+      .resell-m-row span:last-child { color: var(--text); }
+      .resell-m-btns { display: flex; gap: 8px; margin-top: 10px; }
+      .resell-m-btns a { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px; border: 1px solid var(--border); color: var(--text); text-decoration: none; border-radius: 3px; }
+      .resell-m-btns a:hover { border-color: var(--accent); }
       .auth-check { grid-template-columns: 1fr; }
       .chat-fab { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 0.5rem; }
       .chat-fab svg { width: 18px; height: 18px; }
@@ -938,16 +951,13 @@ function DropRadarPage() {
     {label: "JA MORANT", query: "Nike Ja"},
     {label: "MIZUNO", query: "Mizuno"},
     {label: "SACAI", query: "Nike Sacai"},
-    {label: "OFF-WHITE", query: "Off White Nike"},
     {label: "BAD BUNNY", query: "Bad Bunny Adidas"},
-    {label: "SPEEDCAT", query: "Puma Speedcat"},
     {label: "ONITSUKA", query: "Onitsuka Tiger"},
     {label: "HOKA", query: "Hoka"},
     {label: "BROOKS", query: "Brooks"},
     {label: "VANS", query: "Vans"},
     {label: "UGG", query: "UGG"},
     {label: "CROCS", query: "Crocs"},
-    {label: "BAPE", query: "Bape Sta"},
   ];
   const [activeCategory, setActiveCategory] = useState("ALL");
 
@@ -1104,6 +1114,29 @@ function ResellPage() {
             ))}
           </tbody>
         </table>
+        <div className="resell-mobile">
+          {sorted.map((d,i)=>(
+            <div key={i} className="resell-m-card">
+              <div className="resell-m-top">
+                <div>
+                  <div className="resell-m-brand">{d.hot&&<span className="hot-tag" style={{marginRight:6}}>HOT</span>}{d.brand}</div>
+                  <div className="resell-m-name">{d.name}</div>
+                </div>
+                <div style={{textAlign:"right"}}>
+                  <div className="resell-m-avg">{d.avg}</div>
+                  <div className={d.trend.startsWith("-")?"trend-down":"trend-up"} style={{fontSize:"0.65rem"}}>{d.trend}</div>
+                </div>
+              </div>
+              <div className="resell-m-row"><span>Retail</span><span>{d.retail}</span></div>
+              <div className="resell-m-row"><span>Range</span><span>{d.low} — {d.high}</span></div>
+              <div className="resell-m-row"><span>Volume</span><span>{d.vol}</span></div>
+              <div className="resell-m-btns">
+                <a href={`https://stockx.com/search?s=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">StockX</a>
+                <a href={`https://goat.com/search?query=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">GOAT</a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
