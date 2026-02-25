@@ -973,21 +973,50 @@ function DropRadarPage() {
   const loadMore = async ()=>{
     if(!lastQuery || loadingMore || !hasMore) return;
     setLoadingMore(true);
-    const nextPage = page + 1;
     const fetchQuery = lastQuery === "__trending__" ? "" : lastQuery;
-    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending");
-    try {
-      const moreDrops = await fetchDrops(fetchQuery, nextPage);
-      console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
-      if(moreDrops.length === 0) { setHasMore(false); }
-      else {
-        const combined = dedupeDrops([...drops, ...moreDrops]);
-        setDrops(combined);
-        setPage(nextPage);
-        if(moreDrops.length < 30) setHasMore(false);
+    let currentPage = page;
+    let currentDrops = drops;
+    let attempts = 0;
+    const maxAttempts = 3;
+    
+    // Keep fetching pages until we get new results that pass the gender filter, or run out
+    while(attempts < maxAttempts) {
+      attempts++;
+      const nextPage = currentPage + 1;
+      console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending", "attempt:", attempts);
+      try {
+        const moreDrops = await fetchDrops(fetchQuery, nextPage);
+        console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
+        if(moreDrops.length === 0) { setHasMore(false); break; }
+        const combined = dedupeDrops([...currentDrops, ...moreDrops]);
+        currentDrops = combined;
+        currentPage = nextPage;
+        if(moreDrops.length < 30) { setDrops(combined); setPage(currentPage); setHasMore(false); break; }
+        // Check if any new drops pass the current gender filter
+        const newVisible = combined.filter(d => {
+          if(genderFilter === "All") return true;
+          const g = (d.gender || "").toLowerCase();
+          if(genderFilter === "Men") return g === "men";
+          if(genderFilter === "Women") return g === "women";
+          if(genderFilter === "Kids") return ["child","grade school","gs","youth","kids","infant","toddler","preschool"].indexOf(g) >= 0;
+          return true;
+        });
+        if(newVisible.length > drops.filter(d => {
+          if(genderFilter === "All") return true;
+          const g = (d.gender || "").toLowerCase();
+          if(genderFilter === "Men") return g === "men";
+          if(genderFilter === "Women") return g === "women";
+          if(genderFilter === "Kids") return ["child","grade school","gs","youth","kids","infant","toddler","preschool"].indexOf(g) >= 0;
+          return true;
+        }).length) {
+          setDrops(combined); setPage(currentPage); break;
+        }
+        // No new visible results, update drops anyway and try next page
+        setDrops(combined); setPage(currentPage);
+      } catch(e) {
+        console.error("Load more error:", e);
+        break;
       }
-    } catch(e) {
-      console.error("Load more error:", e);
     }
     setLoadingMore(false);
   };
