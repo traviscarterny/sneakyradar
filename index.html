@@ -1,48 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2JCYS8398G"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2JCYS8398G');</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SneakyRadar — Compare Sneaker Prices Across StockX, GOAT & More</title>
-  <meta name="description" content="Compare sneaker prices across StockX, GOAT, and more in one search. Track drops, find the best deals on Jordans, Yeezys, Dunks, New Balance, and 20+ brands. Real-time prices, release dates, and hype scores." />
-  <meta name="keywords" content="sneaker price comparison, StockX prices, GOAT prices, sneaker deals, Jordan releases, Yeezy drops, Nike Dunk, sneaker tracker, shoe price checker, sneaker shopping, resell tracker, sneaker release dates" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://www.sneakyradar.com" />
-
-  <!-- Open Graph / Social -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="SneakyRadar — Compare Sneaker Prices Across StockX, GOAT & More" />
-  <meta property="og:description" content="Search once, compare prices everywhere. Track drops, find deals, and shop smarter across StockX, GOAT, and more." />
-  <meta property="og:url" content="https://www.sneakyradar.com" />
-  <meta property="og:site_name" content="SneakyRadar" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="SneakyRadar — Compare Sneaker Prices" />
-  <meta name="twitter:description" content="Search once, compare prices everywhere. Track drops across StockX, GOAT & more." />
-
-  <!-- Favicon: sneaker SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0a'/%3E%3Cpath d='M12 38c0-2 1-4 3-5l8-6c2-1.5 4-2 6-2h10c3 0 5 1 7 3l6 6c1 1 1.5 2.5 1 4l-1 3c-.5 1.5-2 2.5-3.5 2.5H15c-1.7 0-3-1.3-3-3v-2.5z' fill='%23ff3c00'/%3E%3Ccircle cx='20' cy='40' r='2' fill='%230a0a0a'/%3E%3Ccircle cx='27' cy='40' r='2' fill='%230a0a0a'/%3E%3Ccircle cx='34' cy='40' r='2' fill='%230a0a0a'/%3E%3Cpath d='M22 33l4-3h8l3 3' stroke='%230a0a0a' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='44' cy='20' r='4' fill='none' stroke='%2300ff94' stroke-width='1.5'/%3E%3Ccircle cx='44' cy='20' r='8' fill='none' stroke='%2300ff94' stroke-width='1' opacity='0.5'/%3E%3Ccircle cx='44' cy='20' r='12' fill='none' stroke='%2300ff94' stroke-width='0.7' opacity='0.25'/%3E%3C/svg%3E" />
-
-  <!-- Structured Data: Website -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "SneakyRadar",
-    "url": "https://www.sneakyradar.com",
-    "description": "Compare sneaker prices across StockX, GOAT, and more. Track releases, find deals, and shop smarter.",
-    "applicationCategory": "ShoppingApplication",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
+  <title>SneakyRadar — Drop Radar, Release Calendar, Resell Tracker, Auth Guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -52,7 +13,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #0a0a0a; --surface: #111; --border: #222;
-      --accent: #ff3c00; --accent2: #00ff94; --text: #f0f0f0; --muted: #555; --card: #141414;
+      --accent: #ff3c00; --accent2: #ffd200; --text: #f0f0f0; --muted: #555; --card: #141414;
       --green: #00e676; --purple: #cc44ff;
     }
     body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
@@ -73,8 +34,6 @@
     .nav-tab { display: flex; align-items: center; gap: 7px; padding: 0 22px; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--muted); transition: all 0.15s; border-right: 1px solid var(--border); border-bottom: 2px solid transparent; background: transparent; border-top: none; border-left: none; font-family: 'DM Mono', monospace; }
     .nav-tab:hover { color: var(--text); background: #111; }
     .nav-tab.active { color: var(--text); border-bottom-color: var(--accent); background: #0e0e0e; }
-    .hamburger { display: none; }
-    .mobile-menu { display: none; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .alert-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
     .alert-btn:hover { background: var(--accent); color: white; }
@@ -110,7 +69,7 @@
     .search-go-btn:hover { background: #ff5a20; }
     .search-go-btn:disabled { background: var(--muted); cursor: not-allowed; }
     .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-    .filter-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
     .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
     .result-source-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
     .rsf-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
@@ -139,7 +98,7 @@
     .card-source-tag { position: absolute; bottom: 8px; right: 8px; font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; background: rgba(0,0,0,0.8); border: 1px solid var(--border); color: var(--muted); }
     .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
     .card-brand { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-    .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; line-height: 1.1; margin-bottom: 6px; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.2em; height: 2.2em; }
+    .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; line-height: 1.1; margin-bottom: 6px; cursor: pointer; }
     .card-name:hover { color: var(--accent2); }
     .card-colorway { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; }
     .card-meta { display: flex; flex-direction: column; gap: 6px; }
@@ -159,7 +118,7 @@
     .price-compare-rows { display: flex; flex-direction: column; gap: 5px; }
     .price-row { display: flex; align-items: center; gap: 8px; }
     .price-row-store { font-size: 0.6rem; letter-spacing: 1px; color: var(--muted); flex: 1; text-transform: uppercase; }
-    .price-row-amount { font-size: 0.75rem; color: #00ff94; min-width: 48px; text-align: right; }
+    .price-row-amount { font-size: 0.75rem; color: var(--accent2); min-width: 48px; text-align: right; }
     .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
     .price-row-btn:hover { border-color: var(--accent2); color: var(--accent2); }
     .price-row-btn.best { border-color: var(--accent2); color: #000; background: var(--accent2); }
@@ -171,7 +130,6 @@
     .empty-state { text-align: center; padding: 80px 40px; color: var(--muted); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--border); }
     .empty-state h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--border); letter-spacing: 4px; margin-bottom: 16px; }
     .resell-table { width: 100%; border: 1px solid var(--border); border-collapse: collapse; }
-    .resell-mobile { display: none; }
     .resell-table th { background: #111; padding: 12px 16px; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); font-weight: 400; cursor: pointer; }
     .resell-table td { padding: 14px 16px; font-size: 0.72rem; letter-spacing: 0.5px; border-bottom: 1px solid #1a1a1a; vertical-align: middle; }
     .resell-table tr:hover td { background: #161616; }
@@ -272,68 +230,103 @@
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 4px; }
     .footer-logo .radar { color: var(--accent); }
     @media (max-width: 768px) {
-      .nav { padding: 0 12px; height: 48px; position: relative; }
-      .nav-left { width: 100%; padding: 0; display: flex; align-items: center; justify-content: space-between; }
-      .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; padding: 10px 0; }
-      .nav-tabs { display: none; }
-      .nav-right { display: none; }
-      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 1.2rem; width: 36px; height: 36px; cursor: pointer; border-radius: 4px; font-family: inherit; }
-      .mobile-menu { display: block; position: absolute; top: 100%; right: 12px; background: rgba(15,15,15,0.98); border: 1px solid var(--border); border-radius: 6px; z-index: 100; min-width: 200px; overflow: hidden; backdrop-filter: blur(12px); }
-      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
-      .mobile-menu-item:last-child { border-bottom: none; }
-      .mobile-menu-item:hover, .mobile-menu-item.active { color: var(--text); background: rgba(255,255,255,0.05); }
-      .mobile-menu-item.active { color: var(--accent); }
-      .result-source-filters { display: none; }
-      .section-wrap { padding: 24px 12px 80px; }
-      .section-title { font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 48px; }
-      .section-sub { font-size: 0.7rem; margin-bottom: 24px; display: none; }
-      .search-row { flex-direction: column; gap: 8px; }
-      .search-bar { border-right: 1px solid var(--border); }
-      .search-bar input { font-size: 0.8rem; padding: 14px 14px; }
-      .search-go-btn { padding: 14px 24px; width: 100%; }
-      .filters { gap: 6px; margin-bottom: 16px; justify-content: center; }
-      .filter-btn { font-size: 0.55rem; padding: 5px 10px; letter-spacing: 1px; }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; }
-      .card-img-wrap { height: 150px; }
-      .card-img { padding: 12px; }
-      .card-body { padding: 12px; }
-      .card-brand { font-size: 0.5rem; letter-spacing: 2px; }
-      .card-name { font-size: 1.1rem; letter-spacing: 1px; min-height: 2.2em; height: 2.2em; }
-      .card-colorway { font-size: 0.55rem; }
-      .card-meta { font-size: 0.6rem; }
-      .meta-row { font-size: 0.6rem; }
-      .price { font-size: 0.65rem; }
-      .hype-label { font-size: 0.55rem; }
-      .badge { font-size: 0.45rem; padding: 2px 6px; }
-      .status-bar { font-size: 0.55rem; }
+      .nav { padding: 0 16px; }
+      .nav-logo { font-size: 1.2rem; padding-right: 16px; }
+      .nav-tab { padding: 0 12px; font-size: 0.55rem; }
+      .section-wrap { padding: 40px 16px 80px; }
       .resell-stats { grid-template-columns: repeat(2, 1fr); }
-      .resell-table { display: none; }
-      .resell-mobile { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
-      .resell-m-card { background: var(--card); padding: 14px; }
-      .resell-m-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-      .resell-m-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; line-height: 1.2; max-width: 65%; }
-      .resell-m-brand { font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
-      .resell-m-avg { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--green); }
-      .resell-m-row { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--muted); padding: 4px 0; border-top: 1px solid #1a1a1a; }
-      .resell-m-row span:last-child { color: var(--text); }
-      .resell-m-btns { display: flex; gap: 8px; margin-top: 10px; }
-      .resell-m-btns a { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px; border: 1px solid var(--border); color: var(--text); text-decoration: none; border-radius: 3px; }
-      .resell-m-btns a:hover { border-color: var(--accent); }
       .auth-check { grid-template-columns: 1fr; }
-      .chat-fab { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 0.5rem; }
-      .chat-fab svg { width: 18px; height: 18px; }
-      .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: 60vh; }
-      .chat-input-row input { font-size: 0.8rem; }
-      .price-compare { gap: 4px; }
-      .price-compare a { font-size: 0.55rem; padding: 4px 6px; }
+      .chat-window { width: calc(100vw - 32px); right: 16px; }
     }
-    @media (max-width: 380px) {
-      .grid { grid-template-columns: 1fr; }
-      .card-img-wrap { height: 180px; }
-      .nav-tabs { gap: 0; }
-      .nav-tab { padding: 10px 10px; font-size: 0.45rem; }
-      .filter-btn { font-size: 0.5rem; padding: 4px 8px; }
-      .site-footer { flex-direction: column; gap: 8px; padding: 16px; text-align: center; }
+    /* Release Calendar */
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+    .cal-month-nav { display: flex; align-items: center; gap: 16px; }
+    .cal-month-nav button { background: var(--surface); border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 8px 16px; cursor: pointer; transition: all 0.15s; letter-spacing: 1px; }
+    .cal-month-nav button:hover { border-color: var(--accent); color: var(--accent); }
+    .cal-month-label { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 3px; min-width: 260px; text-align: center; }
+    .cal-month-label span { color: var(--accent); }
+    .cal-view-toggle { display: flex; border: 1px solid var(--border); }
+    .cal-view-btn { background: transparent; border: none; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px 18px; cursor: pointer; transition: all 0.15s; }
+    .cal-view-btn.active { background: var(--accent); color: white; }
+    .cal-filters { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .cal-filter-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .cal-filter-btn:hover { border-color: var(--text); color: var(--text); }
+    .cal-filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(255,60,0,0.08); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 40px; }
+    .cal-day-header { background: var(--surface); padding: 10px; text-align: center; font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+    .cal-day { background: var(--bg); min-height: 120px; padding: 8px; position: relative; transition: background 0.15s; }
+    .cal-day:hover { background: #0e0e0e; }
+    .cal-day.other-month { opacity: 0.3; }
+    .cal-day.today { background: rgba(255,60,0,0.04); }
+    .cal-day.today::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); }
+    .cal-day-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--muted); margin-bottom: 4px; }
+    .cal-day.today .cal-day-num { color: var(--accent); }
+    .cal-release-pip { font-size: 0.45rem; padding: 2px 5px; margin-bottom: 2px; border-radius: 2px; cursor: pointer; transition: all 0.15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.5px; display: block; text-decoration: none; color: inherit; }
+    .cal-release-pip:hover { transform: translateX(2px); filter: brightness(1.3); }
+    .cal-release-pip.brand-jordan { background: rgba(255,60,0,0.15); color: #ff6b3d; border-left: 2px solid #ff3c00; }
+    .cal-release-pip.brand-nike { background: rgba(255,255,255,0.06); color: #ccc; border-left: 2px solid #888; }
+    .cal-release-pip.brand-adidas { background: rgba(0,200,120,0.1); color: #00e676; border-left: 2px solid #00e676; }
+    .cal-release-pip.brand-nb { background: rgba(200,0,0,0.1); color: #ff5555; border-left: 2px solid #ff5555; }
+    .cal-release-pip.brand-yeezy { background: rgba(200,180,100,0.1); color: #d4b957; border-left: 2px solid #d4b957; }
+    .cal-release-pip.brand-collab { background: rgba(200,68,255,0.1); color: #cc44ff; border-left: 2px solid #cc44ff; }
+    .cal-release-pip.brand-other { background: rgba(100,180,255,0.1); color: #64b5f6; border-left: 2px solid #64b5f6; }
+    .cal-more { font-size: 0.45rem; color: var(--muted); padding: 2px 5px; cursor: pointer; }
+    .cal-more:hover { color: var(--accent); }
+    /* List view */
+    .cal-list { display: flex; flex-direction: column; gap: 2px; }
+    .cal-list-date { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; padding: 20px 0 8px; border-bottom: 1px solid var(--border); margin-bottom: 8px; color: var(--muted); }
+    .cal-list-date span { color: var(--accent); }
+    .cal-list-item { display: flex; align-items: center; gap: 16px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); transition: all 0.15s; cursor: pointer; text-decoration: none; color: inherit; }
+    .cal-list-item:hover { border-color: var(--accent); background: #161616; transform: translateX(4px); }
+    .cal-list-img { width: 64px; height: 64px; background: var(--card); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+    .cal-list-img img { width: 100%; height: 100%; object-fit: contain; }
+    .cal-list-info { flex: 1; min-width: 0; }
+    .cal-list-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cal-list-meta { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.5px; margin-top: 2px; }
+    .cal-list-sku { font-size: 0.55rem; color: var(--muted); letter-spacing: 1px; margin-top: 1px; }
+    .cal-list-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--green); white-space: nowrap; }
+    .cal-list-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .cal-list-btn { font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 12px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; }
+    .cal-list-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .cal-list-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .cal-list-btn.primary:hover { background: #ff5522; }
+    .cal-legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 16px 0; border-top: 1px solid var(--border); margin-top: 20px; }
+    .cal-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.55rem; color: var(--muted); letter-spacing: 1px; }
+    .cal-legend-dot { width: 8px; height: 8px; border-radius: 1px; }
+    /* Release detail modal */
+    .cal-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.15s ease; }
+    .cal-modal { background: var(--bg); border: 1px solid var(--border); max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; }
+    .cal-modal-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 24px 0; }
+    .cal-modal-close { background: none; border: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+    .cal-modal-close:hover { color: var(--text); }
+    .cal-modal-img { width: 100%; aspect-ratio: 1; background: var(--surface); display: flex; align-items: center; justify-content: center; margin: 16px 0; overflow: hidden; }
+    .cal-modal-img img { width: 80%; height: 80%; object-fit: contain; }
+    .cal-modal-body { padding: 0 24px 24px; }
+    .cal-modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; line-height: 1.1; }
+    .cal-modal-details { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+    .cal-modal-detail label { font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+    .cal-modal-detail span { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; }
+    .cal-modal-btns { display: flex; gap: 8px; margin-top: 16px; }
+    .cal-modal-btns a { flex: 1; text-align: center; }
+    /* Calendar stats bar */
+    .cal-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
+    .cal-stat { background: var(--bg); padding: 16px 20px; }
+    .cal-stat-label { font-size: 0.5rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .cal-stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; }
+    .cal-stat-val.accent { color: var(--accent); }
+    .cal-stat-val.green { color: var(--green); }
+    @media (max-width: 768px) {
+      .cal-grid { grid-template-columns: repeat(7, 1fr); }
+      .cal-day { min-height: 70px; padding: 4px; }
+      .cal-day-num { font-size: 0.9rem; }
+      .cal-release-pip { font-size: 0.35rem; padding: 1px 3px; }
+      .cal-stats { grid-template-columns: repeat(2, 1fr); }
+      .cal-list-item { flex-wrap: wrap; gap: 10px; }
+      .cal-list-actions { width: 100%; }
+      .cal-list-btn { flex: 1; text-align: center; }
+      .cal-month-label { font-size: 1.6rem; min-width: auto; }
+      .cal-header { justify-content: center; }
+      .cal-list-img { width: 50px; height: 50px; }
     }
   </style>
 </head>
@@ -364,72 +357,20 @@ function affLink(url, sourceId) {
 }
 function trackClick(drop, storeId) { console.log(`[SNEAKYRADAR] click — ${drop.name} -> ${storeId}`); }
 
-const SPONSORED_DROPS = [];
+const SPONSORED_DROPS = [
+  { sponsored: true, sponsorLabel: "Featured Drop", brand: "Nike", name: "Air Jordan 1 Retro High OG", date: "Mar 29, 2025", retail: "$180", resell: "$320+", hype: 98, badge: "hot", colorway: "University Blue/White", method: "SNKRS Draw", source: "SNKRS", image: null, sourceUrl: "https://nike.com/launch",
+    prices: [{store:"SNKRS",storeId:"snkrs",price:"$180",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$290",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$305",url:"https://goat.com"}]},
+];
 
 const RESELL_DATA = [
-  // === JORDAN ===
-  { brand:"Jordan",name:"Air Jordan 1 Retro High Chicago",retail:"$180",low:"$350",avg:"$420",high:"$520",trend:"+15%",hot:true,vol:"1.8k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 1 High Dark Mocha",retail:"$170",low:"$380",avg:"$493",high:"$580",trend:"+10%",hot:true,vol:"1.4k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 3 White Cement Reimagined",retail:"$200",low:"$210",avg:"$248",high:"$310",trend:"+5%",hot:false,vol:"2.8k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 4 Military Blue",retail:"$215",low:"$310",avg:"$348",high:"$420",trend:"+12%",hot:true,vol:"2.4k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 4 Black Cat",retail:"$190",low:"$280",avg:"$340",high:"$410",trend:"+9%",hot:true,vol:"2.1k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 4 Bred Reimagined",retail:"$210",low:"$290",avg:"$355",high:"$430",trend:"+14%",hot:true,vol:"1.9k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 5 Retro Fire Red",retail:"$208",low:"$174",avg:"$198",high:"$299",trend:"-3%",hot:false,vol:"1.6k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 11 Space Jam",retail:"$225",low:"$320",avg:"$395",high:"$480",trend:"+8%",hot:true,vol:"1.5k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 11 Legend Blue",retail:"$220",low:"$178",avg:"$259",high:"$442",trend:"+2%",hot:false,vol:"1.3k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 12 Taxi",retail:"$200",low:"$180",avg:"$215",high:"$280",trend:"+1%",hot:false,vol:"980 sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 13 Chicago (2026)",retail:"$215",low:"$240",avg:"$320",high:"$390",trend:"+18%",hot:true,vol:"870 sales/wk"},
-  // === TRAVIS SCOTT ===
-  { brand:"Travis Scott",name:"TS x Jordan 1 Low Reverse Mocha",retail:"$150",low:"$980",avg:"$1163",high:"$1400",trend:"+6%",hot:true,vol:"620 sales/wk"},
-  { brand:"Travis Scott",name:"TS x Fragment x Jordan 1 Low",retail:"$150",low:"$1100",avg:"$1450",high:"$1800",trend:"+4%",hot:true,vol:"410 sales/wk"},
-  { brand:"Travis Scott",name:"TS x Jordan 1 Low Black Phantom",retail:"$150",low:"$350",avg:"$440",high:"$550",trend:"+11%",hot:true,vol:"780 sales/wk"},
-  { brand:"Travis Scott",name:"TS x Air Max 1 Baroque Brown",retail:"$150",low:"$420",avg:"$510",high:"$640",trend:"+22%",hot:true,vol:"890 sales/wk"},
-  // === NIKE ===
-  { brand:"Nike",name:"Dunk Low Panda",retail:"$110",low:"$58",avg:"$85",high:"$110",trend:"-8%",hot:false,vol:"5.1k sales/wk"},
-  { brand:"Nike",name:"Dunk Low Grey Fog",retail:"$110",low:"$90",avg:"$115",high:"$140",trend:"+2%",hot:false,vol:"2.2k sales/wk"},
-  { brand:"Nike",name:"SB Dunk Low Stranger Things",retail:"$120",low:"$250",avg:"$340",high:"$420",trend:"+28%",hot:true,vol:"560 sales/wk"},
-  { brand:"Nike",name:"Air Force 1 Low White",retail:"$110",low:"$75",avg:"$95",high:"$120",trend:"-1%",hot:false,vol:"6.8k sales/wk"},
-  { brand:"Nike",name:"Air Max 95 OG Neon",retail:"$190",low:"$200",avg:"$250",high:"$320",trend:"+7%",hot:true,vol:"1.1k sales/wk"},
-  { brand:"Nike",name:"Air Max 1 Obsidian",retail:"$140",low:"$120",avg:"$148",high:"$180",trend:"+3%",hot:false,vol:"1.4k sales/wk"},
-  { brand:"Nike",name:"Mars Yard 3.0",retail:"$275",low:"$750",avg:"$1075",high:"$1400",trend:"+291%",hot:true,vol:"320 sales/wk"},
-  // === NIKE KOBE ===
-  { brand:"Nike",name:"Kobe 6 Protro Reverse Grinch",retail:"$190",low:"$320",avg:"$410",high:"$520",trend:"+35%",hot:true,vol:"680 sales/wk"},
-  { brand:"Nike",name:"Kobe 8 Protro What The",retail:"$190",low:"$280",avg:"$350",high:"$450",trend:"+25%",hot:true,vol:"540 sales/wk"},
-  { brand:"Nike",name:"Kobe 6 Protro Grinch",retail:"$190",low:"$380",avg:"$470",high:"$580",trend:"+18%",hot:true,vol:"720 sales/wk"},
-  { brand:"Nike",name:"Ja 3 Midnight Navy",retail:"$130",low:"$110",avg:"$138",high:"$175",trend:"+9%",hot:true,vol:"1.6k sales/wk"},
-  // === OFF-WHITE ===
-  { brand:"Nike",name:"Off-White Dunk Low Lot 1",retail:"$170",low:"$800",avg:"$980",high:"$1300",trend:"+18%",hot:true,vol:"340 sales/wk"},
-  { brand:"Nike",name:"Off-White Jordan 4 Sail",retail:"$200",low:"$680",avg:"$820",high:"$1000",trend:"+12%",hot:true,vol:"290 sales/wk"},
-  // === SACAI ===
-  { brand:"Nike",name:"Sacai LD Waffle Green Gusto",retail:"$160",low:"$280",avg:"$360",high:"$440",trend:"+5%",hot:false,vol:"380 sales/wk"},
-  // === ADIDAS ===
+  { brand:"Nike",name:"Air Jordan 4 Military Blue",retail:"$215",low:"$310",avg:"$348",high:"$420",trend:"+12%",hot:true,vol:"2.4k sales/wk"},
+  { brand:"Nike",name:"Dunk Low Panda",retail:"$110",low:"$140",avg:"$158",high:"$185",trend:"+4%",hot:false,vol:"5.1k sales/wk"},
   { brand:"Adidas",name:"Samba OG Cloud White",retail:"$100",low:"$128",avg:"$142",high:"$165",trend:"+8%",hot:true,vol:"3.7k sales/wk"},
-  { brand:"Adidas",name:"Campus 00s Core Black",retail:"$100",low:"$85",avg:"$108",high:"$135",trend:"+4%",hot:false,vol:"3.2k sales/wk"},
-  { brand:"Adidas",name:"Bad Bunny Response CL Brown",retail:"$160",low:"$190",avg:"$245",high:"$310",trend:"+15%",hot:true,vol:"680 sales/wk"},
-  // === YEEZY ===
-  { brand:"Yeezy",name:"350 V2 Zebra",retail:"$230",low:"$200",avg:"$245",high:"$300",trend:"+3%",hot:false,vol:"1.8k sales/wk"},
-  { brand:"Yeezy",name:"350 V2 Bred",retail:"$230",low:"$280",avg:"$330",high:"$390",trend:"+5%",hot:true,vol:"920 sales/wk"},
-  { brand:"Yeezy",name:"Slide Onyx",retail:"$60",low:"$80",avg:"$110",high:"$145",trend:"-4%",hot:false,vol:"3.4k sales/wk"},
-  { brand:"Yeezy",name:"Foam Runner Onyx",retail:"$80",low:"$90",avg:"$120",high:"$155",trend:"-2%",hot:false,vol:"2.1k sales/wk"},
-  { brand:"Yeezy",name:"700 Wave Runner",retail:"$300",low:"$240",avg:"$290",high:"$360",trend:"+2%",hot:false,vol:"1.1k sales/wk"},
-  { brand:"Yeezy",name:"350 V1 Turtle Dove (2022)",retail:"$230",low:"$280",avg:"$350",high:"$440",trend:"+10%",hot:true,vol:"380 sales/wk"},
-  { brand:"Yeezy",name:"750 Light Brown",retail:"$350",low:"$800",avg:"$1100",high:"$1500",trend:"+8%",hot:true,vol:"120 sales/wk"},
-  // === NEW BALANCE ===
-  { brand:"New Balance",name:"990v6 Made in USA Grey",retail:"$199",low:"$195",avg:"$215",high:"$250",trend:"+4%",hot:false,vol:"1.6k sales/wk"},
+  { brand:"Nike",name:"Travis Scott Air Max 1",retail:"$150",low:"$420",avg:"$510",high:"$640",trend:"+22%",hot:true,vol:"890 sales/wk"},
   { brand:"New Balance",name:"990v4 Made in USA",retail:"$185",low:"$195",avg:"$208",high:"$240",trend:"+3%",hot:false,vol:"1.2k sales/wk"},
-  { brand:"New Balance",name:"2002R Protection Pack Rain Cloud",retail:"$140",low:"$160",avg:"$195",high:"$240",trend:"+7%",hot:true,vol:"1.5k sales/wk"},
-  { brand:"New Balance",name:"550 White Green",retail:"$110",low:"$95",avg:"$118",high:"$150",trend:"+2%",hot:false,vol:"2.8k sales/wk"},
-  { brand:"New Balance",name:"204L Cream",retail:"$130",low:"$145",avg:"$175",high:"$210",trend:"+20%",hot:true,vol:"680 sales/wk"},
-  // === ASICS ===
-  { brand:"ASICS",name:"Gel-1130 Black Pure Silver",retail:"$110",low:"$130",avg:"$155",high:"$190",trend:"+12%",hot:true,vol:"2.9k sales/wk"},
   { brand:"ASICS",name:"Gel-Kayano 14 Ivory",retail:"$130",low:"$165",avg:"$182",high:"$210",trend:"+6%",hot:true,vol:"1.8k sales/wk"},
-  { brand:"ASICS",name:"Gel-Kayano 14 Black",retail:"$130",low:"$140",avg:"$165",high:"$200",trend:"+8%",hot:true,vol:"1.4k sales/wk"},
-  // === EMERGING BRANDS ===
-  { brand:"Puma",name:"Speedcat OG Black",retail:"$100",low:"$110",avg:"$138",high:"$170",trend:"+15%",hot:true,vol:"780 sales/wk"},
-  { brand:"Salomon",name:"XT-6 Black Phantom",retail:"$190",low:"$195",avg:"$228",high:"$280",trend:"+12%",hot:true,vol:"620 sales/wk"},
-  { brand:"Mizuno",name:"Wave Prophecy LS Black",retail:"$250",low:"$270",avg:"$320",high:"$390",trend:"+30%",hot:true,vol:"340 sales/wk"},
-  { brand:"Onitsuka Tiger",name:"Mexico 66 Cream Sage",retail:"$110",low:"$125",avg:"$148",high:"$180",trend:"+18%",hot:true,vol:"520 sales/wk"},
-  { brand:"Converse",name:"Shai 001 Black White",retail:"$120",low:"$130",avg:"$158",high:"$195",trend:"+22%",hot:true,vol:"480 sales/wk"},
+  { brand:"Nike",name:"Off-White Dunk Low Lot 1",retail:"$170",low:"$800",avg:"$980",high:"$1300",trend:"+18%",hot:true,vol:"340 sales/wk"},
+  { brand:"Adidas",name:"Yeezy Foam Runner MXT",retail:"$80",low:"$95",avg:"$115",high:"$145",trend:"-2%",hot:false,vol:"2.1k sales/wk"},
 ];
 
 const AUTH_GUIDES = [
@@ -459,65 +400,11 @@ const AUTH_GUIDES = [
     {area:"Toe Cap Shape",real:"Slightly rounded, consistent curve, leather meets mesh cleanly",fake:"Too flat or too pointed, leather and mesh don't meet evenly",tip:"View from directly above — toe cap curve should be perfectly symmetrical"},
     {area:"Outsole Color",real:"Off-white or cream on most colorways, consistent across full length",fake:"Bright white on colorways that should be cream, or uneven coloring",tip:"Outsole color should always match product photos exactly"},
   ]},
-  { model:"Jordan 4 Black Cat",difficulty:"Hard",fakeScore:93,checks:[
-    {area:"Jumpman Tongue",real:"Clean embroidery, centered Jumpman, consistent thread thickness",fake:"Leaning or bloated Jumpman, uneven thread weight",tip:"Compare the tongue Jumpman to an official Nike product image side-by-side"},
-    {area:"Nubuck Quality",real:"Soft nubuck, consistent nap direction, reacts to brushing",fake:"Plasticky synthetic nubuck, stiff feel, nap doesn't respond",tip:"Brush the nubuck with your thumb — authentic will show a lighter trail"},
-    {area:"Heel AIR Text",real:"Thin, precise 'AIR' lettering, clean mold",fake:"Bolder, thicker text, rough edges on letters",tip:"The 'AIR' should look thin and crisp, never chunky"},
-    {area:"Side Cage",real:"Evenly spaced diamond-shaped netting, clean bonding",fake:"Irregular diamond sizes, glue overflow at cage edges",tip:"Hold the shoe at an angle — cage holes should be perfectly uniform"},
-    {area:"Tongue Height",real:"Tall, padded tongue that stays upright",fake:"Short, thin tongue that flops to one side",tip:"Short tongue is an immediate red flag on Jordan 4s"},
-  ]},
-  { model:"Travis Scott J1 Low",difficulty:"Very Hard",fakeScore:97,checks:[
-    {area:"Reverse Swoosh",real:"Tip points at first lace hole, tight stitching, clean edges",fake:"Swoosh tip misaligned, loose or uneven stitching",tip:"The reverse Swoosh tip should aim directly at the first lace hole"},
-    {area:"Cactus Jack Logo",real:"Precise embroidery, thin lettering, correct proportions",fake:"Thicker, bolder text, horizontally stretched font",tip:"Authentic Cactus Jack text looks small and vertically stretched"},
-    {area:"Suede Quality",real:"Buttery, alive nap that moves when brushed, rich color",fake:"Dead suede that doesn't respond, wrong shade (too light or dark)",tip:"Brush the suede — it should instantly lighten and show movement"},
-    {area:"Interior Tongue Label",real:"Sharp, properly spaced text, correct font weight",fake:"Thin, wavy, or slanted text, wrong font size",tip:"The text should be perfectly horizontal — any wave pattern = fake"},
-    {area:"Toe Box Perforations",real:"Small, evenly punched holes in a precise pattern",fake:"Oversized holes, inconsistent spacing",tip:"Hole size matters — authentic perforations are noticeably smaller"},
-  ]},
-  { model:"Nike Kobe 6 Protro",difficulty:"Hard",fakeScore:91,checks:[
-    {area:"Mamba Logo",real:"Flush with tongue, sharp lines, glittery finish on some colorways",fake:"Chunky raised badge, dull finish, thick outline",tip:"The shield badge should sit flat on the tongue, not stick out"},
-    {area:"Kobe Signature",real:"Thin, delicate signature on heel, lighter shade of red",fake:"Too thick, too dark, signature feels raised",tip:"The signature should look handwritten and thin — bold means fake"},
-    {area:"Zoom Air Unit",real:"Forefoot only, visible via X-ray, responsive cushioning",fake:"Often includes incorrect heel cushioning, less responsive",tip:"Press the forefoot — you should feel a distinct Zoom Air pop"},
-    {area:"Outsole Traction",real:"Razor-sharp herringbone pattern, consistent depth",fake:"Shallow or uneven tread pattern, softer rubber",tip:"Run your finger across — authentic herringbone feels sharp like a cheese grater"},
-    {area:"Size Tag",real:"Thin, precise text, correct style ID for colorway",fake:"Bolder text, wrong font weight, style ID may not match",tip:"Always verify the style ID matches the colorway on Nike or StockX"},
-  ]},
-  { model:"Yeezy Slide",difficulty:"Medium",fakeScore:89,checks:[
-    {area:"Foam Texture",real:"Smooth, consistent EVA foam, no visible seam lines",fake:"Rougher texture, visible mold lines, inconsistent density",tip:"Run your hand across — authentic slides feel perfectly smooth"},
-    {area:"Adidas Logo",real:"Cleanly molded trefoil on footbed, crisp edges",fake:"Blurry or shallow logo, rough edges around trefoil",tip:"The trefoil leaves should have sharp, defined edges"},
-    {area:"Shape Profile",real:"Specific arch height and toe curve, matches size chart",fake:"Flatter arch, wider toe opening, inconsistent sizing",tip:"View from the side — the arch should have a distinct curve"},
-    {area:"Weight",real:"Lightweight but substantial, around 200-250g per slide",fake:"Often noticeably heavier or lighter than authentic",tip:"If they feel unusually heavy for foam slides, be suspicious"},
-  ]},
-  { model:"Air Force 1",difficulty:"Medium",fakeScore:82,checks:[
-    {area:"Toe Box Shape",real:"Clean, slightly rounded toe with precise perforations",fake:"Too boxy or too rounded, uneven perforation alignment",tip:"Compare toe shape to Nike.com product images from above"},
-    {area:"Swoosh Placement",real:"Tip of Swoosh aligned with lowest eyelet, firm stitching",fake:"Swoosh sits too high or low, loose stitching at ends",tip:"Draw an imaginary line from the lowest eyelet — the Swoosh tip should touch it"},
-    {area:"Midsole Stitching",real:"Tight, evenly spaced stitches around the full midsole rim",fake:"Irregular spacing, skipped stitches, visible glue",tip:"Count stitches per inch — authentic AF1s have consistent, tight rows"},
-    {area:"Heel Logo",real:"Clean 'NIKE AIR' or 'AIR' stamp, properly recessed",fake:"Blurry stamp, wrong depth, or misaligned text",tip:"On newer AF1s, 'AIR' should be cleanly debossed into the rubber"},
-  ]},
-  { model:"ASICS Gel-1130",difficulty:"Medium",fakeScore:78,checks:[
-    {area:"GEL Insert",real:"Visible GEL cushioning in heel, clear/slightly blue tint",fake:"Opaque or no GEL visible, wrong color tint",tip:"Look at the midsole window — authentic GEL is visible and slightly translucent"},
-    {area:"Tiger Stripes",real:"Clean stitching, consistent width, flush with upper",fake:"Uneven stripe width, loose stitching, lifting at edges",tip:"Each stripe should be identical width with tight, flat stitching"},
-    {area:"Tongue Label",real:"'ASICS' in correct corporate font, clean print, straight alignment",fake:"Wrong font, blurry print, or tilted label",tip:"The ASICS logo should be perfectly horizontal on the tongue tag"},
-    {area:"Outsole Pattern",real:"AHAR rubber, defined tread pattern, consistent depth",fake:"Softer rubber, shallow or uneven tread",tip:"ASICS outsoles are durable — if the rubber dents easily with a fingernail, it's fake"},
-  ]},
-  { model:"Adidas Samba",difficulty:"Medium",fakeScore:85,checks:[
-    {area:"Leather Quality",real:"Full-grain leather, soft but structured, consistent grain pattern",fake:"Synthetic or low-grade leather, plasticky sheen, no grain",tip:"Scratch the leather lightly — real leather shows a faint scratch mark that fades"},
-    {area:"T-Toe Design",real:"Clean rubber T-shaped toe guard, precise bonding to upper",fake:"Sloppy rubber edges, glue overflow, T-shape is wrong proportion",tip:"The rubber-to-leather bond should be invisible — any visible glue = fake"},
-    {area:"Three Stripes",real:"Suede stripes with consistent nap, clean stitching, even spacing",fake:"Stiff stripes, irregular spacing, loose threads at edges",tip:"All three stripes should be exactly the same width and evenly spaced"},
-    {area:"Gold Foil Logo",real:"Crisp 'adidas' foil stamp on side, clean edges, doesn't flake",fake:"Blurry foil, already flaking on new pairs, wrong gold tone",tip:"Fresh Sambas should have perfectly crisp gold stamping — flaking on DS pairs is a red flag"},
-  ]},
-  { model:"Nike SB Dunk",difficulty:"Hard",fakeScore:92,checks:[
-    {area:"Padded Tongue",real:"Thick, puffy tongue with correct foam fill, holds shape",fake:"Thinner tongue, less padding, collapses when pressed",tip:"SB Dunks have noticeably thicker tongues than regular Dunks — if it feels thin, investigate"},
-    {area:"Zoom Air Insole",real:"Zoom Air unit in heel, responsive bounce, correct thickness",fake:"Basic foam insole, no Zoom Air, flat feel when walking",tip:"Press the insole heel — you should feel a distinct air cushion pop back"},
-    {area:"Heel Stitching",real:"Clean NIKE embroidery, correct thread thickness, centered",fake:"Uneven text, wrong thread weight, off-center placement",tip:"The NIKE text should be perfectly horizontal and centered on the heel panel"},
-    {area:"Toebox Perfs",real:"Two rows of evenly punched perforations, consistent size",fake:"Uneven holes, extra row of perfs, or inconsistent sizing",tip:"Count the perf rows and check each hole size — fakes often add an extra row"},
-    {area:"Lace Tips",real:"Correct metal or plastic aglets, clean cut, proper branding",fake:"Wrong aglet type, rough cut, missing branding",tip:"SB Dunks have specific lace tip styles per release — check against reference images"},
-  ]},
 ];
 
 const ALL_SOURCES = [
   {id:"stockx",label:"StockX",url:"stockx.com",color:"#00ff94"},
   {id:"goat",label:"GOAT",url:"goat.com",color:"#ffffff"},
-  {id:"ebay",label:"eBay",url:"ebay.com",color:"#e53238"},
-  {id:"amazon",label:"Amazon",url:"amazon.com",color:"#ff9900"},
 ];
 
 const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
@@ -531,130 +418,17 @@ const DEFAULT_DROPS = [
   {brand:"Nike",name:"Air Max 95 OG Neon",date:"Mar 5, 2026",retail:"$190",resell:"$250+",hype:88,badge:"hot",colorway:"Black/Cool Grey-Neon Yellow",method:"Nike.com",source:"Nike",image:null,sourceUrl:"https://nike.com",prices:[{store:"Nike",storeId:"nike",price:"$190",url:"https://nike.com"},{store:"StockX",storeId:"stockx",price:"$250",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$260",url:"https://goat.com"}]},
 ];
 
-// === KicksDB-based data fetching ===
-
-function kicksToDrops(products) {
-  return (products || []).map(p => {
-    const slug = p.slug || "";
-    const stockxUrl = slug ? `https://stockx.com/${slug}` : null;
-    const avgPrice = p.avg_price || p.min_price || null;
-    const retailPrice = p.retail_price || null;
-    // Determine badge based on data
-    let badge = "hot";
-    if (p.upcoming) badge = "upcoming";
-    else if (p.weekly_orders && p.weekly_orders < 5) badge = "limited";
-    // Hype score from rank/orders
-    let hype = null;
-    if (p.weekly_orders) hype = Math.min(99, Math.round(50 + Math.log2(p.weekly_orders + 1) * 8));
-    else if (p.rank) hype = Math.max(30, Math.min(95, 100 - Math.round(p.rank / 100)));
-
-    // Build price comparison array
-    const prices = [];
-    if (p.min_price) {
-      prices.push({
-        store: "StockX",
-        storeId: "stockx",
-        price: `$${Math.round(p.min_price)}`,
-        url: stockxUrl || "https://stockx.com",
-      });
-    }
-    // GOAT: no prices available via KicksDB — show "Check Price" with affiliate link
-    if (p._goat && p._goat.link) {
-      prices.push({
-        store: "GOAT",
-        storeId: "goat",
-        price: "Check Price",
-        url: p._goat.link,
-      });
-    }
-
-    // eBay: real prices from Browse API
-    if (p._ebay && p._ebay.price) {
-      prices.push({
-        store: p._ebay.authenticity ? "eBay ✓" : "eBay",
-        storeId: "ebay",
-        price: `$${Math.round(p._ebay.price)}`,
-        url: p._ebay.url || "https://www.ebay.com",
-      });
-    }
-
-    // Amazon: search link with affiliate tag
-    const amzQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
-    prices.push({
-      store: "Amazon",
-      storeId: "amazon",
-      price: "Check Price",
-      url: "https://www.amazon.com/s?k=" + amzQuery + "&tag=sneakyradar-20",
-    });
-
-    // Use GOAT release_date if StockX doesn't have one
-    const releaseDate = p.release_date || (p._goat && p._goat.release_date) || null;
-
-    // Price range from StockX
-    const lowestPrice = p.min_price || null;
-    const maxPrice = p.max_price || null;
-
-    // Build source label
-    const sourceNames = ["StockX"];
-    if (p._goat) sourceNames.push("GOAT");
-    if (p._ebay) sourceNames.push("eBay");
-    sourceNames.push("Amazon");
-
-    return {
-      brand: p.brand || "Unknown",
-      name: p.title || p.name || "Unknown",
-      date: releaseDate ? new Date(releaseDate).toLocaleDateString("en-US", {month:"short",day:"numeric",year:"numeric"}) : (p.upcoming ? "Coming Soon" : "Available"),
-      retail: retailPrice ? `$${retailPrice}` : (avgPrice ? `$${Math.round(avgPrice)}` : "—"),
-      resell: lowestPrice && maxPrice ? `$${Math.round(lowestPrice)} – $${Math.round(maxPrice)}` : (avgPrice ? `$${Math.round(avgPrice)}+` : null),
-      hype: hype,
-      badge: badge,
-      colorway: p.colorway || p.color || null,
-      method: null,
-      image: p.image || null,
-      source: sourceNames.join(" + "),
-      sourceUrl: stockxUrl,
-      sku: p.sku || null,
-      slug: slug,
-      weeklyOrders: p.weekly_orders || 0,
-      prices: prices,
-    };
-  });
-}
-
-async function fetchDrops(q, page = 1) {
-  const action = q ? "search" : "trending";
-  const payload = q
-    ? { action: "search", query: q, limit: 30, page: page }
-    : { action: "trending", limit: 30, page: page };
-
-  console.log(`[SNEAKYRADAR] KicksDB ${action}:`, q || "trending", "page:", page);
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const json = await res.json();
-    console.log("[SNEAKYRADAR] Raw API response:", JSON.stringify(json).substring(0, 200));
-
-    if (json.error) {
-      console.error("[SNEAKYRADAR] KicksDB error:", json.error);
-      return [];
-    }
-
-    const products = json.data || [];
-    console.log(`[SNEAKYRADAR] KicksDB returned ${products.length} products for page ${page}`);
-    const drops = kicksToDrops(products);
-    return drops;
-  } catch(err) {
-    console.error("[SNEAKYRADAR] KicksDB fetch error:", err.message);
-    return [];
-  }
-}
+const DROP_SYSTEM_PROMPT = (sl) => `Search ${sl} for upcoming sneaker drops. Return ONLY a JSON array, max 4 items: [{"brand":"Nike","name":"Name","date":"Mar 15 2025","retail":"$150","resell":"$200+","hype":85,"badge":"hot","colorway":"Color","method":"Method","image":null,"source":"${sl}","sourceUrl":"https://url"}] ONLY the array.`;
 const CHAT_SYSTEM_PROMPT = `You are SOLE — elite sneaker expert on SNEAKYRADAR. Deep knowledge of brands, drops, resell market, authentication, styling, collabs, history. Confident, street-savvy tone. Format shoe names **bold** and prices *italic*.`;
 const SUGGESTED_QUESTIONS = ["What's the most hyped drop right now?","Best sneakers under $150?","How do I win SNKRS draws?","Which Jordans should I flip?"];
 
+function parseDrops(text, sl) {
+  const j = text.match(/```json\n([\s\S]*?)\n```/);
+  if (j) { try { const d = JSON.parse(j[1]); if (Array.isArray(d)) return d.map(x=>({...x,source:x.source||sl})); } catch(e){} }
+  const a = text.match(/\[[\s\S]*\]/);
+  if (a) { try { const d = JSON.parse(a[0]); if (Array.isArray(d)) return d.map(x=>({...x,source:x.source||sl})); } catch(e){} }
+  return [];
+}
 function dedupeDrops(drops) {
   const seen = new Map();
   for (const d of drops) {
@@ -662,18 +436,54 @@ function dedupeDrops(drops) {
     if (!seen.has(key)) { seen.set(key,{...d,sources:[d.source].filter(Boolean)}); }
     else { const e=seen.get(key); if(d.source&&!e.sources.includes(d.source))e.sources.push(d.source); if(d.hype>e.hype)e.hype=d.hype; }
   }
-  return Array.from(seen.values()).sort((a,b)=>(b.hype||0)-(a.hype||0));
+  return Array.from(seen.values()).sort((a,b)=>b.hype-a.hype);
+}
+async function fetchSource(src, q) {
+  const prompt = q ? `Search ${src.label} (${src.url}) for sneaker releases related to: "${q}".` : `Search ${src.label} (${src.url}) for the most anticipated upcoming sneaker drops.`;
+  const res = await fetch(API_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:800, system:DROP_SYSTEM_PROMPT(src.label), tools:[{type:"web_search_20250305",name:"web_search"}], messages:[{role:"user",content:prompt}] }) });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || JSON.stringify(data));
+  const text = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("\n")||"";
+  return parseDrops(text, src.label);
 }
 function fmtMsg(t) { return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br/>'); }
 
 const BADGE_MAP = {hot:"badge-hot",upcoming:"badge-upcoming",limited:"badge-limited"};
 const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
 
-// Image cache no longer needed - KicksDB provides images directly
+const imageCache = {};
+async function fetchSneakerImage(name, brand) {
+  const key = `${brand||""}-${name||""}`.toLowerCase();
+  if (imageCache[key]) return imageCache[key];
+  if (imageCache[key] === null) return null;
+  try {
+    const query = encodeURIComponent((brand && !name.toLowerCase().includes(brand.toLowerCase()) ? brand + " " + name : name) + " sneaker");
+    const r = await fetch("/.netlify/functions/anthropic", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "sneaker_image", query })
+    });
+    const d = await r.json();
+    imageCache[key] = d.thumbnail || null;
+    return imageCache[key];
+  } catch(e) {
+    imageCache[key] = null;
+    return null;
+  }
+}
 
-function DropImage({src, name, brand, source, productUrl, onClick}) {
+function DropImage({src, name, brand, source, onClick}) {
+  const [imgSrc, setImgSrc] = useState(src || null);
   const [err, setErr] = useState(false);
-  const imgSrc = (src && src !== "null") ? src : null;
+
+  useEffect(() => {
+    if (!imgSrc && name) {
+      const timer = setTimeout(() => {
+        fetchSneakerImage(name, brand).then(url => { if (url) setImgSrc(url); });
+      }, Math.random() * 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [name, brand]);
 
   return (
     <div className="card-img-wrap" onClick={onClick}>
@@ -685,11 +495,11 @@ function DropImage({src, name, brand, source, productUrl, onClick}) {
 }
 
 function PriceCompare({prices, drop}) {
-  if (!prices || prices.length === 0) return null;
+  if (!prices?.length) return null;
   const sorted = [...prices].sort((a,b)=>parseFloat(a.price.replace(/[^0-9.]/g,''))-parseFloat(b.price.replace(/[^0-9.]/g,'')));
   return (
     <div className="price-compare">
-      <div className="price-compare-label">{prices.length > 1 ? "Compare Prices" : "Best Price"}</div>
+      <div className="price-compare-label">Best Price</div>
       <div className="price-compare-rows">
         {sorted.map((p,i)=>(
           <div key={p.store} className="price-row">
@@ -803,7 +613,7 @@ function ChatWidget() {
     const newMsgs=[...msgs,{role:"user",content:t}];
     setMsgs(newMsgs); setThinking(true);
     try {
-      const res = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:600,system:CHAT_SYSTEM_PROMPT,messages:newMsgs.map(m=>({role:m.role,content:typeof m.content==="string"?m.content.replace(/<[^>]+>/g,""):m.content}))})});
+      const res = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:600,system:CHAT_SYSTEM_PROMPT,messages:newMsgs.map(m=>({role:m.role,content:typeof m.content==="string"?m.content.replace(/<[^>]+>/g,""):m.content}))})});
       const data = await res.json();
       if(!res.ok)throw new Error(JSON.stringify(data.error)||JSON.stringify(data));
       const reply = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"No response";
@@ -856,158 +666,52 @@ function ChatWidget() {
 function DropRadarPage() {
   const [drops, setDrops] = useState(DEFAULT_DROPS);
   const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
+  const [brandFilter, setBrandFilter] = useState("All");
   const [srcFilter, setSrcFilter] = useState("All");
   const [query, setQuery] = useState("");
-  const [lastQuery, setLastQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
   const [updated, setUpdated] = useState(null);
   const [steps, setSteps] = useState([]);
+  const [selectedSources, setSelectedSources] = useState(ALL_SOURCES.map(s=>s.id));
 
   const search = async (q="")=>{
-    setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
-    setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
-    // Update active category if it matches a category button
-    const matchedCat = CATEGORY_SEARCHES.find(c => c.query.toLowerCase() === q.toLowerCase());
-    if (matchedCat) setActiveCategory(matchedCat.label);
-    else if (q === "") setActiveCategory("ALL");
-    else setActiveCategory("");
-    try {
-      const drops = await fetchDrops(q, 1);
-      const d = dedupeDrops(drops);
-      setSteps([{label:"Searching all sources",status:"done",count:d.length}]);
-      setDrops(d.length>0?d:DEFAULT_DROPS);
-      if(!d.length) setError("No results found. Showing featured drops.");
-      if(d.length < 30) setHasMore(false);
-      setUpdated(new Date().toLocaleTimeString());
-      // Only cache landing page (non-search) results
-      if (d.length > 0 && !q) {
-        localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
-        localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
-        localStorage.setItem("sneakyradar_drops_ver", "v25");
-      }
-    } catch(e) {
-      console.error("Search error:", e);
-      setSteps([{label:"Searching all sources",status:"done",count:0}]);
-      setError(e.message || "Search failed. Showing cached drops.");
+    if(!selectedSources.length){setError("Select at least one source.");return;}
+    setLoading(true); setError(null);
+    const srcs = ALL_SOURCES.filter(s=>selectedSources.includes(s.id));
+    setSteps(srcs.map(s=>({label:s.label,status:"pending"})));
+    const all=[];
+    await Promise.all(srcs.map(async(src,idx)=>{
+      setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"active"}:s));
+      try{const r=await fetchSource(src,q);all.push(...r);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:r.length}:s));}
+      catch(e){console.error(src.label,e);setSteps(p=>p.map((s,i)=>i===idx?{...s,status:"done",count:0}:s));}
+    }));
+    const d=dedupeDrops(all);
+    setDrops(d.length>0?d:DEFAULT_DROPS);
+    if(!d.length)setError("Could not fetch live data. Showing cached drops.");
+    setUpdated(new Date().toLocaleTimeString());
+    if (d.length > 0) {
+      localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
+      localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
     }
     setLoading(false);
   };
 
-  const loadMore = async ()=>{
-    if(!lastQuery || loadingMore || !hasMore) return;
-    setLoadingMore(true);
-    const nextPage = page + 1;
-    const fetchQuery = lastQuery === "__trending__" ? "" : lastQuery;
-    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending");
-    try {
-      const moreDrops = await fetchDrops(fetchQuery, nextPage);
-      console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
-      if(moreDrops.length === 0) { setHasMore(false); }
-      else {
-        const combined = dedupeDrops([...drops, ...moreDrops]);
-        setDrops(combined);
-        setPage(nextPage);
-        if(moreDrops.length < 30) setHasMore(false);
-      }
-    } catch(e) {
-      console.error("Load more error:", e);
-    }
-    setLoadingMore(false);
-  };
-
   useEffect(() => {
-    // Check URL for ?search= param (from blog links)
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get("search");
-    if (searchParam) {
-      setQuery(searchParam);
-      search(searchParam);
-      return;
-    }
-
-    const CACHE_VERSION = "v25";
     const cached = localStorage.getItem("sneakyradar_drops");
     const cachedTime = localStorage.getItem("sneakyradar_drops_time");
-    const cachedVer = localStorage.getItem("sneakyradar_drops_ver");
-    const oneHour = 15 * 60 * 1000; // 15 min cache
-    if (cached && cachedTime && cachedVer === CACHE_VERSION && Date.now() - parseInt(cachedTime) < oneHour) {
-      try { 
-        const parsed = JSON.parse(cached);
-        if (parsed.length > 0) { setDrops(parsed); return; }
-      } catch(e) {}
+    const oneHour = 60 * 60 * 1000;
+    if (cached && cachedTime && Date.now() - parseInt(cachedTime) < oneHour) {
+      try { setDrops(JSON.parse(cached)); return; } catch(e) {}
     }
-    // Clear stale cache
-    localStorage.removeItem("sneakyradar_drops");
-    localStorage.removeItem("sneakyradar_drops_time");
-    localStorage.removeItem("sneakyradar_drops_ver");
-    search("Jordan");
+    search();
   }, []);
 
-  const CATEGORY_SEARCHES = [
-    {label: "ALL", query: ""},
-    {label: "JORDAN ALL", query: "Air Jordan Retro"},
-    {label: "JORDAN 1", query: "Jordan 1 Retro"},
-    {label: "JORDAN 3", query: "Jordan 3 Retro"},
-    {label: "JORDAN 4", query: "Jordan 4 Retro"},
-    {label: "JORDAN 5", query: "Jordan 5 Retro"},
-    {label: "JORDAN 11", query: "Jordan 11 Retro"},
-    {label: "JORDAN 12", query: "Jordan 12 Retro"},
-    {label: "JORDAN 13", query: "Jordan 13 Retro"},
-    {label: "TRAVIS SCOTT", query: "Travis Scott"},
-    {label: "NIKE DUNK", query: "Nike Dunk"},
-    {label: "AIR FORCE 1", query: "Air Force 1"},
-    {label: "AIR MAX", query: "Nike Air Max"},
-    {label: "NIKE SB", query: "Nike SB"},
-    {label: "KOBE", query: "Nike Kobe"},
-    {label: "FOAMPOSITE", query: "Nike Foamposite"},
-    {label: "YEEZY BOOST", query: "Yeezy Boost"},
-    {label: "YEEZY", query: "YZY"},
-    {label: "ADIDAS", query: "Adidas"},
-    {label: "NEW BALANCE", query: "New Balance"},
-    {label: "ASICS", query: "Asics"},
-    {label: "PUMA", query: "Puma"},
-    {label: "ON RUNNING", query: "On Running"},
-    {label: "ANTA", query: "Anta"},
-    {label: "SAUCONY", query: "Saucony"},
-    {label: "SALOMON", query: "Salomon"},
-    {label: "LEBRON", query: "Lebron"},
-    {label: "LUKA", query: "Jordan Luka"},
-    {label: "BALENCIAGA", query: "Balenciaga sneakers"},
-    {label: "VERSACE", query: "Versace sneakers"},
-    {label: "CONVERSE", query: "Converse"},
-    {label: "JA MORANT", query: "Nike Ja"},
-    {label: "MIZUNO", query: "Mizuno"},
-    {label: "SACAI", query: "Nike Sacai"},
-    {label: "BAD BUNNY", query: "Bad Bunny Adidas"},
-    {label: "ONITSUKA", query: "Onitsuka Tiger"},
-    {label: "HOKA", query: "Hoka"},
-    {label: "BROOKS", query: "Brooks"},
-    {label: "VANS", query: "Vans"},
-    {label: "UGG", query: "UGG"},
-    {label: "CROCS", query: "Crocs"},
-  ];
-  const [activeCategory, setActiveCategory] = useState("ALL");
-
-  const handleCategoryClick = (cat) => {
-    setActiveCategory(cat.label);
-    if (cat.query === "") {
-      // ALL — search Jordan as default landing
-      setQuery("");
-      search("Jordan");
-    } else {
-      setQuery(cat.query);
-      search(cat.query);
-    }
-  };
-
-
+  const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
     if(d.sponsored)return true;
-    return(srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
+    return(brandFilter==="All"||d.brand?.toLowerCase()===brandFilter.toLowerCase())&&
+           (srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
   });
 
   return (
@@ -1020,12 +724,22 @@ function DropRadarPage() {
           <div className="search-bar">
             <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search brand, colorway, silhouette..." onKeyDown={e=>e.key==="Enter"&&search(query)}/>
           </div>
+          <SourceDropdown selected={selectedSources} onChange={setSelectedSources}/>
           <button className="search-go-btn" onClick={()=>search(query)} disabled={loading}>{loading?"SCANNING...":"SEARCH"}</button>
         </div>
-        <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
         <div className="filters">
-          {CATEGORY_SEARCHES.map(cat=><button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
+          {BRAND_FILTERS.map(f=><button key={f} className={`filter-btn ${brandFilter===f?"active":""}`} onClick={()=>setBrandFilter(f)}>{f}</button>)}
         </div>
+        {allSrcLabels.length>0&&(
+          <div className="result-source-filters">
+            <button className={`rsf-btn ${srcFilter==="All"?"active":""}`} onClick={()=>setSrcFilter("All")}><span className="dot" style={{background:"var(--muted)"}}/>All Results</button>
+            {allSrcLabels.map(s=>{const src=ALL_SOURCES.find(x=>x.label===s);return(
+              <button key={s} className={`rsf-btn ${srcFilter===s?"active":""}`} style={srcFilter===s?{borderColor:src?.color,color:src?.color}:{}} onClick={()=>setSrcFilter(s===srcFilter?"All":s)}>
+                <span className="dot" style={{background:src?.color||"var(--muted)"}}/>{s}
+              </button>
+            );})}
+          </div>
+        )}
         {error&&<div className="error-msg">⚠ {error}</div>}
         {loading&&steps.length>0&&(
           <div className="progress-steps">
@@ -1034,7 +748,7 @@ function DropRadarPage() {
         )}
         <div className="status-bar">
           <div className="pulse-dot"/>
-          {loading?`Scanning all sources...`:`${filtered.length} drops tracked`}
+          {loading?`Scanning ${selectedSources.length} sources...`:`${filtered.length} drops tracked`}
           {updated&&<span style={{marginLeft:"auto"}}>Updated {updated}</span>}
         </div>
         {loading?(
@@ -1044,39 +758,27 @@ function DropRadarPage() {
         ):filtered.length===0?(
           <div className="empty-state"><h2>NO DROPS</h2>adjust your filters</div>
         ):(
-          <div>
-            <div className="grid">
-              {filtered.map((drop,i)=>(
-                <div key={i} className={`card ${drop.sponsored?"sponsored":""}`}>
-                  {drop.sponsored&&<div className="sponsor-banner"><span>{drop.sponsorLabel||"Featured"}</span><span style={{fontSize:"0.45rem",opacity:0.6}}>Sponsored</span></div>}
-                  <DropImage src={drop.image} name={drop.name} brand={drop.brand} source={drop.source} productUrl={drop.sourceUrl} onClick={()=>{if(drop.sourceUrl){trackClick(drop,drop.source?.toLowerCase());window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}}/>
-                  <div className="card-body">
-                    {drop.badge&&<div className={`badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}`}>{BADGE_LABELS[drop.badge]||drop.badge}</div>}
-                    <div className="card-brand">{drop.brand}</div>
-                    <div className="card-name" onClick={()=>{if(drop.sourceUrl)window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}>{drop.name}</div>
-                    {drop.colorway&&<div className="card-colorway">{drop.colorway}</div>}
-                    <div className="card-meta">
-                      <div className="meta-row"><span className="meta-label">Release</span><span className="meta-value">{drop.date||"TBD"}</span></div>
-                      <div className="meta-row"><span className="meta-label">Retail</span><span className="price">{drop.retail||"—"}</span></div>
-                      {drop.resell&&<div className="meta-row"><span className="meta-label">Est. Resell</span><span className="meta-value">{drop.resell}</span></div>}
-                      {drop.method&&<div className="meta-row"><span className="meta-label">Method</span><span className="meta-value" style={{fontSize:"0.65rem"}}>{drop.method}</span></div>}
-                    </div>
-                    {drop.hype&&<><div className="hype-bar"><div className="hype-fill" style={{width:`${drop.hype}%`}}/></div><div className="hype-label"><span>Hype Index</span><span>{drop.hype}/100</span></div></>}
-                    <PriceCompare prices={drop.prices} drop={drop}/>
+          <div className="grid">
+            {filtered.map((drop,i)=>(
+              <div key={i} className={`card ${drop.sponsored?"sponsored":""}`}>
+                {drop.sponsored&&<div className="sponsor-banner"><span>{drop.sponsorLabel||"Featured"}</span><span style={{fontSize:"0.45rem",opacity:0.6}}>Sponsored</span></div>}
+                <DropImage src={drop.image} name={drop.name} brand={drop.brand} source={drop.source} onClick={()=>{if(drop.sourceUrl){trackClick(drop,drop.source?.toLowerCase());window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}}/>
+                <div className="card-body">
+                  {drop.badge&&<div className={`badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}`}>{BADGE_LABELS[drop.badge]||drop.badge}</div>}
+                  <div className="card-brand">{drop.brand}</div>
+                  <div className="card-name" onClick={()=>{if(drop.sourceUrl)window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}>{drop.name}</div>
+                  {drop.colorway&&<div className="card-colorway">{drop.colorway}</div>}
+                  <div className="card-meta">
+                    <div className="meta-row"><span className="meta-label">Release</span><span className="meta-value">{drop.date||"TBD"}</span></div>
+                    <div className="meta-row"><span className="meta-label">Retail</span><span className="price">{drop.retail||"—"}</span></div>
+                    {drop.resell&&<div className="meta-row"><span className="meta-label">Est. Resell</span><span className="meta-value">{drop.resell}</span></div>}
+                    {drop.method&&<div className="meta-row"><span className="meta-label">Method</span><span className="meta-value" style={{fontSize:"0.65rem"}}>{drop.method}</span></div>}
                   </div>
-                </div>
-              ))}
-            </div>
-            {hasMore && lastQuery && !loading && (
-              <div style={{textAlign:"center",padding:"32px 0"}}>
-                <button onClick={loadMore} disabled={loadingMore} style={{background:loadingMore?"var(--card)":"var(--accent)",color:loadingMore?"var(--muted)":"#000",border:"none",padding:"14px 48px",borderRadius:"8px",fontFamily:"'Bebas Neue',sans-serif",fontSize:"1.1rem",letterSpacing:"2px",cursor:loadingMore?"wait":"pointer",transition:"all 0.2s"}}>
-                  {loadingMore ? "LOADING..." : "LOAD MORE"}
-                </button>
-                <div style={{fontSize:"0.65rem",color:"var(--muted)",marginTop:"8px"}}>
-                  Showing {filtered.length} results
+                  {drop.hype&&<><div className="hype-bar"><div className="hype-fill" style={{width:`${drop.hype}%`}}/></div><div className="hype-label"><span>Hype Index</span><span>{drop.hype}/100</span></div></>}
+                  <PriceCompare prices={drop.prices} drop={drop}/>
                 </div>
               </div>
-            )}
+            ))}
           </div>
         )}
       </div>
@@ -1101,10 +803,10 @@ function ResellPage() {
         <h1 className="section-title"><span className="filled">RESELL</span> <span className="outline">TRACKER</span></h1>
         <p className="section-sub">Retail vs. market price, trend direction, and weekly sales volume — everything you need to buy, hold, or flip.</p>
         <div className="resell-stats">
-          <div className="resell-stat"><div className="resell-stat-label">Models Tracked</div><div className="resell-stat-value">52</div><div className="resell-stat-sub">across 12 brands</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Hottest Model</div><div className="resell-stat-value">TS1</div><div className="resell-stat-sub">Travis Scott Fragment avg $1,450</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Best Flip</div><div className="resell-stat-value">MY3</div><div className="resell-stat-sub">Mars Yard 3.0 avg +291% ROI</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Weekly Vol</div><div className="resell-stat-value">68k</div><div className="resell-stat-sub">verified sales tracked this week</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Avg Premium</div><div className="resell-stat-value">+87%</div><div className="resell-stat-sub">above retail across tracked models</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Hottest Model</div><div className="resell-stat-value">AJ1</div><div className="resell-stat-sub">Air Jordan 1 collab avg +$340</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Best Flip</div><div className="resell-stat-value">OW</div><div className="resell-stat-sub">Off-White Dunk avg 476% ROI</div></div>
+          <div className="resell-stat"><div className="resell-stat-label">Weekly Vol</div><div className="resell-stat-value">16k</div><div className="resell-stat-sub">verified sales tracked this week</div></div>
         </div>
         <div className="filters" style={{marginBottom:20}}>
           {brands.map(b=><button key={b} className={`filter-btn ${brandFilter===b?"active":""}`} onClick={()=>setBrandFilter(b)}>{b}</button>)}
@@ -1134,29 +836,6 @@ function ResellPage() {
             ))}
           </tbody>
         </table>
-        <div className="resell-mobile">
-          {sorted.map((d,i)=>(
-            <div key={i} className="resell-m-card">
-              <div className="resell-m-top">
-                <div>
-                  <div className="resell-m-brand">{d.hot&&<span className="hot-tag" style={{marginRight:6}}>HOT</span>}{d.brand}</div>
-                  <div className="resell-m-name">{d.name}</div>
-                </div>
-                <div style={{textAlign:"right"}}>
-                  <div className="resell-m-avg">{d.avg}</div>
-                  <div className={d.trend.startsWith("-")?"trend-down":"trend-up"} style={{fontSize:"0.65rem"}}>{d.trend}</div>
-                </div>
-              </div>
-              <div className="resell-m-row"><span>Retail</span><span>{d.retail}</span></div>
-              <div className="resell-m-row"><span>Range</span><span>{d.low} — {d.high}</span></div>
-              <div className="resell-m-row"><span>Volume</span><span>{d.vol}</span></div>
-              <div className="resell-m-btns">
-                <a href={`https://stockx.com/search?s=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">StockX</a>
-                <a href={`https://goat.com/search?query=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">GOAT</a>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -1209,39 +888,336 @@ function AuthPage() {
   );
 }
 
+function ReleasesPage() {
+  const { useState, useMemo } = React;
+  const today = new Date();
+  const [monthOffset, setMonthOffset] = useState(0);
+  const [view, setView] = useState("list");
+  const [brandFilter, setBrandFilter] = useState("ALL");
+  const [selectedRelease, setSelectedRelease] = useState(null);
+
+  const releases = [
+    // FEBRUARY 2026 (recent/just dropped)
+    {name:"Air Jordan 5 \"Wolf Grey\"",sku:"DD0587-002",date:"2026-02-28",price:220,brand:"Jordan",color:"Light Graphite/White-Wolf Grey"},
+    {name:"Fragment x Union x Air Jordan 1 High OG",sku:"IO7847-002",date:"2026-02-27",price:200,brand:"Jordan",color:"Black/Varsity Red-Sport Royal-White",collab:true},
+    {name:"Fragment x Union x Air Jordan 1 High OG",sku:"IO7847-001",date:"2026-02-26",price:200,brand:"Jordan",color:"Black/Navy-Royal-Sail",collab:true},
+    {name:"Air Jordan 1 Low \"Lucky Cat\"",sku:"IQ3460-010",date:"2026-03-01",price:145,brand:"Jordan",color:"Black/Multi"},
+    // MARCH 2026
+    {name:"Nike ACG Ultrafly 3",sku:"IR7317-300",date:"2026-03-02",price:250,brand:"Nike",color:"Green/Multi"},
+    {name:"Nike LeBron 23 \"The Decision\"",sku:"IB9557-601",date:"2026-03-03",price:210,brand:"Nike",color:"Pink/Multi"},
+    {name:"Nike Air Max 95 \"Neon\" Big Bubble",sku:"HM4740-001",date:"2026-03-05",price:190,brand:"Nike",color:"Black/Neon Yellow"},
+    {name:"Teyana Taylor x Air Jordan 3 \"Concrete Rose\"",sku:"IF3097-300",date:"2026-03-07",price:280,brand:"Jordan",color:"Fir/Fire Red-Victory Green-Cement Grey",collab:true},
+    {name:"Air Jordan 4 OG \"Lakers\"",sku:"FV5029-500",date:"2026-03-07",price:220,brand:"Jordan",color:"Imperial Purple/Multi-Color"},
+    {name:"Air Jordan 1 High OG \"Psychic Blue\" (W)",sku:"FD2596-102",date:"2026-03-07",price:185,brand:"Jordan",color:"Pale Ivory/Psychic Blue-Coconut Milk"},
+    {name:"Air Jordan 13 \"Chicago\"",sku:"414571-102",date:"2026-03-13",price:215,brand:"Jordan",color:"White/Black-True Red"},
+    {name:"Dashawn Jordan x Nike SB Dunk Low",sku:"IB6208-200",date:"2026-03-14",price:140,brand:"Nike",color:"String/Black-Bright Spruce-Purple",collab:true},
+    {name:"Air Jordan 1 Low OG \"Floral Swoosh\"",sku:"IF4391-100",date:"2026-03-18",price:165,brand:"Jordan",color:"Sail/Off White-Coconut Milk"},
+    {name:"Nike KD 6 \"PBJ\"",sku:"IB6903-800",date:"2026-03-20",price:145,brand:"Nike",color:"Laser Orange/Black-Raspberry Red"},
+    {name:"Air Jordan 14 \"University Blue\"",sku:"487471-007",date:"2026-03-21",price:210,brand:"Jordan",color:"Black/University Blue-Metallic Silver-White"},
+    {name:"Swarovski x Air Jordan 1 High OG",sku:"HF6248-002",date:"2026-03-21",price:1005,brand:"Jordan",color:"Vast Grey/Vast Grey-Photon Dust",collab:true},
+    {name:"Nike Kobe 5 Protro \"Lower Merion Away\"",sku:"IM0557-001",date:"2026-03-23",price:200,brand:"Nike",color:"Metallic Silver/Team Red-White"},
+    {name:"Nike Air Foamposite Pro \"UNC\"",sku:"HF0794-400",date:"2026-03-27",price:240,brand:"Nike",color:"University Blue/White-Midnight Navy"},
+    {name:"Travis Scott x Jumpman Jack \"Green Spark\"",sku:"IM9113-300",date:"2026-03-27",price:205,brand:"Jordan",color:"Green Spark/Vapor Green-Black",collab:true},
+    {name:"Virgil Abloh x Air Jordan 1 \"Alaska\"",sku:"AA3834-100",date:"2026-03-28",price:230,brand:"Jordan",color:"White/White",collab:true},
+    {name:"Air Jordan 3 OG \"Spring is in the Air\"",sku:"IF4396-100",date:"2026-03-28",price:210,brand:"Jordan",color:"Sail/Jade Aura-Aura-Iced Carmine"},
+    {name:"NOTE Manchester x Nike SB Dunk Low",sku:"IO9508-200",date:"2026-03-28",price:130,brand:"Nike",color:"Flax/Summit White-Sail",collab:true},
+    // APRIL 2026
+    {name:"Nike Sabrina 3 \"What The\"",sku:"IO7845-300",date:"2026-04-01",price:145,brand:"Nike",color:"Igloo/Blue Crystal-Light Atomic Pink"},
+    {name:"Air Jordan 3 \"Orange Citrus\" (W)",sku:"CK9246-101",date:"2026-04-04",price:205,brand:"Jordan",color:"White/Cement Grey-Fire Red-Multi"},
+    {name:"Nike Ja 3 \"Jurassic Park\"",sku:"IU7240-001",date:"2026-04-10",price:135,brand:"Nike",color:"Anthracite/Yellow Ochre-Bright Crimson",collab:true},
+    {name:"adidas Anthony Edwards 2 \"Lime Burst\"",sku:"JR1572",date:"2026-04-12",price:130,brand:"Adidas",color:"Core Black/Lime Burst"},
+    {name:"Air Jordan 1 Low OG \"Banned\"",sku:"IW6276-001",date:"2026-04-11",price:185,brand:"Jordan",color:"Black/Sail-Gum-University Red"},
+    {name:"Air Jordan 11 Low \"University Blue\"",sku:"TBD-UNC11",date:"2026-04-18",price:195,brand:"Jordan",color:"White/University Blue"},
+    {name:"Air Jordan 3 \"Orange Citrus\" (W)",sku:"CK9246-101b",date:"2026-04-23",price:205,brand:"Jordan",color:"White/Cement Grey-Fire Red-Multi"},
+    {name:"Air Jordan 5 \"White Metallic\"",sku:"TBD-WM5",date:"2026-04-25",price:220,brand:"Jordan",color:"White/Metallic Silver"},
+    // MAY 2026
+    {name:"Air Jordan 4 \"Toro Bravo\"",sku:"FQ8138-600",date:"2026-05-02",price:220,brand:"Jordan",color:"Fire Red/White-Black-Cement Grey"},
+    {name:"Air Jordan 11 Low \"Mother's Day\"",sku:"AH7860-102",date:"2026-05-02",price:195,brand:"Jordan",color:"White/Metallic Gold-Team Gold"},
+    {name:"Nigel Sylvester x Air Jordan 4",sku:"IQ8055-100",date:"2026-05-09",price:230,brand:"Jordan",color:"Sail/Cinnabar-Black",collab:true},
+    {name:"Air Jordan 1 Low OG \"Banned\"",sku:"IW6276-001b",date:"2026-05-16",price:145,brand:"Jordan",color:"Black/Black-Varsity Red-Summit White"},
+    {name:"Air Jordan 12 \"Bloodline\"",sku:"CT8013-001",date:"2026-05-23",price:205,brand:"Jordan",color:"Black/Varsity Red"},
+    // JUNE 2026
+    {name:"Air Jordan 3 OG \"Bin 23\"",sku:"IO7744-600",date:"2026-06-13",price:350,brand:"Jordan",color:"Team Red/Metallic Gold-Burgundy Crush"},
+    {name:"Free The Youth x Air Jordan 16",sku:"IV7638-001",date:"2026-06-13",price:250,brand:"Jordan",color:"Metallic Silver/Picante Red-Total Orange",collab:true},
+    // JULY 2026
+    {name:"Air Jordan 3 OG \"True Blue\"",sku:"IF4396-102",date:"2026-07-03",price:230,brand:"Jordan",color:"White/True Blue"},
+    // AUGUST 2026
+    {name:"Air Jordan 8 \"Space Jam\"",sku:"HV4794-106",date:"2026-08-08",price:215,brand:"Jordan",color:"Multi",collab:true},
+    {name:"Air Jordan 6 \"Oreo\"",sku:"CT8529-108",date:"2026-08-22",price:215,brand:"Jordan",color:"Black/White-Speckled"},
+    // SEPTEMBER 2026
+    {name:"Air Jordan 8 \"Chrome\"",sku:"TBD-CHR8",date:"2026-09-12",price:215,brand:"Jordan",color:"Chrome/Silver"},
+    // OCTOBER 2026
+    {name:"Air Jordan 1 High OG \"Royal\"",sku:"TBD-ROY1",date:"2026-10-10",price:185,brand:"Jordan",color:"Black/Royal Blue"},
+    {name:"Air Jordan 14 \"Forest Green\"",sku:"TBD-FG14",date:"2026-10-31",price:215,brand:"Jordan",color:"White/Forest Green"},
+    // NOVEMBER 2026
+    {name:"Air Jordan 4 OG \"Bred\"",sku:"TBD-BRED4",date:"2026-11-27",price:220,brand:"Jordan",color:"Black/Cement Grey-Fire Red"},
+    // DECEMBER 2026
+    {name:"Air Jordan 11 \"Space Jam\"",sku:"TBD-SJ11",date:"2026-12-20",price:235,brand:"Jordan",color:"Black/Concord-White",collab:true},
+    {name:"Air Jordan 6 \"White Infrared\"",sku:"TBD-IR6",date:"2026-12-26",price:215,brand:"Jordan",color:"White/Infrared"},
+  ];
+
+  const viewDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+  const monthName = viewDate.toLocaleString('default', { month: 'long' });
+  const year = viewDate.getFullYear();
+
+  const brandOptions = ["ALL","JORDAN","NIKE","ADIDAS","COLLAB"];
+
+  const filteredReleases = useMemo(function() {
+    return releases.filter(function(r) {
+      if (brandFilter === "ALL") return true;
+      if (brandFilter === "COLLAB") return r.collab;
+      return r.brand.toUpperCase() === brandFilter;
+    });
+  }, [brandFilter]);
+
+  const monthReleases = useMemo(function() {
+    return filteredReleases.filter(function(r) {
+      var d = new Date(r.date + "T00:00:00");
+      return d.getMonth() === viewDate.getMonth() && d.getFullYear() === viewDate.getFullYear();
+    }).sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+  }, [filteredReleases, monthOffset]);
+
+  function getBrandClass(r) {
+    if (r.collab) return "brand-collab";
+    switch (r.brand) {
+      case "Jordan": return "brand-jordan";
+      case "Nike": return "brand-nike";
+      case "Adidas": return "brand-adidas";
+      case "New Balance": return "brand-nb";
+      case "Yeezy": return "brand-yeezy";
+      default: return "brand-other";
+    }
+  }
+
+  // Calendar grid generation
+  function getCalendarDays() {
+    var firstDay = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
+    var lastDay = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0);
+    var startDow = firstDay.getDay();
+    var days = [];
+    // Previous month padding
+    for (var i = startDow - 1; i >= 0; i--) {
+      var d = new Date(firstDay);
+      d.setDate(d.getDate() - i - 1);
+      days.push({ date: d, otherMonth: true });
+    }
+    // Current month
+    for (var j = 1; j <= lastDay.getDate(); j++) {
+      days.push({ date: new Date(viewDate.getFullYear(), viewDate.getMonth(), j), otherMonth: false });
+    }
+    // Next month padding
+    while (days.length % 7 !== 0) {
+      var last = days[days.length - 1].date;
+      var nd = new Date(last);
+      nd.setDate(nd.getDate() + 1);
+      days.push({ date: nd, otherMonth: true });
+    }
+    return days;
+  }
+
+  function releasesForDate(date) {
+    var ds = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+    return filteredReleases.filter(function(r) { return r.date === ds; });
+  }
+
+  function isToday(date) {
+    return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+  }
+
+  function formatDate(dateStr) {
+    var d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  // Group list view by date
+  var listGrouped = {};
+  monthReleases.forEach(function(r) {
+    if (!listGrouped[r.date]) listGrouped[r.date] = [];
+    listGrouped[r.date].push(r);
+  });
+
+  // Stats
+  var totalDrops = monthReleases.length;
+  var collabCount = monthReleases.filter(function(r) { return r.collab; }).length;
+  var avgPrice = totalDrops > 0 ? Math.round(monthReleases.reduce(function(s, r) { return s + r.price; }, 0) / totalDrops) : 0;
+  var highestDrop = monthReleases.reduce(function(max, r) { return r.price > (max ? max.price : 0) ? r : max; }, null);
+
+  var calDays = getCalendarDays();
+  var dayNames = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+
+  return (
+    <div className="page">
+      <div className="section-wrap">
+        <div className="section-eyebrow">Upcoming</div>
+        <div className="section-title"><span className="filled">RELEASE</span> <span className="outline">CALENDAR</span></div>
+        <div className="section-sub">Every confirmed sneaker drop. Updated weekly from Nike SNKRS, Sneaker Bar Detroit, House of Heat, and more.</div>
+
+        <div className="cal-stats">
+          <div className="cal-stat">
+            <div className="cal-stat-label">Drops This Month</div>
+            <div className="cal-stat-val accent">{totalDrops}</div>
+          </div>
+          <div className="cal-stat">
+            <div className="cal-stat-label">Collabs</div>
+            <div className="cal-stat-val" style={{color:"#cc44ff"}}>{collabCount}</div>
+          </div>
+          <div className="cal-stat">
+            <div className="cal-stat-label">Avg Retail</div>
+            <div className="cal-stat-val green">${avgPrice}</div>
+          </div>
+          <div className="cal-stat">
+            <div className="cal-stat-label">Priciest Drop</div>
+            <div className="cal-stat-val" style={{color:"#ffd200"}}>{highestDrop ? "$" + highestDrop.price : "—"}</div>
+          </div>
+        </div>
+
+        <div className="cal-header">
+          <div className="cal-month-nav">
+            <button onClick={function(){setMonthOffset(monthOffset-1)}}>◀ PREV</button>
+            <div className="cal-month-label"><span>{monthName}</span> {year}</div>
+            <button onClick={function(){setMonthOffset(monthOffset+1)}}>NEXT ▶</button>
+          </div>
+          <div className="cal-view-toggle">
+            <button className={"cal-view-btn" + (view==="calendar"?" active":"")} onClick={function(){setView("calendar")}}>GRID</button>
+            <button className={"cal-view-btn" + (view==="list"?" active":"")} onClick={function(){setView("list")}}>LIST</button>
+          </div>
+        </div>
+
+        <div className="cal-filters">
+          {brandOptions.map(function(b) {
+            return <button key={b} className={"cal-filter-btn" + (brandFilter===b?" active":"")} onClick={function(){setBrandFilter(b)}}>{b}</button>;
+          })}
+        </div>
+
+        {view === "calendar" && (
+          <div className="cal-grid">
+            {dayNames.map(function(d) { return <div key={d} className="cal-day-header">{d}</div>; })}
+            {calDays.map(function(day, i) {
+              var rels = releasesForDate(day.date);
+              var cls = "cal-day" + (day.otherMonth ? " other-month" : "") + (isToday(day.date) ? " today" : "");
+              return (
+                <div key={i} className={cls}>
+                  <div className="cal-day-num">{day.date.getDate()}</div>
+                  {rels.slice(0, 3).map(function(r, j) {
+                    return <span key={j} className={"cal-release-pip " + getBrandClass(r)} onClick={function(){setSelectedRelease(r)}}>{r.name.split(" ").slice(0,3).join(" ")}</span>;
+                  })}
+                  {rels.length > 3 && <span className="cal-more" onClick={function(){setView("list")}}>+{rels.length - 3} more</span>}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {view === "list" && (
+          <div className="cal-list">
+            {monthReleases.length === 0 && <div style={{textAlign:"center",padding:"60px 0",color:"var(--muted)",fontSize:"0.75rem",letterSpacing:"1px"}}>No releases scheduled for this month</div>}
+            {Object.keys(listGrouped).sort().map(function(dateStr) {
+              var d = new Date(dateStr + "T00:00:00");
+              var dayLabel = d.toLocaleDateString('en-US', { weekday: 'long' });
+              var dateLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+              var isPast = d < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+              return (
+                <div key={dateStr}>
+                  <div className="cal-list-date" style={isPast?{opacity:0.4}:{}}><span>{dateLabel}</span> — {dayLabel}</div>
+                  {listGrouped[dateStr].map(function(r, j) {
+                    return (
+                      <div key={j} className="cal-list-item" style={isPast?{opacity:0.5}:{}} onClick={function(){setSelectedRelease(r)}}>
+                        <div className="cal-list-img">
+                          <ReleaseImage sku={r.sku} name={r.name} />
+                        </div>
+                        <div className="cal-list-info">
+                          <div className="cal-list-name">{r.name}</div>
+                          <div className="cal-list-meta">{r.brand} · {r.color}</div>
+                          <div className="cal-list-sku">{r.sku}</div>
+                        </div>
+                        <div className="cal-list-price">${r.price}</div>
+                        <div className="cal-list-actions">
+                          <a className="cal-list-btn primary" href={"/?search=" + encodeURIComponent(r.name)} onClick={function(e){e.stopPropagation()}}>Compare Prices</a>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="cal-legend">
+          <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#ff3c00"}}/> JORDAN</div>
+          <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#888"}}/> NIKE</div>
+          <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#00e676"}}/> ADIDAS</div>
+          <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#cc44ff"}}/> COLLAB</div>
+        </div>
+
+        {selectedRelease && (
+          <div className="cal-modal-overlay" onClick={function(){setSelectedRelease(null)}}>
+            <div className="cal-modal" onClick={function(e){e.stopPropagation()}}>
+              <div className="cal-modal-head">
+                <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>{selectedRelease.brand}{selectedRelease.collab?" · COLLAB":""}</div>
+                <button className="cal-modal-close" onClick={function(){setSelectedRelease(null)}}>✕</button>
+              </div>
+              <div className="cal-modal-img">
+                <ReleaseImage sku={selectedRelease.sku} name={selectedRelease.name} size={240} />
+              </div>
+              <div className="cal-modal-body">
+                <div className="cal-modal-title">{selectedRelease.name}</div>
+                <div className="cal-modal-details">
+                  <div className="cal-modal-detail"><label>Release Date</label><span>{formatDate(selectedRelease.date)}</span></div>
+                  <div className="cal-modal-detail"><label>Retail Price</label><span style={{color:"var(--green)"}}>${selectedRelease.price}</span></div>
+                  <div className="cal-modal-detail"><label>Style Code</label><span style={{fontSize:"0.9rem"}}>{selectedRelease.sku}</span></div>
+                  <div className="cal-modal-detail"><label>Colorway</label><span style={{fontSize:"0.7rem",fontFamily:"'DM Mono',monospace"}}>{selectedRelease.color}</span></div>
+                </div>
+                <div className="cal-modal-btns">
+                  <a className="cal-list-btn primary" href={"/?search=" + encodeURIComponent(selectedRelease.name)}>Compare Prices</a>
+                  <a className="cal-list-btn" href={"https://www.amazon.com/s?k=" + encodeURIComponent(selectedRelease.name + " " + selectedRelease.sku) + "&tag=sneakyradar-20"} target="_blank" rel="noopener">Amazon</a>
+                  <a className="cal-list-btn" href={"https://stockx.com/search?s=" + encodeURIComponent(selectedRelease.name)} target="_blank" rel="noopener">StockX</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ReleaseImage(props) {
+  const { useState, useEffect } = React;
+  const [src, setSrc] = useState(null);
+  useEffect(function() {
+    if (!props.name) return;
+    var q = props.name.replace(/ \(W\)/g,"").replace(/"[^"]*"/g,"").trim().split(" ").slice(0,4).join(" ");
+    fetch("/.netlify/functions/anthropic", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({action:"search",query:q,limit:1})
+    }).then(function(r){return r.json()}).then(function(j) {
+      if (j.data && j.data[0] && j.data[0].image) setSrc(j.data[0].image);
+    }).catch(function(){});
+  }, [props.name]);
+  if (!src) return <span style={{fontSize:"2rem"}}>👟</span>;
+  return <img src={src} alt={props.name} style={{width:props.size||"100%",height:props.size||"100%",objectFit:"contain"}} />;
+}
+
 function App() {
   const [activePage, setActivePage] = useState("drops");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
-  const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"},{id:"blog",label:"Blog",icon:"📝",href:"/blog"}];
+  const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"releases",label:"Releases",icon:"📅"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"}];
   return (
     <>
       {showAlertModal&&<AlertModal onClose={()=>setShowAlertModal(false)}/>}
       <nav className="nav">
         <div className="nav-left">
-          <div className="nav-logo" style={{cursor:"pointer"}} onClick={()=>{setActivePage("drops");setMobileMenuOpen(false);}}><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
+          <div className="nav-logo"><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
           <div className="nav-tabs">
             {tabs.map(t=>(
-              t.href ? <a key={t.id} className="nav-tab" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
               <button key={t.id} className={`nav-tab ${activePage===t.id?"active":""}`} onClick={()=>setActivePage(t.id)}>
                 <span>{t.icon}</span>{t.label}
               </button>
             ))}
           </div>
-          <button className="hamburger" onClick={()=>setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? "✕" : "☰"}
-          </button>
         </div>
-        {mobileMenuOpen && (
-          <div className="mobile-menu">
-            {tabs.map(t=>(
-              t.href ? <a key={t.id} className="mobile-menu-item" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
-              <button key={t.id} className={`mobile-menu-item ${activePage===t.id?"active":""}`} onClick={()=>{setActivePage(t.id);setMobileMenuOpen(false);}}>
-                <span>{t.icon}</span>{t.label}
-              </button>
-            ))}
-          </div>
-        )}
         <div className="nav-right">
           <button className="alert-btn" onClick={()=>setShowAlertModal(true)}>
             <span className="alert-dot"/> Drop Alerts
@@ -1249,6 +1225,7 @@ function App() {
         </div>
       </nav>
       {activePage==="drops"&&<DropRadarPage/>}
+      {activePage==="releases"&&<ReleasesPage/>}
       {activePage==="resell"&&<ResellPage/>}
       {activePage==="auth"&&<AuthPage/>}
       <footer className="site-footer">
