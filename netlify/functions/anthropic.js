@@ -265,26 +265,45 @@ exports.handler = async function(event) {
     if (!relKey) return cors(500, { error: "No API key" });
     console.log("Fetching release calendar via Anthropic...");
     try {
-      // Step 1: Fetch release page HTML directly
-      var pageRes = await fetch("https://sneakerbardetroit.com/sneaker-release-dates/");
-      var pageText = await pageRes.text();
+      // Step 1: Try multiple release sites (some use server-side rendering)
+      var sources = [
+        "https://justfreshkicks.com/air-jordan-sneaker-releases-2026/",
+        "https://www.kickscrew.com/blogs/sneakernews/air-jordan-release-dates"
+      ];
+      var trimmed = "";
+      for (var si = 0; si < sources.length; si++) {
+        try {
+          var pageRes = await fetch(sources[si], { headers: { "User-Agent": "Mozilla/5.0 (compatible; SneakyRadar/1.0)" } });
+          var pageText = await pageRes.text();
+          console.log("Fetched source " + si + ": " + sources[si].substring(0, 50) + " length:" + pageText.length);
+          
+          // Find content with release dates - look for date patterns
+          var dateIdx = pageText.indexOf("Release Date:");
+          if (dateIdx === -1) dateIdx = pageText.indexOf("Release Date");
+          if (dateIdx === -1) dateIdx = pageText.indexOf("release-date");
+          if (dateIdx === -1) dateIdx = pageText.indexOf("2026");
+          
+          if (dateIdx > 0) {
+            // Grab content starting 500 chars before first date reference
+            var start = Math.max(0, dateIdx - 500);
+            var chunk = pageText.substring(start, start + 40000);
+            chunk = chunk.replace(/<script[\s\S]*?<\/script>/gi, '');
+            chunk = chunk.replace(/<style[\s\S]*?<\/style>/gi, '');
+            chunk = chunk.replace(/<!\-\-[\s\S]*?\-\->/g, '');
+            if (chunk.length > trimmed.length) trimmed = chunk;
+            console.log("Found release content at idx:", dateIdx, "extracted:", chunk.length, "chars");
+            console.log("Content preview:", chunk.substring(0, 300));
+            break; // use first successful source
+          }
+        } catch(e) {
+          console.log("Source " + si + " error:", e.message);
+        }
+      }
       
-      // Extract just the article/main content area, skip nav/header/scripts
-      var contentStart = pageText.indexOf('<article');
-      if (contentStart === -1) contentStart = pageText.indexOf('<main');
-      if (contentStart === -1) contentStart = pageText.indexOf('entry-content');
-      if (contentStart === -1) contentStart = pageText.indexOf('Release Date');
-      if (contentStart === -1) contentStart = Math.floor(pageText.length * 0.2); // skip first 20%
-      
-      // Get a good chunk of the content area
-      var trimmed = pageText.substring(contentStart, contentStart + 40000);
-      // Strip script/style tags to save tokens
-      trimmed = trimmed.replace(/<script[\s\S]*?<\/script>/gi, '');
-      trimmed = trimmed.replace(/<style[\s\S]*?<\/style>/gi, '');
-      trimmed = trimmed.replace(/<!\-\-[\s\S]*?\-\->/g, '');
-      
-      console.log("Fetched SBD page, total:", pageText.length, "content from:", contentStart, "trimmed:", trimmed.length);
-      console.log("Content preview:", trimmed.substring(0, 300));
+      if (trimmed.length < 500) {
+        console.log("No release content found from any source");
+        return cors(500, { error: "Could not fetch release data from sources" });
+      }
 
       // Step 2: Have Claude parse the HTML into structured JSON (no web search needed = fast)
       var relRes = await fetch("https://api.anthropic.com/v1/messages", {
