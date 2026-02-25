@@ -987,7 +987,7 @@ function DropRadarPage() {
     }
   };
 
-  const allSrcLabels=[...new Set(drops.map(d=>d.source).filter(Boolean))];
+
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
     if(d.sponsored)return true;
@@ -1009,9 +1009,6 @@ function DropRadarPage() {
         <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
         <div className="filters">
           {CATEGORY_SEARCHES.map(cat=><button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
-        </div>
-        {allSrcLabels.length>0&&(
-          {/* Source filters removed — all results shown */}
         </div>
         {error&&<div className="error-msg">⚠ {error}</div>}
         {loading&&steps.length>0&&(
