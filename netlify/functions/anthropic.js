@@ -130,6 +130,7 @@ async function searchEbaySku(token, sku, title, minPrice, camp) {
       if (minPrice && price < minPrice * 0.35) continue;
       return {
         price: price,
+        priceLabel: "From $" + Math.round(price),
         url: camp ? (it.itemAffiliateWebUrl || it.itemWebUrl) : it.itemWebUrl,
         authenticity: it.qualifiedPrograms ? it.qualifiedPrograms.indexOf("AUTHENTICITY_GUARANTEE") >= 0 : false
       };
