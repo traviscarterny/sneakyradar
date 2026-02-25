@@ -83,14 +83,6 @@ exports.handler = async function(event) {
       var goatMatches = merged.filter(function(p) { return p._goat; }).length;
       console.log("KicksDB search: " + query + " | StockX: " + stockxProducts.length + ", GOAT: " + goatProducts.length + ", matched: " + goatMatches + " | " + duration + "ms");
 
-      // Debug: log first 5 SKUs from each source to diagnose matching
-      if (goatMatches < 3) {
-        var sxSkus = stockxProducts.slice(0, 5).map(function(p) { return p.sku + " -> " + normSku(p.sku); });
-        var gtSkus = goatProducts.slice(0, 5).map(function(p) { return p.sku + " -> " + normSku(p.sku); });
-        console.log("SKU debug StockX: " + JSON.stringify(sxSkus));
-        console.log("SKU debug GOAT:   " + JSON.stringify(gtSkus));
-      }
-
       return {statusCode: 200, headers: corsHeaders, body: JSON.stringify({data: merged, _page: page, _limit: limit})};
     } catch(err) {
       console.error("KicksDB error:", err.message);
@@ -126,17 +118,31 @@ exports.handler = async function(event) {
       var trendOffset = (trendPage - 1) * trendLimit;
       var trendQuery = "Jordan";
 
+      // Fetch StockX + multiple GOAT queries to maximize SKU overlap
       var trendStockxUrl = KICKSDB_BASE + "/stockx/products?query=" + encodeURIComponent(trendQuery) + "&limit=50&offset=" + trendOffset + "&page=" + trendPage;
-      var trendGoatUrl = KICKSDB_BASE + "/goat/products?query=" + encodeURIComponent(trendQuery) + "&limit=100";
+      var goatQueries = ["Jordan 1", "Jordan 4", "Jordan 3", "Jordan 11", "Jordan 5"];
 
-      var trendResults = await Promise.all([
-        fetch(trendStockxUrl, {headers: trendHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; }),
-        fetch(trendGoatUrl, {headers: trendHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; })
-      ]);
+      var fetchPromises = [
+        fetch(trendStockxUrl, {headers: trendHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; })
+      ];
+      for (var qi = 0; qi < goatQueries.length; qi++) {
+        var gUrl = KICKSDB_BASE + "/goat/products?query=" + encodeURIComponent(goatQueries[qi]) + "&limit=50";
+        fetchPromises.push(
+          fetch(gUrl, {headers: trendHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; })
+        );
+      }
+
+      var trendResults = await Promise.all(fetchPromises);
 
       var trendStockx = (trendResults[0] && trendResults[0].data) ? trendResults[0].data : [];
-      var trendGoat = (trendResults[1] && trendResults[1].data) ? trendResults[1].data : [];
-      var trendGoatMap = buildGoatMap(trendGoat);
+      
+      // Combine all GOAT results into one pool
+      var allGoat = [];
+      for (var gi = 1; gi < trendResults.length; gi++) {
+        var gData = (trendResults[gi] && trendResults[gi].data) ? trendResults[gi].data : [];
+        allGoat = allGoat.concat(gData);
+      }
+      var trendGoatMap = buildGoatMap(allGoat);
 
       var products = trendStockx.filter(isSneaker);
       products = mergeGoat(products, trendGoatMap);
@@ -145,7 +151,7 @@ exports.handler = async function(event) {
 
       var trendMatched = products.filter(function(p) { return p._goat; }).length;
       var trendDuration = Date.now() - trendStart;
-      console.log("KicksDB trending page " + trendPage + ": " + products.length + " products, GOAT matched: " + trendMatched + " in " + trendDuration + "ms");
+      console.log("KicksDB trending page " + trendPage + ": " + products.length + " products, GOAT pool: " + allGoat.length + ", matched: " + trendMatched + " in " + trendDuration + "ms");
 
       return {statusCode: 200, headers: corsHeaders, body: JSON.stringify({data: products, _page: trendPage})};
     } catch(err) {
