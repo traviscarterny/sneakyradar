@@ -143,26 +143,31 @@ async function searchEbaySku(token, sku, title, minPrice, camp) {
 
 // Batch eBay lookups for an array of products — runs up to 10 in parallel
 async function enrichWithEbay(products) {
-  var token = await getEbayToken();
-  if (!token) return 0;
-  var camp = process.env.EBAY_CAMPAIGN_ID || "";
-  var em = 0;
-  
-  // Only look up top products to stay within rate limits and keep response fast
-  var toSearch = products.filter(function(p) { return p.sku; }).slice(0, 10);
-  
-  var results = await Promise.all(toSearch.map(function(p) {
-    return searchEbaySku(token, p.sku, p.title, p.min_price || p.avg_price, camp);
-  }));
-  
-  for (var i = 0; i < toSearch.length; i++) {
-    if (results[i]) {
-      toSearch[i]._ebay = results[i];
-      em++;
+  try {
+    var token = await getEbayToken();
+    if (!token) return 0;
+    var camp = process.env.EBAY_CAMPAIGN_ID || "";
+    var em = 0;
+    
+    // Only look up top products to stay within rate limits and keep response fast
+    var toSearch = products.filter(function(p) { return p.sku; }).slice(0, 10);
+    
+    var results = await Promise.all(toSearch.map(function(p) {
+      return searchEbaySku(token, p.sku, p.title, p.min_price || p.avg_price, camp);
+    }));
+    
+    for (var i = 0; i < toSearch.length; i++) {
+      if (results[i]) {
+        toSearch[i]._ebay = results[i];
+        em++;
+      }
     }
+    console.log("eBay per-SKU lookup: " + em + " matched out of " + toSearch.length + " searched");
+    return em;
+  } catch(e) {
+    console.log("enrichWithEbay error (non-fatal):", e.message);
+    return 0;
   }
-  console.log("eBay per-SKU lookup: " + em + " matched out of " + toSearch.length + " searched");
-  return em;
 }
 
 function mergeAll(sx, goat) {
@@ -184,7 +189,8 @@ function mergeAll(sx, goat) {
     var r = {
       id: p.id, title: p.title || p.name, brand: p.brand, sku: p.sku, slug: p.slug,
       image: p.image, url: p.url, min_price: p.min_price, max_price: p.max_price,
-      avg_price: p.avg_price, weekly_orders: p.weekly_orders || 0, rank: p.rank
+      avg_price: p.avg_price, weekly_orders: p.weekly_orders || 0, rank: p.rank,
+      gender: p.gender || null
     };
     if (g) r._goat = { link: g.link || null, release_date: g.release_date || null, sku: g.sku };
     return r;
