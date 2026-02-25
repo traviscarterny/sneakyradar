@@ -276,9 +276,9 @@
       .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; padding: 10px 0; }
       .nav-tabs { display: none; }
       .nav-right { display: none; }
-      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 1.2rem; width: 36px; height: 36px; cursor: pointer; border-radius: 4px; font-family: inherit; }
+      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 0.55rem; letter-spacing: 2px; padding: 8px 12px; cursor: pointer; border-radius: 4px; font-family: 'DM Mono', monospace; }
       .mobile-menu { display: block; position: absolute; top: 100%; right: 12px; background: rgba(15,15,15,0.98); border: 1px solid var(--border); border-radius: 6px; z-index: 100; min-width: 200px; overflow: hidden; backdrop-filter: blur(12px); }
-      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
+      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
       .mobile-menu-item:last-child { border-bottom: none; }
       .mobile-menu-item:hover, .mobile-menu-item.active { color: var(--text); background: rgba(255,255,255,0.05); }
       .mobile-menu-item.active { color: var(--accent); }
@@ -1408,7 +1408,7 @@ function App() {
             ))}
           </div>
           <button className="hamburger" onClick={()=>setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? "✕" : "☰"}
+            {mobileMenuOpen ? "✕" : "MENU"}
           </button>
         </div>
         {mobileMenuOpen && (
