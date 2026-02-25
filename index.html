@@ -556,40 +556,26 @@ function kicksToDrops(products) {
         url: stockxUrl || "https://stockx.com",
       });
     }
-    // GOAT: Pro tier has prices — show real price if available, otherwise "Check Price"
-    if (p._goat) {
-      const goatPrice = p._goat.min_price ? `$${Math.round(p._goat.min_price)}` : "Check Price";
+    // GOAT: no prices available via KicksDB — show "Check Price" with affiliate link
+    if (p._goat && p._goat.link) {
       prices.push({
         store: "GOAT",
         storeId: "goat",
-        price: goatPrice,
-        url: p._goat.link || `https://goat.com/search?query=${encodeURIComponent(p.title || p.name || "")}`,
-      });
-    }
-
-    // Flight Club: show price if available
-    if (p._fc) {
-      const fcPrice = p._fc.min_price ? `$${Math.round(p._fc.min_price)}` : "Check Price";
-      const fcUrl = p._fc.link || p._fc.url || (p._fc.slug ? `https://www.flightclub.com/${p._fc.slug}` : `https://www.flightclub.com/search?query=${encodeURIComponent(p.title || p.name || "")}`);
-      prices.push({
-        store: "Flight Club",
-        storeId: "fc",
-        price: fcPrice,
-        url: fcUrl,
+        price: "Check Price",
+        url: p._goat.link,
       });
     }
 
     // Use GOAT release_date if StockX doesn't have one
     const releaseDate = p.release_date || (p._goat && p._goat.release_date) || null;
 
-    // Price range from StockX (primary), supplemented by GOAT and FC
-    const lowestPrice = Math.min(...[p.min_price, p._goat?.min_price, p._fc?.min_price].filter(Boolean)) || p.min_price || null;
-    const maxPrice = Math.max(...[p.max_price, p._goat?.max_price, p._fc?.max_price].filter(Boolean)) || p.max_price || null;
+    // Price range from StockX
+    const lowestPrice = p.min_price || null;
+    const maxPrice = p.max_price || null;
 
     // Build source label
     const sourceNames = ["StockX"];
     if (p._goat) sourceNames.push("GOAT");
-    if (p._fc) sourceNames.push("FC");
 
     return {
       brand: p.brand || "Unknown",
