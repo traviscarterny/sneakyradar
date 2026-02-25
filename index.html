@@ -1293,10 +1293,14 @@ function ReleasesPage(){
   const today=new Date();
 
   useEffect(()=>{
-    fetch("/.netlify/functions/anthropic",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"get_releases"})})
-      .then(r=>r.json()).then(d=>{
-        if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"");setRelUpdated(d.updated||"");}
-      }).catch(()=>{});
+    fetch("/releases.json").then(r=>{if(!r.ok)throw new Error("no file");return r.json();}).then(d=>{
+      if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"auto");setRelUpdated(d.updated||"");}
+    }).catch(()=>{
+      fetch("/.netlify/functions/anthropic",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"get_releases"})})
+        .then(r=>r.json()).then(d=>{
+          if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"");setRelUpdated(d.updated||"");}
+        }).catch(()=>{});
+    });
   },[]);
   const vd=new Date(today.getFullYear(),today.getMonth()+monthOffset,1);
   const mn=vd.toLocaleString('default',{month:'long'});
