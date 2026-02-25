@@ -67,7 +67,7 @@ exports.handler = async function(event) {
       var startTime = Date.now();
 
       var stockxUrl = KICKSDB_BASE + "/stockx/products?query=" + encodeURIComponent(query) + "&limit=" + limit + "&page=" + page + "&offset=" + offset;
-      var goatUrl = KICKSDB_BASE + "/goat/products?query=" + encodeURIComponent(query) + "&limit=" + limit;
+      var goatUrl = KICKSDB_BASE + "/goat/products?query=" + encodeURIComponent(query) + "&limit=100";
 
       var results = await Promise.all([
         fetch(stockxUrl, {headers: authHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; }),
@@ -127,7 +127,7 @@ exports.handler = async function(event) {
       var trendQuery = "Jordan";
 
       var trendStockxUrl = KICKSDB_BASE + "/stockx/products?query=" + encodeURIComponent(trendQuery) + "&limit=50&offset=" + trendOffset + "&page=" + trendPage;
-      var trendGoatUrl = KICKSDB_BASE + "/goat/products?query=" + encodeURIComponent(trendQuery) + "&limit=50";
+      var trendGoatUrl = KICKSDB_BASE + "/goat/products?query=" + encodeURIComponent(trendQuery) + "&limit=100";
 
       var trendResults = await Promise.all([
         fetch(trendStockxUrl, {headers: trendHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; }),
