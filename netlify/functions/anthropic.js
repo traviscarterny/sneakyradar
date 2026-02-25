@@ -129,24 +129,79 @@ function buildEbayMap(items) {
   var map = {};
   (items || []).forEach(function(it) {
     var t = (it.title || "").toUpperCase();
+    // Try SKU-based matching first
     var m = t.match(/[A-Z]{1,3}\d{4,}[\s\-]?\d{2,3}/);
     if (m) { var k = normSku(m[0]); if (!map[k]) map[k] = it; }
   });
   return map;
 }
 
+function normTitle(s) {
+  return (s || "").toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+}
+
+function titleWords(s) {
+  return normTitle(s).split(" ").filter(function(w) {
+    return w.length > 1 && ["the","and","for","new","men","mens","women","womens","size","with","box","ds","og","ship","free","shipping","authentic","brand","pair"].indexOf(w) < 0;
+  });
+}
+
+function titleMatchScore(stockxTitle, ebayTitle) {
+  var sWords = titleWords(stockxTitle);
+  var eWords = titleWords(ebayTitle);
+  if (sWords.length === 0) return 0;
+  var matches = 0;
+  for (var i = 0; i < sWords.length; i++) {
+    for (var j = 0; j < eWords.length; j++) {
+      if (sWords[i] === eWords[j]) { matches++; break; }
+    }
+  }
+  return matches / sWords.length;
+}
+
+function matchEbayToProducts(products, ebayItems) {
+  if (!ebayItems || ebayItems.length === 0) return;
+  
+  // First pass: SKU matching (most accurate)
+  var skuMap = buildEbayMap(ebayItems);
+  var usedEbay = {};
+  
+  for (var i = 0; i < products.length; i++) {
+    var p = products[i];
+    if (p._ebay) continue;
+    var sku = normSku(p.sku);
+    if (sku && skuMap[sku]) {
+      p._ebay = { price: skuMap[sku].price, url: skuMap[sku].url, authenticity: skuMap[sku].authenticity };
+      usedEbay[skuMap[sku].url] = true;
+    }
+  }
+  
+  // Second pass: fuzzy title matching for unmatched products
+  var remaining = ebayItems.filter(function(e) { return !usedEbay[e.url]; });
+  if (remaining.length === 0) return;
+  
+  for (var i = 0; i < products.length; i++) {
+    var p = products[i];
+    if (p._ebay) continue;
+    var bestScore = 0;
+    var bestItem = null;
+    for (var j = 0; j < remaining.length; j++) {
+      if (usedEbay[remaining[j].url]) continue;
+      var score = titleMatchScore(p.title || p.name || "", remaining[j].title);
+      if (score > bestScore) { bestScore = score; bestItem = remaining[j]; }
+    }
+    // Require at least 60% word match to avoid bad pairings
+    if (bestItem && bestScore >= 0.6) {
+      p._ebay = { price: bestItem.price, url: bestItem.url, authenticity: bestItem.authenticity };
+      usedEbay[bestItem.url] = true;
+    }
+  }
+}
+
 function mergeAll(sx, goat, ebay) {
   var goatMap = {};
   (goat || []).forEach(function(g) { var k = normSku(g.sku); if (k) goatMap[k] = g; });
-  var ebayMap = buildEbayMap(ebay);
   var gm = 0, em = 0;
-
-  // DEBUG: log first product's fields
-  if (sx && sx.length > 0) {
-    var s = sx[0];
-    console.log("SAMPLE PRODUCT KEYS:", Object.keys(s).join(", "));
-    console.log("SAMPLE category:", JSON.stringify(s.category), "product_type:", JSON.stringify(s.product_type), "type:", JSON.stringify(s.type), "productCategory:", JSON.stringify(s.productCategory));
-  }
 
   var products = (sx || []).map(function(p) {
     var cat = ((p.category || "") + "").toLowerCase();
@@ -158,9 +213,7 @@ function mergeAll(sx, goat, ebay) {
 
     var sku = normSku(p.sku);
     var g = sku ? goatMap[sku] : null;
-    var e = sku ? ebayMap[sku] : null;
     if (g) gm++;
-    if (e) em++;
 
     var r = {
       id: p.id, title: p.title || p.name, brand: p.brand, sku: p.sku, slug: p.slug,
@@ -168,10 +221,14 @@ function mergeAll(sx, goat, ebay) {
       avg_price: p.avg_price, weekly_orders: p.weekly_orders || 0, rank: p.rank
     };
     if (g) r._goat = { link: g.link || null, release_date: g.release_date || null, sku: g.sku };
-    if (e) r._ebay = { price: e.price, url: e.url, authenticity: e.authenticity };
     return r;
   }).filter(Boolean);
 
+  // Match eBay using SKU + fuzzy title matching
+  matchEbayToProducts(products, ebay);
+  products.forEach(function(p) { if (p._ebay) em++; });
+
+  console.log("eBay matching: " + em + "/" + products.length + " products matched from " + (ebay || []).length + " eBay results");
   return { products: products, goatMatched: gm, ebayMatched: em };
 }
 
