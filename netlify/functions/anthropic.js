@@ -1,5 +1,5 @@
 // KicksDB + Anthropic proxy
-// KicksDB for product search (images, links, prices)
+// KicksDB for product search (images, links, prices) — StockX + GOAT + Flight Club
 // Anthropic for trending/editorial drops on landing page
 
 const KICKSDB_KEY = process.env.KICKSDB_API_KEY;
@@ -19,7 +19,7 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body); }
   catch(e) { return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON" }) }; }
 
-  // === KicksDB Product Search (StockX + GOAT) ===
+  // === KicksDB Product Search (StockX + GOAT + Flight Club) ===
   if (body.action === "search") {
     const query = body.query || "";
     const limit = body.limit || 21;
@@ -33,24 +33,35 @@ exports.handler = async function(event) {
       const startTime = Date.now();
       const normSku = s => s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : null;
 
-      const [stockxRes, goatRes] = await Promise.all([
+      // 3-way parallel fetch: StockX + GOAT + Flight Club
+      const [stockxRes, goatRes, fcRes] = await Promise.all([
         fetch(`${KICKSDB_BASE}/stockx/products?query=${encodeURIComponent(query)}&limit=${limit}&page=${page}&offset=${offset}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
         fetch(`${KICKSDB_BASE}/goat/products?query=${encodeURIComponent(query)}&limit=${limit}`, { headers }).then(r => r.json()).catch(() => ({ data: [] })),
+        fetch(`${KICKSDB_BASE}/flightclub/products?query=${encodeURIComponent(query)}&limit=${limit}`, { headers }).then(r => r.json()).catch(e => { console.log("FC fetch error:", e.message); return { data: [] }; }),
       ]);
 
       const stockxProducts = stockxRes?.data || [];
       const goatProducts = goatRes?.data || [];
+      const fcProducts = fcRes?.data || [];
 
-      // Build GOAT lookup by SKU — Starter tier: no prices, but has affiliate links
+      // Build GOAT lookup by SKU
       const goatBySku = {};
       for (const g of goatProducts) {
         const key = normSku(g.sku);
         if (key) goatBySku[key] = g;
       }
 
+      // Build Flight Club lookup by SKU
+      const fcBySku = {};
+      for (const fc of fcProducts) {
+        const key = normSku(fc.sku);
+        if (key) fcBySku[key] = fc;
+      }
+
       const merged = stockxProducts.map(p => {
         const skuKey = normSku(p.sku);
         const gm = skuKey ? goatBySku[skuKey] : null;
+        const fm = skuKey ? fcBySku[skuKey] : null;
         return {
           ...p,
           _goat: gm ? {
@@ -58,13 +69,26 @@ exports.handler = async function(event) {
             link: gm.link || null,
             image_url: gm.image_url || null,
             release_date: gm.release_date || null,
+            min_price: gm.min_price || null,
+            max_price: gm.max_price || null,
+            avg_price: gm.avg_price || null,
+          } : null,
+          _fc: fm ? {
+            slug: fm.slug || null,
+            link: fm.link || null,
+            image_url: fm.image_url || null,
+            min_price: fm.min_price || null,
+            max_price: fm.max_price || null,
+            avg_price: fm.avg_price || null,
+            url: fm.url || null,
           } : null,
         };
       });
 
       const duration = Date.now() - startTime;
       const goatMatches = merged.filter(p => p._goat).length;
-      console.log(`KicksDB search: ${query} | StockX: ${stockxProducts.length}, GOAT: ${goatProducts.length}, matched: ${goatMatches} | ${duration}ms`);
+      const fcMatches = merged.filter(p => p._fc).length;
+      console.log(`KicksDB search: ${query} | StockX: ${stockxProducts.length}, GOAT: ${goatProducts.length}, FC: ${fcProducts.length}, goat-match: ${goatMatches}, fc-match: ${fcMatches} | ${duration}ms`);
 
       return { statusCode: 200, headers: corsHeaders, body: JSON.stringify({ data: merged, _page: page, _limit: limit }) };
     } catch(err) {
