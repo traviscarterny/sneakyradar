@@ -556,26 +556,40 @@ function kicksToDrops(products) {
         url: stockxUrl || "https://stockx.com",
       });
     }
-    // GOAT: Starter tier has no prices — show "Check Price" with affiliate link
-    if (p._goat && p._goat.link) {
+    // GOAT: Pro tier has prices — show real price if available, otherwise "Check Price"
+    if (p._goat) {
+      const goatPrice = p._goat.min_price ? `$${Math.round(p._goat.min_price)}` : "Check Price";
       prices.push({
         store: "GOAT",
         storeId: "goat",
-        price: "Check Price",
-        url: p._goat.link,
+        price: goatPrice,
+        url: p._goat.link || `https://goat.com/search?query=${encodeURIComponent(p.title || p.name || "")}`,
+      });
+    }
+
+    // Flight Club: show price if available
+    if (p._fc) {
+      const fcPrice = p._fc.min_price ? `$${Math.round(p._fc.min_price)}` : "Check Price";
+      const fcUrl = p._fc.link || p._fc.url || (p._fc.slug ? `https://www.flightclub.com/${p._fc.slug}` : `https://www.flightclub.com/search?query=${encodeURIComponent(p.title || p.name || "")}`);
+      prices.push({
+        store: "Flight Club",
+        storeId: "fc",
+        price: fcPrice,
+        url: fcUrl,
       });
     }
 
     // Use GOAT release_date if StockX doesn't have one
     const releaseDate = p.release_date || (p._goat && p._goat.release_date) || null;
 
-    // Price range from StockX (GOAT prices not available on Starter tier)
-    const lowestPrice = p.min_price || null;
-    const maxPrice = p.max_price || null;
+    // Price range from StockX (primary), supplemented by GOAT and FC
+    const lowestPrice = Math.min(...[p.min_price, p._goat?.min_price, p._fc?.min_price].filter(Boolean)) || p.min_price || null;
+    const maxPrice = Math.max(...[p.max_price, p._goat?.max_price, p._fc?.max_price].filter(Boolean)) || p.max_price || null;
 
     // Build source label
     const sourceNames = ["StockX"];
     if (p._goat) sourceNames.push("GOAT");
+    if (p._fc) sourceNames.push("FC");
 
     return {
       brand: p.brand || "Unknown",
@@ -997,15 +1011,8 @@ function DropRadarPage() {
           {CATEGORY_SEARCHES.map(cat=><button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
         </div>
         {allSrcLabels.length>0&&(
-          <div className="result-source-filters">
-            <button className={`rsf-btn ${srcFilter==="All"?"active":""}`} onClick={()=>setSrcFilter("All")}><span className="dot" style={{background:"var(--muted)"}}/>All Results</button>
-            {allSrcLabels.map(s=>{const src=ALL_SOURCES.find(x=>x.label===s);return(
-              <button key={s} className={`rsf-btn ${srcFilter===s?"active":""}`} style={srcFilter===s?{borderColor:src?.color,color:src?.color}:{}} onClick={()=>setSrcFilter(s===srcFilter?"All":s)}>
-                <span className="dot" style={{background:src?.color||"var(--muted)"}}/>{s}
-              </button>
-            );})}
-          </div>
-        )}
+          {/* Source filters removed — all results shown */}
+        </div>
         {error&&<div className="error-msg">⚠ {error}</div>}
         {loading&&steps.length>0&&(
           <div className="progress-steps">
