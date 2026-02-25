@@ -83,6 +83,14 @@ exports.handler = async function(event) {
       var goatMatches = merged.filter(function(p) { return p._goat; }).length;
       console.log("KicksDB search: " + query + " | StockX: " + stockxProducts.length + ", GOAT: " + goatProducts.length + ", matched: " + goatMatches + " | " + duration + "ms");
 
+      // Debug: log first 5 SKUs from each source to diagnose matching
+      if (goatMatches < 3) {
+        var sxSkus = stockxProducts.slice(0, 5).map(function(p) { return p.sku + " -> " + normSku(p.sku); });
+        var gtSkus = goatProducts.slice(0, 5).map(function(p) { return p.sku + " -> " + normSku(p.sku); });
+        console.log("SKU debug StockX: " + JSON.stringify(sxSkus));
+        console.log("SKU debug GOAT:   " + JSON.stringify(gtSkus));
+      }
+
       return {statusCode: 200, headers: corsHeaders, body: JSON.stringify({data: merged, _page: page, _limit: limit})};
     } catch(err) {
       console.error("KicksDB error:", err.message);
