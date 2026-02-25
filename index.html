@@ -1086,7 +1086,7 @@ function DropRadarPage() {
       const g=(d.gender||"").toLowerCase();
       if(genderFilter==="Men"&&g!=="men")return false;
       if(genderFilter==="Women"&&g!=="women")return false;
-      if(genderFilter==="GS"&&g!=="child"&&g!=="grade school"&&g!=="gs"&&g!=="youth"&&g!=="kids"&&g!=="infant"&&g!=="toddler"&&g!=="preschool")return false;
+      if(genderFilter==="Kids"&&g!=="child"&&g!=="grade school"&&g!=="gs"&&g!=="youth"&&g!=="kids"&&g!=="infant"&&g!=="toddler"&&g!=="preschool")return false;
       if(genderFilter==="Unisex"&&g!=="unisex")return false;
     }
     return true;
@@ -1110,7 +1110,7 @@ function DropRadarPage() {
         </div>
         <div style={{textAlign:"center",marginTop:"8px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent2)"}}>Gender</div>
         <div className="filters" style={{justifyContent:"center"}}>
-          {["All","Men","Women","GS","Unisex"].map(g=><button key={g} className={`filter-btn ${genderFilter===g?"active":""}`} onClick={()=>setGenderFilter(g)}>{g}</button>)}
+          {["All","Men","Women","Kids"].map(g=><button key={g} className={`filter-btn ${genderFilter===g?"active":""}`} onClick={()=>setGenderFilter(g)}>{g}</button>)}
         </div>
         {error&&<div className="error-msg">⚠ {error}</div>}
         {loading&&steps.length>0&&(
