@@ -1350,8 +1350,8 @@ function ReleasesPage(){
         {monthRels.length===0&&<div style={{textAlign:"center",padding:"60px 0",color:"var(--muted)",fontSize:".75rem",letterSpacing:"1px"}}>No releases scheduled for this month</div>}
         {Object.keys(grouped).sort().map(ds=>{const d=new Date(ds+"T00:00:00");const isPast=d<new Date(today.getFullYear(),today.getMonth(),today.getDate());return(
           <div key={ds}>
-            <div className="cal-list-date" style={isPast?{opacity:.4}:{}}><span>{d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span> — {d.toLocaleDateString('en-US',{weekday:'long'})}</div>
-            {grouped[ds].map((r,j)=><div key={j} className="cal-list-item" style={isPast?{opacity:.5}:{}} onClick={()=>setSel(r)}>
+            <div className="cal-list-date"><span>{d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span> — {d.toLocaleDateString('en-US',{weekday:'long'})}</div>
+            {grouped[ds].map((r,j)=><div key={j} className="cal-list-item" onClick={()=>setSel(r)}>
               <div className="cal-list-info"><div className="cal-list-name">{r.name}</div><div className="cal-list-meta">{r.brand} · {r.color}</div><div className="cal-list-sku">{r.sku}</div></div>
               <div className="cal-list-price">${r.price}</div>
               <div className="cal-list-actions"><a className="cal-list-btn primary" href={"/?search="+encodeURIComponent(r.name)} onClick={e=>e.stopPropagation()}>Compare Prices</a></div>
