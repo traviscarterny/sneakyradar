@@ -517,6 +517,7 @@ const ALL_SOURCES = [
   {id:"stockx",label:"StockX",url:"stockx.com",color:"#00ff94"},
   {id:"goat",label:"GOAT",url:"goat.com",color:"#ffffff"},
   {id:"ebay",label:"eBay",url:"ebay.com",color:"#e53238"},
+  {id:"amazon",label:"Amazon",url:"amazon.com",color:"#ff9900"},
 ];
 
 const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
@@ -577,6 +578,15 @@ function kicksToDrops(products) {
       });
     }
 
+    // Amazon: search link with affiliate tag
+    const amzQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
+    prices.push({
+      store: "Amazon",
+      storeId: "amazon",
+      price: "Check Price",
+      url: "https://www.amazon.com/s?k=" + amzQuery + "&tag=sneakyradar-20",
+    });
+
     // Use GOAT release_date if StockX doesn't have one
     const releaseDate = p.release_date || (p._goat && p._goat.release_date) || null;
 
@@ -588,6 +598,7 @@ function kicksToDrops(products) {
     const sourceNames = ["StockX"];
     if (p._goat) sourceNames.push("GOAT");
     if (p._ebay) sourceNames.push("eBay");
+    sourceNames.push("Amazon");
 
     return {
       brand: p.brand || "Unknown",
