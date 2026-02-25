@@ -5,7 +5,7 @@ var KICKS_KEY = process.env.KICKSDB_API_KEY || "KICKS-6062-7071-95FB-58E9612A472
 var cachedReleases = null;
 var cachedReleasesTime = null;
 
-var RELEASES_PROMPT = 'Search sneakerbardetroit.com for upcoming sneaker release dates. Return a JSON array of releases for the next 60 days. Each object: {"name":"...","sku":"...","date":"YYYY-MM-DD","price":number,"brand":"Jordan/Nike/Adidas/Other","color":"...","collab":false}. Only confirmed dates. Start with [ end with ]. No other text.';
+var RELEASES_PROMPT = 'Search the internet for upcoming confirmed sneaker release dates for the next 60 days. Find Jordan, Nike, Adidas, and New Balance releases with confirmed dates and prices. Return ONLY a JSON array. Each object: {"name":"full name","sku":"style code","date":"YYYY-MM-DD","price":200,"brand":"Jordan","color":"colorway","collab":false}. No explanation. Start with [ end with ].';
 
 var FALLBACK_RELEASES = [
   {name:"Air Jordan 5 \"Wolf Grey\"",sku:"DD0587-002",date:"2026-02-28",price:220,brand:"Jordan",color:"Light Graphite/White-Wolf Grey",collab:false},
@@ -263,27 +263,34 @@ exports.handler = async function(event) {
   if (body.action === "update_releases") {
     var relKey = process.env.ANTHROPIC_API_KEY;
     if (!relKey) return cors(500, { error: "No API key" });
-    console.log("Fetching release calendar via Anthropic web search...");
+    console.log("Fetching release calendar via Anthropic...");
     try {
+      // Step 1: Fetch release page HTML directly
+      var pageRes = await fetch("https://sneakerbardetroit.com/sneaker-release-dates/");
+      var pageText = await pageRes.text();
+      // Trim to just the release content (first 30k chars to stay within limits)
+      var trimmed = pageText.substring(0, 30000);
+      console.log("Fetched SBD page, length:", pageText.length, "trimmed to:", trimmed.length);
+
+      // Step 2: Have Claude parse the HTML into structured JSON (no web search needed = fast)
       var relRes = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-api-key": relKey,
-          "anthropic-version": "2023-06-01",
-          "anthropic-beta": "web-search-2025-03-05"
+          "anthropic-version": "2023-06-01"
         },
         body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
+          model: "claude-sonnet-4-20250514",
           max_tokens: 8000,
-          system: "You are a JSON API endpoint. You ONLY output valid JSON arrays. Never include explanations, caveats, or any text outside the JSON. If you cannot find enough data, return what you have as a JSON array. Your response must start with [ and end with ].",
-          tools: [{ type: "web_search_20250305", name: "web_search" }],
-          messages: [{ role: "user", content: RELEASES_PROMPT }]
+          system: "You are a JSON API. Extract sneaker release data from the provided HTML. Output ONLY a valid JSON array. No other text.",
+          messages: [{ role: "user", content: "Extract all sneaker releases from this HTML page. For each release return: {\"name\":\"full name with colorway\",\"sku\":\"style code\",\"date\":\"YYYY-MM-DD\",\"price\":200,\"brand\":\"Jordan or Nike or Adidas or New Balance or Other\",\"color\":\"colorway\",\"collab\":false}. Only include releases with confirmed dates in YYYY-MM-DD format. Return ONLY a JSON array starting with [ and ending with ].\n\nHTML:\n" + trimmed }]
         })
       });
+
       var relData = await relRes.json();
       if (!relRes.ok) {
-        console.log("Anthropic releases error:", JSON.stringify(relData).substring(0, 500));
+        console.log("Anthropic parse error:", JSON.stringify(relData).substring(0, 500));
         return cors(relRes.status, { error: "Anthropic API error" });
       }
       var relText = "";
@@ -292,7 +299,8 @@ exports.handler = async function(event) {
           if (relData.content[ri].type === "text") relText += relData.content[ri].text;
         }
       }
-      console.log("Release text length:", relText.length);
+      console.log("Parse response length:", relText.length);
+
       var parsed = null;
       try { parsed = JSON.parse(relText.trim()); } catch(e) {}
       if (!parsed) { var rm = relText.match(/\[[\s\S]*\]/); if (rm) try { parsed = JSON.parse(rm[0]); } catch(e) {} }
