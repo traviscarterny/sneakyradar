@@ -112,6 +112,13 @@ function mergeAll(sx, goat, ebay) {
   var ebayMap = buildEbayMap(ebay);
   var gm = 0, em = 0;
 
+  // DEBUG: log first product's fields
+  if (sx && sx.length > 0) {
+    var s = sx[0];
+    console.log("SAMPLE PRODUCT KEYS:", Object.keys(s).join(", "));
+    console.log("SAMPLE category:", JSON.stringify(s.category), "product_type:", JSON.stringify(s.product_type), "type:", JSON.stringify(s.type), "productCategory:", JSON.stringify(s.productCategory));
+  }
+
   var products = (sx || []).map(function(p) {
     var cat = ((p.category || p.product_type || "") + "").toLowerCase();
     var ok = cat.indexOf("sneaker") >= 0 || cat.indexOf("shoe") >= 0 || cat.indexOf("footwear") >= 0 || cat === "sneakers" || cat === "";
