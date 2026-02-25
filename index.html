@@ -932,7 +932,6 @@ function DropRadarPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
   const [srcFilter, setSrcFilter] = useState("All");
-  const [genderFilter, setGenderFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [lastQuery, setLastQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -973,50 +972,25 @@ function DropRadarPage() {
   const loadMore = async ()=>{
     if(!lastQuery || loadingMore || !hasMore) return;
     setLoadingMore(true);
+    const nextPage = page + 1;
     const fetchQuery = lastQuery === "__trending__" ? "" : lastQuery;
-    let currentPage = page;
-    let currentDrops = drops;
-    let attempts = 0;
-    const maxAttempts = 3;
-    
-    // Keep fetching pages until we get new results that pass the gender filter, or run out
-    while(attempts < maxAttempts) {
-      attempts++;
-      const nextPage = currentPage + 1;
-      console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending", "attempt:", attempts);
-      try {
-        const moreDrops = await fetchDrops(fetchQuery, nextPage);
-        console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
-        if(moreDrops.length === 0) { setHasMore(false); break; }
-        const combined = dedupeDrops([...currentDrops, ...moreDrops]);
-        currentDrops = combined;
-        currentPage = nextPage;
-        if(moreDrops.length < 30) { setDrops(combined); setPage(currentPage); setHasMore(false); break; }
-        // Check if any new drops pass the current gender filter
-        const newVisible = combined.filter(d => {
-          if(genderFilter === "All") return true;
-          const g = (d.gender || "").toLowerCase();
-          if(genderFilter === "Men") return g === "men";
-          if(genderFilter === "Women") return g === "women";
-          if(genderFilter === "Kids") return ["child","grade school","gs","youth","kids","infant","toddler","preschool"].indexOf(g) >= 0;
-          return true;
-        });
-        if(newVisible.length > drops.filter(d => {
-          if(genderFilter === "All") return true;
-          const g = (d.gender || "").toLowerCase();
-          if(genderFilter === "Men") return g === "men";
-          if(genderFilter === "Women") return g === "women";
-          if(genderFilter === "Kids") return ["child","grade school","gs","youth","kids","infant","toddler","preschool"].indexOf(g) >= 0;
-          return true;
-        }).length) {
-          setDrops(combined); setPage(currentPage); break;
+    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending");
+    try {
+      const moreDrops = await fetchDrops(fetchQuery, nextPage);
+      console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
+      if(moreDrops.length === 0) { setHasMore(false); }
+      else {
+        const combined = dedupeDrops([...drops, ...moreDrops]);
+        // If combined length didn't grow, API isn't paginating — stop trying
+        if(combined.length <= drops.length) { setHasMore(false); }
+        else {
+          setDrops(combined);
+          setPage(nextPage);
+          if(moreDrops.length < 30) setHasMore(false);
         }
-        // No new visible results, update drops anyway and try next page
-        setDrops(combined); setPage(currentPage);
-      } catch(e) {
-        console.error("Load more error:", e);
-        break;
       }
+    } catch(e) {
+      console.error("Load more error:", e);
     }
     setLoadingMore(false);
   };
@@ -1110,15 +1084,7 @@ function DropRadarPage() {
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
     if(d.sponsored)return true;
-    if(srcFilter!=="All"&&d.source!==srcFilter&&!d.sources?.includes(srcFilter))return false;
-    if(genderFilter!=="All"){
-      const g=(d.gender||"").toLowerCase();
-      if(genderFilter==="Men"&&g!=="men")return false;
-      if(genderFilter==="Women"&&g!=="women")return false;
-      if(genderFilter==="Kids"&&g!=="child"&&g!=="grade school"&&g!=="gs"&&g!=="youth"&&g!=="kids"&&g!=="infant"&&g!=="toddler"&&g!=="preschool")return false;
-      if(genderFilter==="Unisex"&&g!=="unisex")return false;
-    }
-    return true;
+    return(srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
   });
 
   return (
@@ -1136,10 +1102,6 @@ function DropRadarPage() {
         <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
         <div className="filters">
           {CATEGORY_SEARCHES.map(cat=><button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
-        </div>
-        <div style={{textAlign:"center",marginTop:"8px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent2)"}}>Gender</div>
-        <div className="filters" style={{justifyContent:"center"}}>
-          {["All","Men","Women","Kids"].map(g=><button key={g} className={`filter-btn ${genderFilter===g?"active":""}`} onClick={()=>setGenderFilter(g)}>{g}</button>)}
         </div>
         {error&&<div className="error-msg">⚠ {error}</div>}
         {loading&&steps.length>0&&(
