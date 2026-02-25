@@ -98,6 +98,21 @@ async function getEbayToken() {
   }
 }
 
+var EBAY_JUNK_WORDS = ["box only","empty box","replacement box","shoe box only","no shoes","laces only","insole","keychain","charm","sticker","patch","pin","socks","poster","card","trading card","lot of","bulk","wholesale","display","stand","shoe tree","crep protect","sneaker shields","force field","sole protector","heel tap","custom","painted","air freshener","deodorizer","cleaning kit"];
+
+function isEbayJunk(title) {
+  var t = (title || "").toLowerCase();
+  for (var i = 0; i < EBAY_JUNK_WORDS.length; i++) {
+    if (t.indexOf(EBAY_JUNK_WORDS[i]) >= 0) return true;
+  }
+  // Flag listings that mention "box" without "with box" or "og box"
+  if (t.indexOf("box") >= 0 && t.indexOf("with box") < 0 && t.indexOf("og box") < 0 && t.indexOf("new in box") < 0 && t.indexOf("deadstock") < 0 && t.indexOf("ds") < 0) {
+    // If "box" appears but none of the legit phrases, check if it's "box only" style
+    if (t.indexOf("box only") >= 0 || t.indexOf("empty") >= 0 || t.indexOf("no shoe") >= 0) return true;
+  }
+  return false;
+}
+
 async function searchEbay(query, limit) {
   var token = await getEbayToken();
   if (!token) return [];
@@ -105,20 +120,29 @@ async function searchEbay(query, limit) {
     var camp = process.env.EBAY_CAMPAIGN_ID || "";
     var h = { "Authorization": "Bearer " + token, "Content-Type": "application/json", "X-EBAY-C-MARKETPLACE-ID": "EBAY_US" };
     if (camp) h["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + camp;
-    var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(query) +
-      "&category_ids=93427&filter=conditionIds:{1000|1500|3000},price:[50..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=" + (limit || 20);
+    // Request more results so we still have enough after filtering junk
+    var fetchLimit = Math.min((limit || 20) * 2, 50);
+    var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(query + " sneaker shoe") +
+      "&category_ids=93427&filter=conditionIds:{1000|1500|3000},price:[50..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=" + fetchLimit;
     var res = await fetch(url, { headers: h });
     var d = await res.json();
     if (!d.itemSummaries) return [];
-    return d.itemSummaries.map(function(it) {
-      return {
+    var filtered = [];
+    var junkCount = 0;
+    for (var i = 0; i < d.itemSummaries.length; i++) {
+      var it = d.itemSummaries[i];
+      if (isEbayJunk(it.title)) { junkCount++; continue; }
+      if (filtered.length >= (limit || 20)) break;
+      filtered.push({
         title: it.title,
         price: parseFloat(it.price ? it.price.value : "0"),
         url: camp ? (it.itemAffiliateWebUrl || it.itemWebUrl) : it.itemWebUrl,
         image: it.thumbnailImages ? it.thumbnailImages[0].imageUrl : null,
         authenticity: it.qualifiedPrograms ? it.qualifiedPrograms.indexOf("AUTHENTICITY_GUARANTEE") >= 0 : false
-      };
-    });
+      });
+    }
+    console.log("eBay results: " + d.itemSummaries.length + " raw, " + junkCount + " junk filtered, " + filtered.length + " kept");
+    return filtered;
   } catch(e) {
     console.log("eBay search error:", e.message);
     return [];
@@ -150,12 +174,22 @@ function titleMatchScore(stockxTitle, ebayTitle) {
   var sWords = titleWords(stockxTitle);
   var eWords = titleWords(ebayTitle);
   if (sWords.length === 0) return 0;
+  var eStr = " " + eWords.join(" ") + " ";
   var matches = 0;
+  var keyMatches = 0;
+  // Key words are model identifiers like "jordan", "dunk", "yeezy", numbers like "1", "4", "350"
+  var keyPatterns = ["jordan","dunk","yeezy","force","max","kobe","samba","550","990","1130","kayano"];
   for (var i = 0; i < sWords.length; i++) {
     for (var j = 0; j < eWords.length; j++) {
-      if (sWords[i] === eWords[j]) { matches++; break; }
+      if (sWords[i] === eWords[j]) {
+        matches++;
+        if (keyPatterns.indexOf(sWords[i]) >= 0 || sWords[i].match(/^\d+$/)) keyMatches++;
+        break;
+      }
     }
   }
+  // Must match at least one key identifier word (model name or number)
+  if (keyMatches === 0) return 0;
   return matches / sWords.length;
 }
 
@@ -190,8 +224,8 @@ function matchEbayToProducts(products, ebayItems) {
       var score = titleMatchScore(p.title || p.name || "", remaining[j].title);
       if (score > bestScore) { bestScore = score; bestItem = remaining[j]; }
     }
-    // Require at least 60% word match to avoid bad pairings
-    if (bestItem && bestScore >= 0.6) {
+    // Require at least 70% word match to avoid bad pairings
+    if (bestItem && bestScore >= 0.7) {
       p._ebay = { price: bestItem.price, url: bestItem.url, authenticity: bestItem.authenticity };
       usedEbay[bestItem.url] = true;
     }
