@@ -689,6 +689,7 @@ function kicksToDrops(products) {
       slug: slug,
       weeklyOrders: p.weekly_orders || 0,
       prices: prices,
+      gender: p.gender || null,
     };
   });
 }
@@ -931,6 +932,7 @@ function DropRadarPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
   const [srcFilter, setSrcFilter] = useState("All");
+  const [genderFilter, setGenderFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [lastQuery, setLastQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -1079,7 +1081,15 @@ function DropRadarPage() {
   const allDrops=[...SPONSORED_DROPS,...drops];
   const filtered=allDrops.filter(d=>{
     if(d.sponsored)return true;
-    return(srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
+    if(srcFilter!=="All"&&d.source!==srcFilter&&!d.sources?.includes(srcFilter))return false;
+    if(genderFilter!=="All"){
+      const g=(d.gender||"").toLowerCase();
+      if(genderFilter==="Men"&&g!=="men")return false;
+      if(genderFilter==="Women"&&g!=="women")return false;
+      if(genderFilter==="GS"&&g!=="child"&&g!=="grade school"&&g!=="gs"&&g!=="youth"&&g!=="kids"&&g!=="infant"&&g!=="toddler"&&g!=="preschool")return false;
+      if(genderFilter==="Unisex"&&g!=="unisex")return false;
+    }
+    return true;
   });
 
   return (
@@ -1097,6 +1107,10 @@ function DropRadarPage() {
         <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
         <div className="filters">
           {CATEGORY_SEARCHES.map(cat=><button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
+        </div>
+        <div style={{textAlign:"center",marginTop:"8px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent2)"}}>Gender</div>
+        <div className="filters" style={{justifyContent:"center"}}>
+          {["All","Men","Women","GS","Unisex"].map(g=><button key={g} className={`filter-btn ${genderFilter===g?"active":""}`} onClick={()=>setGenderFilter(g)}>{g}</button>)}
         </div>
         {error&&<div className="error-msg">⚠ {error}</div>}
         {loading&&steps.length>0&&(
