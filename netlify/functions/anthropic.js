@@ -98,161 +98,81 @@ async function getEbayToken() {
   }
 }
 
-var EBAY_JUNK_WORDS = ["box only","empty box","replacement box","shoe box only","no shoes","laces only","insole","keychain","charm","sticker","patch","pin","socks","poster","card","trading card","lot of","bulk","wholesale","display","stand","shoe tree","crep protect","sneaker shields","force field","sole protector","heel tap","custom","painted","air freshener","deodorizer","cleaning kit"];
+var EBAY_JUNK_WORDS = ["box only","empty box","replacement box","shoe box only","no shoes","laces only","insole","keychain","charm","sticker","patch","pin","socks","poster","card","trading card","lot of","bulk","wholesale","display","stand","shoe tree","cleaning kit","air freshener","deodorizer","custom painted"];
 
 function isEbayJunk(title) {
   var t = (title || "").toLowerCase();
   for (var i = 0; i < EBAY_JUNK_WORDS.length; i++) {
     if (t.indexOf(EBAY_JUNK_WORDS[i]) >= 0) return true;
   }
-  // Flag listings that mention "box" without "with box" or "og box"
-  if (t.indexOf("box") >= 0 && t.indexOf("with box") < 0 && t.indexOf("og box") < 0 && t.indexOf("new in box") < 0 && t.indexOf("deadstock") < 0 && t.indexOf("ds") < 0) {
-    // If "box" appears but none of the legit phrases, check if it's "box only" style
-    if (t.indexOf("box only") >= 0 || t.indexOf("empty") >= 0 || t.indexOf("no shoe") >= 0) return true;
-  }
+  if (t.indexOf("used") >= 0 || t.indexOf("worn") >= 0 || t.indexOf("pre-owned") >= 0 || t.indexOf("preowned") >= 0 || t.indexOf("beater") >= 0 || t.indexOf("vnds") >= 0) return true;
   return false;
 }
 
-async function searchEbay(query, limit) {
-  var token = await getEbayToken();
-  if (!token) return [];
+// Search eBay for a single product by its SKU — returns the best matching listing or null
+async function searchEbaySku(token, sku, title, minPrice, camp) {
+  if (!token || !sku) return null;
   try {
-    var camp = process.env.EBAY_CAMPAIGN_ID || "";
     var h = { "Authorization": "Bearer " + token, "Content-Type": "application/json", "X-EBAY-C-MARKETPLACE-ID": "EBAY_US" };
     if (camp) h["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + camp;
-    // Request more results so we still have enough after filtering junk
-    var fetchLimit = Math.min((limit || 20) * 2, 50);
-    // Only new/new with defects (1000=New, 1500=New other), min price $80 to avoid junk
-    var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(query) +
-      "&category_ids=93427&filter=conditionIds:{1000|1500},price:[80..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=" + fetchLimit;
+    // Search by exact SKU — this is the most reliable way to find the right shoe
+    var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(sku) +
+      "&category_ids=93427&filter=conditionIds:{1000|1500},price:[80..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=5";
     var res = await fetch(url, { headers: h });
     var d = await res.json();
-    if (!d.itemSummaries) return [];
-    var filtered = [];
-    var junkCount = 0;
+    if (!d.itemSummaries || d.itemSummaries.length === 0) return null;
+    // Pick the first non-junk listing
     for (var i = 0; i < d.itemSummaries.length; i++) {
       var it = d.itemSummaries[i];
-      if (isEbayJunk(it.title)) { junkCount++; continue; }
-      // Skip worn/used items that slipped through
-      var tLow = (it.title || "").toLowerCase();
-      if (tLow.indexOf("used") >= 0 || tLow.indexOf("worn") >= 0 || tLow.indexOf("pre-owned") >= 0 || tLow.indexOf("preowned") >= 0 || tLow.indexOf("beater") >= 0 || tLow.indexOf("trashed") >= 0 || tLow.indexOf("vnds") >= 0) { junkCount++; continue; }
-      if (filtered.length >= (limit || 20)) break;
-      filtered.push({
-        title: it.title,
-        price: parseFloat(it.price ? it.price.value : "0"),
+      if (isEbayJunk(it.title)) continue;
+      var price = parseFloat(it.price ? it.price.value : "0");
+      // Price sanity: skip if under 35% of StockX price
+      if (minPrice && price < minPrice * 0.35) continue;
+      return {
+        price: price,
         url: camp ? (it.itemAffiliateWebUrl || it.itemWebUrl) : it.itemWebUrl,
-        image: it.thumbnailImages ? it.thumbnailImages[0].imageUrl : null,
         authenticity: it.qualifiedPrograms ? it.qualifiedPrograms.indexOf("AUTHENTICITY_GUARANTEE") >= 0 : false
-      });
+      };
     }
-    console.log("eBay results: " + d.itemSummaries.length + " raw, " + junkCount + " junk filtered, " + filtered.length + " kept");
-    return filtered;
+    return null;
   } catch(e) {
-    console.log("eBay search error:", e.message);
-    return [];
+    return null;
   }
 }
 
-function buildEbayMap(items) {
-  var map = {};
-  (items || []).forEach(function(it) {
-    var t = (it.title || "").toUpperCase();
-    // Try SKU-based matching first
-    var m = t.match(/[A-Z]{1,3}\d{4,}[\s\-]?\d{2,3}/);
-    if (m) { var k = normSku(m[0]); if (!map[k]) map[k] = it; }
-  });
-  return map;
-}
-
-function normTitle(s) {
-  return (s || "").toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
-}
-
-function titleWords(s) {
-  return normTitle(s).split(" ").filter(function(w) {
-    return w.length > 1 && ["the","and","for","new","men","mens","women","womens","size","with","box","ds","og","ship","free","shipping","authentic","brand","pair"].indexOf(w) < 0;
-  });
-}
-
-function titleMatchScore(stockxTitle, ebayTitle) {
-  var sWords = titleWords(stockxTitle);
-  var eWords = titleWords(ebayTitle);
-  if (sWords.length === 0) return 0;
-  var eStr = " " + eWords.join(" ") + " ";
-  var matches = 0;
-  var keyMatches = 0;
-  // Key words are model identifiers like "jordan", "dunk", "yeezy", numbers like "1", "4", "350"
-  var keyPatterns = ["jordan","dunk","yeezy","force","max","kobe","samba","550","990","1130","kayano"];
-  for (var i = 0; i < sWords.length; i++) {
-    for (var j = 0; j < eWords.length; j++) {
-      if (sWords[i] === eWords[j]) {
-        matches++;
-        if (keyPatterns.indexOf(sWords[i]) >= 0 || sWords[i].match(/^\d+$/)) keyMatches++;
-        break;
-      }
+// Batch eBay lookups for an array of products — runs up to 10 in parallel
+async function enrichWithEbay(products) {
+  var token = await getEbayToken();
+  if (!token) return 0;
+  var camp = process.env.EBAY_CAMPAIGN_ID || "";
+  var em = 0;
+  
+  // Only look up top products to stay within rate limits and keep response fast
+  var toSearch = products.filter(function(p) { return p.sku; }).slice(0, 10);
+  
+  var results = await Promise.all(toSearch.map(function(p) {
+    return searchEbaySku(token, p.sku, p.title, p.min_price || p.avg_price, camp);
+  }));
+  
+  for (var i = 0; i < toSearch.length; i++) {
+    if (results[i]) {
+      toSearch[i]._ebay = results[i];
+      em++;
     }
   }
-  // Must match at least one key identifier word (model name or number)
-  if (keyMatches === 0) return 0;
-  return matches / sWords.length;
+  console.log("eBay per-SKU lookup: " + em + " matched out of " + toSearch.length + " searched");
+  return em;
 }
 
-function matchEbayToProducts(products, ebayItems) {
-  if (!ebayItems || ebayItems.length === 0) return;
-  
-  // First pass: SKU matching (most accurate)
-  var skuMap = buildEbayMap(ebayItems);
-  var usedEbay = {};
-  
-  for (var i = 0; i < products.length; i++) {
-    var p = products[i];
-    if (p._ebay) continue;
-    var sku = normSku(p.sku);
-    if (sku && skuMap[sku]) {
-      var ebayPrice = skuMap[sku].price;
-      var sxPrice = p.min_price || p.avg_price || 0;
-      // Even with SKU match, reject if eBay price is suspiciously low (under 35% of StockX)
-      if (sxPrice > 0 && ebayPrice < sxPrice * 0.35) continue;
-      p._ebay = { price: skuMap[sku].price, url: skuMap[sku].url, authenticity: skuMap[sku].authenticity };
-      usedEbay[skuMap[sku].url] = true;
-    }
-  }
-  
-  // Second pass: fuzzy title matching for unmatched products
-  var remaining = ebayItems.filter(function(e) { return !usedEbay[e.url]; });
-  if (remaining.length === 0) return;
-  
-  for (var i = 0; i < products.length; i++) {
-    var p = products[i];
-    if (p._ebay) continue;
-    var sxPrice = p.min_price || p.avg_price || 0;
-    var bestScore = 0;
-    var bestItem = null;
-    for (var j = 0; j < remaining.length; j++) {
-      if (usedEbay[remaining[j].url]) continue;
-      // Skip if eBay price is under 35% of StockX price — probably wrong product
-      if (sxPrice > 0 && remaining[j].price < sxPrice * 0.35) continue;
-      var score = titleMatchScore(p.title || p.name || "", remaining[j].title);
-      if (score > bestScore) { bestScore = score; bestItem = remaining[j]; }
-    }
-    // Require at least 70% word match to avoid bad pairings
-    if (bestItem && bestScore >= 0.7) {
-      p._ebay = { price: bestItem.price, url: bestItem.url, authenticity: bestItem.authenticity };
-      usedEbay[bestItem.url] = true;
-    }
-  }
-}
-
-function mergeAll(sx, goat, ebay) {
+function mergeAll(sx, goat) {
   var goatMap = {};
   (goat || []).forEach(function(g) { var k = normSku(g.sku); if (k) goatMap[k] = g; });
-  var gm = 0, em = 0;
+  var gm = 0;
 
   var products = (sx || []).map(function(p) {
     var cat = ((p.category || "") + "").toLowerCase();
     var pt = ((p.product_type || "") + "").toLowerCase();
     var combined = cat + " " + pt;
-    var isShoe = combined.indexOf("sneaker") >= 0 || combined.indexOf("shoe") >= 0 || combined.indexOf("footwear") >= 0 || pt === "sneakers" || (cat === "" && pt === "");
     var isApparel = pt === "apparel" || pt === "clothing" || pt === "accessories";
     if (isApparel) return null;
 
@@ -269,12 +189,7 @@ function mergeAll(sx, goat, ebay) {
     return r;
   }).filter(Boolean);
 
-  // Match eBay using SKU + fuzzy title matching
-  matchEbayToProducts(products, ebay);
-  products.forEach(function(p) { if (p._ebay) em++; });
-
-  console.log("eBay matching: " + em + "/" + products.length + " products matched from " + (ebay || []).length + " eBay results");
-  return { products: products, goatMatched: gm, ebayMatched: em };
+  return { products: products, goatMatched: gm };
 }
 
 exports.handler = async function(event) {
@@ -294,14 +209,14 @@ exports.handler = async function(event) {
     try {
       var results = await Promise.all([
         kicksSearch(q, limit, page),
-        kicksSearchGoat(q, 100),
-        searchEbay(q, 20)
+        kicksSearchGoat(q, 100)
       ]);
       var sxP = (results[0] && results[0].data) ? results[0].data : [];
       var gP = (results[1] && results[1].data) ? results[1].data : [];
-      var eP = results[2] || [];
-      var m = mergeAll(sxP, gP, eP);
-      console.log("Search: " + q + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + eP.length + " gm:" + m.goatMatched + " em:" + m.ebayMatched + " merged:" + m.products.length + " | " + (Date.now() - t0) + "ms");
+      var m = mergeAll(sxP, gP);
+      // Enrich top products with eBay per-SKU lookups
+      var em = await enrichWithEbay(m.products);
+      console.log("Search: " + q + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " merged:" + m.products.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: m.products, total: results[0].total || m.products.length, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
@@ -320,17 +235,17 @@ exports.handler = async function(event) {
         kicksSearchGoat("Jordan 4", 50),
         kicksSearchGoat("Jordan 3", 50),
         kicksSearchGoat("Jordan 11", 50),
-        kicksSearchGoat("Jordan 5", 50),
-        searchEbay("Air Jordan Retro", 20)
+        kicksSearchGoat("Jordan 5", 50)
       ]);
       var sxD = (tr[0] && tr[0].data) ? tr[0].data : [];
       var allG = [];
       for (var i = 1; i <= 5; i++) { if (tr[i] && tr[i].data) allG = allG.concat(tr[i].data); }
-      var eT = tr[6] || [];
-      var m2 = mergeAll(sxD, allG, eT);
+      var m2 = mergeAll(sxD, allG);
       m2.products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       m2.products = m2.products.slice(0, lim);
-      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + eT.length + " gm:" + m2.goatMatched + " em:" + m2.ebayMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
+      // Enrich top products with eBay per-SKU lookups
+      var em2 = await enrichWithEbay(m2.products);
+      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
       return cors(200, { data: m2.products, total: m2.products.length, page: 1 });
     } catch(err) {
       console.error("Trending error:", err.message);
