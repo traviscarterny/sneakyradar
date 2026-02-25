@@ -120,9 +120,12 @@ function mergeAll(sx, goat, ebay) {
   }
 
   var products = (sx || []).map(function(p) {
-    var cat = ((p.category || p.product_type || "") + "").toLowerCase();
-    var ok = cat.indexOf("sneaker") >= 0 || cat.indexOf("shoe") >= 0 || cat.indexOf("footwear") >= 0 || cat === "sneakers" || cat === "";
-    if (!ok) return null;
+    var cat = ((p.category || "") + "").toLowerCase();
+    var pt = ((p.product_type || "") + "").toLowerCase();
+    var combined = cat + " " + pt;
+    var isShoe = combined.indexOf("sneaker") >= 0 || combined.indexOf("shoe") >= 0 || combined.indexOf("footwear") >= 0 || pt === "sneakers" || (cat === "" && pt === "");
+    var isApparel = pt === "apparel" || pt === "clothing" || pt === "accessories";
+    if (isApparel) return null;
 
     var sku = normSku(p.sku);
     var g = sku ? goatMap[sku] : null;
