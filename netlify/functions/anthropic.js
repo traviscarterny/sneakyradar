@@ -122,8 +122,9 @@ async function searchEbay(query, limit) {
     if (camp) h["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + camp;
     // Request more results so we still have enough after filtering junk
     var fetchLimit = Math.min((limit || 20) * 2, 50);
-    var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(query + " sneaker shoe") +
-      "&category_ids=93427&filter=conditionIds:{1000|1500|3000},price:[50..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=" + fetchLimit;
+    // Only new/new with defects (1000=New, 1500=New other), min price $80 to avoid junk
+    var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(query) +
+      "&category_ids=93427&filter=conditionIds:{1000|1500},price:[80..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=" + fetchLimit;
     var res = await fetch(url, { headers: h });
     var d = await res.json();
     if (!d.itemSummaries) return [];
@@ -132,6 +133,9 @@ async function searchEbay(query, limit) {
     for (var i = 0; i < d.itemSummaries.length; i++) {
       var it = d.itemSummaries[i];
       if (isEbayJunk(it.title)) { junkCount++; continue; }
+      // Skip worn/used items that slipped through
+      var tLow = (it.title || "").toLowerCase();
+      if (tLow.indexOf("used") >= 0 || tLow.indexOf("worn") >= 0 || tLow.indexOf("pre-owned") >= 0 || tLow.indexOf("preowned") >= 0 || tLow.indexOf("beater") >= 0 || tLow.indexOf("trashed") >= 0 || tLow.indexOf("vnds") >= 0) { junkCount++; continue; }
       if (filtered.length >= (limit || 20)) break;
       filtered.push({
         title: it.title,
@@ -205,6 +209,10 @@ function matchEbayToProducts(products, ebayItems) {
     if (p._ebay) continue;
     var sku = normSku(p.sku);
     if (sku && skuMap[sku]) {
+      var ebayPrice = skuMap[sku].price;
+      var sxPrice = p.min_price || p.avg_price || 0;
+      // Even with SKU match, reject if eBay price is suspiciously low (under 35% of StockX)
+      if (sxPrice > 0 && ebayPrice < sxPrice * 0.35) continue;
       p._ebay = { price: skuMap[sku].price, url: skuMap[sku].url, authenticity: skuMap[sku].authenticity };
       usedEbay[skuMap[sku].url] = true;
     }
@@ -217,10 +225,13 @@ function matchEbayToProducts(products, ebayItems) {
   for (var i = 0; i < products.length; i++) {
     var p = products[i];
     if (p._ebay) continue;
+    var sxPrice = p.min_price || p.avg_price || 0;
     var bestScore = 0;
     var bestItem = null;
     for (var j = 0; j < remaining.length; j++) {
       if (usedEbay[remaining[j].url]) continue;
+      // Skip if eBay price is under 35% of StockX price — probably wrong product
+      if (sxPrice > 0 && remaining[j].price < sxPrice * 0.35) continue;
       var score = titleMatchScore(p.title || p.name || "", remaining[j].title);
       if (score > bestScore) { bestScore = score; bestItem = remaining[j]; }
     }
