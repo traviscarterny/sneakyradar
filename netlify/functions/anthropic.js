@@ -5,7 +5,7 @@ var KICKS_KEY = process.env.KICKSDB_API_KEY || "KICKS-6062-7071-95FB-58E9612A472
 var cachedReleases = null;
 var cachedReleasesTime = null;
 
-var RELEASES_PROMPT = 'You are a JSON API. Search sneaker release date websites for upcoming confirmed sneaker releases in the next 90 days. Search sneakerbardetroit.com, houseofheat.co, nicekicks.com, and justfreshkicks.com for release dates.\n\nYour ENTIRE response must be a valid JSON array and nothing else. No explanations, no notes, no caveats. If you find fewer than 40, return what you find.\n\nEach object in the array must have exactly these fields:\n- "name": string (e.g. "Air Jordan 4 OG \\"Lakers\\"")\n- "sku": string (e.g. "FV5029-500")\n- "date": string YYYY-MM-DD format only\n- "price": number (USD, no dollar sign)\n- "brand": string (Jordan, Nike, Adidas, New Balance, Puma, ASICS, Converse, or Other)\n- "color": string (colorway)\n- "collab": boolean\n\nSkip any release without a confirmed YYYY-MM-DD date. Start your response with [ and end with ]. No other text.';
+var RELEASES_PROMPT = 'Search sneakerbardetroit.com for upcoming sneaker release dates. Return a JSON array of releases for the next 60 days. Each object: {"name":"...","sku":"...","date":"YYYY-MM-DD","price":number,"brand":"Jordan/Nike/Adidas/Other","color":"...","collab":false}. Only confirmed dates. Start with [ end with ]. No other text.';
 
 var FALLBACK_RELEASES = [
   {name:"Air Jordan 5 \"Wolf Grey\"",sku:"DD0587-002",date:"2026-02-28",price:220,brand:"Jordan",color:"Light Graphite/White-Wolf Grey",collab:false},
@@ -274,8 +274,8 @@ exports.handler = async function(event) {
           "anthropic-beta": "web-search-2025-03-05"
         },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 16000,
+          model: "claude-haiku-4-5-20251001",
+          max_tokens: 8000,
           system: "You are a JSON API endpoint. You ONLY output valid JSON arrays. Never include explanations, caveats, or any text outside the JSON. If you cannot find enough data, return what you have as a JSON array. Your response must start with [ and end with ].",
           tools: [{ type: "web_search_20250305", name: "web_search" }],
           messages: [{ role: "user", content: RELEASES_PROMPT }]
