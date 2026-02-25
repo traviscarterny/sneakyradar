@@ -268,9 +268,23 @@ exports.handler = async function(event) {
       // Step 1: Fetch release page HTML directly
       var pageRes = await fetch("https://sneakerbardetroit.com/sneaker-release-dates/");
       var pageText = await pageRes.text();
-      // Trim to just the release content (first 30k chars to stay within limits)
-      var trimmed = pageText.substring(0, 30000);
-      console.log("Fetched SBD page, length:", pageText.length, "trimmed to:", trimmed.length);
+      
+      // Extract just the article/main content area, skip nav/header/scripts
+      var contentStart = pageText.indexOf('<article');
+      if (contentStart === -1) contentStart = pageText.indexOf('<main');
+      if (contentStart === -1) contentStart = pageText.indexOf('entry-content');
+      if (contentStart === -1) contentStart = pageText.indexOf('Release Date');
+      if (contentStart === -1) contentStart = Math.floor(pageText.length * 0.2); // skip first 20%
+      
+      // Get a good chunk of the content area
+      var trimmed = pageText.substring(contentStart, contentStart + 40000);
+      // Strip script/style tags to save tokens
+      trimmed = trimmed.replace(/<script[\s\S]*?<\/script>/gi, '');
+      trimmed = trimmed.replace(/<style[\s\S]*?<\/style>/gi, '');
+      trimmed = trimmed.replace(/<!\-\-[\s\S]*?\-\->/g, '');
+      
+      console.log("Fetched SBD page, total:", pageText.length, "content from:", contentStart, "trimmed:", trimmed.length);
+      console.log("Content preview:", trimmed.substring(0, 300));
 
       // Step 2: Have Claude parse the HTML into structured JSON (no web search needed = fast)
       var relRes = await fetch("https://api.anthropic.com/v1/messages", {
