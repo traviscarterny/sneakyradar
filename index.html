@@ -516,6 +516,7 @@ const AUTH_GUIDES = [
 const ALL_SOURCES = [
   {id:"stockx",label:"StockX",url:"stockx.com",color:"#00ff94"},
   {id:"goat",label:"GOAT",url:"goat.com",color:"#ffffff"},
+  {id:"ebay",label:"eBay",url:"ebay.com",color:"#e53238"},
 ];
 
 const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
@@ -566,6 +567,16 @@ function kicksToDrops(products) {
       });
     }
 
+    // eBay: real prices from Browse API
+    if (p._ebay && p._ebay.price) {
+      prices.push({
+        store: p._ebay.authenticity ? "eBay ✓" : "eBay",
+        storeId: "ebay",
+        price: `$${Math.round(p._ebay.price)}`,
+        url: p._ebay.url || "https://www.ebay.com",
+      });
+    }
+
     // Use GOAT release_date if StockX doesn't have one
     const releaseDate = p.release_date || (p._goat && p._goat.release_date) || null;
 
@@ -576,6 +587,7 @@ function kicksToDrops(products) {
     // Build source label
     const sourceNames = ["StockX"];
     if (p._goat) sourceNames.push("GOAT");
+    if (p._ebay) sourceNames.push("eBay");
 
     return {
       brand: p.brand || "Unknown",
