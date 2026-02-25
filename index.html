@@ -1329,10 +1329,11 @@ function ReleasesPage(){
     <div className="page"><div className="section-wrap">
       <div className="section-eyebrow">Upcoming</div>
       <div className="section-title"><span className="filled">RELEASE</span> <span className="outline">CALENDAR</span></div>
-      <div className="section-sub">Every confirmed sneaker drop. Auto-updated via AI-powered web search.
-        {relSource&&<span style={{marginLeft:8,fontSize:".55rem",color:relSource==="live"?"var(--green)":"var(--muted)"}}>● {relSource==="live"?"LIVE DATA":"CACHED"}{relUpdated&&relUpdated!=="hardcoded"?" · Updated "+new Date(relUpdated).toLocaleDateString():""}</span>}
+      <div className="section-sub">Every confirmed sneaker drop. Auto-updated via AI-powered web search.</div>
+      <div style={{marginBottom:24,display:"flex",alignItems:"center",gap:16}}>
+        <button className="cal-list-btn primary" onClick={triggerUpdate} style={updating?{opacity:.5,fontSize:".6rem",letterSpacing:"2px",padding:"10px 20px"}:{fontSize:".6rem",letterSpacing:"2px",padding:"10px 20px"}}>{updating?"⏳ UPDATING RELEASES...":"🔄 REFRESH RELEASES"}</button>
+        {relSource&&<span style={{fontSize:".55rem",color:relSource==="live"?"var(--green)":"var(--muted)",letterSpacing:"1px"}}>● {relSource==="live"?"LIVE DATA":"CACHED"}{relUpdated&&relUpdated!=="hardcoded"?" · Updated "+new Date(relUpdated).toLocaleDateString():""}</span>}
       </div>
-      <div style={{marginBottom:24}}><button className="cal-list-btn" onClick={triggerUpdate} style={updating?{opacity:.5}:{}}>{updating?"⏳ UPDATING...":"🔄 REFRESH RELEASES"}</button></div>
       <div className="cal-stats">
         <div className="cal-stat"><div className="cal-stat-label">Drops This Month</div><div className="cal-stat-val accent">{totalDrops}</div></div>
         <div className="cal-stat"><div className="cal-stat-label">Collabs</div><div className="cal-stat-val" style={{color:"#cc44ff"}}>{collabs}</div></div>
