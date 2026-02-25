@@ -1,0 +1,59 @@
+[functions]
+  directory = "netlify/functions"
+
+[functions."anthropic"]
+  # Extend timeout for release calendar updates (default is 10s, max 26s on free, 60s on Pro)
+  # If on Pro plan, set to 60. Otherwise Netlify's default applies.
+
+[functions."update-releases"]
+  # Scheduled function for weekly release updates
+
+[[redirects]]
+  from = "/blog/best-jordan-releases-2026"
+  to = "/blog/best-jordan-releases-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/sneaker-price-comparison-guide"
+  to = "/blog/sneaker-price-comparison-guide.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/best-sneakers-under-150"
+  to = "/blog/best-sneakers-under-150.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/how-to-authenticate-sneakers"
+  to = "/blog/how-to-authenticate-sneakers.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/best-sneakers-resale-2026"
+  to = "/blog/best-sneakers-resale-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/nike-dunk-release-calendar-2026"
+  to = "/blog/nike-dunk-release-calendar-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/yeezy-price-guide-2026"
+  to = "/blog/yeezy-price-guide-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/new-balance-buying-guide"
+  to = "/blog/new-balance-buying-guide.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/how-stockx-works"
+  to = "/blog/how-stockx-works.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/asics-kayano-14-vs-gel-1130"
+  to = "/blog/asics-kayano-14-vs-gel-1130.html"
+  status = 200
