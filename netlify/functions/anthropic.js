@@ -1,6 +1,35 @@
 // SneakyRadar Backend — uses native fetch() (Node 18+)
 var KICKS_KEY = process.env.KICKSDB_API_KEY || "KICKS-6062-7071-95FB-58E9612A472D";
 
+// Release calendar cache (persists across warm function invocations)
+var cachedReleases = null;
+var cachedReleasesTime = null;
+
+var RELEASES_PROMPT = 'Search for ALL confirmed sneaker releases for the next 90 days from today. Search Nike SNKRS launch calendar, Sneaker Bar Detroit release dates, House of Heat, Nice Kicks, and JustFreshKicks. For EACH release provide a JSON object with: name (full name with colorway nickname in quotes), sku (style code), date (YYYY-MM-DD), price (number, USD, no dollar sign), brand (Jordan/Nike/Adidas/New Balance/Yeezy/Puma/ASICS/Converse/Reebok/Salomon/Other), color (colorway string), collab (boolean true if collaboration). RULES: Only confirmed dates not TBD. Include all brands. Deduplicate across sources. Sort by date ascending. Return ONLY a JSON array starting with [ and ending with ]. Minimum 40 releases. No markdown fences, no explanation, just the array.';
+
+var FALLBACK_RELEASES = [
+  {name:"Air Jordan 5 \"Wolf Grey\"",sku:"DD0587-002",date:"2026-02-28",price:220,brand:"Jordan",color:"Light Graphite/White-Wolf Grey",collab:false},
+  {name:"Air Jordan 1 Low \"Lucky Cat\"",sku:"IQ3460-010",date:"2026-03-01",price:145,brand:"Jordan",color:"Black/Multi",collab:false},
+  {name:"Teyana Taylor x AJ3 \"Concrete Rose\"",sku:"IF3097-300",date:"2026-03-07",price:280,brand:"Jordan",color:"Fir/Fire Red-Victory Green",collab:true},
+  {name:"Air Jordan 4 OG \"Lakers\"",sku:"FV5029-500",date:"2026-03-07",price:220,brand:"Jordan",color:"Imperial Purple/Multi-Color",collab:false},
+  {name:"Air Jordan 1 High OG \"Psychic Blue\" (W)",sku:"FD2596-102",date:"2026-03-07",price:185,brand:"Jordan",color:"Pale Ivory/Psychic Blue",collab:false},
+  {name:"Air Jordan 13 \"Chicago\"",sku:"414571-102",date:"2026-03-13",price:215,brand:"Jordan",color:"White/Black-True Red",collab:false},
+  {name:"Dashawn Jordan x Nike SB Dunk Low",sku:"IB6208-200",date:"2026-03-14",price:140,brand:"Nike",color:"String/Black-Bright Spruce",collab:true},
+  {name:"Air Jordan 14 \"University Blue\"",sku:"487471-007",date:"2026-03-21",price:210,brand:"Jordan",color:"Black/University Blue-Silver",collab:false},
+  {name:"Swarovski x Air Jordan 1 High OG",sku:"HF6248-002",date:"2026-03-21",price:1005,brand:"Jordan",color:"Vast Grey/Photon Dust",collab:true},
+  {name:"Nike Kobe 5 Protro \"Lower Merion Away\"",sku:"IM0557-001",date:"2026-03-23",price:200,brand:"Nike",color:"Metallic Silver/Team Red",collab:false},
+  {name:"Travis Scott x Jumpman Jack \"Green Spark\"",sku:"IM9113-300",date:"2026-03-27",price:205,brand:"Jordan",color:"Green Spark/Vapor Green-Black",collab:true},
+  {name:"Virgil Abloh x Air Jordan 1 \"Alaska\"",sku:"AA3834-100",date:"2026-03-28",price:230,brand:"Jordan",color:"White/White",collab:true},
+  {name:"Air Jordan 3 OG \"Spring is in the Air\"",sku:"IF4396-100",date:"2026-03-28",price:210,brand:"Jordan",color:"Sail/Jade Aura-Iced Carmine",collab:false},
+  {name:"Air Jordan 3 \"Orange Citrus\" (W)",sku:"CK9246-101",date:"2026-04-04",price:205,brand:"Jordan",color:"White/Cement Grey-Fire Red",collab:false},
+  {name:"Air Jordan 5 \"White Metallic\"",sku:"TBD-WM5",date:"2026-04-25",price:220,brand:"Jordan",color:"White/Metallic Silver",collab:false},
+  {name:"Air Jordan 4 \"Toro Bravo\"",sku:"FQ8138-600",date:"2026-05-02",price:220,brand:"Jordan",color:"Fire Red/White-Black-Cement Grey",collab:false},
+  {name:"Nigel Sylvester x Air Jordan 4",sku:"IQ8055-100",date:"2026-05-09",price:230,brand:"Jordan",color:"Sail/Cinnabar-Black",collab:true},
+  {name:"Air Jordan 3 OG \"True Blue\"",sku:"IF4396-102",date:"2026-07-03",price:230,brand:"Jordan",color:"White/True Blue",collab:false},
+  {name:"Air Jordan 4 OG \"Bred\"",sku:"TBD-BRED4",date:"2026-11-27",price:220,brand:"Jordan",color:"Black/Cement Grey-Fire Red",collab:false},
+  {name:"Air Jordan 11 \"Space Jam\"",sku:"TBD-SJ11",date:"2026-12-20",price:235,brand:"Jordan",color:"Black/Concord-White",collab:true},
+];
+
 function cors(code, body) {
   return {
     statusCode: code,
@@ -218,6 +247,79 @@ exports.handler = async function(event) {
       return cors(200, { thumbnail: (id.items && id.items[0]) ? id.items[0].link : null });
     } catch(e) {
       return cors(200, { thumbnail: null });
+    }
+  }
+
+  // ── Release Calendar: Get releases ──
+  if (body.action === "get_releases") {
+    return cors(200, {
+      releases: cachedReleases || FALLBACK_RELEASES,
+      updated: cachedReleasesTime || "hardcoded",
+      source: cachedReleases ? "live" : "fallback"
+    });
+  }
+
+  // ── Release Calendar: Trigger update via Anthropic web search ──
+  if (body.action === "update_releases") {
+    var relKey = process.env.ANTHROPIC_API_KEY;
+    if (!relKey) return cors(500, { error: "No API key" });
+    console.log("Fetching release calendar via Anthropic web search...");
+    try {
+      var relRes = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": relKey,
+          "anthropic-version": "2023-06-01",
+          "anthropic-beta": "web-search-2025-03-05"
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 16000,
+          tools: [{ type: "web_search_20250305", name: "web_search" }],
+          messages: [{ role: "user", content: RELEASES_PROMPT }]
+        })
+      });
+      var relData = await relRes.json();
+      if (!relRes.ok) {
+        console.log("Anthropic releases error:", JSON.stringify(relData).substring(0, 500));
+        return cors(relRes.status, { error: "Anthropic API error" });
+      }
+      var relText = "";
+      if (relData.content) {
+        for (var ri = 0; ri < relData.content.length; ri++) {
+          if (relData.content[ri].type === "text") relText += relData.content[ri].text;
+        }
+      }
+      console.log("Release text length:", relText.length);
+      var parsed = null;
+      try { parsed = JSON.parse(relText.trim()); } catch(e) {}
+      if (!parsed) { var rm = relText.match(/\[[\s\S]*\]/); if (rm) try { parsed = JSON.parse(rm[0]); } catch(e) {} }
+      if (!parsed) { var fm = relText.match(/```(?:json)?\s*([\s\S]*?)```/); if (fm) try { parsed = JSON.parse(fm[1].trim()); } catch(e) {} }
+      if (!parsed || !Array.isArray(parsed)) {
+        console.log("Failed to parse releases:", relText.substring(0, 500));
+        return cors(500, { error: "Failed to parse releases" });
+      }
+      var cleaned = parsed.filter(function(r) {
+        return r.name && r.date && r.date.match(/^\d{4}-\d{2}-\d{2}$/);
+      }).map(function(r) {
+        return {
+          name: String(r.name || "").substring(0, 200),
+          sku: String(r.sku || "TBD").substring(0, 30),
+          date: r.date,
+          price: Number(r.price) || 0,
+          brand: String(r.brand || "Other").substring(0, 20),
+          color: String(r.color || "").substring(0, 100),
+          collab: Boolean(r.collab)
+        };
+      });
+      cachedReleases = cleaned;
+      cachedReleasesTime = new Date().toISOString();
+      console.log("Updated releases: " + cleaned.length + " entries");
+      return cors(200, { success: true, count: cleaned.length, updated: cachedReleasesTime, releases: cleaned });
+    } catch(err) {
+      console.error("Update releases error:", err.message);
+      return cors(500, { error: err.message });
     }
   }
 
