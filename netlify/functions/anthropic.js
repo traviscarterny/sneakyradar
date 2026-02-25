@@ -1,3 +1,89 @@
+// eBay OAuth token cache (in-memory, refreshes every 2 hours)
+var ebayTokenCache = { token: null, expires: 0 };
+
+async function getEbayToken() {
+  var now = Date.now();
+  if (ebayTokenCache.token && now < ebayTokenCache.expires) {
+    return ebayTokenCache.token;
+  }
+  var clientId = process.env.EBAY_CLIENT_ID;
+  var clientSecret = process.env.EBAY_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+
+  var creds = Buffer.from(clientId + ":" + clientSecret).toString("base64");
+  try {
+    var res = await fetch("https://api.ebay.com/identity/v1/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": "Basic " + creds
+      },
+      body: "grant_type=client_credentials&scope=https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope"
+    });
+    var data = await res.json();
+    if (data.access_token) {
+      ebayTokenCache.token = data.access_token;
+      ebayTokenCache.expires = now + ((data.expires_in || 7200) - 300) * 1000;
+      return data.access_token;
+    }
+    console.log("eBay token error:", JSON.stringify(data));
+    return null;
+  } catch(err) {
+    console.log("eBay token fetch error:", err.message);
+    return null;
+  }
+}
+
+async function searchEbay(query, limit) {
+  var token = await getEbayToken();
+  if (!token) return [];
+
+  var campaignId = process.env.EBAY_CAMPAIGN_ID || "";
+  var ebayHeaders = {
+    "Authorization": "Bearer " + token,
+    "Content-Type": "application/json",
+    "X-EBAY-C-MARKETPLACE-ID": "EBAY_US"
+  };
+  if (campaignId) {
+    ebayHeaders["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + campaignId + ",contextualLocation=country=US,zip=10001";
+  } else {
+    ebayHeaders["X-EBAY-C-ENDUSERCTX"] = "contextualLocation=country=US,zip=10001";
+  }
+
+  var searchLimit = Math.min(limit || 10, 20);
+  var url = "https://api.ebay.com/buy/browse/v1/item_summary/search"
+    + "?q=" + encodeURIComponent(query + " sneaker")
+    + "&limit=" + searchLimit
+    + "&filter=conditionIds:{1000|1500},deliveryCountry:US,price:[50..],buyingOptions:{FIXED_PRICE}"
+    + "&category_ids=93427"
+    + "&sort=price";
+
+  try {
+    var res = await fetch(url, { headers: ebayHeaders });
+    var data = await res.json();
+    if (!data.itemSummaries) {
+      if (data.errors) console.log("eBay search error:", JSON.stringify(data.errors[0]));
+      return [];
+    }
+    return data.itemSummaries.map(function(item) {
+      return {
+        title: item.title || "",
+        price: item.price ? parseFloat(item.price.value) : null,
+        currency: item.price ? item.price.currency : "USD",
+        url: item.itemAffiliateWebUrl || item.itemWebUrl || null,
+        image: item.thumbnailImages && item.thumbnailImages[0] ? item.thumbnailImages[0].imageUrl : null,
+        condition: item.condition || null,
+        itemId: item.itemId || null,
+        seller: item.seller ? item.seller.username : null,
+        authenticity: item.qualifiedPrograms ? item.qualifiedPrograms.indexOf("AUTHENTICITY_GUARANTEE") >= 0 : false
+      };
+    });
+  } catch(err) {
+    console.log("eBay search error:", err.message);
+    return [];
+  }
+}
+
 exports.handler = async function(event) {
   var KICKSDB_KEY = process.env.KICKSDB_API_KEY;
   var KICKSDB_BASE = "https://api.kicks.dev/v3";
@@ -32,10 +118,28 @@ exports.handler = async function(event) {
     return map;
   }
 
-  function mergeGoat(stockxProducts, goatBySku) {
+  function buildEbayMap(ebayItems, stockxProducts) {
+    var map = {};
+    for (var i = 0; i < ebayItems.length; i++) {
+      var item = ebayItems[i];
+      var title = (item.title || "").toUpperCase();
+      for (var j = 0; j < stockxProducts.length; j++) {
+        var sx = stockxProducts[j];
+        var sku = sx.sku || "";
+        if (sku && title.indexOf(sku.replace(/-/g, "")) >= 0) {
+          var skuKey = normSku(sku);
+          if (skuKey && !map[skuKey]) map[skuKey] = item;
+        }
+      }
+    }
+    return map;
+  }
+
+  function mergeAll(stockxProducts, goatBySku, ebayBySku) {
     return stockxProducts.map(function(p) {
       var skuKey = normSku(p.sku);
       var gm = skuKey ? goatBySku[skuKey] : null;
+      var em = skuKey ? ebayBySku[skuKey] : null;
       var result = {};
       for (var k in p) result[k] = p[k];
       result._goat = gm ? {
@@ -43,6 +147,12 @@ exports.handler = async function(event) {
         link: gm.link || null,
         image_url: gm.image_url || null,
         release_date: gm.release_date || null
+      } : null;
+      result._ebay = em ? {
+        price: em.price || null,
+        url: em.url || null,
+        condition: em.condition || null,
+        authenticity: em.authenticity || false
       } : null;
       return result;
     });
@@ -69,23 +179,29 @@ exports.handler = async function(event) {
       var stockxUrl = KICKSDB_BASE + "/stockx/products?query=" + encodeURIComponent(query) + "&limit=" + limit + "&page=" + page + "&offset=" + offset;
       var goatUrl = KICKSDB_BASE + "/goat/products?query=" + encodeURIComponent(query) + "&limit=100";
 
+      // Fetch StockX + GOAT + eBay in parallel
       var results = await Promise.all([
         fetch(stockxUrl, {headers: authHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; }),
-        fetch(goatUrl, {headers: authHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; })
+        fetch(goatUrl, {headers: authHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; }),
+        searchEbay(query, 20)
       ]);
 
       var stockxProducts = (results[0] && results[0].data) ? results[0].data : [];
       var goatProducts = (results[1] && results[1].data) ? results[1].data : [];
+      var ebayItems = results[2] || [];
+
       var goatBySku = buildGoatMap(goatProducts);
-      var merged = mergeGoat(stockxProducts, goatBySku);
+      var ebayBySku = buildEbayMap(ebayItems, stockxProducts);
+      var merged = mergeAll(stockxProducts, goatBySku, ebayBySku);
 
       var duration = Date.now() - startTime;
       var goatMatches = merged.filter(function(p) { return p._goat; }).length;
-      console.log("KicksDB search: " + query + " | StockX: " + stockxProducts.length + ", GOAT: " + goatProducts.length + ", matched: " + goatMatches + " | " + duration + "ms");
+      var ebayMatches = merged.filter(function(p) { return p._ebay; }).length;
+      console.log("Search: " + query + " | StockX: " + stockxProducts.length + ", GOAT: " + goatProducts.length + ", eBay: " + ebayItems.length + ", goat-match: " + goatMatches + ", ebay-match: " + ebayMatches + " | " + duration + "ms");
 
       return {statusCode: 200, headers: corsHeaders, body: JSON.stringify({data: merged, _page: page, _limit: limit})};
     } catch(err) {
-      console.error("KicksDB error:", err.message);
+      console.error("Search error:", err.message);
       return {statusCode: 500, headers: corsHeaders, body: JSON.stringify({error: err.message})};
     }
   }
@@ -118,7 +234,6 @@ exports.handler = async function(event) {
       var trendOffset = (trendPage - 1) * trendLimit;
       var trendQuery = "Jordan";
 
-      // Fetch StockX + multiple GOAT queries to maximize SKU overlap
       var trendStockxUrl = KICKSDB_BASE + "/stockx/products?query=" + encodeURIComponent(trendQuery) + "&limit=50&offset=" + trendOffset + "&page=" + trendPage;
       var goatQueries = ["Jordan 1", "Jordan 4", "Jordan 3", "Jordan 11", "Jordan 5"];
 
@@ -131,31 +246,36 @@ exports.handler = async function(event) {
           fetch(gUrl, {headers: trendHeaders}).then(function(r) { return r.json(); }).catch(function() { return {data: []}; })
         );
       }
+      // Also fetch eBay trending
+      fetchPromises.push(searchEbay("Air Jordan Retro", 20));
 
       var trendResults = await Promise.all(fetchPromises);
 
       var trendStockx = (trendResults[0] && trendResults[0].data) ? trendResults[0].data : [];
-      
-      // Combine all GOAT results into one pool
+
       var allGoat = [];
-      for (var gi = 1; gi < trendResults.length; gi++) {
+      for (var gi = 1; gi < trendResults.length - 1; gi++) {
         var gData = (trendResults[gi] && trendResults[gi].data) ? trendResults[gi].data : [];
         allGoat = allGoat.concat(gData);
       }
       var trendGoatMap = buildGoatMap(allGoat);
 
+      var trendEbayItems = trendResults[trendResults.length - 1] || [];
+      var trendEbayMap = buildEbayMap(trendEbayItems, trendStockx);
+
       var products = trendStockx.filter(isSneaker);
-      products = mergeGoat(products, trendGoatMap);
+      products = mergeAll(products, trendGoatMap, trendEbayMap);
       products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       products = products.slice(0, trendLimit);
 
-      var trendMatched = products.filter(function(p) { return p._goat; }).length;
+      var trendGoatMatched = products.filter(function(p) { return p._goat; }).length;
+      var trendEbayMatched = products.filter(function(p) { return p._ebay; }).length;
       var trendDuration = Date.now() - trendStart;
-      console.log("KicksDB trending page " + trendPage + ": " + products.length + " products, GOAT pool: " + allGoat.length + ", matched: " + trendMatched + " in " + trendDuration + "ms");
+      console.log("Trending page " + trendPage + ": " + products.length + " products, GOAT pool: " + allGoat.length + ", goat-match: " + trendGoatMatched + ", ebay: " + trendEbayItems.length + ", ebay-match: " + trendEbayMatched + " | " + trendDuration + "ms");
 
       return {statusCode: 200, headers: corsHeaders, body: JSON.stringify({data: products, _page: trendPage})};
     } catch(err) {
-      console.error("KicksDB trending error:", err.message);
+      console.error("Trending error:", err.message);
       return {statusCode: 500, headers: corsHeaders, body: JSON.stringify({error: err.message})};
     }
   }
