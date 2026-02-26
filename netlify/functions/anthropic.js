@@ -207,27 +207,37 @@ exports.handler = async function(event) {
     var page = body.page || 1;
     var t0 = Date.now();
     try {
-      // KicksDB skip param doesn't paginate search results reliably,
-      // so fetch a large batch and paginate server-side
-      var fetchLimit = 100;
-      var results = await Promise.all([
-        kicksSearch(q, fetchLimit, 1),
-        kicksSearchGoat(q, 100)
-      ]);
-      var sxP = (results[0] && results[0].data) ? results[0].data : [];
-      var gP = (results[1] && results[1].data) ? results[1].data : [];
-      var m = mergeAll(sxP, gP);
+      // KicksDB caps at 100/request. Fetch multiple batches with skip to get more.
+      var needed = page * limit;
+      var batchSize = 100;
+      var batches = Math.ceil(needed / batchSize);
+      if (batches > 5) batches = 5;
+
+      var kicksPromises = [];
+      for (var b = 0; b < batches; b++) {
+        kicksPromises.push(kicksSearch(q, batchSize, b + 1));
+      }
+      kicksPromises.push(kicksSearchGoat(q, 100));
+
+      var results = await Promise.all(kicksPromises);
+
+      var allSx = [];
+      for (var b = 0; b < batches; b++) {
+        if (results[b] && results[b].data) allSx = allSx.concat(results[b].data);
+      }
+      var gP = (results[batches] && results[batches].data) ? results[batches].data : [];
+
+      var m = mergeAll(allSx, gP);
+      m.products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       var totalProducts = m.products.length;
-      // Server-side pagination: slice the merged results
       var start = (page - 1) * limit;
       var end = start + limit;
       var pageProducts = m.products.slice(start, end);
-      // Only enrich with eBay on first page
       var em = 0;
       if (page <= 1) {
         em = await enrichWithEbay(pageProducts);
       }
-      console.log("Search: " + q + " page:" + page + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
+      console.log("Search: " + q + " page:" + page + " batches:" + batches + " | SX:" + allSx.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: pageProducts, total: totalProducts, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
