@@ -45,8 +45,9 @@ async function kicksSearch(query, limit, page) {
   try {
     var res = await fetch(url, { headers: { "Authorization": "Bearer " + KICKS_KEY } });
     var text = await res.text();
-    console.log("kicksSearch raw status:", res.status, "body length:", text.length);
-    return JSON.parse(text);
+    var parsed = JSON.parse(text);
+    console.log("kicksSearch url:", url, "status:", res.status, "body length:", text.length, "total:", parsed.total, "dataLen:", (parsed.data||[]).length);
+    return parsed;
   } catch(e) {
     console.log("kicksSearch error:", e.message);
     return { data: [] };
