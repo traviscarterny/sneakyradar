@@ -203,24 +203,32 @@ exports.handler = async function(event) {
   // ── KicksDB Search ──
   if (body.action === "search") {
     var q = body.query || "Jordan";
-    var limit = body.limit || 30;
+    var limit = body.limit || 50;
     var page = body.page || 1;
     var t0 = Date.now();
     try {
+      // KicksDB skip param doesn't paginate search results reliably,
+      // so fetch a large batch and paginate server-side
+      var fetchLimit = 200;
       var results = await Promise.all([
-        kicksSearch(q, limit, page),
+        kicksSearch(q, fetchLimit, 1),
         kicksSearchGoat(q, 100)
       ]);
       var sxP = (results[0] && results[0].data) ? results[0].data : [];
       var gP = (results[1] && results[1].data) ? results[1].data : [];
       var m = mergeAll(sxP, gP);
-      // Only enrich with eBay on first page to keep Load More fast
+      var totalProducts = m.products.length;
+      // Server-side pagination: slice the merged results
+      var start = (page - 1) * limit;
+      var end = start + limit;
+      var pageProducts = m.products.slice(start, end);
+      // Only enrich with eBay on first page
       var em = 0;
       if (page <= 1) {
-        em = await enrichWithEbay(m.products);
+        em = await enrichWithEbay(pageProducts);
       }
-      console.log("Search: " + q + " page:" + page + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " merged:" + m.products.length + " | " + (Date.now() - t0) + "ms");
-      return cors(200, { data: m.products, total: results[0].total || m.products.length, page: page });
+      console.log("Search: " + q + " page:" + page + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
+      return cors(200, { data: pageProducts, total: totalProducts, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
       return cors(500, { error: err.message });
