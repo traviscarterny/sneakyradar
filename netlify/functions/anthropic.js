@@ -209,7 +209,7 @@ exports.handler = async function(event) {
     try {
       // KicksDB skip param doesn't paginate search results reliably,
       // so fetch a large batch and paginate server-side
-      var fetchLimit = 200;
+      var fetchLimit = 100;
       var results = await Promise.all([
         kicksSearch(q, fetchLimit, 1),
         kicksSearchGoat(q, 100)
