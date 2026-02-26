@@ -213,7 +213,11 @@ exports.handler = async function(event) {
       var sxP = (results[0] && results[0].data) ? results[0].data : [];
       var gP = (results[1] && results[1].data) ? results[1].data : [];
       var m = mergeAll(sxP, gP);
-      var em = await enrichWithEbay(m.products);
+      // Only enrich with eBay on first page to keep Load More fast
+      var em = 0;
+      if (page <= 1) {
+        em = await enrichWithEbay(m.products);
+      }
       console.log("Search: " + q + " page:" + page + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " merged:" + m.products.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: m.products, total: results[0].total || m.products.length, page: page });
     } catch(err) {
