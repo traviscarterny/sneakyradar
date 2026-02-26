@@ -953,7 +953,7 @@ function DropRadarPage() {
       setSteps([{label:"Searching all sources",status:"done",count:d.length}]);
       setDrops(d.length>0?d:DEFAULT_DROPS);
       if(!d.length) setError("No results found. Showing featured drops.");
-      if(d.length < 30) setHasMore(false);
+      if(d.length < 50) setHasMore(false);
       setUpdated(new Date().toLocaleTimeString());
       // Only cache landing page (non-search) results
       if (d.length > 0 && !q) {
@@ -1033,6 +1033,9 @@ function DropRadarPage() {
     {label: "NIKE DUNK", query: "Nike Dunk"},
     {label: "AIR FORCE 1", query: "Air Force 1"},
     {label: "AIR MAX", query: "Nike Air Max"},
+    {label: "AIR MAX 90", query: "Nike Air Max 90"},
+    {label: "AIR MAX 95", query: "Nike Air Max 95"},
+    {label: "AIR MAX 97", query: "Nike Air Max 97"},
     {label: "NIKE SB", query: "Nike SB"},
     {label: "KOBE", query: "Nike Kobe"},
     {label: "FOAMPOSITE", query: "Nike Foamposite"},
