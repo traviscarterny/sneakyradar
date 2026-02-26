@@ -109,24 +109,20 @@ function isEbayJunk(title) {
   return false;
 }
 
-// Search eBay for a single product by its SKU — returns the best matching listing or null
 async function searchEbaySku(token, sku, title, minPrice, camp) {
   if (!token || !sku) return null;
   try {
     var h = { "Authorization": "Bearer " + token, "Content-Type": "application/json", "X-EBAY-C-MARKETPLACE-ID": "EBAY_US" };
     if (camp) h["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + camp;
-    // Search by exact SKU — this is the most reliable way to find the right shoe
     var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(sku) +
       "&category_ids=93427&filter=conditionIds:{1000|1500},price:[80..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=5";
     var res = await fetch(url, { headers: h });
     var d = await res.json();
     if (!d.itemSummaries || d.itemSummaries.length === 0) return null;
-    // Pick the first non-junk listing
     for (var i = 0; i < d.itemSummaries.length; i++) {
       var it = d.itemSummaries[i];
       if (isEbayJunk(it.title)) continue;
       var price = parseFloat(it.price ? it.price.value : "0");
-      // Price sanity: skip if under 35% of StockX price
       if (minPrice && price < minPrice * 0.35) continue;
       return {
         price: price,
@@ -141,21 +137,16 @@ async function searchEbaySku(token, sku, title, minPrice, camp) {
   }
 }
 
-// Batch eBay lookups for an array of products — runs up to 10 in parallel
 async function enrichWithEbay(products) {
   try {
     var token = await getEbayToken();
     if (!token) return 0;
     var camp = process.env.EBAY_CAMPAIGN_ID || "";
     var em = 0;
-    
-    // Only look up top products to stay within rate limits and keep response fast
     var toSearch = products.filter(function(p) { return p.sku; }).slice(0, 10);
-    
     var results = await Promise.all(toSearch.map(function(p) {
       return searchEbaySku(token, p.sku, p.title, p.min_price || p.avg_price, camp);
     }));
-    
     for (var i = 0; i < toSearch.length; i++) {
       if (results[i]) {
         toSearch[i]._ebay = results[i];
@@ -170,7 +161,7 @@ async function enrichWithEbay(products) {
   }
 }
 
-function mergeAll(sx, goat) {
+function mergeAll(sx, goat, ebay) {
   var goatMap = {};
   (goat || []).forEach(function(g) { var k = normSku(g.sku); if (k) goatMap[k] = g; });
   var gm = 0;
@@ -179,6 +170,7 @@ function mergeAll(sx, goat) {
     var cat = ((p.category || "") + "").toLowerCase();
     var pt = ((p.product_type || "") + "").toLowerCase();
     var combined = cat + " " + pt;
+    var isShoe = combined.indexOf("sneaker") >= 0 || combined.indexOf("shoe") >= 0 || combined.indexOf("footwear") >= 0 || pt === "sneakers" || (cat === "" && pt === "");
     var isApparel = pt === "apparel" || pt === "clothing" || pt === "accessories";
     if (isApparel) return null;
 
@@ -196,7 +188,7 @@ function mergeAll(sx, goat) {
     return r;
   }).filter(Boolean);
 
-  return { products: products, goatMatched: gm };
+  return { products: products, goatMatched: gm, ebayMatched: 0 };
 }
 
 exports.handler = async function(event) {
@@ -221,9 +213,8 @@ exports.handler = async function(event) {
       var sxP = (results[0] && results[0].data) ? results[0].data : [];
       var gP = (results[1] && results[1].data) ? results[1].data : [];
       var m = mergeAll(sxP, gP);
-      // Enrich top products with eBay per-SKU lookups
       var em = await enrichWithEbay(m.products);
-      console.log("Search: " + q + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " merged:" + m.products.length + " | " + (Date.now() - t0) + "ms");
+      console.log("Search: " + q + " page:" + page + " | SX:" + sxP.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " merged:" + m.products.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: m.products, total: results[0].total || m.products.length, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
@@ -250,7 +241,6 @@ exports.handler = async function(event) {
       var m2 = mergeAll(sxD, allG);
       m2.products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       m2.products = m2.products.slice(0, lim);
-      // Enrich top products with eBay per-SKU lookups
       var em2 = await enrichWithEbay(m2.products);
       console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
       return cors(200, { data: m2.products, total: m2.products.length, page: 1 });
