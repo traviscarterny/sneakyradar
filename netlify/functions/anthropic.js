@@ -166,8 +166,13 @@ function mergeAll(sx, goat, ebay) {
   var goatMap = {};
   (goat || []).forEach(function(g) { var k = normSku(g.sku); if (k) goatMap[k] = g; });
   var gm = 0;
+  var seen = {};
 
   var products = (sx || []).map(function(p) {
+    // Dedupe by ID across multiple sub-queries
+    if (p.id && seen[p.id]) return null;
+    if (p.id) seen[p.id] = true;
+
     var cat = ((p.category || "") + "").toLowerCase();
     var pt = ((p.product_type || "") + "").toLowerCase();
     var combined = cat + " " + pt;
@@ -207,27 +212,55 @@ exports.handler = async function(event) {
     var page = body.page || 1;
     var t0 = Date.now();
     try {
-      // KicksDB caps at 100/request. Fetch multiple batches with skip to get more.
-      var needed = page * limit;
-      var batchSize = 100;
-      var batches = Math.ceil(needed / batchSize);
-      if (batches > 5) batches = 5;
+      // KicksDB skip is broken. Max 100/query. Fan out to get more results.
+      var sxQueries = [q];
+      var goatQueries = [q];
+      var ql = q.toLowerCase().trim();
 
-      var kicksPromises = [];
-      for (var b = 0; b < batches; b++) {
-        kicksPromises.push(kicksSearch(q, batchSize, b + 1));
+      // Broad brand → model sub-queries
+      if (ql === "jordan" || ql === "air jordan" || ql === "jordans") {
+        sxQueries = ["Jordan 1 Retro", "Jordan 3 Retro", "Jordan 4 Retro", "Jordan 5 Retro", "Jordan 6 Retro", "Jordan 11 Retro", "Jordan 12 Retro", "Jordan 13 Retro"];
+        goatQueries = ["Jordan 1", "Jordan 4", "Jordan 11", "Jordan 3", "Jordan 5"];
+      } else if (ql === "nike" || ql === "nikes") {
+        sxQueries = ["Nike Dunk", "Nike Air Max", "Nike Air Force 1", "Nike SB", "Nike Blazer", "Nike Vomero"];
+        goatQueries = ["Nike Dunk", "Nike Air Max", "Nike Air Force"];
+      } else if (ql === "yeezy" || ql === "yeezys") {
+        sxQueries = ["Yeezy Boost 350", "Yeezy Boost 700", "Yeezy Slide", "Yeezy Foam Runner"];
+        goatQueries = ["Yeezy 350", "Yeezy 700", "Yeezy Slide"];
+      } else if (ql === "new balance") {
+        sxQueries = ["New Balance 550", "New Balance 2002R", "New Balance 990", "New Balance 993", "New Balance 1906"];
+        goatQueries = ["New Balance 550", "New Balance 990", "New Balance 2002R"];
+      } else if (ql === "adidas") {
+        sxQueries = ["Adidas Samba", "Adidas Gazelle", "Adidas Campus", "Adidas Forum"];
+        goatQueries = ["Adidas Samba", "Adidas Gazelle", "Adidas Campus"];
+      } else if (ql === "dunk" || ql === "nike dunk" || ql === "dunks") {
+        sxQueries = ["Nike Dunk Low", "Nike Dunk High", "Nike Dunk Low Retro", "Nike SB Dunk"];
+        goatQueries = ["Nike Dunk Low", "Nike Dunk High", "Nike SB Dunk"];
+      } else if (ql === "air max" || ql === "nike air max") {
+        sxQueries = ["Nike Air Max 1", "Nike Air Max 90", "Nike Air Max 95", "Nike Air Max 97", "Nike Air Max Plus"];
+        goatQueries = ["Air Max 1", "Air Max 90", "Air Max 97"];
+      } else {
+        // For specific queries, add GS/Women/PS variants to get more results
+        sxQueries = [q, q + " GS", q + " Women"];
+        goatQueries = [q, q + " GS"];
       }
-      kicksPromises.push(kicksSearchGoat(q, 100));
 
-      var results = await Promise.all(kicksPromises);
+      var fetches = [];
+      sxQueries.forEach(function(sq) { fetches.push(kicksSearch(sq, 100, 1)); });
+      var sxCount = sxQueries.length;
+      goatQueries.forEach(function(gq) { fetches.push(kicksSearchGoat(gq, 100)); });
+      var results = await Promise.all(fetches);
 
       var allSx = [];
-      for (var b = 0; b < batches; b++) {
-        if (results[b] && results[b].data) allSx = allSx.concat(results[b].data);
+      for (var i = 0; i < sxCount; i++) {
+        if (results[i] && results[i].data) allSx = allSx.concat(results[i].data);
       }
-      var gP = (results[batches] && results[batches].data) ? results[batches].data : [];
+      var allGoat = [];
+      for (var i = sxCount; i < results.length; i++) {
+        if (results[i] && results[i].data) allGoat = allGoat.concat(results[i].data);
+      }
 
-      var m = mergeAll(allSx, gP);
+      var m = mergeAll(allSx, allGoat);
       m.products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       var totalProducts = m.products.length;
       var start = (page - 1) * limit;
@@ -237,7 +270,7 @@ exports.handler = async function(event) {
       if (page <= 1) {
         em = await enrichWithEbay(pageProducts);
       }
-      console.log("Search: " + q + " page:" + page + " batches:" + batches + " | SX:" + allSx.length + " GOAT:" + gP.length + " eBay:" + em + " gm:" + m.goatMatched + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
+      console.log("Search: " + q + " page:" + page + " sxQ:" + sxQueries.length + " goatQ:" + goatQueries.length + " | SX:" + allSx.length + " GOAT:" + allGoat.length + " gm:" + m.goatMatched + " eBay:" + em + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: pageProducts, total: totalProducts, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
