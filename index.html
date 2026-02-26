@@ -697,8 +697,8 @@ function kicksToDrops(products) {
 async function fetchDrops(q, page = 1) {
   const action = q ? "search" : "trending";
   const payload = q
-    ? { action: "search", query: q, limit: 30, page: page }
-    : { action: "trending", limit: 30, page: page };
+    ? { action: "search", query: q, limit: 50, page: page }
+    : { action: "trending", limit: 50, page: page };
 
   console.log(`[SNEAKYRADAR] KicksDB ${action}:`, q || "trending", "page:", page);
 
@@ -981,13 +981,9 @@ function DropRadarPage() {
       if(moreDrops.length === 0) { setHasMore(false); }
       else {
         const combined = dedupeDrops([...drops, ...moreDrops]);
-        // If combined length didn't grow, API isn't paginating — stop trying
-        if(combined.length <= drops.length) { setHasMore(false); }
-        else {
-          setDrops(combined);
-          setPage(nextPage);
-          if(moreDrops.length < 30) setHasMore(false);
-        }
+        setDrops(combined);
+        setPage(nextPage);
+        if(moreDrops.length < 50) setHasMore(false);
       }
     } catch(e) {
       console.error("Load more error:", e);
