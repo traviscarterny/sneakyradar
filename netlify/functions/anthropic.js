@@ -43,13 +43,16 @@ async function kicksSearch(query, limit, page) {
   var skip = ((page || 1) - 1) * l;
   var url = "https://api.kicks.dev/v3/stockx/products?query=" + encodeURIComponent(query) + "&limit=" + l + "&skip=" + skip;
   try {
-    var res = await fetch(url, { headers: { "Authorization": "Bearer " + KICKS_KEY } });
+    var controller = new AbortController();
+    var timeout = setTimeout(function() { controller.abort(); }, 8000);
+    var res = await fetch(url, { headers: { "Authorization": "Bearer " + KICKS_KEY }, signal: controller.signal });
+    clearTimeout(timeout);
     var text = await res.text();
     var parsed = JSON.parse(text);
     console.log("kicksSearch url:", url, "status:", res.status, "body length:", text.length, "total:", parsed.total, "dataLen:", (parsed.data||[]).length);
     return parsed;
   } catch(e) {
-    console.log("kicksSearch error:", e.message);
+    console.log("kicksSearch error:", e.message, "url:", url);
     return { data: [] };
   }
 }
@@ -57,7 +60,10 @@ async function kicksSearch(query, limit, page) {
 async function kicksSearchGoat(query, limit) {
   var url = "https://api.kicks.dev/v3/goat/products?query=" + encodeURIComponent(query) + "&limit=" + (limit || 100);
   try {
-    var res = await fetch(url, { headers: { "Authorization": "Bearer " + KICKS_KEY } });
+    var controller = new AbortController();
+    var timeout = setTimeout(function() { controller.abort(); }, 8000);
+    var res = await fetch(url, { headers: { "Authorization": "Bearer " + KICKS_KEY }, signal: controller.signal });
+    clearTimeout(timeout);
     return await res.json();
   } catch(e) {
     console.log("kicksSearchGoat error:", e.message);
