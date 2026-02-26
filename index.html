@@ -943,7 +943,7 @@ function DropRadarPage() {
     setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
     setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
     // Update active category if it matches a category button
-    const matchedCat = CATEGORY_SEARCHES.find(c => c.query.toLowerCase() === q.toLowerCase());
+    const matchedCat = CATEGORY_SEARCHES.find(c => c.query && c.query.toLowerCase() === q.toLowerCase());
     if (matchedCat) setActiveCategory(matchedCat.label);
     else if (q === "") setActiveCategory("ALL");
     else setActiveCategory("");
@@ -1085,6 +1085,7 @@ function DropRadarPage() {
   const [activeCategory, setActiveCategory] = useState("ALL");
 
   const handleCategoryClick = (cat) => {
+    if (!cat.query && cat.query !== "") return;
     setActiveCategory(cat.label);
     if (cat.query === "") {
       // ALL — search Jordan as default landing
