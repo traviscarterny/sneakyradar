@@ -160,8 +160,9 @@
     .price-row { display: flex; align-items: center; gap: 8px; }
     .price-row-store { font-size: 0.6rem; letter-spacing: 1px; color: var(--muted); flex: 1; text-transform: uppercase; }
     .price-row-amount { font-size: 0.75rem; color: #00ff94; min-width: 48px; text-align: right; }
-    .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--accent2); color: var(--text); padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
-    .price-row-btn:hover { background: var(--accent2); color: #000; }
+    .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
+    .price-row-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .price-row-btn.best { border-color: var(--accent2); color: #000; background: var(--accent2); }
     .loading-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
     .loading-card { background: var(--card); animation: shimmer 1.5s ease-in-out infinite; }
     .loading-img { width: 100%; height: 200px; background: #1a1a1a; border-bottom: 1px solid var(--border); }
@@ -276,9 +277,9 @@
       .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; padding: 10px 0; }
       .nav-tabs { display: none; }
       .nav-right { display: none; }
-      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 0.55rem; letter-spacing: 2px; padding: 8px 12px; cursor: pointer; border-radius: 4px; font-family: 'DM Mono', monospace; }
+      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 1.2rem; width: 36px; height: 36px; cursor: pointer; border-radius: 4px; font-family: inherit; }
       .mobile-menu { display: block; position: absolute; top: 100%; right: 12px; background: rgba(15,15,15,0.98); border: 1px solid var(--border); border-radius: 6px; z-index: 100; min-width: 200px; overflow: hidden; backdrop-filter: blur(12px); }
-      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
+      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
       .mobile-menu-item:last-child { border-bottom: none; }
       .mobile-menu-item:hover, .mobile-menu-item.active { color: var(--text); background: rgba(255,255,255,0.05); }
       .mobile-menu-item.active { color: var(--accent); }
@@ -645,7 +646,7 @@ function kicksToDrops(products) {
       prices.push({
         store: p._ebay.authenticity ? "eBay ✓" : "eBay",
         storeId: "ebay",
-        price: p._ebay.priceLabel || `$${Math.round(p._ebay.price)}`,
+        price: `$${Math.round(p._ebay.price)}`,
         url: p._ebay.url || "https://www.ebay.com",
       });
     }
@@ -689,7 +690,6 @@ function kicksToDrops(products) {
       slug: slug,
       weeklyOrders: p.weekly_orders || 0,
       prices: prices,
-      gender: p.gender || null,
     };
   });
 }
@@ -769,9 +769,9 @@ function PriceCompare({prices, drop}) {
             <span className="price-row-store">{p.store}</span>
             <span className="price-row-amount">{p.price}</span>
             <a href={affLink(p.url,p.storeId)} target="_blank" rel="noopener noreferrer"
-              className="price-row-btn"
+              className={`price-row-btn ${i===0?"best":""}`}
               onClick={e=>{e.stopPropagation();trackClick(drop,p.storeId);}}>
-              Buy
+              {i===0?"Best Deal":"Buy"}
             </a>
           </div>
         ))}
@@ -1409,7 +1409,7 @@ function App() {
             ))}
           </div>
           <button className="hamburger" onClick={()=>setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? "✕" : "MENU"}
+            {mobileMenuOpen ? "✕" : "☰"}
           </button>
         </div>
         {mobileMenuOpen && (
