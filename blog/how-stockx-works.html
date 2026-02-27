@@ -9,7 +9,7 @@
 <meta name="keywords" content="how StockX works, StockX beginner guide, StockX fees, how to buy on StockX, StockX authentication, is StockX legit, StockX tutorial"/>
 <link rel="canonical" href="https://www.sneakyradar.com/blog/how-stockx-works"/>
 <meta property="og:title" content="How StockX Works: Complete Beginner's Guide 2026"/><meta property="og:type" content="article"/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0a'/%3E%3Cpath d='M12 38c0-2 1-4 3-5l8-6c2-1.5 4-2 6-2h10c3 0 5 1 7 3l6 6c1 1 1.5 2.5 1 4l-1 3c-.5 1.5-2 2.5-3.5 2.5H15c-1.7 0-3-1.3-3-3v-2.5z' fill='%23ff3c00'/%3E%3Ccircle cx='44' cy='20' r='4' fill='none' stroke='%2300ff94' stroke-width='1.5'/%3E%3Ccircle cx='44' cy='20' r='8' fill='none' stroke='%2300ff94' stroke-width='1' opacity='0.5'/%3E%3C/svg%3E"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -19,7 +19,7 @@
 .footer-blog{border-top:1px solid #222;margin-top:60px;padding-top:24px;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#555;text-align:center}
 @media(max-width:600px){h1{font-size:2.2rem}.wrap{padding:16px 14px 60px}.step{grid-template-columns:40px 1fr}.step-num{font-size:2rem}}
 
-    .sneaker-img{background:#f5f5f5;border:1px solid #222;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:2px;color:#ccc;text-transform:uppercase;overflow:hidden}
+    .sneaker-img{background:linear-gradient(135deg,#141414 0%,#1a1a1a 50%,#111 100%);border:1px solid #282828;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:#ff3c00;text-transform:uppercase;overflow:hidden;position:relative;text-shadow:0 0 20px rgba(255,60,0,0.3)}
     .sneaker-img.hero{width:100%;aspect-ratio:16/7;border-radius:8px;margin-bottom:32px}
     .sneaker-img.inline{aspect-ratio:4/3}
     .sneaker-img.wide{width:100%;aspect-ratio:16/9;margin:24px 0}
@@ -142,48 +142,42 @@
 
 <div class="footer-blog"><p>© 2026 SneakyRadar · <a href="/">Home</a> · <a href="/blog">Blog</a></p></div>
 </div>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
-    const q = el.getAttribute("data-sneaker");
-    try {
-      const r = await fetch("https://sneakyradar.com/.netlify/functions/anthropic?action=search&query=" + encodeURIComponent(q) + "&limit=1");
-      const j = await r.json();
-      if (j.data && j.data[0] && j.data[0].image) {
-        const img = document.createElement("img");
-        img.src = j.data[0].image;
-        img.alt = q;
-        img.style.cssText = "width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;border-radius:inherit;";
-        el.style.position = "relative";
-        el.style.overflow = "hidden";
-        const overlay = document.createElement("div");
-        overlay.style.cssText = "position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,0.85));z-index:2;font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:#ccc;text-transform:uppercase;";
-        overlay.textContent = q;
-        el.textContent = "";
-        el.appendChild(img);
-        el.appendChild(overlay);
-      }
-    } catch(e) {}
-  });
-});
-</script>
+
 <!-- data-sneaker-script -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".sneaker-img").forEach(function(el) {
+    var label = el.textContent.trim();
+    el.setAttribute("data-label", label);
+    el.innerHTML = '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e0e0e 0%,#161616 50%,#0e0e0e 100%)"></div>' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="position:absolute;opacity:0.06;width:70%;max-width:300px">' +
+      '<circle cx="100" cy="100" r="90" fill="none" stroke="#ff3c00" stroke-width="1.5"/>' +
+      '<circle cx="100" cy="100" r="60" fill="none" stroke="#ff3c00" stroke-width="1"/>' +
+      '<circle cx="100" cy="100" r="30" fill="none" stroke="#ff3c00" stroke-width="0.8"/>' +
+      '<line x1="100" y1="5" x2="100" y2="195" stroke="#ff3c00" stroke-width="0.5"/>' +
+      '<line x1="5" y1="100" x2="195" y2="100" stroke="#ff3c00" stroke-width="0.5"/></svg>' +
+      '<span style="position:relative;z-index:1;padding:0 24px;text-align:center;line-height:1.3;font-family:Bebas Neue,sans-serif;font-size:1.2rem;letter-spacing:3px;color:#ff3c00;text-shadow:0 0 30px rgba(255,60,0,0.3)">' + label + '</span>';
+  });
+
   document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
     var q = el.getAttribute("data-sneaker");
     try {
-      var r = await fetch("https://sneakyradar.com/.netlify/functions/anthropic?action=search&query=" + encodeURIComponent(q) + "&limit=1");
+      var r = await fetch("/.netlify/functions/anthropic", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({action: "search", query: q, limit: 1})
+      });
       var j = await r.json();
       if (j.data && j.data[0] && j.data[0].image) {
         var img = document.createElement("img");
         img.src = j.data[0].image;
         img.alt = q;
-        img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#f5f5f5;padding:8px;";
-        el.style.position = "relative";
-        el.style.overflow = "hidden";
-        el.textContent = "";
-        el.appendChild(img);
+        img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#111;padding:16px;border-radius:8px;";
+        img.onload = function() {
+          el.innerHTML = "";
+          el.style.position = "relative";
+          el.appendChild(img);
+        };
       }
     } catch(e) { console.log("img load fail:", q); }
   });
