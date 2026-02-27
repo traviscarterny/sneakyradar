@@ -17,7 +17,6 @@
   <meta property="og:description" content="Search once, compare prices everywhere. Track drops, find deals, and shop smarter across StockX, GOAT, and more." />
   <meta property="og:url" content="https://www.sneakyradar.com" />
   <meta property="og:site_name" content="SneakyRadar" />
-
   <meta property="og:image" content="https://www.sneakyradar.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -28,8 +27,8 @@
   <meta name="twitter:description" content="Search once, compare prices everywhere. Track drops across StockX, GOAT & more." />
   <meta name="twitter:image" content="https://www.sneakyradar.com/og-image.png" />
 
-  <!-- Favicon: sneaker SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0a'/%3E%3Cpath d='M12 38c0-2 1-4 3-5l8-6c2-1.5 4-2 6-2h10c3 0 5 1 7 3l6 6c1 1 1.5 2.5 1 4l-1 3c-.5 1.5-2 2.5-3.5 2.5H15c-1.7 0-3-1.3-3-3v-2.5z' fill='%23ff3c00'/%3E%3Ccircle cx='20' cy='40' r='2' fill='%230a0a0a'/%3E%3Ccircle cx='27' cy='40' r='2' fill='%230a0a0a'/%3E%3Ccircle cx='34' cy='40' r='2' fill='%230a0a0a'/%3E%3Cpath d='M22 33l4-3h8l3 3' stroke='%230a0a0a' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='44' cy='20' r='4' fill='none' stroke='%2300ff94' stroke-width='1.5'/%3E%3Ccircle cx='44' cy='20' r='8' fill='none' stroke='%2300ff94' stroke-width='1' opacity='0.5'/%3E%3Ccircle cx='44' cy='20' r='12' fill='none' stroke='%2300ff94' stroke-width='0.7' opacity='0.25'/%3E%3C/svg%3E" />
+  <!-- Favicon: SR crosshair -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E" />
 
   <!-- Structured Data: Website -->
   <script type="application/ld+json">
@@ -114,7 +113,7 @@
     .search-go-btn { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 3px; padding: 0 32px; cursor: pointer; transition: background 0.15s; }
     .search-go-btn:hover { background: #ff5a20; }
     .search-go-btn:disabled { background: var(--muted); cursor: not-allowed; }
-    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; justify-content: center; }
     .filter-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
     .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
     .result-source-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
@@ -417,19 +416,14 @@
 </head>
 <body>
 <div id="root"></div>
-<div class="grain"></div>
-
-<!-- Static content for SEO crawlers -->
 <noscript>
 <div style="max-width:900px;margin:0 auto;padding:40px 20px;font-family:sans-serif;color:#f0f0f0;background:#0a0a0a">
   <h1>SneakyRadar — Compare Sneaker Prices Across StockX, GOAT & More</h2>
   <p>Search once, compare everywhere. SneakyRadar is a free sneaker price comparison tool that lets you compare prices across StockX, GOAT, eBay, and Amazon in one search. Track upcoming releases, check resell values, and find the best deals on Jordans, Yeezys, Dunks, New Balance, ASICS, and 20+ brands.</p>
   <h2>Features</h2>
-  <p>Real-time price comparison across 4+ platforms. Release calendar with upcoming drop dates and retail prices. Resell tracker with profit estimates and market trends. Authentication guide for spotting fake sneakers. AI-powered chat assistant for sneaker advice.</p>
+  <p>Real-time price comparison across 4+ platforms. Release calendar with upcoming drop dates and retail prices. Resell tracker with profit estimates and market trends. Authentication guide for spotting fake sneakers.</p>
   <h2>Popular Sneaker Searches</h2>
   <p>Air Jordan 4 White Oreo, Nike Dunk Low Panda, Yeezy 350 V2, New Balance 990v6, ASICS Gel-Kayano 14, Air Jordan 1 Retro High, Nike Air Force 1, Adidas Samba, Jordan 11 Space Jam, Travis Scott Jordan 1.</p>
-  <h2>How It Works</h2>
-  <p>Enter any sneaker name or style code. SneakyRadar searches StockX, GOAT, eBay, and Amazon simultaneously and shows you prices side by side. Find the lowest price instantly — no more opening 4 tabs to compare.</p>
   <h2>Sneaker Guides & Blog</h2>
   <ul>
     <li><a href="/blog/best-jordan-releases-2026">Best Air Jordan Releases 2026</a></li>
@@ -444,9 +438,9 @@
     <li><a href="/blog/asics-kayano-14-vs-gel-1130">ASICS Gel-Kayano 14 vs Gel-1130</a></li>
   </ul>
   <p><a href="/blog">View all sneaker guides →</a></p>
-  <p>© 2026 SneakyRadar. Free sneaker price comparison tool. Not affiliated with StockX, GOAT, Nike, or any retailer.</p>
 </div>
 </noscript>
+<div class="grain"></div>
 
 <script type="text/babel">
 const { useState, useRef, useEffect } = React;
@@ -731,8 +725,8 @@ function kicksToDrops(products) {
 async function fetchDrops(q, page = 1) {
   const action = q ? "search" : "trending";
   const payload = q
-    ? { action: "search", query: q, limit: 30, page: page }
-    : { action: "trending", limit: 30, page: page };
+    ? { action: "search", query: q, limit: 50, page: page }
+    : { action: "trending", limit: 50, page: page };
 
   console.log(`[SNEAKYRADAR] KicksDB ${action}:`, q || "trending", "page:", page);
 
@@ -785,7 +779,7 @@ function DropImage({src, name, brand, source, productUrl, onClick}) {
   return (
     <div className="card-img-wrap" onClick={onClick}>
       {(!imgSrc || err) ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
-        : <img className="card-img" src={imgSrc} alt={name} onError={()=>setErr(true)} loading="lazy"/>}
+        : <img className="card-img" src={imgSrc} alt={brand ? (brand + " " + name) : name} onError={()=>setErr(true)} loading="lazy"/>}
       {source && <div className="card-source-tag">{source}</div>}
     </div>
   );
@@ -977,7 +971,7 @@ function DropRadarPage() {
     setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
     setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
     // Update active category if it matches a category button
-    const matchedCat = CATEGORY_SEARCHES.find(c => c.query.toLowerCase() === q.toLowerCase());
+    const matchedCat = CATEGORY_SEARCHES.find(c => c.query && c.query.toLowerCase() === q.toLowerCase());
     if (matchedCat) setActiveCategory(matchedCat.label);
     else if (q === "") setActiveCategory("ALL");
     else setActiveCategory("");
@@ -987,7 +981,7 @@ function DropRadarPage() {
       setSteps([{label:"Searching all sources",status:"done",count:d.length}]);
       setDrops(d.length>0?d:DEFAULT_DROPS);
       if(!d.length) setError("No results found. Showing featured drops.");
-      if(d.length < 30) setHasMore(false);
+      if(d.length < 50) setHasMore(false);
       setUpdated(new Date().toLocaleTimeString());
       // Only cache landing page (non-search) results
       if (d.length > 0 && !q) {
@@ -1017,7 +1011,7 @@ function DropRadarPage() {
         const combined = dedupeDrops([...drops, ...moreDrops]);
         setDrops(combined);
         setPage(nextPage);
-        if(moreDrops.length < 30) setHasMore(false);
+        if(moreDrops.length < 50) setHasMore(false);
       }
     } catch(e) {
       console.error("Load more error:", e);
@@ -1054,51 +1048,72 @@ function DropRadarPage() {
   }, []);
 
   const CATEGORY_SEARCHES = [
-    {label: "ALL", query: ""},
-    {label: "JORDAN ALL", query: "Air Jordan Retro"},
-    {label: "JORDAN 1", query: "Jordan 1 Retro"},
-    {label: "JORDAN 3", query: "Jordan 3 Retro"},
-    {label: "JORDAN 4", query: "Jordan 4 Retro"},
-    {label: "JORDAN 5", query: "Jordan 5 Retro"},
-    {label: "JORDAN 11", query: "Jordan 11 Retro"},
-    {label: "JORDAN 12", query: "Jordan 12 Retro"},
-    {label: "JORDAN 13", query: "Jordan 13 Retro"},
-    {label: "TRAVIS SCOTT", query: "Travis Scott"},
-    {label: "NIKE DUNK", query: "Nike Dunk"},
-    {label: "AIR FORCE 1", query: "Air Force 1"},
-    {label: "AIR MAX", query: "Nike Air Max"},
-    {label: "NIKE SB", query: "Nike SB"},
-    {label: "KOBE", query: "Nike Kobe"},
-    {label: "FOAMPOSITE", query: "Nike Foamposite"},
-    {label: "YEEZY BOOST", query: "Yeezy Boost"},
-    {label: "YEEZY", query: "YZY"},
-    {label: "ADIDAS", query: "Adidas"},
-    {label: "NEW BALANCE", query: "New Balance"},
-    {label: "ASICS", query: "Asics"},
-    {label: "PUMA", query: "Puma"},
-    {label: "ON RUNNING", query: "On Running"},
-    {label: "ANTA", query: "Anta"},
-    {label: "SAUCONY", query: "Saucony"},
-    {label: "SALOMON", query: "Salomon"},
-    {label: "LEBRON", query: "Lebron"},
-    {label: "LUKA", query: "Jordan Luka"},
-    {label: "BALENCIAGA", query: "Balenciaga sneakers"},
-    {label: "VERSACE", query: "Versace sneakers"},
-    {label: "CONVERSE", query: "Converse"},
-    {label: "JA MORANT", query: "Nike Ja"},
-    {label: "MIZUNO", query: "Mizuno"},
-    {label: "SACAI", query: "Nike Sacai"},
-    {label: "BAD BUNNY", query: "Bad Bunny Adidas"},
-    {label: "ONITSUKA", query: "Onitsuka Tiger"},
-    {label: "HOKA", query: "Hoka"},
-    {label: "BROOKS", query: "Brooks"},
-    {label: "VANS", query: "Vans"},
-    {label: "UGG", query: "UGG"},
-    {label: "CROCS", query: "Crocs"},
+    {label: "ALL", query: "", group: "top"},
+    {label: "JORDAN ALL", query: "Air Jordan Retro", group: "jordan"},
+    {label: "JORDAN 1", query: "Jordan 1 Retro", group: "jordan"},
+    {label: "JORDAN 2", query: "Jordan 2 Retro", group: "jordan"},
+    {label: "JORDAN 3", query: "Jordan 3 Retro", group: "jordan"},
+    {label: "JORDAN 4", query: "Jordan 4 Retro", group: "jordan"},
+    {label: "JORDAN 5", query: "Jordan 5 Retro", group: "jordan"},
+    {label: "JORDAN 6", query: "Jordan 6 Retro", group: "jordan"},
+    {label: "JORDAN 7", query: "Jordan 7 Retro", group: "jordan"},
+    {label: "JORDAN 8", query: "Jordan 8 Retro", group: "jordan"},
+    {label: "JORDAN 9", query: "Jordan 9 Retro", group: "jordan"},
+    {label: "JORDAN 10", query: "Jordan 10 Retro", group: "jordan"},
+    {label: "JORDAN 11", query: "Jordan 11 Retro", group: "jordan"},
+    {label: "JORDAN 12", query: "Jordan 12 Retro", group: "jordan"},
+    {label: "JORDAN 13", query: "Jordan 13 Retro", group: "jordan"},
+    {label: "JORDAN 14", query: "Jordan 14 Retro", group: "jordan"},
+    {label: "---", group: "div1"},
+    {label: "TRAVIS SCOTT", query: "Travis Scott", group: "nike"},
+    {label: "NIKE DUNK", query: "Nike Dunk", group: "nike"},
+    {label: "AIR FORCE 1", query: "Air Force 1", group: "nike"},
+    {label: "AIR MAX", query: "Nike Air Max", group: "nike"},
+    {label: "AIR MAX 90", query: "Nike Air Max 90", group: "nike"},
+    {label: "AIR MAX 95", query: "Nike Air Max 95", group: "nike"},
+    {label: "AIR MAX 97", query: "Nike Air Max 97", group: "nike"},
+    {label: "NIKE SB", query: "Nike SB", group: "nike"},
+    {label: "KOBE", query: "Nike Kobe", group: "nike"},
+    {label: "FOAMPOSITE", query: "Nike Foamposite", group: "nike"},
+    {label: "LEBRON", query: "Lebron", group: "nike"},
+    {label: "JA MORANT", query: "Nike Ja", group: "nike"},
+    {label: "SACAI", query: "Nike Sacai", group: "nike"},
+    {label: "LUKA", query: "Jordan Luka", group: "nike"},
+    {label: "---", group: "div2"},
+    {label: "YEEZY BOOST", query: "Yeezy Boost", group: "yeezy"},
+    {label: "YEEZY", query: "YZY", group: "yeezy"},
+    {label: "ADIDAS", query: "Adidas", group: "yeezy"},
+    {label: "BAD BUNNY", query: "Bad Bunny Adidas", group: "yeezy"},
+    {label: "---", group: "div3"},
+    {label: "BALENCIAGA", query: "Balenciaga sneakers", group: "designer"},
+    {label: "VERSACE", query: "Versace sneakers", group: "designer"},
+    {label: "LOUIS VUITTON", query: "Louis Vuitton sneakers", group: "designer"},
+    {label: "ALEXANDER MCQUEEN", query: "Alexander McQueen sneakers", group: "designer"},
+    {label: "GUCCI", query: "Gucci sneakers", group: "designer"},
+    {label: "MAISON MIHARA", query: "Maison Mihara Yasuhiro", group: "designer"},
+    {label: "BURBERRY", query: "Burberry sneakers", group: "designer"},
+    {label: "PRADA", query: "Prada sneakers", group: "designer"},
+    {label: "---", group: "div4"},
+    {label: "NEW BALANCE", query: "New Balance", group: "other"},
+    {label: "ASICS", query: "Asics", group: "other"},
+    {label: "PUMA", query: "Puma", group: "other"},
+    {label: "ON RUNNING", query: "On Running", group: "other"},
+    {label: "ANTA", query: "Anta", group: "other"},
+    {label: "SAUCONY", query: "Saucony", group: "other"},
+    {label: "SALOMON", query: "Salomon", group: "other"},
+    {label: "CONVERSE", query: "Converse", group: "other"},
+    {label: "MIZUNO", query: "Mizuno", group: "other"},
+    {label: "ONITSUKA", query: "Onitsuka Tiger", group: "other"},
+    {label: "HOKA", query: "Hoka", group: "other"},
+    {label: "BROOKS", query: "Brooks", group: "other"},
+    {label: "VANS", query: "Vans", group: "other"},
+    {label: "UGG", query: "UGG", group: "other"},
+    {label: "CROCS", query: "Crocs", group: "other"},
   ];
   const [activeCategory, setActiveCategory] = useState("ALL");
 
   const handleCategoryClick = (cat) => {
+    if (!cat.query && cat.query !== "") return;
     setActiveCategory(cat.label);
     if (cat.query === "") {
       // ALL — search Jordan as default landing
@@ -1131,7 +1146,7 @@ function DropRadarPage() {
         </div>
         <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
         <div className="filters">
-          {CATEGORY_SEARCHES.map(cat=><button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
+          {CATEGORY_SEARCHES.map((cat,idx)=>cat.label==="---"?<div key={"div"+idx} style={{width:"100%",height:"1px",background:"var(--accent)",margin:"6px 0",opacity:0.4}}/>:<button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
         </div>
         {error&&<div className="error-msg">⚠ {error}</div>}
         {loading&&steps.length>0&&(
