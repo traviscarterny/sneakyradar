@@ -755,7 +755,7 @@ function DropImage({src, name, brand, source, productUrl, onClick}) {
   return (
     <div className="card-img-wrap" onClick={onClick}>
       {(!imgSrc || err) ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
-        : <img className="card-img" src={imgSrc} alt={name} onError={()=>setErr(true)} loading="lazy"/>}
+        : <img className="card-img" src={imgSrc} alt={brand ? (brand + " " + name) : name} onError={()=>setErr(true)} loading="lazy"/>}
       {source && <div className="card-source-tag">{source}</div>}
     </div>
   );
