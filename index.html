@@ -3,1470 +3,349 @@
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2JCYS8398G"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2JCYS8398G');</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SneakyRadar — Compare Sneaker Prices Across StockX, GOAT & More</title>
-  <meta name="description" content="Compare sneaker prices across StockX, GOAT, and more in one search. Track drops, find the best deals on Jordans, Yeezys, Dunks, New Balance, and 20+ brands. Real-time prices, release dates, and hype scores." />
-  <meta name="keywords" content="sneaker price comparison, StockX prices, GOAT prices, sneaker deals, Jordan releases, Yeezy drops, Nike Dunk, sneaker tracker, shoe price checker, sneaker shopping, resell tracker, sneaker release dates" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://www.sneakyradar.com" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SneakyRadar Blog — Sneaker Guides, Price Tips & Release News</title>
+<meta name="description" content="Sneaker buying guides, price comparison tips, release calendars, and market analysis from SneakyRadar. Shop smarter across StockX, GOAT, and more."/>
+<link rel="canonical" href="https://www.sneakyradar.com/blog"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f0f0f0;font-family:'DM Mono',monospace;font-size:15px;line-height:1.8}
+a{color:#ff3c00;text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:900px;margin:0 auto;padding:24px 20px 80px}
+.nav-bar{border-bottom:1px solid #222;padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px)}
+.nav-bar .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;cursor:pointer}
+.nav-bar .logo .s{color:#ff3c00}.nav-bar .logo .r{color:#f0f0f0}
+.nav-bar .back{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:#555;border:1px solid #333;padding:6px 14px;border-radius:3px}
+.nav-bar .back:hover{color:#f0f0f0;border-color:#555;text-decoration:none}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4rem);line-height:1;letter-spacing:2px;margin:48px 0 8px}
+h1 .accent{color:#ff3c00}
+.subtitle{font-size:0.75rem;color:#555;margin-bottom:48px}
 
-  <!-- Open Graph / Social -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="SneakyRadar — Compare Sneaker Prices Across StockX, GOAT & More" />
-  <meta property="og:description" content="Search once, compare prices everywhere. Track drops, find deals, and shop smarter across StockX, GOAT, and more." />
-  <meta property="og:url" content="https://www.sneakyradar.com" />
-  <meta property="og:site_name" content="SneakyRadar" />
-  <meta property="og:image" content="https://www.sneakyradar.com/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+.posts-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.post-card{background:#111;border:1px solid #222;border-radius:8px;overflow:hidden;transition:border-color 0.2s,transform 0.2s}
+.post-card:hover{border-color:#ff3c00;transform:translateY(-3px)}
+.post-card a{color:#f0f0f0;text-decoration:none;display:block}
+.post-card-img{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid #222}
+.post-card-body{padding:20px}
+.post-card-body h2{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:2px;margin-bottom:8px;line-height:1.2}
+.post-card-body p{color:#888;font-size:0.75rem;margin-bottom:14px;line-height:1.6}
+.post-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{display:inline-block;font-size:0.5rem;letter-spacing:2px;text-transform:uppercase;color:#ff3c00;border:1px solid #ff3c0044;padding:3px 10px;border-radius:3px}
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="SneakyRadar — Compare Sneaker Prices" />
-  <meta name="twitter:description" content="Search once, compare prices everywhere. Track drops across StockX, GOAT & more." />
-  <meta name="twitter:image" content="https://www.sneakyradar.com/og-image.png" />
+.footer-blog{border-top:1px solid #222;margin-top:60px;padding-top:24px;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#555;text-align:center}
 
-  <!-- Favicon: SR crosshair -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E" />
-
-  <!-- Structured Data: Website -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "SneakyRadar",
-    "url": "https://www.sneakyradar.com",
-    "description": "Compare sneaker prices across StockX, GOAT, and more. Track releases, find deals, and shop smarter.",
-    "applicationCategory": "ShoppingApplication",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --bg: #0a0a0a; --surface: #111; --border: #222;
-      --accent: #ff3c00; --accent2: #00ff94; --text: #f0f0f0; --muted: #555; --card: #141414;
-      --green: #00e676; --purple: #cc44ff;
-    }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
-    .grain { position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: 0.04;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
-    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes shimmer { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
-    @keyframes dropDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes typingBounce { 0%, 100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(-5px); opacity: 1; } }
-    .page { animation: fadeIn 0.2s ease; }
-    .nav { border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: stretch; justify-content: space-between; position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.97); backdrop-filter: blur(12px); height: 60px; }
-    .nav-left { display: flex; align-items: center; }
-    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 4px; padding-right: 32px; border-right: 1px solid var(--border); display: flex; align-items: center; }
-    .nav-logo .sneaky { color: var(--text); }
-    .nav-logo .radar { color: var(--accent); }
-    .nav-tabs { display: flex; align-items: stretch; }
-    .nav-tab { display: flex; align-items: center; gap: 7px; padding: 0 22px; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--muted); transition: all 0.15s; border-right: 1px solid var(--border); border-bottom: 2px solid transparent; background: transparent; border-top: none; border-left: none; font-family: 'DM Mono', monospace; }
-    .nav-tab:hover { color: var(--text); background: #111; }
-    .nav-tab.active { color: var(--text); border-bottom-color: var(--accent); background: #0e0e0e; }
-    .hamburger { display: none; }
-    .mobile-menu { display: none; }
-    .nav-right { display: flex; align-items: center; gap: 12px; }
-    .alert-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
-    .alert-btn:hover { background: var(--accent); color: white; }
-    .alert-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
-    .section-wrap { max-width: 1200px; margin: 0 auto; padding: 60px 40px 100px; }
-    .section-eyebrow { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); line-height: 0.9; letter-spacing: 2px; margin-bottom: 6px; }
-    .section-title .outline { -webkit-text-stroke: 1px var(--text); color: transparent; }
-    .section-title .filled { color: var(--accent); }
-    .section-sub { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.5px; line-height: 1.7; margin-bottom: 40px; max-width: 520px; }
-    .search-row { display: flex; max-width: 900px; margin: 0 0 24px; }
-    .search-bar { flex: 1; display: flex; border: 1px solid var(--border); background: var(--surface); border-right: none; }
-    .search-bar input { flex: 1; background: transparent; border: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.85rem; padding: 16px 20px; outline: none; letter-spacing: 1px; }
-    .search-bar input::placeholder { color: var(--muted); }
-    .src-dropdown-wrap { position: relative; }
-    .src-dropdown-btn { height: 100%; background: #1a1a1a; border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; padding: 0 20px; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px; transition: background 0.15s; text-transform: uppercase; min-width: 160px; justify-content: space-between; }
-    .src-dropdown-btn:hover { background: #222; }
-    .chevron { transition: transform 0.2s; font-size: 0.6rem; }
-    .chevron.open { transform: rotate(180deg); }
-    .count-badge { background: var(--accent); color: white; font-size: 0.55rem; padding: 1px 5px; min-width: 18px; text-align: center; }
-    .src-dropdown-menu { position: absolute; top: calc(100% + 1px); left: 0; right: 0; min-width: 240px; background: #111; border: 1px solid var(--border); z-index: 200; animation: dropDown 0.15s ease; max-height: 420px; overflow-y: auto; scrollbar-width: thin; }
-    .src-menu-header { padding: 10px 14px; font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .src-menu-header button { background: none; border: none; color: var(--accent); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; }
-    .src-menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid #1a1a1a; font-size: 0.7rem; letter-spacing: 1px; }
-    .src-menu-item:hover { background: #1a1a1a; }
-    .src-checkbox { width: 14px; height: 14px; border: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-    .src-checkbox.checked { border-color: var(--accent2); background: var(--accent2); }
-    .src-checkbox.checked::after { content: '✓'; color: #000; font-size: 0.6rem; font-weight: bold; }
-    .src-color-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .src-label { color: var(--text); flex: 1; }
-    .src-url { font-size: 0.55rem; color: var(--muted); }
-    .search-go-btn { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 3px; padding: 0 32px; cursor: pointer; transition: background 0.15s; }
-    .search-go-btn:hover { background: #ff5a20; }
-    .search-go-btn:disabled { background: var(--muted); cursor: not-allowed; }
-    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; justify-content: center; }
-    .filter-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
-    .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
-    .result-source-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
-    .rsf-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
-    .rsf-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
-    .rsf-btn:hover, .rsf-btn.active { border-color: var(--accent2); color: var(--accent2); }
-    .progress-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; margin-bottom: 24px; }
-    .progress-step { display: flex; align-items: center; gap: 8px; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; }
-    .step-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .step-dot.done { background: var(--accent2); } .step-dot.active { background: var(--accent); animation: pulse 1s infinite; } .step-dot.pending { background: var(--border); }
-    .step-label.done { color: var(--accent2); } .step-label.active { color: var(--text); } .step-label.pending { color: var(--muted); }
-    .status-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-    .pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
-    .error-msg { margin: 0 0 24px; padding: 16px 20px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; letter-spacing: 1px; line-height: 1.6; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.3s; z-index: 2; }
-    .card:hover { background: #1a1a1a; }
-    .card:hover::before { height: 100%; }
-    .card.sponsored { outline: 1px solid var(--accent2); }
-    .card.sponsored::before { background: var(--accent2); }
-    .sponsor-banner { background: var(--accent2); color: #000; font-size: 0.5rem; letter-spacing: 3px; text-transform: uppercase; padding: 4px 14px; display: flex; justify-content: space-between; }
-    .card-img-wrap { width: 100%; height: 200px; background: #191919; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); position: relative; cursor: pointer; }
-    .card-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: transform 0.35s ease; }
-    .card:hover .card-img { transform: scale(1.06); }
-    .card-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: #2a2a2a; }
-    .card-source-tag { position: absolute; bottom: 8px; right: 8px; font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; background: rgba(0,0,0,0.8); border: 1px solid var(--border); color: var(--muted); }
-    .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-    .card-brand { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-    .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; line-height: 1.1; margin-bottom: 6px; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.2em; height: 2.2em; }
-    .card-name:hover { color: var(--accent2); }
-    .card-colorway { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; }
-    .card-meta { display: flex; flex-direction: column; gap: 6px; }
-    .meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; letter-spacing: 1px; }
-    .meta-label { color: var(--muted); text-transform: uppercase; }
-    .meta-value { color: var(--text); }
-    .price { color: var(--accent2); font-size: 0.85rem; }
-    .hype-bar { margin-top: 12px; height: 2px; background: var(--border); overflow: hidden; }
-    .hype-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-    .hype-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 5px; display: flex; justify-content: space-between; }
-    .badge { display: inline-block; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 3px 8px; border: 1px solid; margin-bottom: 8px; }
-    .badge-hot { border-color: var(--accent); color: var(--accent); }
-    .badge-upcoming { border-color: var(--accent2); color: var(--accent2); }
-    .badge-limited { border-color: #a0f; color: #a0f; }
-    .price-compare { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
-    .price-compare-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
-    .price-compare-rows { display: flex; flex-direction: column; gap: 5px; }
-    .price-row { display: flex; align-items: center; gap: 8px; }
-    .price-row-store { font-size: 0.6rem; letter-spacing: 1px; color: var(--muted); flex: 1; text-transform: uppercase; }
-    .price-row-amount { font-size: 0.75rem; color: #00ff94; min-width: 48px; text-align: right; }
-    .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
-    .price-row-btn:hover { border-color: var(--accent2); color: var(--accent2); }
-    .price-row-btn.best { border-color: var(--accent2); color: #000; background: var(--accent2); }
-    .loading-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .loading-card { background: var(--card); animation: shimmer 1.5s ease-in-out infinite; }
-    .loading-img { width: 100%; height: 200px; background: #1a1a1a; border-bottom: 1px solid var(--border); }
-    .loading-body { padding: 20px; }
-    .skeleton { background: var(--border); margin-bottom: 12px; }
-    .empty-state { text-align: center; padding: 80px 40px; color: var(--muted); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--border); }
-    .empty-state h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--border); letter-spacing: 4px; margin-bottom: 16px; }
-    .resell-table { width: 100%; border: 1px solid var(--border); border-collapse: collapse; }
-    .resell-mobile { display: none; }
-    .resell-table th { background: #111; padding: 12px 16px; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); font-weight: 400; cursor: pointer; }
-    .resell-table td { padding: 14px 16px; font-size: 0.72rem; letter-spacing: 0.5px; border-bottom: 1px solid #1a1a1a; vertical-align: middle; }
-    .resell-table tr:hover td { background: #161616; }
-    .resell-brand { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
-    .resell-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
-    .resell-price-avg { color: var(--accent2); font-size: 0.85rem; }
-    .resell-price-low { color: var(--muted); font-size: 0.7rem; }
-    .resell-price-high { color: var(--text); font-size: 0.7rem; }
-    .trend-up { color: var(--green); font-size: 0.7rem; }
-    .trend-down { color: var(--accent); font-size: 0.7rem; }
-    .hot-tag { background: var(--accent); color: white; font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; }
-    .vol-tag { font-size: 0.6rem; color: var(--muted); }
-    .resell-buy-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; white-space: nowrap; }
-    .resell-buy-btn:hover { border-color: var(--accent2); color: var(--accent2); }
-    .resell-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
-    .resell-stat { background: var(--card); padding: 24px; }
-    .resell-stat-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-    .resell-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--accent2); }
-    .resell-stat-sub { font-size: 0.6rem; color: var(--muted); margin-top: 4px; }
-    .auth-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
-    .auth-card { background: var(--card); padding: 24px; cursor: pointer; transition: background 0.15s; position: relative; overflow: hidden; }
-    .auth-card:hover { background: #1a1a1a; }
-    .auth-card.selected { background: #1a1a1a; outline: 1px solid var(--accent); }
-    .auth-model { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 6px; }
-    .auth-diff { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-    .auth-diff.easy { color: var(--green); } .auth-diff.medium { color: var(--accent2); } .auth-diff.hard { color: var(--accent); } .auth-diff.veryhard { color: var(--purple); }
-    .fake-score-label { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; }
-    .fake-score-bar { height: 3px; background: var(--border); overflow: hidden; }
-    .fake-score-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--accent2), var(--accent)); }
-    .auth-cta { font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-top: 12px; }
-    .auth-detail { border: 1px solid var(--border); animation: fadeIn 0.2s ease; }
-    .auth-detail-header { background: #111; padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-    .auth-detail-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; }
-    .auth-detail-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
-    .auth-detail-close:hover { color: var(--text); }
-    .auth-check { padding: 20px 28px; border-bottom: 1px solid #1a1a1a; display: grid; grid-template-columns: 160px 1fr 1fr 1fr; gap: 20px; align-items: start; }
-    .auth-check:last-child { border-bottom: none; }
-    .auth-check-area { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; padding-top: 2px; }
-    .auth-check-real { font-size: 0.68rem; color: var(--green); line-height: 1.5; }
-    .auth-check-fake { font-size: 0.68rem; color: var(--accent); line-height: 1.5; }
-    .auth-check-tip { font-size: 0.68rem; color: var(--accent2); line-height: 1.5; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.2s; }
-    .modal { background: #0e0e0e; border: 1px solid var(--border); width: 480px; max-width: 95vw; animation: fadeIn 0.25s ease; }
-    .modal-header { padding: 24px 28px 0; display: flex; align-items: flex-start; justify-content: space-between; }
-    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; }
-    .modal-title span { color: var(--accent); }
-    .modal-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; line-height: 1; }
-    .modal-body { padding: 16px 28px 28px; }
-    .modal-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
-    .modal-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
-    .modal-feature { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; color: var(--text); }
-    .modal-feature-dot { width: 5px; height: 5px; background: var(--accent2); border-radius: 50%; flex-shrink: 0; }
-    .modal-form { display: flex; }
-    .modal-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.8rem; padding: 13px 16px; outline: none; }
-    .modal-input:focus { border-color: var(--accent); }
-    .modal-input::placeholder { color: var(--muted); }
-    .modal-submit { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; padding: 13px 24px; cursor: pointer; }
-    .modal-submit:hover { background: #ff5a20; }
-    .modal-success { text-align: center; padding: 40px 28px; }
-    .modal-fine { font-size: 0.55rem; color: var(--muted); margin-top: 12px; line-height: 1.5; opacity: 0.7; }
-    .chat-fab { position: fixed; bottom: 32px; right: 32px; z-index: 200; width: 60px; height: 60px; background: var(--accent); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px #ff3c0044, 0 8px 32px rgba(255,60,0,0.4); transition: transform 0.2s; font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: white; flex-direction: column; gap: 2px; }
-    .chat-fab:hover { transform: scale(1.06); }
-    .chat-fab svg { width: 22px; height: 22px; }
-    .chat-window { position: fixed; bottom: 108px; right: 32px; z-index: 200; width: 400px; max-height: 600px; background: #0e0e0e; border: 1px solid var(--border); display: flex; flex-direction: column; box-shadow: 0 24px 80px rgba(0,0,0,0.8); animation: fadeIn 0.25s ease; }
-    .chat-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #111; }
-    .chat-header-left { display: flex; align-items: center; gap: 12px; }
-    .chat-avatar { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: white; flex-shrink: 0; }
-    .chat-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; }
-    .chat-subtitle { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 1px; display: flex; align-items: center; gap: 5px; }
-    .chat-online { width: 7px; height: 7px; background: #00e676; border-radius: 50%; animation: pulse 2s infinite; }
-    .chat-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; padding: 4px; line-height: 1; }
-    .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; }
-    .msg { display: flex; gap: 10px; animation: fadeIn 0.2s ease; }
-    .msg.user { flex-direction: row-reverse; }
-    .msg-avatar { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; }
-    .msg-avatar.bot { background: var(--accent); color: white; }
-    .msg-avatar.user { background: var(--border); color: var(--muted); }
-    .msg-bubble { max-width: calc(100% - 44px); padding: 10px 14px; font-size: 0.75rem; line-height: 1.6; border: 1px solid var(--border); }
-    .msg.bot .msg-bubble { background: #161616; }
-    .msg.user .msg-bubble { background: #1a0a00; border-color: #ff3c0044; }
-    .msg-bubble strong { color: var(--accent2); font-weight: 500; }
-    .msg-bubble em { color: var(--accent); font-style: normal; }
-    .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
-    .typing-dot { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typingBounce 1.2s ease-in-out infinite; }
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    .chat-suggestions { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; }
-    .suggestion-chip { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; padding: 5px 10px; cursor: pointer; transition: all 0.15s; }
-    .suggestion-chip:hover { border-color: var(--accent); color: var(--accent); }
-    .chat-input-row { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; background: #111; }
-    .chat-input { flex: 1; background: transparent; border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 10px 14px; outline: none; resize: none; max-height: 80px; line-height: 1.4; }
-    .chat-input::placeholder { color: var(--muted); }
-    .chat-send { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 10px 16px; cursor: pointer; }
-    .chat-send:hover { background: #ff5a20; }
-    .chat-send:disabled { background: var(--muted); cursor: not-allowed; }
-    .chat-clear { background: transparent; border: none; color: var(--muted); font-size: 0.6rem; letter-spacing: 1px; cursor: pointer; font-family: 'DM Mono', monospace; text-transform: uppercase; }
-    .site-footer { max-width: 1200px; margin: 0 auto; padding: 20px 40px 40px; font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 4px; }
-    .footer-logo .radar { color: var(--accent); }
-    @media (max-width: 768px) {
-      .nav { padding: 0 12px; height: 48px; position: relative; }
-      .nav-left { width: 100%; padding: 0; display: flex; align-items: center; justify-content: space-between; }
-      .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; padding: 10px 0; }
-      .nav-tabs { display: none; }
-      .nav-right { display: none; }
-      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 1.2rem; width: 36px; height: 36px; cursor: pointer; border-radius: 4px; font-family: inherit; }
-      .mobile-menu { display: block; position: absolute; top: 100%; right: 12px; background: rgba(15,15,15,0.98); border: 1px solid var(--border); border-radius: 6px; z-index: 100; min-width: 200px; overflow: hidden; backdrop-filter: blur(12px); }
-      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
-      .mobile-menu-item:last-child { border-bottom: none; }
-      .mobile-menu-item:hover, .mobile-menu-item.active { color: var(--text); background: rgba(255,255,255,0.05); }
-      .mobile-menu-item.active { color: var(--accent); }
-      .result-source-filters { display: none; }
-      .section-wrap { padding: 24px 12px 80px; }
-      .section-title { font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 48px; }
-      .section-sub { font-size: 0.7rem; margin-bottom: 24px; display: none; }
-      .search-row { flex-direction: column; gap: 8px; }
-      .search-bar { border-right: 1px solid var(--border); }
-      .search-bar input { font-size: 0.8rem; padding: 14px 14px; }
-      .search-go-btn { padding: 14px 24px; width: 100%; }
-      .filters { gap: 6px; margin-bottom: 16px; justify-content: center; }
-      .filter-btn { font-size: 0.55rem; padding: 5px 10px; letter-spacing: 1px; }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; }
-      .card-img-wrap { height: 150px; }
-      .card-img { padding: 12px; }
-      .card-body { padding: 12px; }
-      .card-brand { font-size: 0.5rem; letter-spacing: 2px; }
-      .card-name { font-size: 1.1rem; letter-spacing: 1px; min-height: 2.2em; height: 2.2em; }
-      .card-colorway { font-size: 0.55rem; }
-      .card-meta { font-size: 0.6rem; }
-      .meta-row { font-size: 0.6rem; }
-      .price { font-size: 0.65rem; }
-      .hype-label { font-size: 0.55rem; }
-      .badge { font-size: 0.45rem; padding: 2px 6px; }
-      .status-bar { font-size: 0.55rem; }
-      .resell-stats { grid-template-columns: repeat(2, 1fr); }
-      .resell-table { display: none; }
-      .resell-mobile { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
-      .resell-m-card { background: var(--card); padding: 14px; }
-      .resell-m-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-      .resell-m-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; line-height: 1.2; max-width: 65%; }
-      .resell-m-brand { font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
-      .resell-m-avg { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--green); }
-      .resell-m-row { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--muted); padding: 4px 0; border-top: 1px solid #1a1a1a; }
-      .resell-m-row span:last-child { color: var(--text); }
-      .resell-m-btns { display: flex; gap: 8px; margin-top: 10px; }
-      .resell-m-btns a { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px; border: 1px solid var(--border); color: var(--text); text-decoration: none; border-radius: 3px; }
-      .resell-m-btns a:hover { border-color: var(--accent); }
-      .auth-check { grid-template-columns: 1fr; }
-      .chat-fab { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 0.5rem; }
-      .chat-fab svg { width: 18px; height: 18px; }
-      .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: 60vh; }
-      .chat-input-row input { font-size: 0.8rem; }
-      .price-compare { gap: 4px; }
-      .price-compare a { font-size: 0.55rem; padding: 4px 6px; }
-    }
-    @media (max-width: 380px) {
-      .grid { grid-template-columns: 1fr; }
-      .card-img-wrap { height: 180px; }
-      .nav-tabs { gap: 0; }
-      .nav-tab { padding: 10px 10px; font-size: 0.45rem; }
-      .filter-btn { font-size: 0.5rem; padding: 4px 8px; }
-      .site-footer { flex-direction: column; gap: 8px; padding: 16px; text-align: center; }
-    }
-    /* Release Calendar */
-    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
-    .cal-month-nav{display:flex;align-items:center;gap:16px}
-    .cal-month-nav button{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;cursor:pointer;transition:all .15s;letter-spacing:1px}
-    .cal-month-nav button:hover{border-color:var(--accent);color:var(--accent)}
-    .cal-month-label{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:3px;min-width:260px;text-align:center}
-    .cal-month-label span{color:var(--accent)}
-    .cal-view-toggle{display:flex;border:1px solid var(--border)}
-    .cal-view-btn{background:transparent;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;cursor:pointer;transition:all .15s}
-    .cal-view-btn.active{background:var(--accent);color:white}
-    .cal-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
-    .cal-filter-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all .15s;white-space:nowrap}
-    .cal-filter-btn:hover{border-color:var(--text);color:var(--text)}
-    .cal-filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(255,60,0,.08)}
-    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:40px}
-    .cal-day-header{background:var(--surface);padding:10px;text-align:center;font-size:.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
-    .cal-day{background:var(--bg);min-height:120px;padding:8px;position:relative;transition:background .15s}
-    .cal-day:hover{background:#0e0e0e}
-    .cal-day.other-month{opacity:.3}
-    .cal-day.today{background:rgba(255,60,0,.04)}
-    .cal-day.today::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
-    .cal-day-num{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--muted);margin-bottom:4px}
-    .cal-day.today .cal-day-num{color:var(--accent)}
-    .cal-release-pip{font-size:.45rem;padding:2px 5px;margin-bottom:2px;border-radius:2px;cursor:pointer;transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;display:block}
-    .cal-release-pip:hover{transform:translateX(2px);filter:brightness(1.3)}
-    .cal-release-pip.brand-jordan{background:rgba(255,60,0,.15);color:#ff6b3d;border-left:2px solid #ff3c00}
-    .cal-release-pip.brand-nike{background:rgba(255,255,255,.06);color:#ccc;border-left:2px solid #888}
-    .cal-release-pip.brand-adidas{background:rgba(0,200,120,.1);color:#00e676;border-left:2px solid #00e676}
-    .cal-release-pip.brand-collab{background:rgba(200,68,255,.1);color:#cc44ff;border-left:2px solid #cc44ff}
-    .cal-release-pip.brand-other{background:rgba(100,180,255,.1);color:#64b5f6;border-left:2px solid #64b5f6}
-    .cal-more{font-size:.45rem;color:var(--muted);padding:2px 5px;cursor:pointer}
-    .cal-more:hover{color:var(--accent)}
-    .cal-list{display:flex;flex-direction:column;gap:2px}
-    .cal-list-date{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;padding:20px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px;color:var(--muted)}
-    .cal-list-date span{color:var(--accent)}
-    .cal-list-item{display:flex;align-items:center;gap:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);transition:all .15s;cursor:pointer}
-    .cal-list-item:hover{border-color:var(--accent);background:#161616;transform:translateX(4px)}
-    .cal-list-info{flex:1;min-width:0}
-    .cal-list-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .cal-list-meta{font-size:.6rem;color:var(--muted);letter-spacing:.5px;margin-top:2px}
-    .cal-list-sku{font-size:.55rem;color:var(--muted);letter-spacing:1px;margin-top:1px}
-    .cal-list-price{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--green);white-space:nowrap}
-    .cal-list-actions{display:flex;gap:6px;flex-shrink:0}
-    .cal-list-btn{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:1.5px;text-transform:uppercase;padding:6px 12px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
-    .cal-list-btn:hover{border-color:var(--accent);color:var(--accent)}
-    .cal-list-btn.primary{background:var(--accent);border-color:var(--accent);color:white}
-    .cal-list-btn.primary:hover{background:#ff5522}
-    .cal-legend{display:flex;gap:16px;flex-wrap:wrap;padding:16px 0;border-top:1px solid var(--border);margin-top:20px}
-    .cal-legend-item{display:flex;align-items:center;gap:6px;font-size:.55rem;color:var(--muted);letter-spacing:1px}
-    .cal-legend-dot{width:8px;height:8px;border-radius:1px}
-    .cal-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .15s ease}
-    .cal-modal{background:var(--bg);border:1px solid var(--border);max-width:500px;width:100%;max-height:80vh;overflow-y:auto}
-    .cal-modal-head{display:flex;justify-content:space-between;align-items:flex-start;padding:24px 24px 0}
-    .cal-modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
-    .cal-modal-close:hover{color:var(--text)}
-    .cal-modal-body{padding:16px 24px 24px}
-    .cal-modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;line-height:1.1}
-    .cal-modal-details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
-    .cal-modal-detail label{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
-    .cal-modal-detail span{font-family:'Bebas Neue',sans-serif;font-size:1.2rem}
-    .cal-modal-btns{display:flex;gap:8px;margin-top:16px}
-    .cal-modal-btns a{flex:1;text-align:center}
-    .cal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px}
-    .cal-stat{background:var(--bg);padding:16px 20px}
-    .cal-stat-label{font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-    .cal-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px}
-    .cal-stat-val.accent{color:var(--accent)}
-    .cal-stat-val.green{color:var(--green)}
-    @media(max-width:768px){
-      .cal-grid{grid-template-columns:repeat(7,1fr)}.cal-day{min-height:70px;padding:4px}.cal-day-num{font-size:.9rem}.cal-release-pip{font-size:.35rem;padding:1px 3px}
-      .cal-stats{grid-template-columns:repeat(2,1fr)}.cal-list-item{flex-wrap:wrap;gap:10px}.cal-list-actions{width:100%}.cal-list-btn{flex:1;text-align:center}
-      .cal-month-label{font-size:1.6rem;min-width:auto}.cal-header{justify-content:center}
-    }
-  </style>
+@media(max-width:640px){
+  h1{font-size:2.5rem}
+  .wrap{padding:16px 14px 60px}
+  .posts-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
-<div id="root"></div>
-<div class="grain"></div>
+<div class="nav-bar">
+<a href="/" class="logo"><span class="s">SNEAKY</span><span class="r">RADAR</span></a>
+<a href="/" class="back">← Back to Drop Radar</a>
+</div>
+<div class="wrap">
+<h1><span class="accent">SNEAKY</span>RADAR BLOG</h1>
+<div class="subtitle">Guides, market analysis, and tips to help you buy smarter.</div>
 
-<script type="text/babel">
-const { useState, useRef, useEffect } = React;
+<div class="posts-grid">
 
-const API_URL = "/.netlify/functions/anthropic";
+<!-- Jordan Releases 2026 -->
+<div class="post-card">
+<a href="/blog/best-jordan-releases-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<rect width="400" height="225" fill="#ff3c00" opacity="0.08"/>
+<!-- Jordan wings logo inspired shape -->
+<circle cx="200" cy="90" r="50" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.3"/>
+<circle cx="200" cy="90" r="35" fill="none" stroke="#ff3c00" stroke-width="1.5" opacity="0.2"/>
+<path d="M160 90 L200 50 L240 90 L200 130 Z" fill="#ff3c00" opacity="0.15"/>
+<text x="200" y="98" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="36" fill="#ff3c00" font-weight="900">23</text>
+<text x="200" y="170" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="22" fill="#ffffff" letter-spacing="4">AIR JORDAN</text>
+<text x="200" y="198" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ff3c00" letter-spacing="6">2026 RELEASES</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Releases</span><span class="tag">Jordan</span></div>
+<h2>Best Air Jordan Releases 2026: Every Drop, Price & Where to Buy</h2>
+<p>Complete guide to every major Air Jordan release in 2026 — retail prices, resell estimates, and where to find the best deals.</p>
+</div>
+</a>
+</div>
 
-const AFFILIATE = {
-  stockx:      { tag: "YOUR_STOCKX_CODE",  param: "utm_source" },
-  goat:        { tag: "YOUR_GOAT_CODE",    param: "ref" },
-  footlocker:  { tag: "YOUR_FL_CODE",      param: "AID" },
-  jd:          { tag: "YOUR_JD_CODE",      param: "affil" },
-  hibbett:     { tag: "YOUR_HIBBETT_CODE", param: "ref" },
-  champssports:{ tag: "YOUR_CHAMPS_CODE",  param: "AID" },
-  eastbay:     { tag: "YOUR_EASTBAY_CODE", param: "AID" },
-  kickscrew:   { tag: "YOUR_KC_CODE",      param: "ref" },
-};
-function affLink(url, sourceId) {
-  if (!url) return "#";
-  const aff = AFFILIATE[sourceId];
-  if (!aff || aff.tag.startsWith("YOUR_")) return url;
-  try { const u = new URL(url); u.searchParams.set(aff.param, aff.tag); u.searchParams.set("utm_campaign", "sneakyradar"); return u.toString(); } catch { return url; }
-}
-function trackClick(drop, storeId) { console.log(`[SNEAKYRADAR] click — ${drop.name} -> ${storeId}`); }
+<!-- StockX vs GOAT -->
+<div class="post-card">
+<a href="/blog/sneaker-price-comparison-guide">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Split comparison layout -->
+<rect x="0" y="0" width="195" height="225" fill="#0e1a0e" opacity="0.5"/>
+<rect x="205" y="0" width="195" height="225" fill="#1a0e0e" opacity="0.5"/>
+<line x1="200" y1="20" x2="200" y2="205" stroke="#333" stroke-width="2" stroke-dasharray="6,4"/>
+<!-- Price tags -->
+<rect x="50" y="50" width="100" height="40" rx="6" fill="none" stroke="#00ff94" stroke-width="2"/>
+<text x="100" y="76" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#00ff94">$285</text>
+<rect x="250" y="50" width="100" height="40" rx="6" fill="none" stroke="#ff3c00" stroke-width="2"/>
+<text x="300" y="76" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ff3c00">$312</text>
+<!-- Labels -->
+<text x="100" y="120" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="2">STOCKX</text>
+<text x="200" y="120" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#555">vs</text>
+<text x="300" y="120" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="2">GOAT</text>
+<text x="200" y="170" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ff3c00" letter-spacing="3">PRICE COMPARISON</text>
+<text x="200" y="198" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#666" letter-spacing="2">WHO HAS THE BEST DEALS?</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">Comparison</span></div>
+<h2>StockX vs GOAT 2026: Where to Buy Sneakers for the Best Price</h2>
+<p>Detailed comparison of fees, prices, shipping, and authentication between the two biggest sneaker resale platforms.</p>
+</div>
+</a>
+</div>
 
-const SPONSORED_DROPS = [];
+<!-- Best Under $150 -->
+<div class="post-card">
+<a href="/blog/best-sneakers-under-150">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<rect width="400" height="225" fill="#00ff94" opacity="0.04"/>
+<!-- Big price tag -->
+<rect x="120" y="30" width="160" height="90" rx="12" fill="none" stroke="#00ff94" stroke-width="3"/>
+<circle cx="145" cy="45" r="8" fill="none" stroke="#00ff94" stroke-width="2"/>
+<text x="200" y="68" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#888">UNDER</text>
+<text x="200" y="104" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="48" fill="#00ff94">$150</text>
+<text x="200" y="160" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="20" fill="#ffffff" letter-spacing="3">BEST SNEAKERS</text>
+<text x="200" y="190" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#666" letter-spacing="2">JORDANS • DUNKS • YEEZYS • MORE</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Deals</span><span class="tag">Budget</span></div>
+<h2>Best Sneakers Under $150 in 2026: Jordans, Dunks, Yeezys & More</h2>
+<p>Great sneakers that won't break the bank — Dunks, Jordans, Yeezys, New Balance, and ASICS all under $150 on resale.</p>
+</div>
+</a>
+</div>
 
-const RESELL_DATA = [
-  // === JORDAN ===
-  { brand:"Jordan",name:"Air Jordan 1 Retro High Chicago",retail:"$180",low:"$350",avg:"$420",high:"$520",trend:"+15%",hot:true,vol:"1.8k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 1 High Dark Mocha",retail:"$170",low:"$380",avg:"$493",high:"$580",trend:"+10%",hot:true,vol:"1.4k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 3 White Cement Reimagined",retail:"$200",low:"$210",avg:"$248",high:"$310",trend:"+5%",hot:false,vol:"2.8k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 4 Military Blue",retail:"$215",low:"$310",avg:"$348",high:"$420",trend:"+12%",hot:true,vol:"2.4k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 4 Black Cat",retail:"$190",low:"$280",avg:"$340",high:"$410",trend:"+9%",hot:true,vol:"2.1k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 4 Bred Reimagined",retail:"$210",low:"$290",avg:"$355",high:"$430",trend:"+14%",hot:true,vol:"1.9k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 5 Retro Fire Red",retail:"$208",low:"$174",avg:"$198",high:"$299",trend:"-3%",hot:false,vol:"1.6k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 11 Space Jam",retail:"$225",low:"$320",avg:"$395",high:"$480",trend:"+8%",hot:true,vol:"1.5k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 11 Legend Blue",retail:"$220",low:"$178",avg:"$259",high:"$442",trend:"+2%",hot:false,vol:"1.3k sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 12 Taxi",retail:"$200",low:"$180",avg:"$215",high:"$280",trend:"+1%",hot:false,vol:"980 sales/wk"},
-  { brand:"Jordan",name:"Air Jordan 13 Chicago (2026)",retail:"$215",low:"$240",avg:"$320",high:"$390",trend:"+18%",hot:true,vol:"870 sales/wk"},
-  // === TRAVIS SCOTT ===
-  { brand:"Travis Scott",name:"TS x Jordan 1 Low Reverse Mocha",retail:"$150",low:"$980",avg:"$1163",high:"$1400",trend:"+6%",hot:true,vol:"620 sales/wk"},
-  { brand:"Travis Scott",name:"TS x Fragment x Jordan 1 Low",retail:"$150",low:"$1100",avg:"$1450",high:"$1800",trend:"+4%",hot:true,vol:"410 sales/wk"},
-  { brand:"Travis Scott",name:"TS x Jordan 1 Low Black Phantom",retail:"$150",low:"$350",avg:"$440",high:"$550",trend:"+11%",hot:true,vol:"780 sales/wk"},
-  { brand:"Travis Scott",name:"TS x Air Max 1 Baroque Brown",retail:"$150",low:"$420",avg:"$510",high:"$640",trend:"+22%",hot:true,vol:"890 sales/wk"},
-  // === NIKE ===
-  { brand:"Nike",name:"Dunk Low Panda",retail:"$110",low:"$58",avg:"$85",high:"$110",trend:"-8%",hot:false,vol:"5.1k sales/wk"},
-  { brand:"Nike",name:"Dunk Low Grey Fog",retail:"$110",low:"$90",avg:"$115",high:"$140",trend:"+2%",hot:false,vol:"2.2k sales/wk"},
-  { brand:"Nike",name:"SB Dunk Low Stranger Things",retail:"$120",low:"$250",avg:"$340",high:"$420",trend:"+28%",hot:true,vol:"560 sales/wk"},
-  { brand:"Nike",name:"Air Force 1 Low White",retail:"$110",low:"$75",avg:"$95",high:"$120",trend:"-1%",hot:false,vol:"6.8k sales/wk"},
-  { brand:"Nike",name:"Air Max 95 OG Neon",retail:"$190",low:"$200",avg:"$250",high:"$320",trend:"+7%",hot:true,vol:"1.1k sales/wk"},
-  { brand:"Nike",name:"Air Max 1 Obsidian",retail:"$140",low:"$120",avg:"$148",high:"$180",trend:"+3%",hot:false,vol:"1.4k sales/wk"},
-  { brand:"Nike",name:"Mars Yard 3.0",retail:"$275",low:"$750",avg:"$1075",high:"$1400",trend:"+291%",hot:true,vol:"320 sales/wk"},
-  // === NIKE KOBE ===
-  { brand:"Nike",name:"Kobe 6 Protro Reverse Grinch",retail:"$190",low:"$320",avg:"$410",high:"$520",trend:"+35%",hot:true,vol:"680 sales/wk"},
-  { brand:"Nike",name:"Kobe 8 Protro What The",retail:"$190",low:"$280",avg:"$350",high:"$450",trend:"+25%",hot:true,vol:"540 sales/wk"},
-  { brand:"Nike",name:"Kobe 6 Protro Grinch",retail:"$190",low:"$380",avg:"$470",high:"$580",trend:"+18%",hot:true,vol:"720 sales/wk"},
-  { brand:"Nike",name:"Ja 3 Midnight Navy",retail:"$130",low:"$110",avg:"$138",high:"$175",trend:"+9%",hot:true,vol:"1.6k sales/wk"},
-  // === OFF-WHITE ===
-  { brand:"Nike",name:"Off-White Dunk Low Lot 1",retail:"$170",low:"$800",avg:"$980",high:"$1300",trend:"+18%",hot:true,vol:"340 sales/wk"},
-  { brand:"Nike",name:"Off-White Jordan 4 Sail",retail:"$200",low:"$680",avg:"$820",high:"$1000",trend:"+12%",hot:true,vol:"290 sales/wk"},
-  // === SACAI ===
-  { brand:"Nike",name:"Sacai LD Waffle Green Gusto",retail:"$160",low:"$280",avg:"$360",high:"$440",trend:"+5%",hot:false,vol:"380 sales/wk"},
-  // === ADIDAS ===
-  { brand:"Adidas",name:"Samba OG Cloud White",retail:"$100",low:"$128",avg:"$142",high:"$165",trend:"+8%",hot:true,vol:"3.7k sales/wk"},
-  { brand:"Adidas",name:"Campus 00s Core Black",retail:"$100",low:"$85",avg:"$108",high:"$135",trend:"+4%",hot:false,vol:"3.2k sales/wk"},
-  { brand:"Adidas",name:"Bad Bunny Response CL Brown",retail:"$160",low:"$190",avg:"$245",high:"$310",trend:"+15%",hot:true,vol:"680 sales/wk"},
-  // === YEEZY ===
-  { brand:"Yeezy",name:"350 V2 Zebra",retail:"$230",low:"$200",avg:"$245",high:"$300",trend:"+3%",hot:false,vol:"1.8k sales/wk"},
-  { brand:"Yeezy",name:"350 V2 Bred",retail:"$230",low:"$280",avg:"$330",high:"$390",trend:"+5%",hot:true,vol:"920 sales/wk"},
-  { brand:"Yeezy",name:"Slide Onyx",retail:"$60",low:"$80",avg:"$110",high:"$145",trend:"-4%",hot:false,vol:"3.4k sales/wk"},
-  { brand:"Yeezy",name:"Foam Runner Onyx",retail:"$80",low:"$90",avg:"$120",high:"$155",trend:"-2%",hot:false,vol:"2.1k sales/wk"},
-  { brand:"Yeezy",name:"700 Wave Runner",retail:"$300",low:"$240",avg:"$290",high:"$360",trend:"+2%",hot:false,vol:"1.1k sales/wk"},
-  { brand:"Yeezy",name:"350 V1 Turtle Dove (2022)",retail:"$230",low:"$280",avg:"$350",high:"$440",trend:"+10%",hot:true,vol:"380 sales/wk"},
-  { brand:"Yeezy",name:"750 Light Brown",retail:"$350",low:"$800",avg:"$1100",high:"$1500",trend:"+8%",hot:true,vol:"120 sales/wk"},
-  // === NEW BALANCE ===
-  { brand:"New Balance",name:"990v6 Made in USA Grey",retail:"$199",low:"$195",avg:"$215",high:"$250",trend:"+4%",hot:false,vol:"1.6k sales/wk"},
-  { brand:"New Balance",name:"990v4 Made in USA",retail:"$185",low:"$195",avg:"$208",high:"$240",trend:"+3%",hot:false,vol:"1.2k sales/wk"},
-  { brand:"New Balance",name:"2002R Protection Pack Rain Cloud",retail:"$140",low:"$160",avg:"$195",high:"$240",trend:"+7%",hot:true,vol:"1.5k sales/wk"},
-  { brand:"New Balance",name:"550 White Green",retail:"$110",low:"$95",avg:"$118",high:"$150",trend:"+2%",hot:false,vol:"2.8k sales/wk"},
-  { brand:"New Balance",name:"204L Cream",retail:"$130",low:"$145",avg:"$175",high:"$210",trend:"+20%",hot:true,vol:"680 sales/wk"},
-  // === ASICS ===
-  { brand:"ASICS",name:"Gel-1130 Black Pure Silver",retail:"$110",low:"$130",avg:"$155",high:"$190",trend:"+12%",hot:true,vol:"2.9k sales/wk"},
-  { brand:"ASICS",name:"Gel-Kayano 14 Ivory",retail:"$130",low:"$165",avg:"$182",high:"$210",trend:"+6%",hot:true,vol:"1.8k sales/wk"},
-  { brand:"ASICS",name:"Gel-Kayano 14 Black",retail:"$130",low:"$140",avg:"$165",high:"$200",trend:"+8%",hot:true,vol:"1.4k sales/wk"},
-  // === EMERGING BRANDS ===
-  { brand:"Puma",name:"Speedcat OG Black",retail:"$100",low:"$110",avg:"$138",high:"$170",trend:"+15%",hot:true,vol:"780 sales/wk"},
-  { brand:"Salomon",name:"XT-6 Black Phantom",retail:"$190",low:"$195",avg:"$228",high:"$280",trend:"+12%",hot:true,vol:"620 sales/wk"},
-  { brand:"Mizuno",name:"Wave Prophecy LS Black",retail:"$250",low:"$270",avg:"$320",high:"$390",trend:"+30%",hot:true,vol:"340 sales/wk"},
-  { brand:"Onitsuka Tiger",name:"Mexico 66 Cream Sage",retail:"$110",low:"$125",avg:"$148",high:"$180",trend:"+18%",hot:true,vol:"520 sales/wk"},
-  { brand:"Converse",name:"Shai 001 Black White",retail:"$120",low:"$130",avg:"$158",high:"$195",trend:"+22%",hot:true,vol:"480 sales/wk"},
-];
+<!-- Resale Guide -->
+<div class="post-card">
+<a href="/blog/best-sneakers-resale-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Profit chart going up -->
+<polyline points="40,180 100,160 160,140 200,90 260,70 320,30 370,20" fill="none" stroke="#00ff94" stroke-width="3" stroke-linecap="round"/>
+<polyline points="40,180 100,160 160,140 200,90 260,70 320,30 370,20 370,180 40,180" fill="#00ff94" opacity="0.06"/>
+<!-- Grid lines -->
+<line x1="40" y1="180" x2="370" y2="180" stroke="#333" stroke-width="1"/>
+<line x1="40" y1="140" x2="370" y2="140" stroke="#222" stroke-width="0.5" stroke-dasharray="4,4"/>
+<line x1="40" y1="100" x2="370" y2="100" stroke="#222" stroke-width="0.5" stroke-dasharray="4,4"/>
+<line x1="40" y1="60" x2="370" y2="60" stroke="#222" stroke-width="0.5" stroke-dasharray="4,4"/>
+<!-- Arrow up -->
+<text x="350" y="55" font-family="Arial Black,Impact,sans-serif" font-size="24" fill="#00ff94">↑</text>
+<text x="200" y="210" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="14" fill="#ff3c00" letter-spacing="4">BEST SNEAKERS FOR RESALE 2026</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Resale</span><span class="tag">Investment</span></div>
+<h2>Best Sneakers to Buy for Resale in 2026</h2>
+<p>Top sneakers with the highest resale margins this year — which pairs to buy and flip for maximum profit.</p>
+</div>
+</a>
+</div>
 
-const AUTH_GUIDES = [
-  { model:"Nike Dunk Low",difficulty:"Medium",fakeScore:87,checks:[
-    {area:"Swoosh Shape",real:"Clean taper, consistent thickness end-to-end",fake:"Swoosh often too thick at toe end or uneven width",tip:"Hold at eye level — the Swoosh tip should come to a sharp, clean point"},
-    {area:"Toe Box Stitching",real:"8-10 tight, even stitches per inch, no loose threads",fake:"Irregular spacing, loose threads, or glue visible at seams",tip:"Count the stitches — fakes usually have 5-7 sloppy stitches per inch"},
-    {area:"Heel Tab",real:"Nike text perfectly centered, firm rubber, no flex",fake:"Text offset or blurry, softer rubber that bends easily",tip:"Press the heel tab — legit pairs feel dense and don't flex at all"},
-    {area:"Size Tag",real:"Clean laser print, correct font weight, barcode scans correctly",fake:"Blurry or off-color print, barcode often doesn't scan",tip:"Scan the barcode — if it doesn't resolve to Nike, walk away"},
-    {area:"Box Label",real:"Font matches Nike spec, SKU matches shoe colorway exactly",fake:"Slightly wrong font, SKU doesn't match the actual shoe",tip:"Cross-reference the SKU on the box with StockX or Nike's site"},
-  ]},
-  { model:"Air Jordan 1",difficulty:"Hard",fakeScore:94,checks:[
-    {area:"Collar Stitching",real:"Single-row stitching, tight and consistent around full ankle collar",fake:"Double stitching or inconsistent tension — often puckers at the back",tip:"Run your finger around the collar — any puckering or double rows = fake"},
-    {area:"Jumpman Logo",real:"Clean silhouette, arms and legs proportional, no bleed",fake:"Stubby legs, thick arms, or ink bleed into surrounding material",tip:"Compare against Nike SNKRS product photo — any proportion difference is a red flag"},
-    {area:"Tongue Tag",real:"Bold clean font, correct thread color for colorway, no fraying",fake:"Lighter font weight, wrong thread color, fraying at edges",tip:"Thread color on tongue tag should exactly match the colorway's accent color"},
-    {area:"Outsole",real:"Clean herringbone pattern, consistent depth, firm rubber",fake:"Shallow tread, softer rubber, or uneven depth across the sole",tip:"Press your thumbnail into the outsole — legit rubber resists; fakes dent"},
-    {area:"Wings Logo",real:"Perfectly debossed into leather, uniform depth, no smearing",fake:"Stamped too shallow or unevenly — one wing often higher than the other",tip:"Check both wings are at identical height — uneven wings = likely fake"},
-  ]},
-  { model:"Yeezy 350 V2",difficulty:"Very Hard",fakeScore:96,checks:[
-    {area:"Primeknit Pattern",real:"Consistent 3-stripe weave, no loose threads, pattern aligns at seams",fake:"Slightly off-pattern weave, threads visible, misaligned at seam joins",tip:"Under bright light, check that weave pattern flows seamlessly across every seam"},
-    {area:"SPLY-350 Text",real:"Consistent font, correct 45 degree lean angle, slightly reflective",fake:"Wrong font weight, doesn't reflect correctly, or angle is off",tip:"SPLY-350 should be at exactly 45 degrees — use a protractor app if unsure"},
-    {area:"Boost Sole",real:"Hundreds of uniform beads, consistent translucency, firm but springy",fake:"Inconsistent bead size, too opaque or too clear, feels harder",tip:"Squeeze the Boost midsole — it should spring back instantly"},
-    {area:"Heel Patch",real:"Perfectly adhered, no lifting edges, correct font and spacing",fake:"Lifting at edges, adhesive visible, font slightly too bold or light",tip:"Press down on all four corners of the heel patch — any lift = fake"},
-    {area:"Inner Label",real:"Correct Adidas font, clean print, QR code resolves to Adidas",fake:"Slightly blurry print, QR code leads nowhere",tip:"Scan the QR code — it should go directly to the Adidas product page"},
-  ]},
-  { model:"New Balance 550",difficulty:"Easy",fakeScore:71,checks:[
-    {area:"N Logo Stitching",real:"Clean multi-layer embroidery, correct stitch count, firm backing",fake:"Single layer, floppy logo, visible backing through the N stitches",tip:"Pinch the N logo — on legit pairs it feels thick and structured"},
-    {area:"Toe Cap Shape",real:"Slightly rounded, consistent curve, leather meets mesh cleanly",fake:"Too flat or too pointed, leather and mesh don't meet evenly",tip:"View from directly above — toe cap curve should be perfectly symmetrical"},
-    {area:"Outsole Color",real:"Off-white or cream on most colorways, consistent across full length",fake:"Bright white on colorways that should be cream, or uneven coloring",tip:"Outsole color should always match product photos exactly"},
-  ]},
-  { model:"Jordan 4 Black Cat",difficulty:"Hard",fakeScore:93,checks:[
-    {area:"Jumpman Tongue",real:"Clean embroidery, centered Jumpman, consistent thread thickness",fake:"Leaning or bloated Jumpman, uneven thread weight",tip:"Compare the tongue Jumpman to an official Nike product image side-by-side"},
-    {area:"Nubuck Quality",real:"Soft nubuck, consistent nap direction, reacts to brushing",fake:"Plasticky synthetic nubuck, stiff feel, nap doesn't respond",tip:"Brush the nubuck with your thumb — authentic will show a lighter trail"},
-    {area:"Heel AIR Text",real:"Thin, precise 'AIR' lettering, clean mold",fake:"Bolder, thicker text, rough edges on letters",tip:"The 'AIR' should look thin and crisp, never chunky"},
-    {area:"Side Cage",real:"Evenly spaced diamond-shaped netting, clean bonding",fake:"Irregular diamond sizes, glue overflow at cage edges",tip:"Hold the shoe at an angle — cage holes should be perfectly uniform"},
-    {area:"Tongue Height",real:"Tall, padded tongue that stays upright",fake:"Short, thin tongue that flops to one side",tip:"Short tongue is an immediate red flag on Jordan 4s"},
-  ]},
-  { model:"Travis Scott J1 Low",difficulty:"Very Hard",fakeScore:97,checks:[
-    {area:"Reverse Swoosh",real:"Tip points at first lace hole, tight stitching, clean edges",fake:"Swoosh tip misaligned, loose or uneven stitching",tip:"The reverse Swoosh tip should aim directly at the first lace hole"},
-    {area:"Cactus Jack Logo",real:"Precise embroidery, thin lettering, correct proportions",fake:"Thicker, bolder text, horizontally stretched font",tip:"Authentic Cactus Jack text looks small and vertically stretched"},
-    {area:"Suede Quality",real:"Buttery, alive nap that moves when brushed, rich color",fake:"Dead suede that doesn't respond, wrong shade (too light or dark)",tip:"Brush the suede — it should instantly lighten and show movement"},
-    {area:"Interior Tongue Label",real:"Sharp, properly spaced text, correct font weight",fake:"Thin, wavy, or slanted text, wrong font size",tip:"The text should be perfectly horizontal — any wave pattern = fake"},
-    {area:"Toe Box Perforations",real:"Small, evenly punched holes in a precise pattern",fake:"Oversized holes, inconsistent spacing",tip:"Hole size matters — authentic perforations are noticeably smaller"},
-  ]},
-  { model:"Nike Kobe 6 Protro",difficulty:"Hard",fakeScore:91,checks:[
-    {area:"Mamba Logo",real:"Flush with tongue, sharp lines, glittery finish on some colorways",fake:"Chunky raised badge, dull finish, thick outline",tip:"The shield badge should sit flat on the tongue, not stick out"},
-    {area:"Kobe Signature",real:"Thin, delicate signature on heel, lighter shade of red",fake:"Too thick, too dark, signature feels raised",tip:"The signature should look handwritten and thin — bold means fake"},
-    {area:"Zoom Air Unit",real:"Forefoot only, visible via X-ray, responsive cushioning",fake:"Often includes incorrect heel cushioning, less responsive",tip:"Press the forefoot — you should feel a distinct Zoom Air pop"},
-    {area:"Outsole Traction",real:"Razor-sharp herringbone pattern, consistent depth",fake:"Shallow or uneven tread pattern, softer rubber",tip:"Run your finger across — authentic herringbone feels sharp like a cheese grater"},
-    {area:"Size Tag",real:"Thin, precise text, correct style ID for colorway",fake:"Bolder text, wrong font weight, style ID may not match",tip:"Always verify the style ID matches the colorway on Nike or StockX"},
-  ]},
-  { model:"Yeezy Slide",difficulty:"Medium",fakeScore:89,checks:[
-    {area:"Foam Texture",real:"Smooth, consistent EVA foam, no visible seam lines",fake:"Rougher texture, visible mold lines, inconsistent density",tip:"Run your hand across — authentic slides feel perfectly smooth"},
-    {area:"Adidas Logo",real:"Cleanly molded trefoil on footbed, crisp edges",fake:"Blurry or shallow logo, rough edges around trefoil",tip:"The trefoil leaves should have sharp, defined edges"},
-    {area:"Shape Profile",real:"Specific arch height and toe curve, matches size chart",fake:"Flatter arch, wider toe opening, inconsistent sizing",tip:"View from the side — the arch should have a distinct curve"},
-    {area:"Weight",real:"Lightweight but substantial, around 200-250g per slide",fake:"Often noticeably heavier or lighter than authentic",tip:"If they feel unusually heavy for foam slides, be suspicious"},
-  ]},
-  { model:"Air Force 1",difficulty:"Medium",fakeScore:82,checks:[
-    {area:"Toe Box Shape",real:"Clean, slightly rounded toe with precise perforations",fake:"Too boxy or too rounded, uneven perforation alignment",tip:"Compare toe shape to Nike.com product images from above"},
-    {area:"Swoosh Placement",real:"Tip of Swoosh aligned with lowest eyelet, firm stitching",fake:"Swoosh sits too high or low, loose stitching at ends",tip:"Draw an imaginary line from the lowest eyelet — the Swoosh tip should touch it"},
-    {area:"Midsole Stitching",real:"Tight, evenly spaced stitches around the full midsole rim",fake:"Irregular spacing, skipped stitches, visible glue",tip:"Count stitches per inch — authentic AF1s have consistent, tight rows"},
-    {area:"Heel Logo",real:"Clean 'NIKE AIR' or 'AIR' stamp, properly recessed",fake:"Blurry stamp, wrong depth, or misaligned text",tip:"On newer AF1s, 'AIR' should be cleanly debossed into the rubber"},
-  ]},
-  { model:"ASICS Gel-1130",difficulty:"Medium",fakeScore:78,checks:[
-    {area:"GEL Insert",real:"Visible GEL cushioning in heel, clear/slightly blue tint",fake:"Opaque or no GEL visible, wrong color tint",tip:"Look at the midsole window — authentic GEL is visible and slightly translucent"},
-    {area:"Tiger Stripes",real:"Clean stitching, consistent width, flush with upper",fake:"Uneven stripe width, loose stitching, lifting at edges",tip:"Each stripe should be identical width with tight, flat stitching"},
-    {area:"Tongue Label",real:"'ASICS' in correct corporate font, clean print, straight alignment",fake:"Wrong font, blurry print, or tilted label",tip:"The ASICS logo should be perfectly horizontal on the tongue tag"},
-    {area:"Outsole Pattern",real:"AHAR rubber, defined tread pattern, consistent depth",fake:"Softer rubber, shallow or uneven tread",tip:"ASICS outsoles are durable — if the rubber dents easily with a fingernail, it's fake"},
-  ]},
-  { model:"Adidas Samba",difficulty:"Medium",fakeScore:85,checks:[
-    {area:"Leather Quality",real:"Full-grain leather, soft but structured, consistent grain pattern",fake:"Synthetic or low-grade leather, plasticky sheen, no grain",tip:"Scratch the leather lightly — real leather shows a faint scratch mark that fades"},
-    {area:"T-Toe Design",real:"Clean rubber T-shaped toe guard, precise bonding to upper",fake:"Sloppy rubber edges, glue overflow, T-shape is wrong proportion",tip:"The rubber-to-leather bond should be invisible — any visible glue = fake"},
-    {area:"Three Stripes",real:"Suede stripes with consistent nap, clean stitching, even spacing",fake:"Stiff stripes, irregular spacing, loose threads at edges",tip:"All three stripes should be exactly the same width and evenly spaced"},
-    {area:"Gold Foil Logo",real:"Crisp 'adidas' foil stamp on side, clean edges, doesn't flake",fake:"Blurry foil, already flaking on new pairs, wrong gold tone",tip:"Fresh Sambas should have perfectly crisp gold stamping — flaking on DS pairs is a red flag"},
-  ]},
-  { model:"Nike SB Dunk",difficulty:"Hard",fakeScore:92,checks:[
-    {area:"Padded Tongue",real:"Thick, puffy tongue with correct foam fill, holds shape",fake:"Thinner tongue, less padding, collapses when pressed",tip:"SB Dunks have noticeably thicker tongues than regular Dunks — if it feels thin, investigate"},
-    {area:"Zoom Air Insole",real:"Zoom Air unit in heel, responsive bounce, correct thickness",fake:"Basic foam insole, no Zoom Air, flat feel when walking",tip:"Press the insole heel — you should feel a distinct air cushion pop back"},
-    {area:"Heel Stitching",real:"Clean NIKE embroidery, correct thread thickness, centered",fake:"Uneven text, wrong thread weight, off-center placement",tip:"The NIKE text should be perfectly horizontal and centered on the heel panel"},
-    {area:"Toebox Perfs",real:"Two rows of evenly punched perforations, consistent size",fake:"Uneven holes, extra row of perfs, or inconsistent sizing",tip:"Count the perf rows and check each hole size — fakes often add an extra row"},
-    {area:"Lace Tips",real:"Correct metal or plastic aglets, clean cut, proper branding",fake:"Wrong aglet type, rough cut, missing branding",tip:"SB Dunks have specific lace tip styles per release — check against reference images"},
-  ]},
-];
+<!-- Authentication Guide -->
+<div class="post-card">
+<a href="/blog/how-to-authenticate-sneakers">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Magnifying glass -->
+<circle cx="170" cy="95" r="50" fill="none" stroke="#ff3c00" stroke-width="3"/>
+<line x1="205" y1="130" x2="250" y2="175" stroke="#ff3c00" stroke-width="4" stroke-linecap="round"/>
+<!-- Checkmark inside -->
+<polyline points="148,95 163,110 192,78" fill="none" stroke="#00ff94" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- X mark -->
+<text x="310" y="105" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="50" fill="#ff3c00" opacity="0.3">✕</text>
+<text x="200" y="210" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="3">AUTHENTICATION GUIDE</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Auth</span><span class="tag">Guide</span></div>
+<h2>How to Authenticate Sneakers: Real vs Fake Guide 2026</h2>
+<p>Spot fakes like a pro — detailed authentication tips for Jordans, Dunks, Yeezys, and more.</p>
+</div>
+</a>
+</div>
 
-const ALL_SOURCES = [
-  {id:"stockx",label:"StockX",url:"stockx.com",color:"#00ff94"},
-  {id:"goat",label:"GOAT",url:"goat.com",color:"#ffffff"},
-  {id:"ebay",label:"eBay",url:"ebay.com",color:"#e53238"},
-  {id:"amazon",label:"Amazon",url:"amazon.com",color:"#ff9900"},
-];
+<!-- How StockX Works -->
+<div class="post-card">
+<a href="/blog/how-stockx-works">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- StockX-style bid/ask spread -->
+<rect x="50" y="50" width="130" height="120" rx="8" fill="#141414" stroke="#222" stroke-width="1"/>
+<text x="115" y="75" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#888" letter-spacing="2">LOWEST ASK</text>
+<text x="115" y="115" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="32" fill="#00ff94">$245</text>
+<text x="115" y="155" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#666" letter-spacing="1">SIZE 10</text>
+<rect x="220" y="50" width="130" height="120" rx="8" fill="#141414" stroke="#222" stroke-width="1"/>
+<text x="285" y="75" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#888" letter-spacing="2">HIGHEST BID</text>
+<text x="285" y="115" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="32" fill="#ff3c00">$220</text>
+<text x="285" y="155" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#666" letter-spacing="1">SIZE 10</text>
+<text x="200" y="205" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ffffff" letter-spacing="3">HOW STOCKX WORKS</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">StockX</span></div>
+<h2>How StockX Works: Complete Beginner's Guide 2026</h2>
+<p>Everything you need to know about buying and selling on StockX — fees, shipping, authentication, and tips.</p>
+</div>
+</a>
+</div>
 
-const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
+<!-- Yeezy Price Guide -->
+<div class="post-card">
+<a href="/blog/yeezy-price-guide-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<rect width="400" height="225" fill="#ff3c00" opacity="0.03"/>
+<!-- Yeezy stripe pattern -->
+<line x1="0" y1="60" x2="400" y2="20" stroke="#ff3c00" stroke-width="1" opacity="0.15"/>
+<line x1="0" y1="80" x2="400" y2="40" stroke="#ff3c00" stroke-width="1" opacity="0.12"/>
+<line x1="0" y1="100" x2="400" y2="60" stroke="#ff3c00" stroke-width="1" opacity="0.09"/>
+<line x1="0" y1="120" x2="400" y2="80" stroke="#ff3c00" stroke-width="1" opacity="0.06"/>
+<!-- Bold Yeezy text -->
+<text x="200" y="100" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="52" fill="#ffffff" letter-spacing="8">YEEZY</text>
+<text x="200" y="140" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="24" fill="#ff3c00" letter-spacing="4">PRICE GUIDE</text>
+<!-- Price range bar -->
+<rect x="80" y="165" width="240" height="8" rx="4" fill="#222"/>
+<rect x="80" y="165" width="160" height="8" rx="4" fill="#00ff94"/>
+<circle cx="240" cy="169" r="6" fill="#00ff94"/>
+<text x="80" y="198" font-family="Arial,sans-serif" font-size="11" fill="#666">$120</text>
+<text x="320" y="198" text-anchor="end" font-family="Arial,sans-serif" font-size="11" fill="#666">$800+</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Yeezy</span><span class="tag">Prices</span></div>
+<h2>Yeezy Price Guide 2026: Every Model Ranked by Value</h2>
+<p>Complete breakdown of Yeezy prices — which models are below retail, which are climbing, and the best deals right now.</p>
+</div>
+</a>
+</div>
 
-const DEFAULT_DROPS = [
-  {brand:"Jordan",name:"Teyana Taylor x Air Jordan 3 Concrete Rose",date:"Mar 7, 2026",retail:"$280",resell:"$450+",hype:96,badge:"hot",colorway:"Fir/Gorge Green-Cement Grey",method:"SNKRS Draw",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$280",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$450",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$460",url:"https://goat.com"}]},
-  {brand:"Jordan",name:"Air Jordan 4 Lakers",date:"Mar 7, 2026",retail:"$220",resell:"$380+",hype:94,badge:"hot",colorway:"Imperial Purple/Multi-Color",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$220",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$380",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$390",url:"https://goat.com"}]},
-  {brand:"Jordan",name:"Air Jordan 13 Chicago",date:"Mar 13, 2026",retail:"$215",resell:"$320+",hype:91,badge:"hot",colorway:"White/Black-True Red",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$215",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$320",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$330",url:"https://goat.com"}]},
-  {brand:"Jordan",name:"Air Jordan 14 Black University Blue",date:"Mar 21, 2026",retail:"$205",resell:"$280+",hype:82,badge:"upcoming",colorway:"Black/University Blue",method:"SNKRS",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$205",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$280",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$290",url:"https://goat.com"}]},
-  {brand:"Jordan",name:"Virgil Abloh x Air Jordan 1 High Alaska",date:"Mar 28, 2026",retail:"$230",resell:"$600+",hype:99,badge:"limited",colorway:"White/White",method:"SNKRS Draw",source:"SNKRS",image:null,sourceUrl:"https://nike.com/launch",prices:[{store:"SNKRS",storeId:"snkrs",price:"$230",url:"https://nike.com/launch"},{store:"StockX",storeId:"stockx",price:"$600",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$620",url:"https://goat.com"}]},
-  {brand:"Nike",name:"Air Max 95 OG Neon",date:"Mar 5, 2026",retail:"$190",resell:"$250+",hype:88,badge:"hot",colorway:"Black/Cool Grey-Neon Yellow",method:"Nike.com",source:"Nike",image:null,sourceUrl:"https://nike.com",prices:[{store:"Nike",storeId:"nike",price:"$190",url:"https://nike.com"},{store:"StockX",storeId:"stockx",price:"$250",url:"https://stockx.com"},{store:"GOAT",storeId:"goat",price:"$260",url:"https://goat.com"}]},
-];
+<!-- Nike Dunk Calendar -->
+<div class="post-card">
+<a href="/blog/nike-dunk-release-calendar-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Calendar grid -->
+<rect x="80" y="30" width="240" height="160" rx="8" fill="#141414" stroke="#282828" stroke-width="1"/>
+<rect x="80" y="30" width="240" height="35" rx="8" fill="#ff3c00"/>
+<rect x="80" y="57" width="240" height="8" fill="#ff3c00"/>
+<text x="200" y="55" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="3">2026</text>
+<!-- Calendar cells -->
+<line x1="114" y1="65" x2="114" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="148" y1="65" x2="148" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="182" y1="65" x2="182" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="216" y1="65" x2="216" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="250" y1="65" x2="250" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="284" y1="65" x2="284" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="80" y1="95" x2="320" y2="95" stroke="#222" stroke-width="0.5"/>
+<line x1="80" y1="125" x2="320" y2="125" stroke="#222" stroke-width="0.5"/>
+<line x1="80" y1="155" x2="320" y2="155" stroke="#222" stroke-width="0.5"/>
+<!-- Highlighted drop dates -->
+<circle cx="165" cy="110" r="10" fill="#ff3c00" opacity="0.3"/>
+<text x="165" y="114" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#ff3c00" font-weight="700">12</text>
+<circle cx="250" cy="140" r="10" fill="#ff3c00" opacity="0.3"/>
+<text x="250" y="144" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#ff3c00" font-weight="700">22</text>
+<circle cx="131" cy="170" r="10" fill="#00ff94" opacity="0.3"/>
+<text x="131" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" font-weight="700">7</text>
+<text x="200" y="215" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="14" fill="#ffffff" letter-spacing="3">NIKE DUNK RELEASE CALENDAR</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Releases</span><span class="tag">Dunk</span></div>
+<h2>Nike Dunk Release Calendar 2026: Every Drop Date & Price</h2>
+<p>All confirmed Nike Dunk releases for 2026 with dates, retail prices, and resell predictions.</p>
+</div>
+</a>
+</div>
 
-// === KicksDB-based data fetching ===
+<!-- New Balance Guide -->
+<div class="post-card">
+<a href="/blog/new-balance-buying-guide">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- NB-inspired N -->
+<text x="200" y="120" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="100" fill="#ff3c00" opacity="0.12">N</text>
+<!-- Model numbers -->
+<text x="100" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ffffff">990</text>
+<text x="100" y="110" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" letter-spacing="1">$184</text>
+<text x="200" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ffffff">2002R</text>
+<text x="200" y="110" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" letter-spacing="1">$139</text>
+<text x="300" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ffffff">550</text>
+<text x="300" y="110" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" letter-spacing="1">$109</text>
+<!-- Dividers -->
+<line x1="150" y1="70" x2="150" y2="120" stroke="#333" stroke-width="1"/>
+<line x1="250" y1="70" x2="250" y2="120" stroke="#333" stroke-width="1"/>
+<text x="200" y="160" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="20" fill="#ffffff" letter-spacing="3">NEW BALANCE</text>
+<text x="200" y="188" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="14" fill="#ff3c00" letter-spacing="4">BUYING GUIDE</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">New Balance</span></div>
+<h2>New Balance Buying Guide: 990 vs 2002R vs 550 Compared</h2>
+<p>Which New Balance model is right for you? Comparing comfort, style, price, and resale value across the top models.</p>
+</div>
+</a>
+</div>
 
-function kicksToDrops(products) {
-  return (products || []).map(p => {
-    const slug = p.slug || "";
-    const stockxUrl = slug ? `https://stockx.com/${slug}` : null;
-    const avgPrice = p.avg_price || p.min_price || null;
-    const retailPrice = p.retail_price || null;
-    // Determine badge based on data
-    let badge = "hot";
-    if (p.upcoming) badge = "upcoming";
-    else if (p.weekly_orders && p.weekly_orders < 5) badge = "limited";
-    // Hype score from rank/orders
-    let hype = null;
-    if (p.weekly_orders) hype = Math.min(99, Math.round(50 + Math.log2(p.weekly_orders + 1) * 8));
-    else if (p.rank) hype = Math.max(30, Math.min(95, 100 - Math.round(p.rank / 100)));
+<!-- ASICS Comparison -->
+<div class="post-card">
+<a href="/blog/asics-kayano-14-vs-gel-1130">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- ASICS stripe pattern -->
+<path d="M50 140 L90 80 L130 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.2"/>
+<path d="M60 140 L100 85 L140 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.15"/>
+<path d="M260 140 L300 80 L340 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.2"/>
+<path d="M270 140 L310 85 L350 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.15"/>
+<!-- Model names -->
+<text x="110" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="1">KAYANO</text>
+<text x="110" y="116" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ff3c00">14</text>
+<text x="200" y="105" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#555">vs</text>
+<text x="290" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="1">GEL</text>
+<text x="290" y="116" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ff3c00">1130</text>
+<text x="200" y="170" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ffffff" letter-spacing="3">ASICS</text>
+<text x="200" y="198" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#666" letter-spacing="2">WHICH SHOULD YOU BUY?</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Comparison</span><span class="tag">ASICS</span></div>
+<h2>ASICS Gel-Kayano 14 vs Gel-1130: Which Should You Buy?</h2>
+<p>Side-by-side comparison of two of the hottest ASICS models — comfort, style, sizing, and where to find the best price.</p>
+</div>
+</a>
+</div>
 
-    // Build price comparison array
-    const prices = [];
-    if (p.min_price) {
-      prices.push({
-        store: "StockX",
-        storeId: "stockx",
-        price: `$${Math.round(p.min_price)}`,
-        url: stockxUrl || "https://stockx.com",
-      });
-    }
-    // GOAT: no prices available via KicksDB — show "Check Price" with affiliate link
-    if (p._goat && p._goat.link) {
-      prices.push({
-        store: "GOAT",
-        storeId: "goat",
-        price: "Check Price",
-        url: p._goat.link,
-      });
-    }
+</div>
 
-    // eBay: real prices from Browse API
-    if (p._ebay && p._ebay.price) {
-      prices.push({
-        store: p._ebay.authenticity ? "eBay ✓" : "eBay",
-        storeId: "ebay",
-        price: `$${Math.round(p._ebay.price)}`,
-        url: p._ebay.url || "https://www.ebay.com",
-      });
-    }
-
-    // Amazon: search link with affiliate tag
-    const amzQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
-    prices.push({
-      store: "Amazon",
-      storeId: "amazon",
-      price: "Check Price",
-      url: "https://www.amazon.com/s?k=" + amzQuery + "&tag=sneakyradar-20",
-    });
-
-    // Use GOAT release_date if StockX doesn't have one
-    const releaseDate = p.release_date || (p._goat && p._goat.release_date) || null;
-
-    // Price range from StockX
-    const lowestPrice = p.min_price || null;
-    const maxPrice = p.max_price || null;
-
-    // Build source label
-    const sourceNames = ["StockX"];
-    if (p._goat) sourceNames.push("GOAT");
-    if (p._ebay) sourceNames.push("eBay");
-    sourceNames.push("Amazon");
-
-    return {
-      brand: p.brand || "Unknown",
-      name: p.title || p.name || "Unknown",
-      date: releaseDate ? new Date(releaseDate).toLocaleDateString("en-US", {month:"short",day:"numeric",year:"numeric"}) : (p.upcoming ? "Coming Soon" : "Available"),
-      retail: retailPrice ? `$${retailPrice}` : (avgPrice ? `$${Math.round(avgPrice)}` : "—"),
-      resell: lowestPrice && maxPrice ? `$${Math.round(lowestPrice)} – $${Math.round(maxPrice)}` : (avgPrice ? `$${Math.round(avgPrice)}+` : null),
-      hype: hype,
-      badge: badge,
-      colorway: p.colorway || p.color || null,
-      method: null,
-      image: p.image || null,
-      source: sourceNames.join(" + "),
-      sourceUrl: stockxUrl,
-      sku: p.sku || null,
-      slug: slug,
-      weeklyOrders: p.weekly_orders || 0,
-      prices: prices,
-    };
-  });
-}
-
-async function fetchDrops(q, page = 1) {
-  const action = q ? "search" : "trending";
-  const payload = q
-    ? { action: "search", query: q, limit: 50, page: page }
-    : { action: "trending", limit: 50, page: page };
-
-  console.log(`[SNEAKYRADAR] KicksDB ${action}:`, q || "trending", "page:", page);
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const json = await res.json();
-    console.log("[SNEAKYRADAR] Raw API response:", JSON.stringify(json).substring(0, 200));
-
-    if (json.error) {
-      console.error("[SNEAKYRADAR] KicksDB error:", json.error);
-      return [];
-    }
-
-    const products = json.data || [];
-    console.log(`[SNEAKYRADAR] KicksDB returned ${products.length} products for page ${page}`);
-    const drops = kicksToDrops(products);
-    return drops;
-  } catch(err) {
-    console.error("[SNEAKYRADAR] KicksDB fetch error:", err.message);
-    return [];
-  }
-}
-const CHAT_SYSTEM_PROMPT = `You are SOLE — elite sneaker expert on SNEAKYRADAR. Deep knowledge of brands, drops, resell market, authentication, styling, collabs, history. Confident, street-savvy tone. Format shoe names **bold** and prices *italic*.`;
-const SUGGESTED_QUESTIONS = ["What's the most hyped drop right now?","Best sneakers under $150?","How do I win SNKRS draws?","Which Jordans should I flip?"];
-
-function dedupeDrops(drops) {
-  const seen = new Map();
-  for (const d of drops) {
-    const key = `${d.brand?.toLowerCase()}-${d.name?.toLowerCase().replace(/\s+/g,'')}`;
-    if (!seen.has(key)) { seen.set(key,{...d,sources:[d.source].filter(Boolean)}); }
-    else { const e=seen.get(key); if(d.source&&!e.sources.includes(d.source))e.sources.push(d.source); if(d.hype>e.hype)e.hype=d.hype; }
-  }
-  return Array.from(seen.values()).sort((a,b)=>(b.hype||0)-(a.hype||0));
-}
-function fmtMsg(t) { return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br/>'); }
-
-const BADGE_MAP = {hot:"badge-hot",upcoming:"badge-upcoming",limited:"badge-limited"};
-const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
-
-// Image cache no longer needed - KicksDB provides images directly
-
-function DropImage({src, name, brand, source, productUrl, onClick}) {
-  const [err, setErr] = useState(false);
-  const imgSrc = (src && src !== "null") ? src : null;
-
-  return (
-    <div className="card-img-wrap" onClick={onClick}>
-      {(!imgSrc || err) ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
-        : <img className="card-img" src={imgSrc} alt={brand ? (brand + " " + name) : name} onError={()=>setErr(true)} loading="lazy"/>}
-      {source && <div className="card-source-tag">{source}</div>}
-    </div>
-  );
-}
-
-function PriceCompare({prices, drop}) {
-  if (!prices || prices.length === 0) return null;
-  const sorted = [...prices].sort((a,b)=>parseFloat(a.price.replace(/[^0-9.]/g,''))-parseFloat(b.price.replace(/[^0-9.]/g,'')));
-  return (
-    <div className="price-compare">
-      <div className="price-compare-label">{prices.length > 1 ? "Compare Prices" : "Best Price"}</div>
-      <div className="price-compare-rows">
-        {sorted.map((p,i)=>(
-          <div key={p.store} className="price-row">
-            <span className="price-row-store">{p.store}</span>
-            <span className="price-row-amount">{p.price}</span>
-            <a href={affLink(p.url,p.storeId)} target="_blank" rel="noopener noreferrer"
-              className={`price-row-btn ${i===0?"best":""}`}
-              onClick={e=>{e.stopPropagation();trackClick(drop,p.storeId);}}>
-              {i===0?"Best Deal":"Buy"}
-            </a>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SourceDropdown({selected, onChange}) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  useEffect(()=>{
-    const h = e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false);};
-    document.addEventListener("mousedown",h);
-    return()=>document.removeEventListener("mousedown",h);
-  },[]);
-  const toggle = id => onChange(selected.includes(id)?selected.filter(s=>s!==id):[...selected,id]);
-  return (
-    <div className="src-dropdown-wrap" ref={ref}>
-      <button className="src-dropdown-btn" onClick={()=>setOpen(o=>!o)}>
-        <span>{selected.length===0?"No Sources":selected.length===ALL_SOURCES.length?"All Sources":`${selected.length} Sources`}</span>
-        <span style={{display:"flex",alignItems:"center",gap:8}}>
-          {selected.length>0&&selected.length<ALL_SOURCES.length&&<span className="count-badge">{selected.length}</span>}
-          <span className={`chevron ${open?"open":""}`}>▼</span>
-        </span>
-      </button>
-      {open&&(
-        <div className="src-dropdown-menu">
-          <div className="src-menu-header">
-            <span>{ALL_SOURCES.length} Sources</span>
-            <div style={{display:"flex",gap:12}}>
-              <button onClick={()=>onChange(ALL_SOURCES.map(s=>s.id))}>All</button>
-              <button onClick={()=>onChange([])}>Clear</button>
-            </div>
-          </div>
-          {ALL_SOURCES.map(s=>(
-            <div key={s.id} className={`src-menu-item ${selected.includes(s.id)?"checked":""}`} onClick={()=>toggle(s.id)}>
-              <div className={`src-checkbox ${selected.includes(s.id)?"checked":""}`}/>
-              <div className="src-color-dot" style={{background:s.color}}/>
-              <span className="src-label">{s.label}</span>
-              <span className="src-url">{s.url}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AlertModal({onClose}) {
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-  const submit = ()=>{ if(!email.includes("@"))return; console.log("[SNEAKYRADAR] subscriber:",email); setDone(true); };
-  return (
-    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal">
-        {done?(
-          <div className="modal-success" style={{textAlign:"center",padding:"40px 28px"}}>
-            <div style={{fontSize:"2.5rem",marginBottom:12}}>🔥</div>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"1.8rem",letterSpacing:"3px",color:"var(--accent2)"}}>You're In</div>
-            <div style={{fontSize:"0.7rem",color:"var(--muted)",marginTop:8}}>Drop alerts locked in for {email}</div>
-          </div>
-        ):(
-          <>
-            <div className="modal-header">
-              <div className="modal-title">SNEAKY<span>ALERTS</span></div>
-              <button className="modal-close" onClick={onClose}>✕</button>
-            </div>
-            <div className="modal-body">
-              <div className="modal-desc">Get in before everyone else. 48hr advance notice, restocks, exclusive raffle links — straight to your inbox.</div>
-              <div className="modal-features">
-                {["48hr advance drop notices","Restock alerts on sold-out grails","Exclusive raffle links before public","Weekly resell market digest"].map(f=>(
-                  <div key={f} className="modal-feature"><div className="modal-feature-dot"/>{f}</div>
-                ))}
-              </div>
-              <div className="modal-form">
-                <input className="modal-input" type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>
-                <button className="modal-submit" onClick={submit}>ALERT ME</button>
-              </div>
-              <div className="modal-fine">No spam. Unsubscribe anytime.</div>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ChatWidget() {
-  const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState([{role:"assistant",content:"Yo, I'm **SOLE** — your sneaker expert on SNEAKYRADAR. Ask me about drops, resell, authentication, anything."}]);
-  const [input, setInput] = useState("");
-  const [thinking, setThinking] = useState(false);
-  const [showSug, setShowSug] = useState(true);
-  const bottomRef = useRef(null);
-  const inputRef = useRef(null);
-  useEffect(()=>{bottomRef.current?.scrollIntoView({behavior:"smooth"});},[msgs,thinking]);
-  useEffect(()=>{if(open)setTimeout(()=>inputRef.current?.focus(),100);},[open]);
-  const send = async (text)=>{
-    const t=text||input.trim(); if(!t||thinking)return;
-    setInput(""); setShowSug(false);
-    const newMsgs=[...msgs,{role:"user",content:t}];
-    setMsgs(newMsgs); setThinking(true);
-    try {
-      const res = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:600,system:CHAT_SYSTEM_PROMPT,messages:newMsgs.map(m=>({role:m.role,content:typeof m.content==="string"?m.content.replace(/<[^>]+>/g,""):m.content}))})});
-      const data = await res.json();
-      if(!res.ok)throw new Error(JSON.stringify(data.error)||JSON.stringify(data));
-      const reply = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"No response";
-      setMsgs(p=>[...p,{role:"assistant",content:reply}]);
-    } catch(e){setMsgs(p=>[...p,{role:"assistant",content:`Error: ${e.message}`}]);}
-    finally{setThinking(false);}
-  };
-  return (
-    <>
-      {open&&(
-        <div className="chat-window">
-          <div className="chat-header">
-            <div className="chat-header-left">
-              <div className="chat-avatar">S</div>
-              <div>
-                <div className="chat-title">SOLE EXPERT</div>
-                <div className="chat-subtitle"><span className="chat-online"/>Online · Sneaker AI</div>
-              </div>
-            </div>
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <button className="chat-clear" onClick={()=>{setMsgs([{role:"assistant",content:"Fresh start. What do you want to know?"}]);setShowSug(true);}}>Clear</button>
-              <button className="chat-close" onClick={()=>setOpen(false)}>✕</button>
-            </div>
-          </div>
-          <div className="chat-messages">
-            {msgs.map((m,i)=>(
-              <div key={i} className={`msg ${m.role==="user"?"user":"bot"}`}>
-                <div className={`msg-avatar ${m.role==="user"?"user":"bot"}`}>{m.role==="user"?"U":"S"}</div>
-                <div className="msg-bubble" dangerouslySetInnerHTML={{__html:fmtMsg(m.content)}}/>
-              </div>
-            ))}
-            {thinking&&<div className="msg bot"><div className="msg-avatar bot">S</div><div className="msg-bubble"><div className="typing-indicator"><div className="typing-dot"/><div className="typing-dot"/><div className="typing-dot"/></div></div></div>}
-            <div ref={bottomRef}/>
-          </div>
-          {showSug&&<div className="chat-suggestions">{SUGGESTED_QUESTIONS.map((q,i)=><button key={i} className="suggestion-chip" onClick={()=>send(q)}>{q}</button>)}</div>}
-          <div className="chat-input-row">
-            <textarea ref={inputRef} className="chat-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}} placeholder="Ask about any sneaker..." rows={1}/>
-            <button className="chat-send" onClick={()=>send()} disabled={thinking||!input.trim()}>SEND</button>
-          </div>
-        </div>
-      )}
-      <button className="chat-fab" onClick={()=>setOpen(o=>!o)}>
-        {open?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          :<><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>ASK SOLE</span></>}
-      </button>
-    </>
-  );
-}
-
-function DropRadarPage() {
-  const [drops, setDrops] = useState(DEFAULT_DROPS);
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState(null);
-  const [srcFilter, setSrcFilter] = useState("All");
-  const [query, setQuery] = useState("");
-  const [lastQuery, setLastQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [updated, setUpdated] = useState(null);
-  const [steps, setSteps] = useState([]);
-
-  const search = async (q="")=>{
-    setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
-    setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
-    // Update active category if it matches a category button
-    const matchedCat = CATEGORY_SEARCHES.find(c => c.query && c.query.toLowerCase() === q.toLowerCase());
-    if (matchedCat) setActiveCategory(matchedCat.label);
-    else if (q === "") setActiveCategory("ALL");
-    else setActiveCategory("");
-    try {
-      const drops = await fetchDrops(q, 1);
-      const d = dedupeDrops(drops);
-      setSteps([{label:"Searching all sources",status:"done",count:d.length}]);
-      setDrops(d.length>0?d:DEFAULT_DROPS);
-      if(!d.length) setError("No results found. Showing featured drops.");
-      if(d.length < 50) setHasMore(false);
-      setUpdated(new Date().toLocaleTimeString());
-      // Only cache landing page (non-search) results
-      if (d.length > 0 && !q) {
-        localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
-        localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
-        localStorage.setItem("sneakyradar_drops_ver", "v25");
-      }
-    } catch(e) {
-      console.error("Search error:", e);
-      setSteps([{label:"Searching all sources",status:"done",count:0}]);
-      setError(e.message || "Search failed. Showing cached drops.");
-    }
-    setLoading(false);
-  };
-
-  const loadMore = async ()=>{
-    if(!lastQuery || loadingMore || !hasMore) return;
-    setLoadingMore(true);
-    const nextPage = page + 1;
-    const fetchQuery = lastQuery === "__trending__" ? "" : lastQuery;
-    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending");
-    try {
-      const moreDrops = await fetchDrops(fetchQuery, nextPage);
-      console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
-      if(moreDrops.length === 0) { setHasMore(false); }
-      else {
-        const combined = dedupeDrops([...drops, ...moreDrops]);
-        setDrops(combined);
-        setPage(nextPage);
-        if(moreDrops.length < 50) setHasMore(false);
-      }
-    } catch(e) {
-      console.error("Load more error:", e);
-    }
-    setLoadingMore(false);
-  };
-
-  useEffect(() => {
-    // Check URL for ?search= param (from blog links)
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get("search");
-    if (searchParam) {
-      setQuery(searchParam);
-      search(searchParam);
-      return;
-    }
-
-    const CACHE_VERSION = "v25";
-    const cached = localStorage.getItem("sneakyradar_drops");
-    const cachedTime = localStorage.getItem("sneakyradar_drops_time");
-    const cachedVer = localStorage.getItem("sneakyradar_drops_ver");
-    const oneHour = 15 * 60 * 1000; // 15 min cache
-    if (cached && cachedTime && cachedVer === CACHE_VERSION && Date.now() - parseInt(cachedTime) < oneHour) {
-      try { 
-        const parsed = JSON.parse(cached);
-        if (parsed.length > 0) { setDrops(parsed); return; }
-      } catch(e) {}
-    }
-    // Clear stale cache
-    localStorage.removeItem("sneakyradar_drops");
-    localStorage.removeItem("sneakyradar_drops_time");
-    localStorage.removeItem("sneakyradar_drops_ver");
-    search("Jordan");
-  }, []);
-
-  const CATEGORY_SEARCHES = [
-    {label: "ALL", query: "", group: "top"},
-    {label: "JORDAN ALL", query: "Air Jordan Retro", group: "jordan"},
-    {label: "JORDAN 1", query: "Jordan 1 Retro", group: "jordan"},
-    {label: "JORDAN 2", query: "Jordan 2 Retro", group: "jordan"},
-    {label: "JORDAN 3", query: "Jordan 3 Retro", group: "jordan"},
-    {label: "JORDAN 4", query: "Jordan 4 Retro", group: "jordan"},
-    {label: "JORDAN 5", query: "Jordan 5 Retro", group: "jordan"},
-    {label: "JORDAN 6", query: "Jordan 6 Retro", group: "jordan"},
-    {label: "JORDAN 7", query: "Jordan 7 Retro", group: "jordan"},
-    {label: "JORDAN 8", query: "Jordan 8 Retro", group: "jordan"},
-    {label: "JORDAN 9", query: "Jordan 9 Retro", group: "jordan"},
-    {label: "JORDAN 10", query: "Jordan 10 Retro", group: "jordan"},
-    {label: "JORDAN 11", query: "Jordan 11 Retro", group: "jordan"},
-    {label: "JORDAN 12", query: "Jordan 12 Retro", group: "jordan"},
-    {label: "JORDAN 13", query: "Jordan 13 Retro", group: "jordan"},
-    {label: "JORDAN 14", query: "Jordan 14 Retro", group: "jordan"},
-    {label: "---", group: "div1"},
-    {label: "TRAVIS SCOTT", query: "Travis Scott", group: "nike"},
-    {label: "NIKE DUNK", query: "Nike Dunk", group: "nike"},
-    {label: "AIR FORCE 1", query: "Air Force 1", group: "nike"},
-    {label: "AIR MAX", query: "Nike Air Max", group: "nike"},
-    {label: "AIR MAX 90", query: "Nike Air Max 90", group: "nike"},
-    {label: "AIR MAX 95", query: "Nike Air Max 95", group: "nike"},
-    {label: "AIR MAX 97", query: "Nike Air Max 97", group: "nike"},
-    {label: "NIKE SB", query: "Nike SB", group: "nike"},
-    {label: "KOBE", query: "Nike Kobe", group: "nike"},
-    {label: "FOAMPOSITE", query: "Nike Foamposite", group: "nike"},
-    {label: "LEBRON", query: "Lebron", group: "nike"},
-    {label: "JA MORANT", query: "Nike Ja", group: "nike"},
-    {label: "SACAI", query: "Nike Sacai", group: "nike"},
-    {label: "LUKA", query: "Jordan Luka", group: "nike"},
-    {label: "---", group: "div2"},
-    {label: "YEEZY BOOST", query: "Yeezy Boost", group: "yeezy"},
-    {label: "YEEZY", query: "YZY", group: "yeezy"},
-    {label: "ADIDAS", query: "Adidas", group: "yeezy"},
-    {label: "BAD BUNNY", query: "Bad Bunny Adidas", group: "yeezy"},
-    {label: "---", group: "div3"},
-    {label: "BALENCIAGA", query: "Balenciaga sneakers", group: "designer"},
-    {label: "VERSACE", query: "Versace sneakers", group: "designer"},
-    {label: "LOUIS VUITTON", query: "Louis Vuitton sneakers", group: "designer"},
-    {label: "ALEXANDER MCQUEEN", query: "Alexander McQueen sneakers", group: "designer"},
-    {label: "GUCCI", query: "Gucci sneakers", group: "designer"},
-    {label: "MAISON MIHARA", query: "Maison Mihara Yasuhiro", group: "designer"},
-    {label: "BURBERRY", query: "Burberry sneakers", group: "designer"},
-    {label: "PRADA", query: "Prada sneakers", group: "designer"},
-    {label: "---", group: "div4"},
-    {label: "NEW BALANCE", query: "New Balance", group: "other"},
-    {label: "ASICS", query: "Asics", group: "other"},
-    {label: "PUMA", query: "Puma", group: "other"},
-    {label: "ON RUNNING", query: "On Running", group: "other"},
-    {label: "ANTA", query: "Anta", group: "other"},
-    {label: "SAUCONY", query: "Saucony", group: "other"},
-    {label: "SALOMON", query: "Salomon", group: "other"},
-    {label: "CONVERSE", query: "Converse", group: "other"},
-    {label: "MIZUNO", query: "Mizuno", group: "other"},
-    {label: "ONITSUKA", query: "Onitsuka Tiger", group: "other"},
-    {label: "HOKA", query: "Hoka", group: "other"},
-    {label: "BROOKS", query: "Brooks", group: "other"},
-    {label: "VANS", query: "Vans", group: "other"},
-    {label: "UGG", query: "UGG", group: "other"},
-    {label: "CROCS", query: "Crocs", group: "other"},
-  ];
-  const [activeCategory, setActiveCategory] = useState("ALL");
-
-  const handleCategoryClick = (cat) => {
-    if (!cat.query && cat.query !== "") return;
-    setActiveCategory(cat.label);
-    if (cat.query === "") {
-      // ALL — search Jordan as default landing
-      setQuery("");
-      search("Jordan");
-    } else {
-      setQuery(cat.query);
-      search(cat.query);
-    }
-  };
-
-
-  const allDrops=[...SPONSORED_DROPS,...drops];
-  const filtered=allDrops.filter(d=>{
-    if(d.sponsored)return true;
-    return(srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
-  });
-
-  return (
-    <div className="page">
-      <div className="section-wrap">
-        <div className="section-eyebrow">Live Intelligence</div>
-        <h1 className="section-title"><span className="filled">DROP</span> <span className="outline">RADAR</span></h1>
-        <p className="section-sub">Release tracking across every major retailer. Every upcoming drop, deduplicated and ranked by hype score.</p>
-        <div className="search-row">
-          <div className="search-bar">
-            <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search brand, colorway, silhouette..." onKeyDown={e=>e.key==="Enter"&&search(query)}/>
-          </div>
-          <button className="search-go-btn" onClick={()=>search(query)} disabled={loading}>{loading?"SCANNING...":"SEARCH"}</button>
-        </div>
-        <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
-        <div className="filters">
-          {CATEGORY_SEARCHES.map((cat,idx)=>cat.label==="---"?<div key={"div"+idx} style={{width:"100%",height:"1px",background:"var(--accent)",margin:"6px 0",opacity:0.4}}/>:<button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
-        </div>
-        {error&&<div className="error-msg">⚠ {error}</div>}
-        {loading&&steps.length>0&&(
-          <div className="progress-steps">
-            {steps.map((s,i)=><div key={i} className="progress-step"><div className={`step-dot ${s.status}`}/><span className={`step-label ${s.status}`}>{s.status==="done"?`✓ ${s.label}${s.count!=null?` (${s.count})`:""}`:s.status==="active"?`scanning ${s.label}...`:s.label}</span></div>)}
-          </div>
-        )}
-        <div className="status-bar">
-          <div className="pulse-dot"/>
-          {loading?`Scanning all sources...`:`${filtered.length} drops tracked`}
-          {updated&&<span style={{marginLeft:"auto"}}>Updated {updated}</span>}
-        </div>
-        {loading?(
-          <div className="loading-grid">
-            {[1,2,3,4,5,6].map(i=><div key={i} className="loading-card"><div className="loading-img"/><div className="loading-body"><div className="skeleton" style={{width:"60px",height:"10px"}}/><div className="skeleton" style={{width:"70%",height:"24px",marginTop:"8px"}}/><div className="skeleton" style={{width:"100%",height:"8px",marginTop:"12px"}}/></div></div>)}
-          </div>
-        ):filtered.length===0?(
-          <div className="empty-state"><h2>NO DROPS</h2>adjust your filters</div>
-        ):(
-          <div>
-            <div className="grid">
-              {filtered.map((drop,i)=>(
-                <div key={i} className={`card ${drop.sponsored?"sponsored":""}`}>
-                  {drop.sponsored&&<div className="sponsor-banner"><span>{drop.sponsorLabel||"Featured"}</span><span style={{fontSize:"0.45rem",opacity:0.6}}>Sponsored</span></div>}
-                  <DropImage src={drop.image} name={drop.name} brand={drop.brand} source={drop.source} productUrl={drop.sourceUrl} onClick={()=>{if(drop.sourceUrl){trackClick(drop,drop.source?.toLowerCase());window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}}/>
-                  <div className="card-body">
-                    {drop.badge&&<div className={`badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}`}>{BADGE_LABELS[drop.badge]||drop.badge}</div>}
-                    <div className="card-brand">{drop.brand}</div>
-                    <div className="card-name" onClick={()=>{if(drop.sourceUrl)window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}>{drop.name}</div>
-                    {drop.colorway&&<div className="card-colorway">{drop.colorway}</div>}
-                    <div className="card-meta">
-                      <div className="meta-row"><span className="meta-label">Release</span><span className="meta-value">{drop.date||"TBD"}</span></div>
-                      <div className="meta-row"><span className="meta-label">Retail</span><span className="price">{drop.retail||"—"}</span></div>
-                      {drop.resell&&<div className="meta-row"><span className="meta-label">Est. Resell</span><span className="meta-value">{drop.resell}</span></div>}
-                      {drop.method&&<div className="meta-row"><span className="meta-label">Method</span><span className="meta-value" style={{fontSize:"0.65rem"}}>{drop.method}</span></div>}
-                    </div>
-                    {drop.hype&&<><div className="hype-bar"><div className="hype-fill" style={{width:`${drop.hype}%`}}/></div><div className="hype-label"><span>Hype Index</span><span>{drop.hype}/100</span></div></>}
-                    <PriceCompare prices={drop.prices} drop={drop}/>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {hasMore && lastQuery && !loading && (
-              <div style={{textAlign:"center",padding:"32px 0"}}>
-                <button onClick={loadMore} disabled={loadingMore} style={{background:loadingMore?"var(--card)":"var(--accent)",color:loadingMore?"var(--muted)":"#000",border:"none",padding:"14px 48px",borderRadius:"8px",fontFamily:"'Bebas Neue',sans-serif",fontSize:"1.1rem",letterSpacing:"2px",cursor:loadingMore?"wait":"pointer",transition:"all 0.2s"}}>
-                  {loadingMore ? "LOADING..." : "LOAD MORE"}
-                </button>
-                <div style={{fontSize:"0.65rem",color:"var(--muted)",marginTop:"8px"}}>
-                  Showing {filtered.length} results
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ResellPage() {
-  const [sortCol, setSortCol] = useState("avg");
-  const [brandFilter, setBrandFilter] = useState("All");
-  const brands=["All",...new Set(RESELL_DATA.map(d=>d.brand))];
-  const sorted=[...RESELL_DATA].filter(d=>brandFilter==="All"||d.brand===brandFilter).sort((a,b)=>{
-    const p=v=>parseFloat(v.replace(/[^0-9.]/g,''));
-    if(sortCol==="avg")return p(b.avg)-p(a.avg);
-    if(sortCol==="trend")return parseFloat(b.trend)-parseFloat(a.trend);
-    return 0;
-  });
-  return (
-    <div className="page">
-      <div className="section-wrap">
-        <div className="section-eyebrow">Market Intelligence</div>
-        <h1 className="section-title"><span className="filled">RESELL</span> <span className="outline">TRACKER</span></h1>
-        <p className="section-sub">Retail vs. market price, trend direction, and weekly sales volume — everything you need to buy, hold, or flip.</p>
-        <div className="resell-stats">
-          <div className="resell-stat"><div className="resell-stat-label">Models Tracked</div><div className="resell-stat-value">52</div><div className="resell-stat-sub">across 12 brands</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Hottest Model</div><div className="resell-stat-value">TS1</div><div className="resell-stat-sub">Travis Scott Fragment avg $1,450</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Best Flip</div><div className="resell-stat-value">MY3</div><div className="resell-stat-sub">Mars Yard 3.0 avg +291% ROI</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Weekly Vol</div><div className="resell-stat-value">68k</div><div className="resell-stat-sub">verified sales tracked this week</div></div>
-        </div>
-        <div className="filters" style={{marginBottom:20}}>
-          {brands.map(b=><button key={b} className={`filter-btn ${brandFilter===b?"active":""}`} onClick={()=>setBrandFilter(b)}>{b}</button>)}
-        </div>
-        <table className="resell-table">
-          <thead><tr>
-            <th>Model</th><th>Retail</th>
-            <th style={{color:sortCol==="avg"?"var(--accent2)":"var(--muted)"}} onClick={()=>setSortCol("avg")}>Avg {sortCol==="avg"?"↓":""}</th>
-            <th>Low / High</th>
-            <th style={{color:sortCol==="trend"?"var(--accent2)":"var(--muted)"}} onClick={()=>setSortCol("trend")}>Trend {sortCol==="trend"?"↓":""}</th>
-            <th>Volume</th><th>Buy</th>
-          </tr></thead>
-          <tbody>
-            {sorted.map((d,i)=>(
-              <tr key={i}>
-                <td><div style={{display:"flex",alignItems:"center",gap:10}}>{d.hot&&<span className="hot-tag">HOT</span>}<div><div className="resell-brand">{d.brand}</div><div className="resell-name">{d.name}</div></div></div></td>
-                <td><span className="resell-price-low">{d.retail}</span></td>
-                <td><span className="resell-price-avg">{d.avg}</span></td>
-                <td><span className="resell-price-low">{d.low}</span><span style={{color:"var(--border)",margin:"0 4px"}}>/</span><span className="resell-price-high">{d.high}</span></td>
-                <td><span className={d.trend.startsWith("-")?"trend-down":"trend-up"}>{d.trend}</span></td>
-                <td><span className="vol-tag">{d.vol}</span></td>
-                <td><div style={{display:"flex",gap:6}}>
-                  <a href={`https://stockx.com/search?s=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer" className="resell-buy-btn">StockX</a>
-                  <a href={`https://goat.com/search?query=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer" className="resell-buy-btn">GOAT</a>
-                </div></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="resell-mobile">
-          {sorted.map((d,i)=>(
-            <div key={i} className="resell-m-card">
-              <div className="resell-m-top">
-                <div>
-                  <div className="resell-m-brand">{d.hot&&<span className="hot-tag" style={{marginRight:6}}>HOT</span>}{d.brand}</div>
-                  <div className="resell-m-name">{d.name}</div>
-                </div>
-                <div style={{textAlign:"right"}}>
-                  <div className="resell-m-avg">{d.avg}</div>
-                  <div className={d.trend.startsWith("-")?"trend-down":"trend-up"} style={{fontSize:"0.65rem"}}>{d.trend}</div>
-                </div>
-              </div>
-              <div className="resell-m-row"><span>Retail</span><span>{d.retail}</span></div>
-              <div className="resell-m-row"><span>Range</span><span>{d.low} — {d.high}</span></div>
-              <div className="resell-m-row"><span>Volume</span><span>{d.vol}</span></div>
-              <div className="resell-m-btns">
-                <a href={`https://stockx.com/search?s=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">StockX</a>
-                <a href={`https://goat.com/search?query=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">GOAT</a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AuthPage() {
-  const [selected, setSelected] = useState(null);
-  return (
-    <div className="page">
-      <div className="section-wrap">
-        <div className="section-eyebrow">Know Before You Buy</div>
-        <h1 className="section-title"><span className="filled">AUTH</span> <span className="outline">GUIDE</span></h1>
-        <p className="section-sub">Spot fakes before you get burned. Expert check-by-check authentication guides for the most-faked silhouettes.</p>
-        <div className="auth-grid">
-          {AUTH_GUIDES.map((g,i)=>(
-            <div key={i} className={`auth-card ${selected===i?"selected":""}`} onClick={()=>setSelected(selected===i?null:i)}>
-              <div className="auth-model">{g.model}</div>
-              <div className={`auth-diff ${g.difficulty.toLowerCase().replace(" ","")}`}>{g.difficulty} to Fake</div>
-              <div><div className="fake-score-label"><span>Fake Prevalence</span><span>{g.fakeScore}%</span></div><div className="fake-score-bar"><div className="fake-score-fill" style={{width:`${g.fakeScore}%`}}/></div></div>
-              <div className="auth-cta">{selected===i?"▲ Collapse":"▼ View "+g.checks.length+" checks"}</div>
-            </div>
-          ))}
-        </div>
-        {selected!==null&&(
-          <div className="auth-detail">
-            <div className="auth-detail-header">
-              <div className="auth-detail-title">{AUTH_GUIDES[selected].model} — Authentication Checklist</div>
-              <button className="auth-detail-close" onClick={()=>setSelected(null)}>✕ Close</button>
-            </div>
-            <div style={{padding:"10px 28px",background:"#0e0e0e",borderBottom:"1px solid var(--border)",display:"grid",gridTemplateColumns:"160px 1fr 1fr 1fr",gap:20}}>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--muted)"}}>Check Area</div>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--green)"}}>✓ Legit</div>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>✗ Fake</div>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent2)"}}>💡 Pro Tip</div>
-            </div>
-            <div>
-              {AUTH_GUIDES[selected].checks.map((c,i)=>(
-                <div key={i} className="auth-check">
-                  <div className="auth-check-area">{c.area}</div>
-                  <div className="auth-check-real">{c.real}</div>
-                  <div className="auth-check-fake">{c.fake}</div>
-                  <div className="auth-check-tip">{c.tip}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ReleasesPage(){
-  const [monthOffset,setMonthOffset]=useState(0);
-  const [view,setView]=useState("list");
-  const [brandFilter,setBrandFilter]=useState("ALL");
-  const [sel,setSel]=useState(null);
-  const [releases,setReleases]=useState([]);
-  const [relSource,setRelSource]=useState("");
-  const [relUpdated,setRelUpdated]=useState("");
-  const today=new Date();
-
-  useEffect(()=>{
-    fetch("/releases.json").then(r=>{if(!r.ok)throw new Error("no file");return r.json();}).then(d=>{
-      if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"auto");setRelUpdated(d.updated||"");}
-    }).catch(()=>{
-      fetch("/.netlify/functions/anthropic",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"get_releases"})})
-        .then(r=>r.json()).then(d=>{
-          if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"");setRelUpdated(d.updated||"");}
-        }).catch(()=>{});
-    });
-  },[]);
-  const vd=new Date(today.getFullYear(),today.getMonth()+monthOffset,1);
-  const mn=vd.toLocaleString('default',{month:'long'});
-  const yr=vd.getFullYear();
-  const bOpts=["ALL","JORDAN","NIKE","ADIDAS","COLLAB"];
-  const filtered=releases.filter(r=>{if(brandFilter==="ALL")return true;if(brandFilter==="COLLAB")return r.collab;return r.brand.toUpperCase()===brandFilter;});
-  const monthRels=filtered.filter(r=>{const d=new Date(r.date+"T00:00:00");return d.getMonth()===vd.getMonth()&&d.getFullYear()===vd.getFullYear();}).sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const getBrandClass=r=>{if(r.collab)return"brand-collab";if(r.brand==="Jordan")return"brand-jordan";if(r.brand==="Nike")return"brand-nike";if(r.brand==="Adidas")return"brand-adidas";return"brand-other";};
-  const getCalDays=()=>{const f=new Date(vd.getFullYear(),vd.getMonth(),1);const l=new Date(vd.getFullYear(),vd.getMonth()+1,0);const sd=f.getDay();const days=[];for(let i=sd-1;i>=0;i--){const d=new Date(f);d.setDate(d.getDate()-i-1);days.push({date:d,other:true});}for(let j=1;j<=l.getDate();j++)days.push({date:new Date(vd.getFullYear(),vd.getMonth(),j),other:false});while(days.length%7!==0){const la=days[days.length-1].date;const nd=new Date(la);nd.setDate(nd.getDate()+1);days.push({date:nd,other:true});}return days;};
-  const relsForDate=date=>{const ds=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");return filtered.filter(r=>r.date===ds);};
-  const isToday=d=>d.getDate()===today.getDate()&&d.getMonth()===today.getMonth()&&d.getFullYear()===today.getFullYear();
-  const fmtDate=ds=>{const d=new Date(ds+"T00:00:00");return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});};
-  const grouped={};monthRels.forEach(r=>{if(!grouped[r.date])grouped[r.date]=[];grouped[r.date].push(r);});
-  const totalDrops=monthRels.length;
-  const collabs=monthRels.filter(r=>r.collab).length;
-  const avgP=totalDrops>0?Math.round(monthRels.reduce((s,r)=>s+r.price,0)/totalDrops):0;
-  const highest=monthRels.reduce((mx,r)=>r.price>(mx?mx.price:0)?r:mx,null);
-  return(
-    <div className="page"><div className="section-wrap">
-      <div className="section-eyebrow">Upcoming</div>
-      <div className="section-title"><span className="filled">RELEASE</span> <span className="outline">CALENDAR</span></div>
-      <div className="section-sub">Every confirmed sneaker drop. Auto-updated weekly via AI-powered web search.</div>
-      <div className="cal-stats">
-        <div className="cal-stat"><div className="cal-stat-label">Drops This Month</div><div className="cal-stat-val accent">{totalDrops}</div></div>
-        <div className="cal-stat"><div className="cal-stat-label">Collabs</div><div className="cal-stat-val" style={{color:"#cc44ff"}}>{collabs}</div></div>
-        <div className="cal-stat"><div className="cal-stat-label">Avg Retail</div><div className="cal-stat-val green">${avgP}</div></div>
-        <div className="cal-stat"><div className="cal-stat-label">Priciest Drop</div><div className="cal-stat-val" style={{color:"#ffd200"}}>{highest?"$"+highest.price:"—"}</div></div>
-      </div>
-      <div className="cal-header">
-        <div className="cal-month-nav">
-          <button onClick={()=>setMonthOffset(monthOffset-1)}>◀ PREV</button>
-          <div className="cal-month-label"><span>{mn}</span> {yr}</div>
-          <button onClick={()=>setMonthOffset(monthOffset+1)}>NEXT ▶</button>
-        </div>
-        <div className="cal-view-toggle">
-          <button className={"cal-view-btn"+(view==="calendar"?" active":"")} onClick={()=>setView("calendar")}>GRID</button>
-          <button className={"cal-view-btn"+(view==="list"?" active":"")} onClick={()=>setView("list")}>LIST</button>
-        </div>
-      </div>
-      <div className="cal-filters">{bOpts.map(b=><button key={b} className={"cal-filter-btn"+(brandFilter===b?" active":"")} onClick={()=>setBrandFilter(b)}>{b}</button>)}</div>
-      {view==="calendar"&&<div className="cal-grid">
-        {["SUN","MON","TUE","WED","THU","FRI","SAT"].map(d=><div key={d} className="cal-day-header">{d}</div>)}
-        {getCalDays().map((day,i)=>{const rels=relsForDate(day.date);return(
-          <div key={i} className={"cal-day"+(day.other?" other-month":"")+(isToday(day.date)?" today":"")}>
-            <div className="cal-day-num">{day.date.getDate()}</div>
-            {rels.slice(0,3).map((r,j)=><span key={j} className={"cal-release-pip "+getBrandClass(r)} onClick={()=>setSel(r)}>{r.name.split(" ").slice(0,3).join(" ")}</span>)}
-            {rels.length>3&&<span className="cal-more" onClick={()=>setView("list")}>+{rels.length-3} more</span>}
-          </div>);})}
-      </div>}
-      {view==="list"&&<div className="cal-list">
-        {monthRels.length===0&&<div style={{textAlign:"center",padding:"60px 0",color:"var(--muted)",fontSize:".75rem",letterSpacing:"1px"}}>No releases scheduled for this month</div>}
-        {Object.keys(grouped).sort().map(ds=>{const d=new Date(ds+"T00:00:00");const isPast=d<new Date(today.getFullYear(),today.getMonth(),today.getDate());return(
-          <div key={ds}>
-            <div className="cal-list-date"><span>{d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span> — {d.toLocaleDateString('en-US',{weekday:'long'})}</div>
-            {grouped[ds].map((r,j)=><div key={j} className="cal-list-item" onClick={()=>setSel(r)}>
-              <div className="cal-list-info"><div className="cal-list-name">{r.name}</div><div className="cal-list-meta">{r.brand} · {r.color}</div><div className="cal-list-sku">{r.sku}</div></div>
-              <div className="cal-list-price">${r.price}</div>
-              <div className="cal-list-actions"><a className="cal-list-btn primary" href={"/?search="+encodeURIComponent(r.name)} onClick={e=>e.stopPropagation()}>Compare Prices</a></div>
-            </div>)}
-          </div>);})}
-      </div>}
-      <div className="cal-legend">
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#ff3c00"}}/> JORDAN</div>
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#888"}}/> NIKE</div>
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#00e676"}}/> ADIDAS</div>
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#cc44ff"}}/> COLLAB</div>
-      </div>
-      {sel&&<div className="cal-modal-overlay" onClick={()=>setSel(null)}><div className="cal-modal" onClick={e=>e.stopPropagation()}>
-        <div className="cal-modal-head"><div style={{fontSize:".5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>{sel.brand}{sel.collab?" · COLLAB":""}</div><button className="cal-modal-close" onClick={()=>setSel(null)}>✕</button></div>
-        <div className="cal-modal-body">
-          <div className="cal-modal-title">{sel.name}</div>
-          <div className="cal-modal-details">
-            <div className="cal-modal-detail"><label>Release Date</label><span>{fmtDate(sel.date)}</span></div>
-            <div className="cal-modal-detail"><label>Retail Price</label><span style={{color:"var(--green)"}}>${sel.price}</span></div>
-            <div className="cal-modal-detail"><label>Style Code</label><span style={{fontSize:".9rem"}}>{sel.sku}</span></div>
-            <div className="cal-modal-detail"><label>Colorway</label><span style={{fontSize:".7rem",fontFamily:"'DM Mono',monospace"}}>{sel.color}</span></div>
-          </div>
-          <div className="cal-modal-btns">
-            <a className="cal-list-btn primary" href={"/?search="+encodeURIComponent(sel.name)}>Compare Prices</a>
-            <a className="cal-list-btn" href={"https://www.amazon.com/s?k="+encodeURIComponent(sel.name+" "+sel.sku)+"&tag=sneakyradar-20"} target="_blank" rel="noopener">Amazon</a>
-            <a className="cal-list-btn" href={"https://stockx.com/search?s="+encodeURIComponent(sel.name)} target="_blank" rel="noopener">StockX</a>
-          </div>
-        </div>
-      </div></div>}
-    </div></div>
-  );
-}
-
-function App() {
-  const [activePage, setActivePage] = useState("drops");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showAlertModal, setShowAlertModal] = useState(false);
-  const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"releases",label:"Releases",icon:"📅"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"},{id:"blog",label:"Blog",icon:"📝",href:"/blog"}];
-  return (
-    <>
-      {showAlertModal&&<AlertModal onClose={()=>setShowAlertModal(false)}/>}
-      <nav className="nav">
-        <div className="nav-left">
-          <div className="nav-logo" style={{cursor:"pointer"}} onClick={()=>{setActivePage("drops");setMobileMenuOpen(false);}}><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
-          <div className="nav-tabs">
-            {tabs.map(t=>(
-              t.href ? <a key={t.id} className="nav-tab" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
-              <button key={t.id} className={`nav-tab ${activePage===t.id?"active":""}`} onClick={()=>setActivePage(t.id)}>
-                <span>{t.icon}</span>{t.label}
-              </button>
-            ))}
-          </div>
-          <button className="hamburger" onClick={()=>setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? "✕" : "☰"}
-          </button>
-        </div>
-        {mobileMenuOpen && (
-          <div className="mobile-menu">
-            {tabs.map(t=>(
-              t.href ? <a key={t.id} className="mobile-menu-item" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
-              <button key={t.id} className={`mobile-menu-item ${activePage===t.id?"active":""}`} onClick={()=>{setActivePage(t.id);setMobileMenuOpen(false);}}>
-                <span>{t.icon}</span>{t.label}
-              </button>
-            ))}
-          </div>
-        )}
-        <div className="nav-right">
-          <button className="alert-btn" onClick={()=>setShowAlertModal(true)}>
-            <span className="alert-dot"/> Drop Alerts
-          </button>
-        </div>
-      </nav>
-      {activePage==="drops"&&<DropRadarPage/>}
-      {activePage==="releases"&&<ReleasesPage/>}
-      {activePage==="resell"&&<ResellPage/>}
-      {activePage==="auth"&&<AuthPage/>}
-      <footer className="site-footer">
-        <div className="footer-logo"><span>SNEAKY</span><span className="radar">RADAR</span></div>
-        <div>Prices subject to change. Links may be affiliate links. Not affiliated with any retailer.</div>
-      </footer>
-      <ChatWidget/>
-    </>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-</script>
+<div class="footer-blog">
+<p>© 2026 SneakyRadar · <a href="/">Home</a> · Compare sneaker prices across StockX & GOAT</p>
+</div>
+</div>
 </body>
 </html>
