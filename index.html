@@ -10,8 +10,6 @@
   <meta name="keywords" content="sneaker price comparison, StockX prices, GOAT prices, sneaker deals, Jordan releases, Yeezy drops, Nike Dunk, sneaker tracker, shoe price checker, sneaker shopping, resell tracker, sneaker release dates" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://www.sneakyradar.com" />
-
-  <!-- Open Graph / Social -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="SneakyRadar — Compare Sneaker Prices Across StockX, GOAT & More" />
   <meta property="og:description" content="Search once, compare prices everywhere. Track drops, find deals, and shop smarter across StockX, GOAT, and more." />
@@ -20,17 +18,11 @@
   <meta property="og:image" content="https://www.sneakyradar.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="SneakyRadar — Compare Sneaker Prices" />
   <meta name="twitter:description" content="Search once, compare prices everywhere. Track drops across StockX, GOAT & more." />
   <meta name="twitter:image" content="https://www.sneakyradar.com/og-image.png" />
-
-  <!-- Favicon: SR crosshair -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E" />
-
-  <!-- Structured Data: Website -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -49,10 +41,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-  <style>
+<style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #0a0a0a; --surface: #111; --border: #222;
@@ -444,10 +433,8 @@
 </div>
 </noscript>
 <div class="grain"></div>
-
-<script type="text/babel">
-const { useState, useRef, useEffect } = React;
-
+<script>
+// ===== DATA & HELPERS (unchanged from React version) =====
 const API_URL = "/.netlify/functions/anthropic";
 
 const AFFILIATE = {
@@ -775,281 +762,203 @@ const BADGE_LABELS = {hot:"🔥 HOT",upcoming:"UPCOMING",limited:"LIMITED"};
 
 // Image cache no longer needed - KicksDB provides images directly
 
-function DropImage({src, name, brand, source, productUrl, onClick}) {
-  const [err, setErr] = useState(false);
-  const imgSrc = (src && src !== "null") ? src : null;
 
-  return (
-    <div className="card-img-wrap" onClick={onClick}>
-      {(!imgSrc || err) ? <div className="card-img-placeholder">{(name||"?")[0].toUpperCase()}</div>
-        : <img className="card-img" src={imgSrc} alt={brand ? (brand + " " + name) : name} onError={()=>setErr(true)} loading="lazy"/>}
-      {source && <div className="card-source-tag">{source}</div>}
-    </div>
-  );
+// ===== VANILLA JS RENDERING ENGINE =====
+
+// --- State ---
+let activePage = "drops";
+let mobileMenuOpen = false;
+let showAlertModal = false;
+
+// Drop Radar state
+let drops = DEFAULT_DROPS;
+let dropsLoading = false;
+let dropsLoadingMore = false;
+let dropsError = null;
+let srcFilter = "All";
+let searchQuery = "";
+let lastQuery = "";
+let dropsPage = 1;
+let hasMore = true;
+let dropsUpdated = null;
+let steps = [];
+let activeCategory = "ALL";
+
+// Resell state
+let resellSortCol = "avg";
+let resellBrandFilter = "All";
+
+// Auth state
+let authSelected = null;
+
+// Releases state
+let monthOffset = 0;
+let releasesView = "list";
+let releasesBrandFilter = "ALL";
+let releasesSel = null;
+let releases = [];
+let relSource = "";
+let relUpdated = "";
+
+// Chat state
+let chatOpen = false;
+let chatMsgs = [{role:"assistant",content:"Yo, I'm **SOLE** — your sneaker expert on SNEAKYRADAR. Ask me about drops, resell, authentication, anything."}];
+let chatInput = "";
+let chatThinking = false;
+let chatShowSug = true;
+
+// Alert modal state
+let alertEmail = "";
+let alertDone = false;
+
+// --- Escaping ---
+function esc(s) {
+  if (s == null) return "";
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 
-function PriceCompare({prices, drop}) {
-  if (!prices || prices.length === 0) return null;
+// --- Rendering ---
+function render() {
+  const root = document.getElementById("root");
+  root.innerHTML = renderAlertModal() + renderNav() + renderPage() + renderFooter() + renderChat();
+  attachEvents();
+}
+
+function renderNav() {
+  const tabs = [
+    {id:"drops",label:"Drop Radar",icon:"📡"},
+    {id:"releases",label:"Releases",icon:"📅"},
+    {id:"resell",label:"Resell Tracker",icon:"📈"},
+    {id:"auth",label:"Auth Guide",icon:"🔍"},
+    {id:"blog",label:"Blog",icon:"📝",href:"/blog"}
+  ];
+  return `<nav class="nav">
+    <div class="nav-left">
+      <div class="nav-logo" style="cursor:pointer" data-action="home"><span class="sneaky">SNEAKY</span><span class="radar">RADAR</span></div>
+      <div class="nav-tabs">
+        ${tabs.map(t => t.href
+          ? `<a class="nav-tab" href="${t.href}" style="text-decoration:none"><span>${t.icon}</span>${t.label}</a>`
+          : `<button class="nav-tab ${activePage===t.id?"active":""}" data-action="nav" data-page="${t.id}"><span>${t.icon}</span>${t.label}</button>`
+        ).join("")}
+      </div>
+      <button class="hamburger" data-action="hamburger">${mobileMenuOpen ? "✕" : "☰"}</button>
+    </div>
+    ${mobileMenuOpen ? `<div class="mobile-menu">
+      ${tabs.map(t => t.href
+        ? `<a class="mobile-menu-item" href="${t.href}" style="text-decoration:none"><span>${t.icon}</span>${t.label}</a>`
+        : `<button class="mobile-menu-item ${activePage===t.id?"active":""}" data-action="nav-mobile" data-page="${t.id}"><span>${t.icon}</span>${t.label}</button>`
+      ).join("")}
+    </div>` : ""}
+    <div class="nav-right">
+      <button class="alert-btn" data-action="alert-open"><span class="alert-dot"></span> Drop Alerts</button>
+    </div>
+  </nav>`;
+}
+
+function renderPage() {
+  if (activePage === "drops") return renderDropsPage();
+  if (activePage === "releases") return renderReleasesPage();
+  if (activePage === "resell") return renderResellPage();
+  if (activePage === "auth") return renderAuthPage();
+  return "";
+}
+
+function renderFooter() {
+  return `<footer class="site-footer">
+    <div class="footer-logo"><span>SNEAKY</span><span class="radar">RADAR</span></div>
+    <div><a href="/blog" style="color:#ff3c00;text-decoration:none">Blog</a> · Prices subject to change. Links may be affiliate links. Not affiliated with any retailer.</div>
+  </footer>`;
+}
+
+// --- Alert Modal ---
+function renderAlertModal() {
+  if (!showAlertModal) return "";
+  if (alertDone) {
+    return `<div class="modal-overlay" data-action="alert-overlay">
+      <div class="modal">
+        <div class="modal-success" style="text-align:center;padding:40px 28px">
+          <div style="font-size:2.5rem;margin-bottom:12px">🔥</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--accent2)">You're In</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:8px">Drop alerts locked in for ${esc(alertEmail)}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+  return `<div class="modal-overlay" data-action="alert-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">SNEAKY<span>ALERTS</span></div>
+        <button class="modal-close" data-action="alert-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-desc">Get in before everyone else. 48hr advance notice, restocks, exclusive raffle links — straight to your inbox.</div>
+        <div class="modal-features">
+          ${["48hr advance drop notices","Restock alerts on sold-out grails","Exclusive raffle links before public","Weekly resell market digest"].map(f =>
+            `<div class="modal-feature"><div class="modal-feature-dot"></div>${f}</div>`
+          ).join("")}
+        </div>
+        <div class="modal-form">
+          <input class="modal-input" type="email" placeholder="your@email.com" id="alert-email-input" value="${esc(alertEmail)}"/>
+          <button class="modal-submit" data-action="alert-submit">ALERT ME</button>
+        </div>
+        <div class="modal-fine">No spam. Unsubscribe anytime.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// --- Drop Image ---
+function renderDropImage(drop) {
+  const src = (drop.image && drop.image !== "null") ? drop.image : null;
+  const alt = esc((drop.brand ? drop.brand + " " : "") + drop.name);
+  return `<div class="card-img-wrap" data-action="drop-click" data-url="${esc(drop.sourceUrl||"")}" data-source="${esc((drop.source||"").toLowerCase())}">
+    ${src ? `<img class="card-img" src="${esc(src)}" alt="${alt}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'card-img-placeholder\'>${esc((drop.name||"?")[0].toUpperCase())}</div>'+this.parentNode.querySelector('.card-source-tag')?.outerHTML||''"/>` : `<div class="card-img-placeholder">${esc((drop.name||"?")[0].toUpperCase())}</div>`}
+    ${drop.source ? `<div class="card-source-tag">${esc(drop.source)}</div>` : ""}
+  </div>`;
+}
+
+// --- Price Compare ---
+function renderPriceCompare(prices, drop) {
+  if (!prices || prices.length === 0) return "";
   const sorted = [...prices].sort((a,b)=>parseFloat(a.price.replace(/[^0-9.]/g,''))-parseFloat(b.price.replace(/[^0-9.]/g,'')));
-  return (
-    <div className="price-compare">
-      <div className="price-compare-label">{prices.length > 1 ? "Compare Prices" : "Best Price"}</div>
-      <div className="price-compare-rows">
-        {sorted.map((p,i)=>(
-          <div key={p.store} className="price-row">
-            <span className="price-row-store">{p.store}</span>
-            <span className="price-row-amount">{p.price}</span>
-            <a href={affLink(p.url,p.storeId)} target="_blank" rel="noopener noreferrer"
-              className={`price-row-btn ${i===0?"best":""}`}
-              onClick={e=>{e.stopPropagation();trackClick(drop,p.storeId);}}>
-              {i===0?"Best Deal":"Buy"}
-            </a>
-          </div>
-        ))}
+  return `<div class="price-compare">
+    <div class="price-compare-label">${prices.length > 1 ? "Compare Prices" : "Best Price"}</div>
+    <div class="price-compare-rows">
+      ${sorted.map((p,i) => `<div class="price-row">
+        <span class="price-row-store">${esc(p.store)}</span>
+        <span class="price-row-amount">${esc(p.price)}</span>
+        <a href="${esc(affLink(p.url,p.storeId))}" target="_blank" rel="noopener noreferrer"
+          class="price-row-btn ${i===0?"best":""}"
+          onclick="event.stopPropagation();trackClick(${JSON.stringify({name:drop.name})},'${esc(p.storeId)}')">${i===0?"Best Deal":"Buy"}</a>
+      </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+// --- Drop Card ---
+function renderDropCard(drop, i) {
+  return `<div class="card ${drop.sponsored?"sponsored":""}">
+    ${drop.sponsored ? `<div class="sponsor-banner"><span>${esc(drop.sponsorLabel||"Featured")}</span><span style="font-size:0.45rem;opacity:0.6">Sponsored</span></div>` : ""}
+    ${renderDropImage(drop)}
+    <div class="card-body">
+      ${drop.badge ? `<div class="badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}">${BADGE_LABELS[drop.badge]||esc(drop.badge)}</div>` : ""}
+      <div class="card-brand">${esc(drop.brand)}</div>
+      <div class="card-name" ${drop.sourceUrl ? `data-action="drop-click" data-url="${esc(drop.sourceUrl)}" data-source="${esc((drop.source||"").toLowerCase())}" style="cursor:pointer"` : ""}>${esc(drop.name)}</div>
+      ${drop.colorway ? `<div class="card-colorway">${esc(drop.colorway)}</div>` : ""}
+      <div class="card-meta">
+        <div class="meta-row"><span class="meta-label">Release</span><span class="meta-value">${esc(drop.date||"TBD")}</span></div>
+        <div class="meta-row"><span class="meta-label">Retail</span><span class="price">${esc(drop.retail||"—")}</span></div>
+        ${drop.resell ? `<div class="meta-row"><span class="meta-label">Est. Resell</span><span class="meta-value">${esc(drop.resell)}</span></div>` : ""}
+        ${drop.method ? `<div class="meta-row"><span class="meta-label">Method</span><span class="meta-value" style="font-size:0.65rem">${esc(drop.method)}</span></div>` : ""}
       </div>
+      ${drop.hype ? `<div class="hype-bar"><div class="hype-fill" style="width:${drop.hype}%"></div></div><div class="hype-label"><span>Hype Index</span><span>${drop.hype}/100</span></div>` : ""}
+      ${renderPriceCompare(drop.prices, drop)}
     </div>
-  );
+  </div>`;
 }
 
-function SourceDropdown({selected, onChange}) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  useEffect(()=>{
-    const h = e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false);};
-    document.addEventListener("mousedown",h);
-    return()=>document.removeEventListener("mousedown",h);
-  },[]);
-  const toggle = id => onChange(selected.includes(id)?selected.filter(s=>s!==id):[...selected,id]);
-  return (
-    <div className="src-dropdown-wrap" ref={ref}>
-      <button className="src-dropdown-btn" onClick={()=>setOpen(o=>!o)}>
-        <span>{selected.length===0?"No Sources":selected.length===ALL_SOURCES.length?"All Sources":`${selected.length} Sources`}</span>
-        <span style={{display:"flex",alignItems:"center",gap:8}}>
-          {selected.length>0&&selected.length<ALL_SOURCES.length&&<span className="count-badge">{selected.length}</span>}
-          <span className={`chevron ${open?"open":""}`}>▼</span>
-        </span>
-      </button>
-      {open&&(
-        <div className="src-dropdown-menu">
-          <div className="src-menu-header">
-            <span>{ALL_SOURCES.length} Sources</span>
-            <div style={{display:"flex",gap:12}}>
-              <button onClick={()=>onChange(ALL_SOURCES.map(s=>s.id))}>All</button>
-              <button onClick={()=>onChange([])}>Clear</button>
-            </div>
-          </div>
-          {ALL_SOURCES.map(s=>(
-            <div key={s.id} className={`src-menu-item ${selected.includes(s.id)?"checked":""}`} onClick={()=>toggle(s.id)}>
-              <div className={`src-checkbox ${selected.includes(s.id)?"checked":""}`}/>
-              <div className="src-color-dot" style={{background:s.color}}/>
-              <span className="src-label">{s.label}</span>
-              <span className="src-url">{s.url}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AlertModal({onClose}) {
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-  const submit = ()=>{ if(!email.includes("@"))return; console.log("[SNEAKYRADAR] subscriber:",email); setDone(true); };
-  return (
-    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal">
-        {done?(
-          <div className="modal-success" style={{textAlign:"center",padding:"40px 28px"}}>
-            <div style={{fontSize:"2.5rem",marginBottom:12}}>🔥</div>
-            <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"1.8rem",letterSpacing:"3px",color:"var(--accent2)"}}>You're In</div>
-            <div style={{fontSize:"0.7rem",color:"var(--muted)",marginTop:8}}>Drop alerts locked in for {email}</div>
-          </div>
-        ):(
-          <>
-            <div className="modal-header">
-              <div className="modal-title">SNEAKY<span>ALERTS</span></div>
-              <button className="modal-close" onClick={onClose}>✕</button>
-            </div>
-            <div className="modal-body">
-              <div className="modal-desc">Get in before everyone else. 48hr advance notice, restocks, exclusive raffle links — straight to your inbox.</div>
-              <div className="modal-features">
-                {["48hr advance drop notices","Restock alerts on sold-out grails","Exclusive raffle links before public","Weekly resell market digest"].map(f=>(
-                  <div key={f} className="modal-feature"><div className="modal-feature-dot"/>{f}</div>
-                ))}
-              </div>
-              <div className="modal-form">
-                <input className="modal-input" type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>
-                <button className="modal-submit" onClick={submit}>ALERT ME</button>
-              </div>
-              <div className="modal-fine">No spam. Unsubscribe anytime.</div>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ChatWidget() {
-  const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState([{role:"assistant",content:"Yo, I'm **SOLE** — your sneaker expert on SNEAKYRADAR. Ask me about drops, resell, authentication, anything."}]);
-  const [input, setInput] = useState("");
-  const [thinking, setThinking] = useState(false);
-  const [showSug, setShowSug] = useState(true);
-  const bottomRef = useRef(null);
-  const inputRef = useRef(null);
-  useEffect(()=>{bottomRef.current?.scrollIntoView({behavior:"smooth"});},[msgs,thinking]);
-  useEffect(()=>{if(open)setTimeout(()=>inputRef.current?.focus(),100);},[open]);
-  const send = async (text)=>{
-    const t=text||input.trim(); if(!t||thinking)return;
-    setInput(""); setShowSug(false);
-    const newMsgs=[...msgs,{role:"user",content:t}];
-    setMsgs(newMsgs); setThinking(true);
-    try {
-      const res = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:600,system:CHAT_SYSTEM_PROMPT,messages:newMsgs.map(m=>({role:m.role,content:typeof m.content==="string"?m.content.replace(/<[^>]+>/g,""):m.content}))})});
-      const data = await res.json();
-      if(!res.ok)throw new Error(JSON.stringify(data.error)||JSON.stringify(data));
-      const reply = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"No response";
-      setMsgs(p=>[...p,{role:"assistant",content:reply}]);
-    } catch(e){setMsgs(p=>[...p,{role:"assistant",content:`Error: ${e.message}`}]);}
-    finally{setThinking(false);}
-  };
-  return (
-    <>
-      {open&&(
-        <div className="chat-window">
-          <div className="chat-header">
-            <div className="chat-header-left">
-              <div className="chat-avatar">S</div>
-              <div>
-                <div className="chat-title">SOLE EXPERT</div>
-                <div className="chat-subtitle"><span className="chat-online"/>Online · Sneaker AI</div>
-              </div>
-            </div>
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <button className="chat-clear" onClick={()=>{setMsgs([{role:"assistant",content:"Fresh start. What do you want to know?"}]);setShowSug(true);}}>Clear</button>
-              <button className="chat-close" onClick={()=>setOpen(false)}>✕</button>
-            </div>
-          </div>
-          <div className="chat-messages">
-            {msgs.map((m,i)=>(
-              <div key={i} className={`msg ${m.role==="user"?"user":"bot"}`}>
-                <div className={`msg-avatar ${m.role==="user"?"user":"bot"}`}>{m.role==="user"?"U":"S"}</div>
-                <div className="msg-bubble" dangerouslySetInnerHTML={{__html:fmtMsg(m.content)}}/>
-              </div>
-            ))}
-            {thinking&&<div className="msg bot"><div className="msg-avatar bot">S</div><div className="msg-bubble"><div className="typing-indicator"><div className="typing-dot"/><div className="typing-dot"/><div className="typing-dot"/></div></div></div>}
-            <div ref={bottomRef}/>
-          </div>
-          {showSug&&<div className="chat-suggestions">{SUGGESTED_QUESTIONS.map((q,i)=><button key={i} className="suggestion-chip" onClick={()=>send(q)}>{q}</button>)}</div>}
-          <div className="chat-input-row">
-            <textarea ref={inputRef} className="chat-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}} placeholder="Ask about any sneaker..." rows={1}/>
-            <button className="chat-send" onClick={()=>send()} disabled={thinking||!input.trim()}>SEND</button>
-          </div>
-        </div>
-      )}
-      <button className="chat-fab" onClick={()=>setOpen(o=>!o)}>
-        {open?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          :<><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>ASK SOLE</span></>}
-      </button>
-    </>
-  );
-}
-
-function DropRadarPage() {
-  const [drops, setDrops] = useState(DEFAULT_DROPS);
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState(null);
-  const [srcFilter, setSrcFilter] = useState("All");
-  const [query, setQuery] = useState("");
-  const [lastQuery, setLastQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [updated, setUpdated] = useState(null);
-  const [steps, setSteps] = useState([]);
-
-  const search = async (q="")=>{
-    setLoading(true); setError(null); setSteps([{label:"Searching all sources",status:"active"}]);
-    setPage(1); setHasMore(true); setLastQuery(q !== "" ? q : "__trending__");
-    // Update active category if it matches a category button
-    const matchedCat = CATEGORY_SEARCHES.find(c => c.query && c.query.toLowerCase() === q.toLowerCase());
-    if (matchedCat) setActiveCategory(matchedCat.label);
-    else if (q === "") setActiveCategory("ALL");
-    else setActiveCategory("");
-    try {
-      const drops = await fetchDrops(q, 1);
-      const d = dedupeDrops(drops);
-      setSteps([{label:"Searching all sources",status:"done",count:d.length}]);
-      setDrops(d.length>0?d:DEFAULT_DROPS);
-      if(!d.length) setError("No results found. Showing featured drops.");
-      if(d.length < 50) setHasMore(false);
-      setUpdated(new Date().toLocaleTimeString());
-      // Only cache landing page (non-search) results
-      if (d.length > 0 && !q) {
-        localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
-        localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
-        localStorage.setItem("sneakyradar_drops_ver", "v25");
-      }
-    } catch(e) {
-      console.error("Search error:", e);
-      setSteps([{label:"Searching all sources",status:"done",count:0}]);
-      setError(e.message || "Search failed. Showing cached drops.");
-    }
-    setLoading(false);
-  };
-
-  const loadMore = async ()=>{
-    if(!lastQuery || loadingMore || !hasMore) return;
-    setLoadingMore(true);
-    const nextPage = page + 1;
-    const fetchQuery = lastQuery === "__trending__" ? "" : lastQuery;
-    console.log("[SNEAKYRADAR] Loading more - page:", nextPage, "query:", fetchQuery || "trending");
-    try {
-      const moreDrops = await fetchDrops(fetchQuery, nextPage);
-      console.log("[SNEAKYRADAR] Load more got", moreDrops.length, "drops");
-      if(moreDrops.length === 0) { setHasMore(false); }
-      else {
-        const combined = dedupeDrops([...drops, ...moreDrops]);
-        setDrops(combined);
-        setPage(nextPage);
-        if(moreDrops.length < 50) setHasMore(false);
-      }
-    } catch(e) {
-      console.error("Load more error:", e);
-    }
-    setLoadingMore(false);
-  };
-
-  useEffect(() => {
-    // Check URL for ?search= param (from blog links)
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get("search");
-    if (searchParam) {
-      setQuery(searchParam);
-      search(searchParam);
-      return;
-    }
-
-    const CACHE_VERSION = "v25";
-    const cached = localStorage.getItem("sneakyradar_drops");
-    const cachedTime = localStorage.getItem("sneakyradar_drops_time");
-    const cachedVer = localStorage.getItem("sneakyradar_drops_ver");
-    const oneHour = 15 * 60 * 1000; // 15 min cache
-    if (cached && cachedTime && cachedVer === CACHE_VERSION && Date.now() - parseInt(cachedTime) < oneHour) {
-      try { 
-        const parsed = JSON.parse(cached);
-        if (parsed.length > 0) { setDrops(parsed); return; }
-      } catch(e) {}
-    }
-    // Clear stale cache
-    localStorage.removeItem("sneakyradar_drops");
-    localStorage.removeItem("sneakyradar_drops_time");
-    localStorage.removeItem("sneakyradar_drops_ver");
-    search("Jordan");
-  }, []);
-
+// --- Drops Page ---
+function renderDropsPage() {
   const CATEGORY_SEARCHES = [
     {label: "ALL", query: "", group: "top"},
     {label: "JORDAN ALL", query: "Air Jordan Retro", group: "jordan"},
@@ -1113,387 +1022,575 @@ function DropRadarPage() {
     {label: "UGG", query: "UGG", group: "other"},
     {label: "CROCS", query: "Crocs", group: "other"},
   ];
-  const [activeCategory, setActiveCategory] = useState("ALL");
+  // Store globally for event handlers
+  window._CATEGORY_SEARCHES = CATEGORY_SEARCHES;
 
-  const handleCategoryClick = (cat) => {
-    if (!cat.query && cat.query !== "") return;
-    setActiveCategory(cat.label);
-    if (cat.query === "") {
-      // ALL — search Jordan as default landing
-      setQuery("");
-      search("Jordan");
-    } else {
-      setQuery(cat.query);
-      search(cat.query);
-    }
+  const allDrops = [...SPONSORED_DROPS, ...drops];
+  const filtered = allDrops.filter(d => {
+    if (d.sponsored) return true;
+    return (srcFilter === "All" || d.source === srcFilter || (d.sources && d.sources.includes(srcFilter)));
+  });
+
+  let content;
+  if (dropsLoading) {
+    content = `<div class="loading-grid">
+      ${[1,2,3,4,5,6].map(i => `<div class="loading-card"><div class="loading-img"></div><div class="loading-body"><div class="skeleton" style="width:60px;height:10px"></div><div class="skeleton" style="width:70%;height:24px;margin-top:8px"></div><div class="skeleton" style="width:100%;height:8px;margin-top:12px"></div></div></div>`).join("")}
+    </div>`;
+  } else if (filtered.length === 0) {
+    content = `<div class="empty-state"><h2>NO DROPS</h2>adjust your filters</div>`;
+  } else {
+    content = `<div>
+      <div class="grid">${filtered.map((d,i) => renderDropCard(d,i)).join("")}</div>
+      ${hasMore && lastQuery && !dropsLoading ? `<div style="text-align:center;padding:32px 0">
+        <button data-action="load-more" ${dropsLoadingMore?"disabled":""} style="background:${dropsLoadingMore?"var(--card)":"var(--accent)"};color:${dropsLoadingMore?"var(--muted)":"#000"};border:none;padding:14px 48px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:${dropsLoadingMore?"wait":"pointer"};transition:all 0.2s">
+          ${dropsLoadingMore ? "LOADING..." : "LOAD MORE"}
+        </button>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:8px">Showing ${filtered.length} results</div>
+      </div>` : ""}
+    </div>`;
+  }
+
+  return `<div class="page"><div class="section-wrap">
+    <div class="section-eyebrow">Live Intelligence</div>
+    <h2 class="section-title"><span class="filled">DROP</span> <span class="outline">RADAR</span></h2>
+    <p class="section-sub">Release tracking across every major retailer. Every upcoming drop, deduplicated and ranked by hype score.</p>
+    <div class="search-row">
+      <div class="search-bar">
+        <input id="search-input" value="${esc(searchQuery)}" placeholder="Search brand, colorway, silhouette..."/>
+      </div>
+      <button class="search-go-btn" data-action="search" ${dropsLoading?"disabled":""}>${dropsLoading?"SCANNING...":"SEARCH"}</button>
+    </div>
+    <div style="text-align:center;margin-top:16px;margin-bottom:6px;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent)">Categories</div>
+    <div class="filters">
+      ${CATEGORY_SEARCHES.map((cat,idx) => cat.label === "---"
+        ? `<div style="width:100%;height:1px;background:var(--accent);margin:6px 0;opacity:0.4"></div>`
+        : `<button class="filter-btn ${activeCategory===cat.label?"active":""}" data-action="category" data-idx="${idx}">${esc(cat.label)}</button>`
+      ).join("")}
+    </div>
+    ${dropsError ? `<div class="error-msg">⚠ ${esc(dropsError)}</div>` : ""}
+    ${dropsLoading && steps.length > 0 ? `<div class="progress-steps">
+      ${steps.map(s => `<div class="progress-step"><div class="step-dot ${s.status}"></div><span class="step-label ${s.status}">${s.status==="done" ? `✓ ${esc(s.label)}${s.count!=null?` (${s.count})`:""}` : s.status==="active" ? `scanning ${esc(s.label)}...` : esc(s.label)}</span></div>`).join("")}
+    </div>` : ""}
+    <div class="status-bar">
+      <div class="pulse-dot"></div>
+      ${dropsLoading ? "Scanning all sources..." : `${filtered.length} drops tracked`}
+      ${dropsUpdated ? `<span style="margin-left:auto">Updated ${esc(dropsUpdated)}</span>` : ""}
+    </div>
+    ${content}
+  </div></div>`;
+}
+
+// --- Resell Page ---
+function renderResellPage() {
+  const p = v => parseFloat(v.replace(/[^0-9.]/g,''));
+  const brands = ["All", ...new Set(RESELL_DATA.map(d => d.brand))];
+  const sorted = [...RESELL_DATA]
+    .filter(d => resellBrandFilter === "All" || d.brand === resellBrandFilter)
+    .sort((a,b) => {
+      if (resellSortCol === "avg") return p(b.avg) - p(a.avg);
+      if (resellSortCol === "trend") return parseFloat(b.trend) - parseFloat(a.trend);
+      return 0;
+    });
+
+  return `<div class="page"><div class="section-wrap">
+    <div class="section-eyebrow">Market Intelligence</div>
+    <h2 class="section-title"><span class="filled">RESELL</span> <span class="outline">TRACKER</span></h2>
+    <p class="section-sub">Retail vs. market price, trend direction, and weekly sales volume — everything you need to buy, hold, or flip.</p>
+    <div class="resell-stats">
+      <div class="resell-stat"><div class="resell-stat-label">Models Tracked</div><div class="resell-stat-value">52</div><div class="resell-stat-sub">across 12 brands</div></div>
+      <div class="resell-stat"><div class="resell-stat-label">Hottest Model</div><div class="resell-stat-value">TS1</div><div class="resell-stat-sub">Travis Scott Fragment avg $1,450</div></div>
+      <div class="resell-stat"><div class="resell-stat-label">Best Flip</div><div class="resell-stat-value">MY3</div><div class="resell-stat-sub">Mars Yard 3.0 avg +291% ROI</div></div>
+      <div class="resell-stat"><div class="resell-stat-label">Weekly Vol</div><div class="resell-stat-value">68k</div><div class="resell-stat-sub">verified sales tracked this week</div></div>
+    </div>
+    <div class="filters" style="margin-bottom:20px">
+      ${brands.map(b => `<button class="filter-btn ${resellBrandFilter===b?"active":""}" data-action="resell-brand" data-brand="${esc(b)}">${esc(b)}</button>`).join("")}
+    </div>
+    <table class="resell-table">
+      <thead><tr>
+        <th>Model</th><th>Retail</th>
+        <th style="color:${resellSortCol==="avg"?"var(--accent2)":"var(--muted)"}" data-action="resell-sort" data-col="avg">Avg ${resellSortCol==="avg"?"↓":""}</th>
+        <th>Low / High</th>
+        <th style="color:${resellSortCol==="trend"?"var(--accent2)":"var(--muted)"}" data-action="resell-sort" data-col="trend">Trend ${resellSortCol==="trend"?"↓":""}</th>
+        <th>Volume</th><th>Buy</th>
+      </tr></thead>
+      <tbody>
+        ${sorted.map(d => `<tr>
+          <td><div style="display:flex;align-items:center;gap:10px">${d.hot?`<span class="hot-tag">HOT</span>`:``}<div><div class="resell-brand">${esc(d.brand)}</div><div class="resell-name">${esc(d.name)}</div></div></div></td>
+          <td><span class="resell-price-low">${esc(d.retail)}</span></td>
+          <td><span class="resell-price-avg">${esc(d.avg)}</span></td>
+          <td><span class="resell-price-low">${esc(d.low)}</span><span style="color:var(--border);margin:0 4px">/</span><span class="resell-price-high">${esc(d.high)}</span></td>
+          <td><span class="${d.trend.startsWith("-")?"trend-down":"trend-up"}">${esc(d.trend)}</span></td>
+          <td><span class="vol-tag">${esc(d.vol)}</span></td>
+          <td><div style="display:flex;gap:6px">
+            <a href="https://stockx.com/search?s=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="resell-buy-btn">StockX</a>
+            <a href="https://goat.com/search?query=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="resell-buy-btn">GOAT</a>
+          </div></td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+    <div class="resell-mobile">
+      ${sorted.map(d => `<div class="resell-m-card">
+        <div class="resell-m-top">
+          <div>
+            <div class="resell-m-brand">${d.hot?`<span class="hot-tag" style="margin-right:6px">HOT</span>`:``}${esc(d.brand)}</div>
+            <div class="resell-m-name">${esc(d.name)}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="resell-m-avg">${esc(d.avg)}</div>
+            <div class="${d.trend.startsWith("-")?"trend-down":"trend-up"}" style="font-size:0.65rem">${esc(d.trend)}</div>
+          </div>
+        </div>
+        <div class="resell-m-row"><span>Retail</span><span>${esc(d.retail)}</span></div>
+        <div class="resell-m-row"><span>Range</span><span>${esc(d.low)} — ${esc(d.high)}</span></div>
+        <div class="resell-m-row"><span>Volume</span><span>${esc(d.vol)}</span></div>
+        <div class="resell-m-btns">
+          <a href="https://stockx.com/search?s=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer">StockX</a>
+          <a href="https://goat.com/search?query=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer">GOAT</a>
+        </div>
+      </div>`).join("")}
+    </div>
+  </div></div>`;
+}
+
+// --- Auth Page ---
+function renderAuthPage() {
+  return `<div class="page"><div class="section-wrap">
+    <div class="section-eyebrow">Know Before You Buy</div>
+    <h2 class="section-title"><span class="filled">AUTH</span> <span class="outline">GUIDE</span></h2>
+    <p class="section-sub">Spot fakes before you get burned. Expert check-by-check authentication guides for the most-faked silhouettes.</p>
+    <div class="auth-grid">
+      ${AUTH_GUIDES.map((g,i) => `<div class="auth-card ${authSelected===i?"selected":""}" data-action="auth-toggle" data-idx="${i}">
+        <div class="auth-model">${esc(g.model)}</div>
+        <div class="auth-diff ${g.difficulty.toLowerCase().replace(" ","")}">${esc(g.difficulty)} to Fake</div>
+        <div><div class="fake-score-label"><span>Fake Prevalence</span><span>${g.fakeScore}%</span></div><div class="fake-score-bar"><div class="fake-score-fill" style="width:${g.fakeScore}%"></div></div></div>
+        <div class="auth-cta">${authSelected===i ? "▲ Collapse" : "▼ View "+g.checks.length+" checks"}</div>
+      </div>`).join("")}
+    </div>
+    ${authSelected !== null ? `<div class="auth-detail">
+      <div class="auth-detail-header">
+        <div class="auth-detail-title">${esc(AUTH_GUIDES[authSelected].model)} — Authentication Checklist</div>
+        <button class="auth-detail-close" data-action="auth-close">✕ Close</button>
+      </div>
+      <div style="padding:10px 28px;background:#0e0e0e;border-bottom:1px solid var(--border);display:grid;grid-template-columns:160px 1fr 1fr 1fr;gap:20px">
+        <div style="font-size:0.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)">Check Area</div>
+        <div style="font-size:0.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--green)">✓ Legit</div>
+        <div style="font-size:0.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent)">✗ Fake</div>
+        <div style="font-size:0.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent2)">💡 Pro Tip</div>
+      </div>
+      <div>
+        ${AUTH_GUIDES[authSelected].checks.map(c => `<div class="auth-check">
+          <div class="auth-check-area">${esc(c.area)}</div>
+          <div class="auth-check-real">${esc(c.real)}</div>
+          <div class="auth-check-fake">${esc(c.fake)}</div>
+          <div class="auth-check-tip">${esc(c.tip)}</div>
+        </div>`).join("")}
+      </div>
+    </div>` : ""}
+  </div></div>`;
+}
+
+// --- Releases Page ---
+function renderReleasesPage() {
+  const today = new Date();
+  const vd = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+  const mn = vd.toLocaleString('default', {month: 'long'});
+  const yr = vd.getFullYear();
+  const bOpts = ["ALL","JORDAN","NIKE","ADIDAS","COLLAB"];
+  const filtered = releases.filter(r => {
+    if (releasesBrandFilter === "ALL") return true;
+    if (releasesBrandFilter === "COLLAB") return r.collab;
+    return r.brand.toUpperCase() === releasesBrandFilter;
+  });
+  const monthRels = filtered.filter(r => {
+    const d = new Date(r.date + "T00:00:00");
+    return d.getMonth() === vd.getMonth() && d.getFullYear() === vd.getFullYear();
+  }).sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  const totalDrops = monthRels.length;
+  const collabs = monthRels.filter(r => r.collab).length;
+  const avgP = totalDrops > 0 ? Math.round(monthRels.reduce((s,r) => s + r.price, 0) / totalDrops) : 0;
+  const highest = monthRels.reduce((mx,r) => r.price > (mx ? mx.price : 0) ? r : mx, null);
+
+  const getBrandClass = r => {
+    if (r.collab) return "brand-collab";
+    if (r.brand === "Jordan") return "brand-jordan";
+    if (r.brand === "Nike") return "brand-nike";
+    if (r.brand === "Adidas") return "brand-adidas";
+    return "brand-other";
   };
 
+  const fmtDate = ds => {
+    const d = new Date(ds + "T00:00:00");
+    return d.toLocaleDateString('en-US', {weekday:'short',month:'short',day:'numeric'});
+  };
 
-  const allDrops=[...SPONSORED_DROPS,...drops];
-  const filtered=allDrops.filter(d=>{
-    if(d.sponsored)return true;
-    return(srcFilter==="All"||d.source===srcFilter||d.sources?.includes(srcFilter));
-  });
+  // Group by date for list view
+  const grouped = {};
+  monthRels.forEach(r => { if (!grouped[r.date]) grouped[r.date] = []; grouped[r.date].push(r); });
 
-  return (
-    <div className="page">
-      <div className="section-wrap">
-        <div className="section-eyebrow">Live Intelligence</div>
-        <h2 className="section-title"><span className="filled">DROP</span> <span className="outline">RADAR</span></h2>
-        <p className="section-sub">Release tracking across every major retailer. Every upcoming drop, deduplicated and ranked by hype score.</p>
-        <div className="search-row">
-          <div className="search-bar">
-            <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search brand, colorway, silhouette..." onKeyDown={e=>e.key==="Enter"&&search(query)}/>
+  // Calendar grid
+  let calendarHtml = "";
+  if (releasesView === "calendar") {
+    const f = new Date(vd.getFullYear(), vd.getMonth(), 1);
+    const l = new Date(vd.getFullYear(), vd.getMonth() + 1, 0);
+    const sd = f.getDay();
+    const days = [];
+    for (let i = sd - 1; i >= 0; i--) { const d = new Date(f); d.setDate(d.getDate() - i - 1); days.push({date:d,other:true}); }
+    for (let j = 1; j <= l.getDate(); j++) days.push({date:new Date(vd.getFullYear(),vd.getMonth(),j),other:false});
+    while (days.length % 7 !== 0) { const la = days[days.length-1].date; const nd = new Date(la); nd.setDate(nd.getDate()+1); days.push({date:nd,other:true}); }
+
+    const isToday = d => d.getDate()===today.getDate()&&d.getMonth()===today.getMonth()&&d.getFullYear()===today.getFullYear();
+    const relsForDate = date => {
+      const ds = date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+      return filtered.filter(r => r.date === ds);
+    };
+
+    calendarHtml = `<div class="cal-grid">
+      ${["SUN","MON","TUE","WED","THU","FRI","SAT"].map(d => `<div class="cal-day-header">${d}</div>`).join("")}
+      ${days.map((day,i) => {
+        const rels = relsForDate(day.date);
+        return `<div class="cal-day${day.other?" other-month":""}${isToday(day.date)?" today":""}">
+          <div class="cal-day-num">${day.date.getDate()}</div>
+          ${rels.slice(0,3).map((r,j) => `<span class="cal-release-pip ${getBrandClass(r)}" data-action="release-select" data-idx="${releases.indexOf(r)}">${esc(r.name.split(" ").slice(0,3).join(" "))}</span>`).join("")}
+          ${rels.length>3?`<span class="cal-more" data-action="release-view-list">+${rels.length-3} more</span>`:""}
+        </div>`;
+      }).join("")}
+    </div>`;
+  }
+
+  // List view
+  let listHtml = "";
+  if (releasesView === "list") {
+    if (monthRels.length === 0) {
+      listHtml = `<div style="text-align:center;padding:60px 0;color:var(--muted);font-size:.75rem;letter-spacing:1px">No releases scheduled for this month</div>`;
+    } else {
+      listHtml = Object.keys(grouped).sort().map(ds => {
+        const d = new Date(ds + "T00:00:00");
+        return `<div>
+          <div class="cal-list-date"><span>${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span> — ${d.toLocaleDateString('en-US',{weekday:'long'})}</div>
+          ${grouped[ds].map((r,j) => `<div class="cal-list-item" data-action="release-select" data-idx="${releases.indexOf(r)}">
+            <div class="cal-list-info"><div class="cal-list-name">${esc(r.name)}</div><div class="cal-list-meta">${esc(r.brand)} · ${esc(r.color)}</div><div class="cal-list-sku">${esc(r.sku)}</div></div>
+            <div class="cal-list-price">$${r.price}</div>
+            <div class="cal-list-actions"><a class="cal-list-btn primary" href="/?search=${encodeURIComponent(r.name)}" onclick="event.stopPropagation()">Compare Prices</a></div>
+          </div>`).join("")}
+        </div>`;
+      }).join("");
+    }
+  }
+
+  // Modal
+  let modalHtml = "";
+  if (releasesSel !== null) {
+    const sel = releases[releasesSel];
+    if (sel) {
+      modalHtml = `<div class="cal-modal-overlay" data-action="release-modal-close"><div class="cal-modal" onclick="event.stopPropagation()">
+        <div class="cal-modal-head"><div style="font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent)">${esc(sel.brand)}${sel.collab?" · COLLAB":""}</div><button class="cal-modal-close" data-action="release-modal-close">✕</button></div>
+        <div class="cal-modal-body">
+          <div class="cal-modal-title">${esc(sel.name)}</div>
+          <div class="cal-modal-details">
+            <div class="cal-modal-detail"><label>Release Date</label><span>${fmtDate(sel.date)}</span></div>
+            <div class="cal-modal-detail"><label>Retail Price</label><span style="color:var(--green)">$${sel.price}</span></div>
+            <div class="cal-modal-detail"><label>Style Code</label><span style="font-size:.9rem">${esc(sel.sku)}</span></div>
+            <div class="cal-modal-detail"><label>Colorway</label><span style="font-size:.7rem;font-family:'DM Mono',monospace">${esc(sel.color)}</span></div>
           </div>
-          <button className="search-go-btn" onClick={()=>search(query)} disabled={loading}>{loading?"SCANNING...":"SEARCH"}</button>
-        </div>
-        <div style={{textAlign:"center",marginTop:"16px",marginBottom:"6px",fontSize:"0.6rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>Categories</div>
-        <div className="filters">
-          {CATEGORY_SEARCHES.map((cat,idx)=>cat.label==="---"?<div key={"div"+idx} style={{width:"100%",height:"1px",background:"var(--accent)",margin:"6px 0",opacity:0.4}}/>:<button key={cat.label} className={`filter-btn ${activeCategory===cat.label?"active":""}`} onClick={()=>handleCategoryClick(cat)}>{cat.label}</button>)}
-        </div>
-        {error&&<div className="error-msg">⚠ {error}</div>}
-        {loading&&steps.length>0&&(
-          <div className="progress-steps">
-            {steps.map((s,i)=><div key={i} className="progress-step"><div className={`step-dot ${s.status}`}/><span className={`step-label ${s.status}`}>{s.status==="done"?`✓ ${s.label}${s.count!=null?` (${s.count})`:""}`:s.status==="active"?`scanning ${s.label}...`:s.label}</span></div>)}
+          <div class="cal-modal-btns">
+            <a class="cal-list-btn primary" href="/?search=${encodeURIComponent(sel.name)}">Compare Prices</a>
+            <a class="cal-list-btn" href="https://www.amazon.com/s?k=${encodeURIComponent(sel.name+" "+sel.sku)}&tag=sneakyradar-20" target="_blank" rel="noopener">Amazon</a>
+            <a class="cal-list-btn" href="https://stockx.com/search?s=${encodeURIComponent(sel.name)}" target="_blank" rel="noopener">StockX</a>
           </div>
-        )}
-        <div className="status-bar">
-          <div className="pulse-dot"/>
-          {loading?`Scanning all sources...`:`${filtered.length} drops tracked`}
-          {updated&&<span style={{marginLeft:"auto"}}>Updated {updated}</span>}
         </div>
-        {loading?(
-          <div className="loading-grid">
-            {[1,2,3,4,5,6].map(i=><div key={i} className="loading-card"><div className="loading-img"/><div className="loading-body"><div className="skeleton" style={{width:"60px",height:"10px"}}/><div className="skeleton" style={{width:"70%",height:"24px",marginTop:"8px"}}/><div className="skeleton" style={{width:"100%",height:"8px",marginTop:"12px"}}/></div></div>)}
-          </div>
-        ):filtered.length===0?(
-          <div className="empty-state"><h2>NO DROPS</h2>adjust your filters</div>
-        ):(
+      </div></div>`;
+    }
+  }
+
+  return `<div class="page"><div class="section-wrap">
+    <div class="section-eyebrow">Upcoming</div>
+    <div class="section-title"><span class="filled">RELEASE</span> <span class="outline">CALENDAR</span></div>
+    <div class="section-sub">Every confirmed sneaker drop. Auto-updated weekly via AI-powered web search.</div>
+    <div class="cal-stats">
+      <div class="cal-stat"><div class="cal-stat-label">Drops This Month</div><div class="cal-stat-val accent">${totalDrops}</div></div>
+      <div class="cal-stat"><div class="cal-stat-label">Collabs</div><div class="cal-stat-val" style="color:#cc44ff">${collabs}</div></div>
+      <div class="cal-stat"><div class="cal-stat-label">Avg Retail</div><div class="cal-stat-val green">$${avgP}</div></div>
+      <div class="cal-stat"><div class="cal-stat-label">Priciest Drop</div><div class="cal-stat-val" style="color:#ffd200">${highest?"$"+highest.price:"—"}</div></div>
+    </div>
+    <div class="cal-header">
+      <div class="cal-month-nav">
+        <button data-action="month-prev">◀ PREV</button>
+        <div class="cal-month-label"><span>${mn}</span> ${yr}</div>
+        <button data-action="month-next">NEXT ▶</button>
+      </div>
+      <div class="cal-view-toggle">
+        <button class="cal-view-btn${releasesView==="calendar"?" active":""}" data-action="release-view" data-view="calendar">GRID</button>
+        <button class="cal-view-btn${releasesView==="list"?" active":""}" data-action="release-view" data-view="list">LIST</button>
+      </div>
+    </div>
+    <div class="cal-filters">${bOpts.map(b => `<button class="cal-filter-btn${releasesBrandFilter===b?" active":""}" data-action="release-brand" data-brand="${b}">${b}</button>`).join("")}</div>
+    ${releasesView === "calendar" ? calendarHtml : `<div class="cal-list">${listHtml}</div>`}
+    <div class="cal-legend">
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#ff3c00"></div> JORDAN</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#888"></div> NIKE</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#00e676"></div> ADIDAS</div>
+      <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#cc44ff"></div> COLLAB</div>
+    </div>
+    ${modalHtml}
+  </div></div>`;
+}
+
+// --- Chat Widget ---
+function renderChat() {
+  let windowHtml = "";
+  if (chatOpen) {
+    windowHtml = `<div class="chat-window">
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <div class="chat-avatar">S</div>
           <div>
-            <div className="grid">
-              {filtered.map((drop,i)=>(
-                <div key={i} className={`card ${drop.sponsored?"sponsored":""}`}>
-                  {drop.sponsored&&<div className="sponsor-banner"><span>{drop.sponsorLabel||"Featured"}</span><span style={{fontSize:"0.45rem",opacity:0.6}}>Sponsored</span></div>}
-                  <DropImage src={drop.image} name={drop.name} brand={drop.brand} source={drop.source} productUrl={drop.sourceUrl} onClick={()=>{if(drop.sourceUrl){trackClick(drop,drop.source?.toLowerCase());window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}}/>
-                  <div className="card-body">
-                    {drop.badge&&<div className={`badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}`}>{BADGE_LABELS[drop.badge]||drop.badge}</div>}
-                    <div className="card-brand">{drop.brand}</div>
-                    <div className="card-name" onClick={()=>{if(drop.sourceUrl)window.open(affLink(drop.sourceUrl,drop.source?.toLowerCase()),"_blank");}}>{drop.name}</div>
-                    {drop.colorway&&<div className="card-colorway">{drop.colorway}</div>}
-                    <div className="card-meta">
-                      <div className="meta-row"><span className="meta-label">Release</span><span className="meta-value">{drop.date||"TBD"}</span></div>
-                      <div className="meta-row"><span className="meta-label">Retail</span><span className="price">{drop.retail||"—"}</span></div>
-                      {drop.resell&&<div className="meta-row"><span className="meta-label">Est. Resell</span><span className="meta-value">{drop.resell}</span></div>}
-                      {drop.method&&<div className="meta-row"><span className="meta-label">Method</span><span className="meta-value" style={{fontSize:"0.65rem"}}>{drop.method}</span></div>}
-                    </div>
-                    {drop.hype&&<><div className="hype-bar"><div className="hype-fill" style={{width:`${drop.hype}%`}}/></div><div className="hype-label"><span>Hype Index</span><span>{drop.hype}/100</span></div></>}
-                    <PriceCompare prices={drop.prices} drop={drop}/>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {hasMore && lastQuery && !loading && (
-              <div style={{textAlign:"center",padding:"32px 0"}}>
-                <button onClick={loadMore} disabled={loadingMore} style={{background:loadingMore?"var(--card)":"var(--accent)",color:loadingMore?"var(--muted)":"#000",border:"none",padding:"14px 48px",borderRadius:"8px",fontFamily:"'Bebas Neue',sans-serif",fontSize:"1.1rem",letterSpacing:"2px",cursor:loadingMore?"wait":"pointer",transition:"all 0.2s"}}>
-                  {loadingMore ? "LOADING..." : "LOAD MORE"}
-                </button>
-                <div style={{fontSize:"0.65rem",color:"var(--muted)",marginTop:"8px"}}>
-                  Showing {filtered.length} results
-                </div>
-              </div>
-            )}
+            <div class="chat-title">SOLE EXPERT</div>
+            <div class="chat-subtitle"><span class="chat-online"></span>Online · Sneaker AI</div>
           </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ResellPage() {
-  const [sortCol, setSortCol] = useState("avg");
-  const [brandFilter, setBrandFilter] = useState("All");
-  const brands=["All",...new Set(RESELL_DATA.map(d=>d.brand))];
-  const sorted=[...RESELL_DATA].filter(d=>brandFilter==="All"||d.brand===brandFilter).sort((a,b)=>{
-    const p=v=>parseFloat(v.replace(/[^0-9.]/g,''));
-    if(sortCol==="avg")return p(b.avg)-p(a.avg);
-    if(sortCol==="trend")return parseFloat(b.trend)-parseFloat(a.trend);
-    return 0;
-  });
-  return (
-    <div className="page">
-      <div className="section-wrap">
-        <div className="section-eyebrow">Market Intelligence</div>
-        <h2 className="section-title"><span className="filled">RESELL</span> <span className="outline">TRACKER</span></h2>
-        <p className="section-sub">Retail vs. market price, trend direction, and weekly sales volume — everything you need to buy, hold, or flip.</p>
-        <div className="resell-stats">
-          <div className="resell-stat"><div className="resell-stat-label">Models Tracked</div><div className="resell-stat-value">52</div><div className="resell-stat-sub">across 12 brands</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Hottest Model</div><div className="resell-stat-value">TS1</div><div className="resell-stat-sub">Travis Scott Fragment avg $1,450</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Best Flip</div><div className="resell-stat-value">MY3</div><div className="resell-stat-sub">Mars Yard 3.0 avg +291% ROI</div></div>
-          <div className="resell-stat"><div className="resell-stat-label">Weekly Vol</div><div className="resell-stat-value">68k</div><div className="resell-stat-sub">verified sales tracked this week</div></div>
         </div>
-        <div className="filters" style={{marginBottom:20}}>
-          {brands.map(b=><button key={b} className={`filter-btn ${brandFilter===b?"active":""}`} onClick={()=>setBrandFilter(b)}>{b}</button>)}
-        </div>
-        <table className="resell-table">
-          <thead><tr>
-            <th>Model</th><th>Retail</th>
-            <th style={{color:sortCol==="avg"?"var(--accent2)":"var(--muted)"}} onClick={()=>setSortCol("avg")}>Avg {sortCol==="avg"?"↓":""}</th>
-            <th>Low / High</th>
-            <th style={{color:sortCol==="trend"?"var(--accent2)":"var(--muted)"}} onClick={()=>setSortCol("trend")}>Trend {sortCol==="trend"?"↓":""}</th>
-            <th>Volume</th><th>Buy</th>
-          </tr></thead>
-          <tbody>
-            {sorted.map((d,i)=>(
-              <tr key={i}>
-                <td><div style={{display:"flex",alignItems:"center",gap:10}}>{d.hot&&<span className="hot-tag">HOT</span>}<div><div className="resell-brand">{d.brand}</div><div className="resell-name">{d.name}</div></div></div></td>
-                <td><span className="resell-price-low">{d.retail}</span></td>
-                <td><span className="resell-price-avg">{d.avg}</span></td>
-                <td><span className="resell-price-low">{d.low}</span><span style={{color:"var(--border)",margin:"0 4px"}}>/</span><span className="resell-price-high">{d.high}</span></td>
-                <td><span className={d.trend.startsWith("-")?"trend-down":"trend-up"}>{d.trend}</span></td>
-                <td><span className="vol-tag">{d.vol}</span></td>
-                <td><div style={{display:"flex",gap:6}}>
-                  <a href={`https://stockx.com/search?s=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer" className="resell-buy-btn">StockX</a>
-                  <a href={`https://goat.com/search?query=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer" className="resell-buy-btn">GOAT</a>
-                </div></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="resell-mobile">
-          {sorted.map((d,i)=>(
-            <div key={i} className="resell-m-card">
-              <div className="resell-m-top">
-                <div>
-                  <div className="resell-m-brand">{d.hot&&<span className="hot-tag" style={{marginRight:6}}>HOT</span>}{d.brand}</div>
-                  <div className="resell-m-name">{d.name}</div>
-                </div>
-                <div style={{textAlign:"right"}}>
-                  <div className="resell-m-avg">{d.avg}</div>
-                  <div className={d.trend.startsWith("-")?"trend-down":"trend-up"} style={{fontSize:"0.65rem"}}>{d.trend}</div>
-                </div>
-              </div>
-              <div className="resell-m-row"><span>Retail</span><span>{d.retail}</span></div>
-              <div className="resell-m-row"><span>Range</span><span>{d.low} — {d.high}</span></div>
-              <div className="resell-m-row"><span>Volume</span><span>{d.vol}</span></div>
-              <div className="resell-m-btns">
-                <a href={`https://stockx.com/search?s=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">StockX</a>
-                <a href={`https://goat.com/search?query=${encodeURIComponent(d.name)}`} target="_blank" rel="noopener noreferrer">GOAT</a>
-              </div>
-            </div>
-          ))}
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="chat-clear" data-action="chat-clear">Clear</button>
+          <button class="chat-close" data-action="chat-close">✕</button>
         </div>
       </div>
-    </div>
-  );
-}
-
-function AuthPage() {
-  const [selected, setSelected] = useState(null);
-  return (
-    <div className="page">
-      <div className="section-wrap">
-        <div className="section-eyebrow">Know Before You Buy</div>
-        <h2 className="section-title"><span className="filled">AUTH</span> <span className="outline">GUIDE</span></h2>
-        <p className="section-sub">Spot fakes before you get burned. Expert check-by-check authentication guides for the most-faked silhouettes.</p>
-        <div className="auth-grid">
-          {AUTH_GUIDES.map((g,i)=>(
-            <div key={i} className={`auth-card ${selected===i?"selected":""}`} onClick={()=>setSelected(selected===i?null:i)}>
-              <div className="auth-model">{g.model}</div>
-              <div className={`auth-diff ${g.difficulty.toLowerCase().replace(" ","")}`}>{g.difficulty} to Fake</div>
-              <div><div className="fake-score-label"><span>Fake Prevalence</span><span>{g.fakeScore}%</span></div><div className="fake-score-bar"><div className="fake-score-fill" style={{width:`${g.fakeScore}%`}}/></div></div>
-              <div className="auth-cta">{selected===i?"▲ Collapse":"▼ View "+g.checks.length+" checks"}</div>
-            </div>
-          ))}
-        </div>
-        {selected!==null&&(
-          <div className="auth-detail">
-            <div className="auth-detail-header">
-              <div className="auth-detail-title">{AUTH_GUIDES[selected].model} — Authentication Checklist</div>
-              <button className="auth-detail-close" onClick={()=>setSelected(null)}>✕ Close</button>
-            </div>
-            <div style={{padding:"10px 28px",background:"#0e0e0e",borderBottom:"1px solid var(--border)",display:"grid",gridTemplateColumns:"160px 1fr 1fr 1fr",gap:20}}>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--muted)"}}>Check Area</div>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--green)"}}>✓ Legit</div>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>✗ Fake</div>
-              <div style={{fontSize:"0.5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent2)"}}>💡 Pro Tip</div>
-            </div>
-            <div>
-              {AUTH_GUIDES[selected].checks.map((c,i)=>(
-                <div key={i} className="auth-check">
-                  <div className="auth-check-area">{c.area}</div>
-                  <div className="auth-check-real">{c.real}</div>
-                  <div className="auth-check-fake">{c.fake}</div>
-                  <div className="auth-check-tip">{c.tip}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+      <div class="chat-messages" id="chat-messages">
+        ${chatMsgs.map((m,i) => `<div class="msg ${m.role==="user"?"user":"bot"}">
+          <div class="msg-avatar ${m.role==="user"?"user":"bot"}">${m.role==="user"?"U":"S"}</div>
+          <div class="msg-bubble">${fmtMsg(m.content)}</div>
+        </div>`).join("")}
+        ${chatThinking ? `<div class="msg bot"><div class="msg-avatar bot">S</div><div class="msg-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div></div>` : ""}
+        <div id="chat-bottom"></div>
       </div>
-    </div>
-  );
+      ${chatShowSug ? `<div class="chat-suggestions">${SUGGESTED_QUESTIONS.map((q,i) => `<button class="suggestion-chip" data-action="chat-suggest" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>` : ""}
+      <div class="chat-input-row">
+        <textarea id="chat-input" class="chat-input" placeholder="Ask about any sneaker..." rows="1">${esc(chatInput)}</textarea>
+        <button class="chat-send" data-action="chat-send" ${chatThinking?"disabled":""}>SEND</button>
+      </div>
+    </div>`;
+  }
+  return windowHtml + `<button class="chat-fab" data-action="chat-toggle">
+    ${chatOpen
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>ASK SOLE</span>`
+    }
+  </button>`;
 }
 
-function ReleasesPage(){
-  const [monthOffset,setMonthOffset]=useState(0);
-  const [view,setView]=useState("list");
-  const [brandFilter,setBrandFilter]=useState("ALL");
-  const [sel,setSel]=useState(null);
-  const [releases,setReleases]=useState([]);
-  const [relSource,setRelSource]=useState("");
-  const [relUpdated,setRelUpdated]=useState("");
-  const today=new Date();
-
-  useEffect(()=>{
-    fetch("/releases.json").then(r=>{if(!r.ok)throw new Error("no file");return r.json();}).then(d=>{
-      if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"auto");setRelUpdated(d.updated||"");}
-    }).catch(()=>{
-      fetch("/.netlify/functions/anthropic",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"get_releases"})})
-        .then(r=>r.json()).then(d=>{
-          if(d.releases&&d.releases.length>0){setReleases(d.releases);setRelSource(d.source||"");setRelUpdated(d.updated||"");}
-        }).catch(()=>{});
+// ===== EVENT DELEGATION =====
+function attachEvents() {
+  // Search input enter key
+  const si = document.getElementById("search-input");
+  if (si) {
+    si.addEventListener("keydown", e => {
+      if (e.key === "Enter") { searchQuery = si.value; doSearch(searchQuery); }
     });
-  },[]);
-  const vd=new Date(today.getFullYear(),today.getMonth()+monthOffset,1);
-  const mn=vd.toLocaleString('default',{month:'long'});
-  const yr=vd.getFullYear();
-  const bOpts=["ALL","JORDAN","NIKE","ADIDAS","COLLAB"];
-  const filtered=releases.filter(r=>{if(brandFilter==="ALL")return true;if(brandFilter==="COLLAB")return r.collab;return r.brand.toUpperCase()===brandFilter;});
-  const monthRels=filtered.filter(r=>{const d=new Date(r.date+"T00:00:00");return d.getMonth()===vd.getMonth()&&d.getFullYear()===vd.getFullYear();}).sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const getBrandClass=r=>{if(r.collab)return"brand-collab";if(r.brand==="Jordan")return"brand-jordan";if(r.brand==="Nike")return"brand-nike";if(r.brand==="Adidas")return"brand-adidas";return"brand-other";};
-  const getCalDays=()=>{const f=new Date(vd.getFullYear(),vd.getMonth(),1);const l=new Date(vd.getFullYear(),vd.getMonth()+1,0);const sd=f.getDay();const days=[];for(let i=sd-1;i>=0;i--){const d=new Date(f);d.setDate(d.getDate()-i-1);days.push({date:d,other:true});}for(let j=1;j<=l.getDate();j++)days.push({date:new Date(vd.getFullYear(),vd.getMonth(),j),other:false});while(days.length%7!==0){const la=days[days.length-1].date;const nd=new Date(la);nd.setDate(nd.getDate()+1);days.push({date:nd,other:true});}return days;};
-  const relsForDate=date=>{const ds=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");return filtered.filter(r=>r.date===ds);};
-  const isToday=d=>d.getDate()===today.getDate()&&d.getMonth()===today.getMonth()&&d.getFullYear()===today.getFullYear();
-  const fmtDate=ds=>{const d=new Date(ds+"T00:00:00");return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});};
-  const grouped={};monthRels.forEach(r=>{if(!grouped[r.date])grouped[r.date]=[];grouped[r.date].push(r);});
-  const totalDrops=monthRels.length;
-  const collabs=monthRels.filter(r=>r.collab).length;
-  const avgP=totalDrops>0?Math.round(monthRels.reduce((s,r)=>s+r.price,0)/totalDrops):0;
-  const highest=monthRels.reduce((mx,r)=>r.price>(mx?mx.price:0)?r:mx,null);
-  return(
-    <div className="page"><div className="section-wrap">
-      <div className="section-eyebrow">Upcoming</div>
-      <div className="section-title"><span className="filled">RELEASE</span> <span className="outline">CALENDAR</span></div>
-      <div className="section-sub">Every confirmed sneaker drop. Auto-updated weekly via AI-powered web search.</div>
-      <div className="cal-stats">
-        <div className="cal-stat"><div className="cal-stat-label">Drops This Month</div><div className="cal-stat-val accent">{totalDrops}</div></div>
-        <div className="cal-stat"><div className="cal-stat-label">Collabs</div><div className="cal-stat-val" style={{color:"#cc44ff"}}>{collabs}</div></div>
-        <div className="cal-stat"><div className="cal-stat-label">Avg Retail</div><div className="cal-stat-val green">${avgP}</div></div>
-        <div className="cal-stat"><div className="cal-stat-label">Priciest Drop</div><div className="cal-stat-val" style={{color:"#ffd200"}}>{highest?"$"+highest.price:"—"}</div></div>
-      </div>
-      <div className="cal-header">
-        <div className="cal-month-nav">
-          <button onClick={()=>setMonthOffset(monthOffset-1)}>◀ PREV</button>
-          <div className="cal-month-label"><span>{mn}</span> {yr}</div>
-          <button onClick={()=>setMonthOffset(monthOffset+1)}>NEXT ▶</button>
-        </div>
-        <div className="cal-view-toggle">
-          <button className={"cal-view-btn"+(view==="calendar"?" active":"")} onClick={()=>setView("calendar")}>GRID</button>
-          <button className={"cal-view-btn"+(view==="list"?" active":"")} onClick={()=>setView("list")}>LIST</button>
-        </div>
-      </div>
-      <div className="cal-filters">{bOpts.map(b=><button key={b} className={"cal-filter-btn"+(brandFilter===b?" active":"")} onClick={()=>setBrandFilter(b)}>{b}</button>)}</div>
-      {view==="calendar"&&<div className="cal-grid">
-        {["SUN","MON","TUE","WED","THU","FRI","SAT"].map(d=><div key={d} className="cal-day-header">{d}</div>)}
-        {getCalDays().map((day,i)=>{const rels=relsForDate(day.date);return(
-          <div key={i} className={"cal-day"+(day.other?" other-month":"")+(isToday(day.date)?" today":"")}>
-            <div className="cal-day-num">{day.date.getDate()}</div>
-            {rels.slice(0,3).map((r,j)=><span key={j} className={"cal-release-pip "+getBrandClass(r)} onClick={()=>setSel(r)}>{r.name.split(" ").slice(0,3).join(" ")}</span>)}
-            {rels.length>3&&<span className="cal-more" onClick={()=>setView("list")}>+{rels.length-3} more</span>}
-          </div>);})}
-      </div>}
-      {view==="list"&&<div className="cal-list">
-        {monthRels.length===0&&<div style={{textAlign:"center",padding:"60px 0",color:"var(--muted)",fontSize:".75rem",letterSpacing:"1px"}}>No releases scheduled for this month</div>}
-        {Object.keys(grouped).sort().map(ds=>{const d=new Date(ds+"T00:00:00");const isPast=d<new Date(today.getFullYear(),today.getMonth(),today.getDate());return(
-          <div key={ds}>
-            <div className="cal-list-date"><span>{d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span> — {d.toLocaleDateString('en-US',{weekday:'long'})}</div>
-            {grouped[ds].map((r,j)=><div key={j} className="cal-list-item" onClick={()=>setSel(r)}>
-              <div className="cal-list-info"><div className="cal-list-name">{r.name}</div><div className="cal-list-meta">{r.brand} · {r.color}</div><div className="cal-list-sku">{r.sku}</div></div>
-              <div className="cal-list-price">${r.price}</div>
-              <div className="cal-list-actions"><a className="cal-list-btn primary" href={"/?search="+encodeURIComponent(r.name)} onClick={e=>e.stopPropagation()}>Compare Prices</a></div>
-            </div>)}
-          </div>);})}
-      </div>}
-      <div className="cal-legend">
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#ff3c00"}}/> JORDAN</div>
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#888"}}/> NIKE</div>
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#00e676"}}/> ADIDAS</div>
-        <div className="cal-legend-item"><div className="cal-legend-dot" style={{background:"#cc44ff"}}/> COLLAB</div>
-      </div>
-      {sel&&<div className="cal-modal-overlay" onClick={()=>setSel(null)}><div className="cal-modal" onClick={e=>e.stopPropagation()}>
-        <div className="cal-modal-head"><div style={{fontSize:".5rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--accent)"}}>{sel.brand}{sel.collab?" · COLLAB":""}</div><button className="cal-modal-close" onClick={()=>setSel(null)}>✕</button></div>
-        <div className="cal-modal-body">
-          <div className="cal-modal-title">{sel.name}</div>
-          <div className="cal-modal-details">
-            <div className="cal-modal-detail"><label>Release Date</label><span>{fmtDate(sel.date)}</span></div>
-            <div className="cal-modal-detail"><label>Retail Price</label><span style={{color:"var(--green)"}}>${sel.price}</span></div>
-            <div className="cal-modal-detail"><label>Style Code</label><span style={{fontSize:".9rem"}}>{sel.sku}</span></div>
-            <div className="cal-modal-detail"><label>Colorway</label><span style={{fontSize:".7rem",fontFamily:"'DM Mono',monospace"}}>{sel.color}</span></div>
-          </div>
-          <div className="cal-modal-btns">
-            <a className="cal-list-btn primary" href={"/?search="+encodeURIComponent(sel.name)}>Compare Prices</a>
-            <a className="cal-list-btn" href={"https://www.amazon.com/s?k="+encodeURIComponent(sel.name+" "+sel.sku)+"&tag=sneakyradar-20"} target="_blank" rel="noopener">Amazon</a>
-            <a className="cal-list-btn" href={"https://stockx.com/search?s="+encodeURIComponent(sel.name)} target="_blank" rel="noopener">StockX</a>
-          </div>
-        </div>
-      </div></div>}
-    </div></div>
-  );
+    // Keep input value synced (since we re-render, the value resets)
+    si.value = searchQuery;
+  }
+
+  // Alert email input
+  const ae = document.getElementById("alert-email-input");
+  if (ae) ae.addEventListener("input", e => { alertEmail = e.target.value; });
+
+  // Chat input
+  const ci = document.getElementById("chat-input");
+  if (ci) {
+    ci.addEventListener("input", e => { chatInput = e.target.value; });
+    ci.addEventListener("keydown", e => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); doSendChat(); }
+    });
+    if (chatOpen) setTimeout(() => ci.focus(), 50);
+  }
+
+  // Scroll chat to bottom
+  const cb = document.getElementById("chat-bottom");
+  if (cb) cb.scrollIntoView({behavior:"smooth"});
 }
 
-function App() {
-  const [activePage, setActivePage] = useState("drops");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showAlertModal, setShowAlertModal] = useState(false);
-  const tabs = [{id:"drops",label:"Drop Radar",icon:"📡"},{id:"releases",label:"Releases",icon:"📅"},{id:"resell",label:"Resell Tracker",icon:"📈"},{id:"auth",label:"Auth Guide",icon:"🔍"},{id:"blog",label:"Blog",icon:"📝",href:"/blog"}];
-  return (
-    <>
-      {showAlertModal&&<AlertModal onClose={()=>setShowAlertModal(false)}/>}
-      <nav className="nav">
-        <div className="nav-left">
-          <div className="nav-logo" style={{cursor:"pointer"}} onClick={()=>{setActivePage("drops");setMobileMenuOpen(false);}}><span className="sneaky">SNEAKY</span><span className="radar">RADAR</span></div>
-          <div className="nav-tabs">
-            {tabs.map(t=>(
-              t.href ? <a key={t.id} className="nav-tab" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
-              <button key={t.id} className={`nav-tab ${activePage===t.id?"active":""}`} onClick={()=>setActivePage(t.id)}>
-                <span>{t.icon}</span>{t.label}
-              </button>
-            ))}
-          </div>
-          <button className="hamburger" onClick={()=>setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? "✕" : "☰"}
-          </button>
-        </div>
-        {mobileMenuOpen && (
-          <div className="mobile-menu">
-            {tabs.map(t=>(
-              t.href ? <a key={t.id} className="mobile-menu-item" href={t.href} style={{textDecoration:"none"}}><span>{t.icon}</span>{t.label}</a> :
-              <button key={t.id} className={`mobile-menu-item ${activePage===t.id?"active":""}`} onClick={()=>{setActivePage(t.id);setMobileMenuOpen(false);}}>
-                <span>{t.icon}</span>{t.label}
-              </button>
-            ))}
-          </div>
-        )}
-        <div className="nav-right">
-          <button className="alert-btn" onClick={()=>setShowAlertModal(true)}>
-            <span className="alert-dot"/> Drop Alerts
-          </button>
-        </div>
-      </nav>
-      {activePage==="drops"&&<DropRadarPage/>}
-      {activePage==="releases"&&<ReleasesPage/>}
-      {activePage==="resell"&&<ResellPage/>}
-      {activePage==="auth"&&<AuthPage/>}
-      <footer className="site-footer">
-        <div className="footer-logo"><span>SNEAKY</span><span className="radar">RADAR</span></div>
-        <div><a href="/blog" style={{color:"#ff3c00",textDecoration:"none"}}>Blog</a> · Prices subject to change. Links may be affiliate links. Not affiliated with any retailer.</div>
-      </footer>
-      <ChatWidget/>
-    </>
-  );
+// ===== GLOBAL CLICK HANDLER =====
+document.addEventListener("click", function(e) {
+  const btn = e.target.closest("[data-action]");
+  if (!btn) return;
+  const action = btn.dataset.action;
+
+  if (action === "home") { activePage = "drops"; mobileMenuOpen = false; render(); }
+  else if (action === "nav") { activePage = btn.dataset.page; render(); }
+  else if (action === "nav-mobile") { activePage = btn.dataset.page; mobileMenuOpen = false; render(); }
+  else if (action === "hamburger") { mobileMenuOpen = !mobileMenuOpen; render(); }
+  else if (action === "alert-open") { showAlertModal = true; alertDone = false; alertEmail = ""; render(); }
+  else if (action === "alert-close" || action === "alert-overlay") {
+    if (action === "alert-overlay" && e.target !== btn) return;
+    showAlertModal = false; render();
+  }
+  else if (action === "alert-submit") {
+    if (!alertEmail.includes("@")) return;
+    console.log("[SNEAKYRADAR] subscriber:", alertEmail);
+    alertDone = true; render();
+  }
+  else if (action === "search") {
+    const si = document.getElementById("search-input");
+    if (si) searchQuery = si.value;
+    doSearch(searchQuery);
+  }
+  else if (action === "category") {
+    const cats = window._CATEGORY_SEARCHES;
+    const cat = cats[parseInt(btn.dataset.idx)];
+    if (!cat || (cat.query == null && cat.query !== "")) return;
+    activeCategory = cat.label;
+    if (cat.query === "") { searchQuery = ""; doSearch("Jordan"); }
+    else { searchQuery = cat.query; doSearch(cat.query); }
+  }
+  else if (action === "load-more") { doLoadMore(); }
+  else if (action === "drop-click") {
+    const url = btn.dataset.url;
+    if (url) window.open(affLink(url, btn.dataset.source), "_blank");
+  }
+  else if (action === "resell-brand") { resellBrandFilter = btn.dataset.brand; render(); }
+  else if (action === "resell-sort") { resellSortCol = btn.dataset.col; render(); }
+  else if (action === "auth-toggle") {
+    const idx = parseInt(btn.dataset.idx);
+    authSelected = authSelected === idx ? null : idx;
+    render();
+  }
+  else if (action === "auth-close") { authSelected = null; render(); }
+  else if (action === "month-prev") { monthOffset--; render(); }
+  else if (action === "month-next") { monthOffset++; render(); }
+  else if (action === "release-view") { releasesView = btn.dataset.view; render(); }
+  else if (action === "release-view-list") { releasesView = "list"; render(); }
+  else if (action === "release-brand") { releasesBrandFilter = btn.dataset.brand; render(); }
+  else if (action === "release-select") { releasesSel = parseInt(btn.dataset.idx); render(); }
+  else if (action === "release-modal-close") { releasesSel = null; render(); }
+  else if (action === "chat-toggle") { chatOpen = !chatOpen; render(); }
+  else if (action === "chat-close") { chatOpen = false; render(); }
+  else if (action === "chat-clear") {
+    chatMsgs = [{role:"assistant",content:"Fresh start. What do you want to know?"}];
+    chatShowSug = true; render();
+  }
+  else if (action === "chat-send") { doSendChat(); }
+  else if (action === "chat-suggest") { chatInput = btn.dataset.q; doSendChat(btn.dataset.q); }
+});
+
+// ===== ASYNC ACTIONS =====
+async function doSearch(q) {
+  dropsLoading = true; dropsError = null; steps = [{label:"Searching all sources",status:"active"}];
+  dropsPage = 1; hasMore = true; lastQuery = q !== "" ? q : "__trending__";
+  const cats = window._CATEGORY_SEARCHES || [];
+  const matchedCat = cats.find(c => c.query && c.query.toLowerCase() === q.toLowerCase());
+  if (matchedCat) activeCategory = matchedCat.label;
+  else if (q === "") activeCategory = "ALL";
+  else activeCategory = "";
+  render();
+  try {
+    const result = await fetchDrops(q, 1);
+    const d = dedupeDrops(result);
+    steps = [{label:"Searching all sources",status:"done",count:d.length}];
+    drops = d.length > 0 ? d : DEFAULT_DROPS;
+    if (!d.length) dropsError = "No results found. Showing featured drops.";
+    if (d.length < 50) hasMore = false;
+    dropsUpdated = new Date().toLocaleTimeString();
+    if (d.length > 0 && !q) {
+      localStorage.setItem("sneakyradar_drops", JSON.stringify(d));
+      localStorage.setItem("sneakyradar_drops_time", Date.now().toString());
+      localStorage.setItem("sneakyradar_drops_ver", "v25");
+    }
+  } catch(e) {
+    console.error("Search error:", e);
+    steps = [{label:"Searching all sources",status:"done",count:0}];
+    dropsError = e.message || "Search failed. Showing cached drops.";
+  }
+  dropsLoading = false;
+  render();
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+async function doLoadMore() {
+  if (!lastQuery || dropsLoadingMore || !hasMore) return;
+  dropsLoadingMore = true;
+  render();
+  const nextPage = dropsPage + 1;
+  const fetchQuery = lastQuery === "__trending__" ? "" : lastQuery;
+  try {
+    const moreDrops = await fetchDrops(fetchQuery, nextPage);
+    if (moreDrops.length === 0) { hasMore = false; }
+    else {
+      drops = dedupeDrops([...drops, ...moreDrops]);
+      dropsPage = nextPage;
+      if (moreDrops.length < 50) hasMore = false;
+    }
+  } catch(e) { console.error("Load more error:", e); }
+  dropsLoadingMore = false;
+  render();
+}
+
+async function doSendChat(text) {
+  const t = text || chatInput.trim();
+  if (!t || chatThinking) return;
+  chatInput = ""; chatShowSug = false;
+  chatMsgs = [...chatMsgs, {role:"user",content:t}];
+  chatThinking = true;
+  render();
+  try {
+    const res = await fetch(API_URL, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-haiku-4-5-20251001",
+        max_tokens:600,
+        system:CHAT_SYSTEM_PROMPT,
+        messages:chatMsgs.map(m=>({role:m.role,content:typeof m.content==="string"?m.content.replace(/<[^>]+>/g,""):m.content}))
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(JSON.stringify(data.error) || JSON.stringify(data));
+    const reply = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("") || "No response";
+    chatMsgs = [...chatMsgs, {role:"assistant",content:reply}];
+  } catch(e) {
+    chatMsgs = [...chatMsgs, {role:"assistant",content:`Error: ${e.message}`}];
+  }
+  chatThinking = false;
+  render();
+}
+
+// ===== INIT =====
+(function init() {
+  // Check URL for ?search= param
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchParam = urlParams.get("search");
+  if (searchParam) {
+    searchQuery = searchParam;
+    render();
+    doSearch(searchParam);
+    return;
+  }
+
+  // Check cache
+  const CACHE_VERSION = "v25";
+  const cached = localStorage.getItem("sneakyradar_drops");
+  const cachedTime = localStorage.getItem("sneakyradar_drops_time");
+  const cachedVer = localStorage.getItem("sneakyradar_drops_ver");
+  const oneHour = 15 * 60 * 1000;
+  if (cached && cachedTime && cachedVer === CACHE_VERSION && Date.now() - parseInt(cachedTime) < oneHour) {
+    try {
+      const parsed = JSON.parse(cached);
+      if (parsed.length > 0) { drops = parsed; render(); return; }
+    } catch(e) {}
+  }
+  localStorage.removeItem("sneakyradar_drops");
+  localStorage.removeItem("sneakyradar_drops_time");
+  localStorage.removeItem("sneakyradar_drops_ver");
+  render();
+  doSearch("Jordan");
+
+  // Load releases
+  fetch("/releases.json").then(r => {if(!r.ok)throw new Error("no file");return r.json();}).then(d => {
+    if (d.releases && d.releases.length > 0) { releases = d.releases; relSource = d.source || "auto"; relUpdated = d.updated || ""; if (activePage === "releases") render(); }
+  }).catch(() => {
+    fetch("/.netlify/functions/anthropic", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"get_releases"})})
+      .then(r => r.json()).then(d => {
+        if (d.releases && d.releases.length > 0) { releases = d.releases; relSource = d.source || ""; relUpdated = d.updated || ""; if (activePage === "releases") render(); }
+      }).catch(() => {});
+  });
+})();
 </script>
 </body>
 </html>
