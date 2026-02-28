@@ -73,13 +73,19 @@
     .alert-btn:hover { background: var(--accent); color: white; }
     .alert-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
     .section-wrap { max-width: 1200px; margin: 0 auto; padding: 60px 40px 100px; }
-    .hero-header { display: flex; align-items: center; gap: 24px; margin-bottom: 8px; }
+    .hero-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 8px; }
     .hero-text { flex: 1; min-width: 0; }
-    .hero-img { width: 260px; height: 90px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-radius: 8px; background: linear-gradient(135deg, #0e0e0e 0%, #161616 50%, #0e0e0e 100%); border: 1px solid #1a1a1a; }
-    .hero-img img { width: 100%; height: 100%; object-fit: contain; padding: 12px; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.6s ease; }
-    .hero-img img.active { opacity: 1; }
-    .hero-img .hero-label { position: absolute; bottom: 6px; left: 0; right: 0; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.45rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); opacity: 0; transition: opacity 0.6s ease; }
-    .hero-img .hero-label.active { opacity: 1; }
+    .hero-img { width: 120px; height: 120px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-top: -8px; }
+    .radar-sweep { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .radar-sweep svg { width: 80px; height: 80px; }
+    .radar-sweep .sweep-line { transform-origin: 40px 40px; animation: sweep 2.5s linear infinite; }
+    .radar-sweep .blip1 { animation: blip 2.5s ease-out infinite; animation-delay: 0.6s; }
+    .radar-sweep .blip2 { animation: blip 2.5s ease-out infinite; animation-delay: 1.4s; }
+    .radar-sweep .blip3 { animation: blip 2.5s ease-out infinite; animation-delay: 2.0s; }
+    .radar-glow { position: absolute; top: 50%; left: 50%; width: 70px; height: 70px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255,60,0,0.08) 0%, transparent 70%); animation: radarGlow 2.5s ease-in-out infinite; }
+    @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes blip { 0%, 15% { opacity: 0; r: 2; } 20% { opacity: 1; r: 3; } 60% { opacity: 0.3; r: 2; } 100% { opacity: 0; r: 2; } }
+    @keyframes radarGlow { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
     .section-eyebrow { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
     .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); line-height: 0.9; letter-spacing: 2px; margin-bottom: 6px; }
     .section-title .outline { -webkit-text-stroke: 1px var(--text); color: transparent; }
@@ -285,8 +291,9 @@
       .mobile-menu-item.active { color: var(--accent); }
       .result-source-filters { display: none; }
       .section-wrap { padding: 24px 12px 80px; }
-      .hero-img { width: 160px; height: 60px; }
-      .hero-img .hero-label { font-size: 0.35rem; bottom: 3px; }
+      .hero-img { width: 80px; height: 80px; }
+      .radar-sweep svg { width: 52px; height: 52px; }
+      .radar-glow { width: 46px; height: 46px; }
       .section-title { font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 48px; }
       .section-sub { font-size: 0.7rem; margin-bottom: 24px; display: none; }
       .search-row { flex-direction: column; gap: 8px; }
@@ -1069,14 +1076,22 @@ function renderDropsPage() {
         <h2 class="section-title"><span class="filled">DROP</span> <span class="outline">RADAR</span></h2>
         <p class="section-sub">Release tracking across every major retailer. Every upcoming drop, deduplicated and ranked by hype score.</p>
       </div>
-      <div class="hero-img" id="hero-sneaker">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="opacity:0.08;width:80%;max-width:200px">
-          <circle cx="100" cy="100" r="90" fill="none" stroke="#ff3c00" stroke-width="1.5"/>
-          <circle cx="100" cy="100" r="60" fill="none" stroke="#ff3c00" stroke-width="1"/>
-          <circle cx="100" cy="100" r="30" fill="none" stroke="#ff3c00" stroke-width="0.8"/>
-          <line x1="100" y1="5" x2="100" y2="195" stroke="#ff3c00" stroke-width="0.5"/>
-          <line x1="5" y1="100" x2="195" y2="100" stroke="#ff3c00" stroke-width="0.5"/>
-        </svg>
+      <div class="hero-img">
+        <div class="radar-sweep">
+          <div class="radar-glow"></div>
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="35" fill="none" stroke="#ff3c00" stroke-width="0.5" opacity="0.2"/>
+            <circle cx="40" cy="40" r="25" fill="none" stroke="#ff3c00" stroke-width="0.5" opacity="0.15"/>
+            <circle cx="40" cy="40" r="15" fill="none" stroke="#ff3c00" stroke-width="0.5" opacity="0.1"/>
+            <line x1="40" y1="3" x2="40" y2="77" stroke="#ff3c00" stroke-width="0.3" opacity="0.15"/>
+            <line x1="3" y1="40" x2="77" y2="40" stroke="#ff3c00" stroke-width="0.3" opacity="0.15"/>
+            <line class="sweep-line" x1="40" y1="40" x2="40" y2="5" stroke="#ff3c00" stroke-width="1" opacity="0.6"/>
+            <path class="sweep-line" d="M40,40 L40,5 A35,35 0 0,1 58,10 Z" fill="rgba(255,60,0,0.08)"/>
+            <circle class="blip1" cx="55" cy="25" r="2" fill="#ff3c00"/>
+            <circle class="blip2" cx="28" cy="52" r="2" fill="#00ff94"/>
+            <circle class="blip3" cx="60" cy="48" r="2" fill="#ff3c00"/>
+          </svg>
+        </div>
       </div>
     </div>
     <div class="search-row">
@@ -1616,79 +1631,6 @@ async function doSendChat(text) {
       }).catch(() => {});
   });
 
-  // Hero image rotator — global state so it survives render() calls
-  let _heroImages = [];
-  let _heroIdx = 0;
-  let _heroInterval = null;
-
-  function showHero() {
-    const el = document.getElementById("hero-sneaker");
-    if (!el || _heroImages.length === 0) return;
-    const img = _heroImages[_heroIdx];
-    const imgEl = new Image();
-    imgEl.onload = function() {
-      // Re-check element still exists (render may have fired)
-      const el2 = document.getElementById("hero-sneaker");
-      if (!el2) return;
-      el2.querySelectorAll("img.active, .hero-label.active").forEach(e => e.classList.remove("active"));
-      setTimeout(() => { el2.querySelectorAll("img:not(.active)").forEach(e => { if (el2.querySelectorAll("img").length > 1) e.remove(); }); }, 700);
-      imgEl.className = "active";
-      imgEl.alt = img.name;
-      imgEl.style.cssText = "width:100%;height:100%;object-fit:contain;padding:12px;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.6s ease;";
-      el2.appendChild(imgEl);
-      const svg = el2.querySelector("svg");
-      if (svg) svg.style.display = "none";
-      let label = el2.querySelector(".hero-label");
-      if (!label) { label = document.createElement("div"); label.className = "hero-label"; el2.appendChild(label); }
-      label.textContent = img.name;
-      label.classList.add("active");
-      requestAnimationFrame(() => { imgEl.style.opacity = "1"; });
-    };
-    imgEl.src = img.src;
-    _heroIdx = (_heroIdx + 1) % _heroImages.length;
-  }
-
-  // After every render, immediately restore current hero image
-  function restoreHero() {
-    if (_heroImages.length === 0) return;
-    const el = document.getElementById("hero-sneaker");
-    if (!el || el.querySelector("img")) return; // already has image
-    // Show current image immediately (no fade for restore)
-    const img = _heroImages[(_heroIdx - 1 + _heroImages.length) % _heroImages.length];
-    const imgEl = new Image();
-    imgEl.onload = function() {
-      const el2 = document.getElementById("hero-sneaker");
-      if (!el2 || el2.querySelector("img")) return;
-      imgEl.className = "active";
-      imgEl.alt = img.name;
-      imgEl.style.cssText = "width:100%;height:100%;object-fit:contain;padding:12px;position:absolute;top:0;left:0;opacity:1;";
-      el2.appendChild(imgEl);
-      const svg = el2.querySelector("svg");
-      if (svg) svg.style.display = "none";
-      let label = el2.querySelector(".hero-label");
-      if (!label) { label = document.createElement("div"); label.className = "hero-label active"; el2.appendChild(label); }
-      label.textContent = img.name;
-      label.classList.add("active");
-    };
-    imgEl.src = img.src;
-  }
-
-  (async function loadHeroImages() {
-    const heroQueries = ["Jordan 4 Retro","Nike Dunk Low","Yeezy 350","Travis Scott Jordan 1","Air Force 1","New Balance 990","ASICS Gel-1130","Nike Kobe 6"];
-    for (const q of heroQueries) {
-      try {
-        const r = await fetch(API_URL, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"search",query:q,limit:1})});
-        const j = await r.json();
-        if (j.data && j.data[0] && j.data[0].image) {
-          _heroImages.push({src: j.data[0].image, name: j.data[0].title || j.data[0].name || q});
-          // Show first image as soon as we get it
-          if (_heroImages.length === 1) showHero();
-        }
-      } catch(e) {}
-    }
-    if (_heroImages.length === 0) return;
-    if (!_heroInterval) _heroInterval = setInterval(showHero, 4000);
-  })();
 })();
 </script>
 </body>
