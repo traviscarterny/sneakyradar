@@ -404,9 +404,9 @@
       <a class="nav-tab active" href="/auth"><span>🔍</span>Auth Guide</a>
       <a class="nav-tab" href="/blog"><span>📝</span>Blog</a>
     </div>
-    <button class="hamburger" onclick="document.querySelector('.mobile-menu').style.display=document.querySelector('.mobile-menu').style.display==='flex'?'none':'flex';this.textContent=this.textContent==='☰'?'✕':'☰'">☰</button>
+    <button class="hamburger" onclick="var m=document.getElementById('mobile-nav');if(m.classList.contains('open')){m.classList.remove('open');m.style.display='none';this.textContent='☰';}else{m.classList.add('open');m.style.display='block';this.textContent='✕';}">☰</button>
   </div>
-  <div class="mobile-menu" style="display:none">
+  <div class="mobile-menu" id="mobile-nav">
     <a class="mobile-menu-item" href="/" style="text-decoration:none"><span>📡</span>Drop Radar</a>
     <a class="mobile-menu-item" href="/releases" style="text-decoration:none"><span>📅</span>Releases</a>
     <a class="mobile-menu-item" href="/resell" style="text-decoration:none"><span>📈</span>Resell Tracker</a>
