@@ -73,19 +73,19 @@
     .alert-btn:hover { background: var(--accent); color: white; }
     .alert-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
     .section-wrap { max-width: 1200px; margin: 0 auto; padding: 60px 40px 100px; }
-    .hero-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 8px; }
+    .hero-header { display: flex; align-items: flex-start; gap: 0; margin-bottom: 8px; }
     .hero-text { flex: 1; min-width: 0; }
-    .hero-img { width: 120px; height: 120px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-top: -8px; }
+    .hero-img { width: 100px; height: 100px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: visible; margin-top: 5px; margin-left: -20px; }
     .radar-sweep { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-    .radar-sweep svg { width: 80px; height: 80px; }
+    .radar-sweep svg { width: 90px; height: 90px; }
     .radar-sweep .sweep-line { transform-origin: 40px 40px; animation: sweep 2.5s linear infinite; }
     .radar-sweep .blip1 { animation: blip 2.5s ease-out infinite; animation-delay: 0.6s; }
     .radar-sweep .blip2 { animation: blip 2.5s ease-out infinite; animation-delay: 1.4s; }
     .radar-sweep .blip3 { animation: blip 2.5s ease-out infinite; animation-delay: 2.0s; }
-    .radar-glow { position: absolute; top: 50%; left: 50%; width: 70px; height: 70px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255,60,0,0.08) 0%, transparent 70%); animation: radarGlow 2.5s ease-in-out infinite; }
+    .radar-glow { position: absolute; top: 50%; left: 50%; width: 80px; height: 80px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(255,60,0,0.15) 0%, transparent 70%); animation: radarGlow 2.5s ease-in-out infinite; }
     @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes blip { 0%, 15% { opacity: 0; r: 2; } 20% { opacity: 1; r: 3; } 60% { opacity: 0.3; r: 2; } 100% { opacity: 0; r: 2; } }
-    @keyframes radarGlow { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+    @keyframes blip { 0%, 15% { opacity: 0; } 20% { opacity: 1; } 60% { opacity: 0.5; } 100% { opacity: 0; } }
+    @keyframes radarGlow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
     .section-eyebrow { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
     .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); line-height: 0.9; letter-spacing: 2px; margin-bottom: 6px; }
     .section-title .outline { -webkit-text-stroke: 1px var(--text); color: transparent; }
@@ -291,9 +291,9 @@
       .mobile-menu-item.active { color: var(--accent); }
       .result-source-filters { display: none; }
       .section-wrap { padding: 24px 12px 80px; }
-      .hero-img { width: 80px; height: 80px; }
-      .radar-sweep svg { width: 52px; height: 52px; }
-      .radar-glow { width: 46px; height: 46px; }
+      .hero-img { width: 70px; height: 70px; margin-left: -10px; }
+      .radar-sweep svg { width: 65px; height: 65px; }
+      .radar-glow { width: 60px; height: 60px; }
       .section-title { font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 48px; }
       .section-sub { font-size: 0.7rem; margin-bottom: 24px; display: none; }
       .search-row { flex-direction: column; gap: 8px; }
@@ -1080,16 +1080,16 @@ function renderDropsPage() {
         <div class="radar-sweep">
           <div class="radar-glow"></div>
           <svg viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="35" fill="none" stroke="#ff3c00" stroke-width="0.5" opacity="0.2"/>
-            <circle cx="40" cy="40" r="25" fill="none" stroke="#ff3c00" stroke-width="0.5" opacity="0.15"/>
-            <circle cx="40" cy="40" r="15" fill="none" stroke="#ff3c00" stroke-width="0.5" opacity="0.1"/>
-            <line x1="40" y1="3" x2="40" y2="77" stroke="#ff3c00" stroke-width="0.3" opacity="0.15"/>
-            <line x1="3" y1="40" x2="77" y2="40" stroke="#ff3c00" stroke-width="0.3" opacity="0.15"/>
-            <line class="sweep-line" x1="40" y1="40" x2="40" y2="5" stroke="#ff3c00" stroke-width="1" opacity="0.6"/>
-            <path class="sweep-line" d="M40,40 L40,5 A35,35 0 0,1 58,10 Z" fill="rgba(255,60,0,0.08)"/>
-            <circle class="blip1" cx="55" cy="25" r="2" fill="#ff3c00"/>
-            <circle class="blip2" cx="28" cy="52" r="2" fill="#00ff94"/>
-            <circle class="blip3" cx="60" cy="48" r="2" fill="#ff3c00"/>
+            <circle cx="40" cy="40" r="35" fill="none" stroke="#ff3c00" stroke-width="0.8" opacity="0.4"/>
+            <circle cx="40" cy="40" r="25" fill="none" stroke="#ff3c00" stroke-width="0.7" opacity="0.3"/>
+            <circle cx="40" cy="40" r="15" fill="none" stroke="#ff3c00" stroke-width="0.6" opacity="0.25"/>
+            <line x1="40" y1="3" x2="40" y2="77" stroke="#ff3c00" stroke-width="0.4" opacity="0.25"/>
+            <line x1="3" y1="40" x2="77" y2="40" stroke="#ff3c00" stroke-width="0.4" opacity="0.25"/>
+            <line class="sweep-line" x1="40" y1="40" x2="40" y2="5" stroke="#ff3c00" stroke-width="1.5" opacity="0.8"/>
+            <path class="sweep-line" d="M40,40 L40,5 A35,35 0 0,1 58,10 Z" fill="rgba(255,60,0,0.15)"/>
+            <circle class="blip1" cx="55" cy="25" r="3" fill="#ff3c00"/>
+            <circle class="blip2" cx="28" cy="52" r="3" fill="#00ff94"/>
+            <circle class="blip3" cx="60" cy="48" r="3" fill="#ff3c00"/>
           </svg>
         </div>
       </div>
