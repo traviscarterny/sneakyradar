@@ -92,9 +92,9 @@
     .section-title .filled { color: var(--accent); }
     .section-sub { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.5px; line-height: 1.7; margin-bottom: 40px; max-width: 520px; }
     .search-row { display: flex; max-width: 900px; margin: 0 0 24px; }
-    .search-bar { flex: 1; display: flex; border: 1px solid var(--border); background: var(--surface); border-right: none; }
-    .search-bar input { flex: 1; background: transparent; border: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.85rem; padding: 16px 20px; outline: none; letter-spacing: 1px; }
-    .search-bar input::placeholder { color: var(--muted); }
+    .search-bar { flex: 1; display: flex; border: none; background: #f0f0f0; border-radius: 6px 0 0 6px; }
+    .search-bar input { flex: 1; background: transparent; border: none; color: #0a0a0a; font-family: 'DM Mono', monospace; font-size: 0.85rem; font-weight: 700; padding: 16px 20px; outline: none; letter-spacing: 1px; border-radius: 6px 0 0 6px; }
+    .search-bar input::placeholder { color: #777; font-weight: 500; }
     .src-dropdown-wrap { position: relative; }
     .src-dropdown-btn { height: 100%; background: #1a1a1a; border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; padding: 0 20px; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px; transition: background 0.15s; text-transform: uppercase; min-width: 160px; justify-content: space-between; }
     .src-dropdown-btn:hover { background: #222; }
@@ -296,10 +296,10 @@
       .radar-glow { width: 60px; height: 60px; }
       .section-title { font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 48px; }
       .section-sub { font-size: 0.7rem; margin-bottom: 24px; display: none; }
-      .search-row { flex-direction: column; gap: 8px; }
-      .search-bar { border-right: 1px solid var(--border); }
-      .search-bar input { font-size: 0.8rem; padding: 14px 14px; }
-      .search-go-btn { padding: 14px 24px; width: 100%; }
+      .search-row { flex-direction: row; gap: 0; }
+      .search-bar { border-right: none; }
+      .search-bar input { font-size: 0.75rem; padding: 14px 12px; }
+      .search-go-btn { padding: 14px 20px; width: auto; }
       .filters { gap: 6px; margin-bottom: 16px; justify-content: center; }
       .filter-btn { font-size: 0.55rem; padding: 5px 10px; letter-spacing: 1px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; }
