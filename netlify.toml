@@ -1,59 +1,37 @@
-[functions]
-  directory = "netlify/functions"
+# Netlify configuration for SneakyRadar
 
-[functions."anthropic"]
-  # Extend timeout for release calendar updates (default is 10s, max 26s on free, 60s on Pro)
-  # If on Pro plan, set to 60. Otherwise Netlify's default applies.
+# Enable prerendering - serves static HTML snapshots to bots/crawlers
+# This is the single biggest SEO fix for a client-side React SPA
+[[plugins]]
+  package = "@netlify/plugin-prerender"
 
-[functions."update-releases"]
-  # Scheduled function for weekly release updates
-
+# Redirect www to non-www (or vice versa - pick one)
 [[redirects]]
-  from = "/blog/best-jordan-releases-2026"
-  to = "/blog/best-jordan-releases-2026.html"
-  status = 200
+  from = "https://sneakyradar.com/*"
+  to = "https://www.sneakyradar.com/:splat"
+  status = 301
+  force = true
 
-[[redirects]]
-  from = "/blog/sneaker-price-comparison-guide"
-  to = "/blog/sneaker-price-comparison-guide.html"
-  status = 200
+# Headers for SEO and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
-[[redirects]]
-  from = "/blog/best-sneakers-under-150"
-  to = "/blog/best-sneakers-under-150.html"
-  status = 200
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
 
-[[redirects]]
-  from = "/blog/how-to-authenticate-sneakers"
-  to = "/blog/how-to-authenticate-sneakers.html"
-  status = 200
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain"
 
-[[redirects]]
-  from = "/blog/best-sneakers-resale-2026"
-  to = "/blog/best-sneakers-resale-2026.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/nike-dunk-release-calendar-2026"
-  to = "/blog/nike-dunk-release-calendar-2026.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/yeezy-price-guide-2026"
-  to = "/blog/yeezy-price-guide-2026.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/new-balance-buying-guide"
-  to = "/blog/new-balance-buying-guide.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/how-stockx-works"
-  to = "/blog/how-stockx-works.html"
-  status = 200
-
-[[redirects]]
-  from = "/blog/asics-kayano-14-vs-gel-1130"
-  to = "/blog/asics-kayano-14-vs-gel-1130.html"
-  status = 200
+# Cache static assets
+[[headers]]
+  for = "/og-image.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
