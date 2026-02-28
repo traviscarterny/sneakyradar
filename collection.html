@@ -202,7 +202,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
       <a class="nav-tab" href="/releases"><span>📅</span>Releases</a>
       <a class="nav-tab" href="/resell"><span>📈</span>Resell Tracker</a>
       <a class="nav-tab" href="/auth"><span>🔍</span>Auth Guide</a>
-      <a class="nav-tab active" href="/collection"><span>👟</span>Collection</a>
+      <a class="nav-tab active" href="/collection"><span>👟</span>My Collection</a>
       <a class="nav-tab" href="/blog"><span>📝</span>Blog</a>
     </div>
     <button class="hamburger" onclick="var m=document.getElementById('mobile-nav');if(m.classList.contains('open')){m.classList.remove('open');m.style.display='none';this.textContent='☰';}else{m.classList.add('open');m.style.display='block';this.textContent='✕';}">☰</button>
@@ -212,7 +212,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
     <a class="mobile-menu-item" href="/releases" style="text-decoration:none"><span>📅</span>Releases</a>
     <a class="mobile-menu-item" href="/resell" style="text-decoration:none"><span>📈</span>Resell Tracker</a>
     <a class="mobile-menu-item" href="/auth" style="text-decoration:none"><span>🔍</span>Auth Guide</a>
-    <a class="mobile-menu-item active" href="/collection" style="text-decoration:none"><span>👟</span>Collection</a>
+    <a class="mobile-menu-item active" href="/collection" style="text-decoration:none"><span>👟</span>My Collection</a>
     <a class="mobile-menu-item" href="/blog" style="text-decoration:none"><span>📝</span>Blog</a>
   </div>
   <div class="nav-right">
@@ -242,7 +242,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 const SUPABASE_URL = 'https://sjoqbdjkplvpvcrsdjtm.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqb3FiZGprcGx2cHZjcnNkanRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMTExMTQsImV4cCI6MjA4Nzg4NzExNH0.MhHIgita9TvLelzxMSN1TYJhA_AK1U8RX5SXJdSwL6M';
 
-let supabase = null;
+let sb = null;
 let currentUser = null;
 let collection = [];
 let searchTimeout = null;
@@ -252,7 +252,7 @@ let sortBy = 'date'; // date, value, profit
 // Try to initialize Supabase
 try {
   if (typeof window.supabase !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   }
 } catch(e) {
   console.log('Supabase not configured yet');
@@ -266,7 +266,7 @@ function render() {
   const app = document.getElementById('app');
 
   // If Supabase isn't configured, show setup instructions
-  if (!supabase) {
+  if (!sb) {
     app.innerHTML = renderSetupGuide();
     return;
   }
@@ -388,9 +388,9 @@ function bindAuthEvents() {
     try {
       let result;
       if (isSignUp) {
-        result = await supabase.auth.signUp({ email, password: pass });
+        result = await sb.auth.signUp({ email, password: pass });
       } else {
-        result = await supabase.auth.signInWithPassword({ email, password: pass });
+        result = await sb.auth.signInWithPassword({ email, password: pass });
       }
       if (result.error) throw result.error;
       if (isSignUp && result.data?.user && !result.data.session) {
@@ -413,7 +413,7 @@ function bindAuthEvents() {
 
   googleBtn.addEventListener('click', async () => {
     try {
-      await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/collection' } });
+      await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/collection' } });
     } catch(e) {
       errEl.style.display='block'; errEl.textContent = e.message || 'Google sign-in failed';
     }
@@ -541,7 +541,7 @@ function renderShoeCard(shoe) {
 function bindCollectionEvents() {
   // Logout
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    await supabase.auth.signOut();
+    await sb.auth.signOut();
     currentUser = null; collection = [];
     render();
   });
@@ -581,7 +581,7 @@ function bindCollectionEvents() {
       if (!confirm('Remove this shoe from your collection?')) return;
       const id = btn.dataset.delete;
       btn.textContent = '...';
-      await supabase.from('collection').delete().eq('id', id);
+      await sb.from('collection').delete().eq('id', id);
       collection = collection.filter(s => s.id !== id);
       render();
     });
@@ -699,7 +699,7 @@ function showAddForm() {
       source: 'stockx'
     };
 
-    const { data, error } = await supabase.from('collection').insert([shoe]).select();
+    const { data, error } = await sb.from('collection').insert([shoe]).select();
     if (error) {
       alert('Failed to save: ' + error.message);
       saveBtn.disabled = false; saveBtn.textContent = 'ADD TO COLLECTION';
@@ -716,7 +716,7 @@ function showAddForm() {
 // DATA LOADING
 // =============================================
 async function loadCollection() {
-  if (!supabase || !currentUser) return;
+  if (!sb || !currentUser) return;
   const { data, error } = await supabase
     .from('collection')
     .select('*')
@@ -729,17 +729,17 @@ async function loadCollection() {
 // INIT
 // =============================================
 async function init() {
-  if (!supabase) { render(); return; }
+  if (!sb) { render(); return; }
 
   // Check for existing session
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await sb.auth.getSession();
   if (session?.user) {
     currentUser = session.user;
     await loadCollection();
   }
 
   // Listen for auth changes (handles OAuth redirect)
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
       currentUser = session.user;
       await loadCollection();
