@@ -459,6 +459,7 @@ const API_URL = "/.netlify/functions/anthropic";
 const AFFILIATE = {
   stockx:      { tag: "YOUR_STOCKX_CODE",  param: "utm_source" },
   nike:        { tag: "YOUR_NIKE_CODE",     param: "utm_source" },
+  ebay:        { tag: "5339143424",         param: "campid" },
   footlocker:  { tag: "YOUR_FL_CODE",      param: "AID" },
   jd:          { tag: "YOUR_JD_CODE",      param: "affil" },
   hibbett:     { tag: "YOUR_HIBBETT_CODE", param: "ref" },
@@ -470,7 +471,21 @@ function affLink(url, sourceId) {
   if (!url) return "#";
   const aff = AFFILIATE[sourceId];
   if (!aff || aff.tag.startsWith("YOUR_")) return url;
-  try { const u = new URL(url); u.searchParams.set(aff.param, aff.tag); u.searchParams.set("utm_campaign", "sneakyradar"); return u.toString(); } catch { return url; }
+  try {
+    const u = new URL(url);
+    if (sourceId === "ebay") {
+      u.searchParams.set("mkevt", "1");
+      u.searchParams.set("mkcid", "1");
+      u.searchParams.set("mkrid", "711-53200-19255-0");
+      u.searchParams.set("campid", aff.tag);
+      u.searchParams.set("toolid", "10049");
+      u.searchParams.set("customid", "sneakyradar");
+    } else {
+      u.searchParams.set(aff.param, aff.tag);
+      u.searchParams.set("utm_campaign", "sneakyradar");
+    }
+    return u.toString();
+  } catch { return url; }
 }
 function trackClick(drop, storeId) { console.log(`[SNEAKYRADAR] click — ${drop.name} -> ${storeId}`); }
 
