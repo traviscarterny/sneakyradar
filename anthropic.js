@@ -1,5 +1,5 @@
 // SneakyRadar Backend — uses native fetch() (Node 18+)
-var KICKS_KEY = process.env.KICKSDB_API_KEY || "KICKS-6062-7071-95FB-58E9612A472D";
+var KICKS_KEY = process.env.KICKSDB_API_KEY;
 
 // Release calendar cache (persists across warm function invocations)
 var cachedReleases = null;

@@ -519,7 +519,7 @@ function esc(s) { return s == null ? "" : String(s).replace(/&/g,"&amp;").replac
 function renderAuth() {
   document.getElementById("auth-root").innerHTML = `<div class="page"><div class="section-wrap">
     <div class="section-eyebrow">Know Before You Buy</div>
-    <h1 class="section-title"><span class="filled">AUTH</span> <span class="outline">GUIDE</span></h1>
+    <h2 class="section-title"><span class="filled">AUTH</span> <span class="outline">GUIDE</span></h2>
     <p class="section-sub">Spot fakes before you get burned. Expert check-by-check authentication guides for the most-faked silhouettes.</p>
     <div class="auth-grid">
       ${AUTH_GUIDES.map((g,i) => `<div class="auth-card ${authSelected===i?"selected":""}" data-auth-idx="${i}">
