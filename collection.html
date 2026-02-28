@@ -388,7 +388,7 @@ function bindAuthEvents() {
     try {
       let result;
       if (isSignUp) {
-        result = await sb.auth.signUp({ email, password: pass });
+        result = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: window.location.origin + '/collection' } });
       } else {
         result = await sb.auth.signInWithPassword({ email, password: pass });
       }
