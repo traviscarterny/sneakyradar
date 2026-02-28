@@ -1,37 +1,15 @@
-# Netlify configuration for SneakyRadar
-
-# Enable prerendering - serves static HTML snapshots to bots/crawlers
-# This is the single biggest SEO fix for a client-side React SPA
-[[plugins]]
-  package = "@netlify/plugin-prerender"
-
-# Redirect www to non-www (or vice versa - pick one)
+# Blog clean URLs for new posts
 [[redirects]]
-  from = "https://sneakyradar.com/*"
-  to = "https://www.sneakyradar.com/:splat"
-  status = 301
-  force = true
+  from = "/blog/best-sneakers-under-100"
+  to = "/blog/best-sneakers-under-100.html"
+  status = 200
 
-# Headers for SEO and performance
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+[[redirects]]
+  from = "/blog/sneaker-release-dates-2026"
+  to = "/blog/sneaker-release-dates-2026.html"
+  status = 200
 
-[[headers]]
-  for = "/sitemap.xml"
-  [headers.values]
-    Content-Type = "application/xml"
-
-[[headers]]
-  for = "/robots.txt"
-  [headers.values]
-    Content-Type = "text/plain"
-
-# Cache static assets
-[[headers]]
-  for = "/og-image.png"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
+[[redirects]]
+  from = "/blog/how-to-buy-sneakers-retail"
+  to = "/blog/how-to-buy-sneakers-retail.html"
+  status = 200
