@@ -830,9 +830,9 @@ function render() {
 function renderNav() {
   const tabs = [
     {id:"drops",label:"Drop Radar",icon:"📡"},
-    {id:"releases",label:"Releases",icon:"📅"},
-    {id:"resell",label:"Resell Tracker",icon:"📈"},
-    {id:"auth",label:"Auth Guide",icon:"🔍"},
+    {id:"releases",label:"Releases",icon:"📅",href:"/releases"},
+    {id:"resell",label:"Resell Tracker",icon:"📈",href:"/resell"},
+    {id:"auth",label:"Auth Guide",icon:"🔍",href:"/auth"},
     {id:"blog",label:"Blog",icon:"📝",href:"/blog"}
   ];
   return `<nav class="nav">

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2JCYS8398G"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2JCYS8398G');</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sneaker Resell Price Tracker — Live Market Prices | SneakyRadar</title>
+<meta name="description" content="Track sneaker resale prices across 50+ models. Compare retail vs market price, trend direction, and weekly sales volume for Jordans, Yeezys, Dunks, and more."/>
+<meta name="keywords" content="sneaker resale prices, sneaker resell tracker, Jordan resale value, Yeezy resell price, sneaker market prices, StockX prices, GOAT prices"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://www.sneakyradar.com/resell"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Sneaker Resell Price Tracker — SneakyRadar"/>
+<meta property="og:description" content="Track sneaker resale prices across 50+ models. Retail vs market, trends, and volume."/>
+<meta property="og:url" content="https://www.sneakyradar.com/resell"/>
+<meta property="og:image" content="https://www.sneakyradar.com/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Sneaker Resell Tracker — SneakyRadar"/>
+<meta name="twitter:description" content="Track resale prices for 50+ sneaker models. Retail vs market, trends, weekly volume."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Sneaker Resell Price Tracker",
+  "description": "Track sneaker resale prices across 50+ models including Jordans, Yeezys, Dunks, and more.",
+  "url": "https://www.sneakyradar.com/resell",
+  "isPartOf": {"@type": "WebApplication", "name": "SneakyRadar", "url": "https://www.sneakyradar.com"}
+}
+</script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0a; --surface: #111; --border: #222;
+      --accent: #ff3c00; --accent2: #00ff94; --text: #f0f0f0; --muted: #555; --card: #141414;
+      --green: #00e676; --purple: #cc44ff;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+    .grain { position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmer { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+    @keyframes dropDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes typingBounce { 0%, 100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(-5px); opacity: 1; } }
+    .page { animation: fadeIn 0.2s ease; }
+    .nav { border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: stretch; justify-content: space-between; position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.97); backdrop-filter: blur(12px); height: 60px; }
+    .nav-left { display: flex; align-items: center; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 4px; padding-right: 32px; border-right: 1px solid var(--border); display: flex; align-items: center; }
+    .nav-logo .sneaky { color: var(--text); }
+    .nav-logo .radar { color: var(--accent); }
+    .nav-tabs { display: flex; align-items: stretch; }
+    .nav-tab { display: flex; align-items: center; gap: 7px; padding: 0 22px; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; color: var(--muted); transition: all 0.15s; border-right: 1px solid var(--border); border-bottom: 2px solid transparent; background: transparent; border-top: none; border-left: none; font-family: 'DM Mono', monospace; }
+    .nav-tab:hover { color: var(--text); background: #111; }
+    .nav-tab.active { color: var(--text); border-bottom-color: var(--accent); background: #0e0e0e; }
+    .hamburger { display: none; }
+    .mobile-menu { display: none; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .alert-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 7px; }
+    .alert-btn:hover { background: var(--accent); color: white; }
+    .alert-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
+    .section-wrap { max-width: 1200px; margin: 0 auto; padding: 60px 40px 100px; }
+    .section-eyebrow { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); line-height: 0.9; letter-spacing: 2px; margin-bottom: 6px; }
+    .section-title .outline { -webkit-text-stroke: 1px var(--text); color: transparent; }
+    .section-title .filled { color: var(--accent); }
+    .section-sub { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.5px; line-height: 1.7; margin-bottom: 40px; max-width: 520px; }
+    .search-row { display: flex; max-width: 900px; margin: 0 0 24px; }
+    .search-bar { flex: 1; display: flex; border: 1px solid var(--border); background: var(--surface); border-right: none; }
+    .search-bar input { flex: 1; background: transparent; border: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.85rem; padding: 16px 20px; outline: none; letter-spacing: 1px; }
+    .search-bar input::placeholder { color: var(--muted); }
+    .src-dropdown-wrap { position: relative; }
+    .src-dropdown-btn { height: 100%; background: #1a1a1a; border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 2px; padding: 0 20px; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px; transition: background 0.15s; text-transform: uppercase; min-width: 160px; justify-content: space-between; }
+    .src-dropdown-btn:hover { background: #222; }
+    .chevron { transition: transform 0.2s; font-size: 0.6rem; }
+    .chevron.open { transform: rotate(180deg); }
+    .count-badge { background: var(--accent); color: white; font-size: 0.55rem; padding: 1px 5px; min-width: 18px; text-align: center; }
+    .src-dropdown-menu { position: absolute; top: calc(100% + 1px); left: 0; right: 0; min-width: 240px; background: #111; border: 1px solid var(--border); z-index: 200; animation: dropDown 0.15s ease; max-height: 420px; overflow-y: auto; scrollbar-width: thin; }
+    .src-menu-header { padding: 10px 14px; font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .src-menu-header button { background: none; border: none; color: var(--accent); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; }
+    .src-menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid #1a1a1a; font-size: 0.7rem; letter-spacing: 1px; }
+    .src-menu-item:hover { background: #1a1a1a; }
+    .src-checkbox { width: 14px; height: 14px; border: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .src-checkbox.checked { border-color: var(--accent2); background: var(--accent2); }
+    .src-checkbox.checked::after { content: '✓'; color: #000; font-size: 0.6rem; font-weight: bold; }
+    .src-color-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .src-label { color: var(--text); flex: 1; }
+    .src-url { font-size: 0.55rem; color: var(--muted); }
+    .search-go-btn { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 3px; padding: 0 32px; cursor: pointer; transition: background 0.15s; }
+    .search-go-btn:hover { background: #ff5a20; }
+    .search-go-btn:disabled { background: var(--muted); cursor: not-allowed; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; justify-content: center; }
+    .filter-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
+    .result-source-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
+    .rsf-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+    .rsf-btn .dot { width: 6px; height: 6px; border-radius: 50%; }
+    .rsf-btn:hover, .rsf-btn.active { border-color: var(--accent2); color: var(--accent2); }
+    .progress-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; margin-bottom: 24px; }
+    .progress-step { display: flex; align-items: center; gap: 8px; font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; }
+    .step-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .step-dot.done { background: var(--accent2); } .step-dot.active { background: var(--accent); animation: pulse 1s infinite; } .step-dot.pending { background: var(--border); }
+    .step-label.done { color: var(--accent2); } .step-label.active { color: var(--text); } .step-label.pending { color: var(--muted); }
+    .status-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+    .error-msg { margin: 0 0 24px; padding: 16px 20px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; letter-spacing: 1px; line-height: 1.6; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.3s; z-index: 2; }
+    .card:hover { background: #1a1a1a; }
+    .card:hover::before { height: 100%; }
+    .card.sponsored { outline: 1px solid var(--accent2); }
+    .card.sponsored::before { background: var(--accent2); }
+    .sponsor-banner { background: var(--accent2); color: #000; font-size: 0.5rem; letter-spacing: 3px; text-transform: uppercase; padding: 4px 14px; display: flex; justify-content: space-between; }
+    .card-img-wrap { width: 100%; height: 200px; background: #191919; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); position: relative; cursor: pointer; }
+    .card-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: transform 0.35s ease; }
+    .card:hover .card-img { transform: scale(1.06); }
+    .card-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: #2a2a2a; }
+    .card-source-tag { position: absolute; bottom: 8px; right: 8px; font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; background: rgba(0,0,0,0.8); border: 1px solid var(--border); color: var(--muted); }
+    .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .card-brand { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; line-height: 1.1; margin-bottom: 6px; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.2em; height: 2.2em; }
+    .card-name:hover { color: var(--accent2); }
+    .card-colorway { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; }
+    .card-meta { display: flex; flex-direction: column; gap: 6px; }
+    .meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; letter-spacing: 1px; }
+    .meta-label { color: var(--muted); text-transform: uppercase; }
+    .meta-value { color: var(--text); }
+    .price { color: var(--accent2); font-size: 0.85rem; }
+    .hype-bar { margin-top: 12px; height: 2px; background: var(--border); overflow: hidden; }
+    .hype-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .hype-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 5px; display: flex; justify-content: space-between; }
+    .badge { display: inline-block; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 3px 8px; border: 1px solid; margin-bottom: 8px; }
+    .badge-hot { border-color: var(--accent); color: var(--accent); }
+    .badge-upcoming { border-color: var(--accent2); color: var(--accent2); }
+    .badge-limited { border-color: #a0f; color: #a0f; }
+    .price-compare { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .price-compare-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+    .price-compare-rows { display: flex; flex-direction: column; gap: 5px; }
+    .price-row { display: flex; align-items: center; gap: 8px; }
+    .price-row-store { font-size: 0.6rem; letter-spacing: 1px; color: var(--muted); flex: 1; text-transform: uppercase; }
+    .price-row-amount { font-size: 0.75rem; color: #00ff94; min-width: 48px; text-align: right; }
+    .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
+    .price-row-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .price-row-btn.best { border-color: var(--accent2); color: #000; background: var(--accent2); }
+    .loading-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .loading-card { background: var(--card); animation: shimmer 1.5s ease-in-out infinite; }
+    .loading-img { width: 100%; height: 200px; background: #1a1a1a; border-bottom: 1px solid var(--border); }
+    .loading-body { padding: 20px; }
+    .skeleton { background: var(--border); margin-bottom: 12px; }
+    .empty-state { text-align: center; padding: 80px 40px; color: var(--muted); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--border); }
+    .empty-state h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--border); letter-spacing: 4px; margin-bottom: 16px; }
+    .resell-table { width: 100%; border: 1px solid var(--border); border-collapse: collapse; }
+    .resell-mobile { display: none; }
+    .resell-table th { background: #111; padding: 12px 16px; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid var(--border); font-weight: 400; cursor: pointer; }
+    .resell-table td { padding: 14px 16px; font-size: 0.72rem; letter-spacing: 0.5px; border-bottom: 1px solid #1a1a1a; vertical-align: middle; }
+    .resell-table tr:hover td { background: #161616; }
+    .resell-brand { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+    .resell-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
+    .resell-price-avg { color: var(--accent2); font-size: 0.85rem; }
+    .resell-price-low { color: var(--muted); font-size: 0.7rem; }
+    .resell-price-high { color: var(--text); font-size: 0.7rem; }
+    .trend-up { color: var(--green); font-size: 0.7rem; }
+    .trend-down { color: var(--accent); font-size: 0.7rem; }
+    .hot-tag { background: var(--accent); color: white; font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; }
+    .vol-tag { font-size: 0.6rem; color: var(--muted); }
+    .resell-buy-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; white-space: nowrap; }
+    .resell-buy-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .resell-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
+    .resell-stat { background: var(--card); padding: 24px; }
+    .resell-stat-label { font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .resell-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--accent2); }
+    .resell-stat-sub { font-size: 0.6rem; color: var(--muted); margin-top: 4px; }
+    .auth-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+    .auth-card { background: var(--card); padding: 24px; cursor: pointer; transition: background 0.15s; position: relative; overflow: hidden; }
+    .auth-card:hover { background: #1a1a1a; }
+    .auth-card.selected { background: #1a1a1a; outline: 1px solid var(--accent); }
+    .auth-model { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 6px; }
+    .auth-diff { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+    .auth-diff.easy { color: var(--green); } .auth-diff.medium { color: var(--accent2); } .auth-diff.hard { color: var(--accent); } .auth-diff.veryhard { color: var(--purple); }
+    .fake-score-label { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; }
+    .fake-score-bar { height: 3px; background: var(--border); overflow: hidden; }
+    .fake-score-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--accent2), var(--accent)); }
+    .auth-cta { font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-top: 12px; }
+    .auth-detail { border: 1px solid var(--border); animation: fadeIn 0.2s ease; }
+    .auth-detail-header { background: #111; padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .auth-detail-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; }
+    .auth-detail-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; font-family: 'DM Mono', monospace; letter-spacing: 1px; }
+    .auth-detail-close:hover { color: var(--text); }
+    .auth-check { padding: 20px 28px; border-bottom: 1px solid #1a1a1a; display: grid; grid-template-columns: 160px 1fr 1fr 1fr; gap: 20px; align-items: start; }
+    .auth-check:last-child { border-bottom: none; }
+    .auth-check-area { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; padding-top: 2px; }
+    .auth-check-real { font-size: 0.68rem; color: var(--green); line-height: 1.5; }
+    .auth-check-fake { font-size: 0.68rem; color: var(--accent); line-height: 1.5; }
+    .auth-check-tip { font-size: 0.68rem; color: var(--accent2); line-height: 1.5; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 300; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.2s; }
+    .modal { background: #0e0e0e; border: 1px solid var(--border); width: 480px; max-width: 95vw; animation: fadeIn 0.25s ease; }
+    .modal-header { padding: 24px 28px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; }
+    .modal-title span { color: var(--accent); }
+    .modal-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; line-height: 1; }
+    .modal-body { padding: 16px 28px 28px; }
+    .modal-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+    .modal-features { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .modal-feature { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; color: var(--text); }
+    .modal-feature-dot { width: 5px; height: 5px; background: var(--accent2); border-radius: 50%; flex-shrink: 0; }
+    .modal-form { display: flex; }
+    .modal-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.8rem; padding: 13px 16px; outline: none; }
+    .modal-input:focus { border-color: var(--accent); }
+    .modal-input::placeholder { color: var(--muted); }
+    .modal-submit { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; padding: 13px 24px; cursor: pointer; }
+    .modal-submit:hover { background: #ff5a20; }
+    .modal-success { text-align: center; padding: 40px 28px; }
+    .modal-fine { font-size: 0.55rem; color: var(--muted); margin-top: 12px; line-height: 1.5; opacity: 0.7; }
+    .chat-fab { position: fixed; bottom: 32px; right: 32px; z-index: 200; width: 60px; height: 60px; background: var(--accent); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px #ff3c0044, 0 8px 32px rgba(255,60,0,0.4); transition: transform 0.2s; font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: white; flex-direction: column; gap: 2px; }
+    .chat-fab:hover { transform: scale(1.06); }
+    .chat-fab svg { width: 22px; height: 22px; }
+    .chat-window { position: fixed; bottom: 108px; right: 32px; z-index: 200; width: 400px; max-height: 600px; background: #0e0e0e; border: 1px solid var(--border); display: flex; flex-direction: column; box-shadow: 0 24px 80px rgba(0,0,0,0.8); animation: fadeIn 0.25s ease; }
+    .chat-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: #111; }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; }
+    .chat-avatar { width: 36px; height: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: white; flex-shrink: 0; }
+    .chat-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; }
+    .chat-subtitle { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 1px; display: flex; align-items: center; gap: 5px; }
+    .chat-online { width: 7px; height: 7px; background: #00e676; border-radius: 50%; animation: pulse 2s infinite; }
+    .chat-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; padding: 4px; line-height: 1; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; }
+    .msg { display: flex; gap: 10px; animation: fadeIn 0.2s ease; }
+    .msg.user { flex-direction: row-reverse; }
+    .msg-avatar { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; }
+    .msg-avatar.bot { background: var(--accent); color: white; }
+    .msg-avatar.user { background: var(--border); color: var(--muted); }
+    .msg-bubble { max-width: calc(100% - 44px); padding: 10px 14px; font-size: 0.75rem; line-height: 1.6; border: 1px solid var(--border); }
+    .msg.bot .msg-bubble { background: #161616; }
+    .msg.user .msg-bubble { background: #1a0a00; border-color: #ff3c0044; }
+    .msg-bubble strong { color: var(--accent2); font-weight: 500; }
+    .msg-bubble em { color: var(--accent); font-style: normal; }
+    .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+    .typing-dot { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typingBounce 1.2s ease-in-out infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    .chat-suggestions { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .suggestion-chip { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1px; padding: 5px 10px; cursor: pointer; transition: all 0.15s; }
+    .suggestion-chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chat-input-row { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; background: #111; }
+    .chat-input { flex: 1; background: transparent; border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 10px 14px; outline: none; resize: none; max-height: 80px; line-height: 1.4; }
+    .chat-input::placeholder { color: var(--muted); }
+    .chat-send { background: var(--accent); color: white; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; padding: 10px 16px; cursor: pointer; }
+    .chat-send:hover { background: #ff5a20; }
+    .chat-send:disabled { background: var(--muted); cursor: not-allowed; }
+    .chat-clear { background: transparent; border: none; color: var(--muted); font-size: 0.6rem; letter-spacing: 1px; cursor: pointer; font-family: 'DM Mono', monospace; text-transform: uppercase; }
+    .site-footer { max-width: 1200px; margin: 0 auto; padding: 20px 40px 40px; font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 4px; }
+    .footer-logo .radar { color: var(--accent); }
+    @media (max-width: 768px) {
+      .nav { padding: 0 12px; height: 48px; position: relative; }
+      .nav-left { width: 100%; padding: 0; display: flex; align-items: center; justify-content: space-between; }
+      .nav-logo { font-size: 1.2rem; padding-right: 0; border-right: none; padding: 10px 0; }
+      .nav-tabs { display: none; }
+      .nav-right { display: none; }
+      .hamburger { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text); font-size: 1.2rem; width: 36px; height: 36px; cursor: pointer; border-radius: 4px; font-family: inherit; }
+      .mobile-menu { display: block; position: absolute; top: 100%; right: 12px; background: rgba(15,15,15,0.98); border: 1px solid var(--border); border-radius: 6px; z-index: 100; min-width: 200px; overflow: hidden; backdrop-filter: blur(12px); }
+      .mobile-menu-item { display: flex; align-items: center; gap: 8px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; width: 100%; text-align: left; border-bottom: 1px solid var(--border); }
+      .mobile-menu-item:last-child { border-bottom: none; }
+      .mobile-menu-item:hover, .mobile-menu-item.active { color: var(--text); background: rgba(255,255,255,0.05); }
+      .mobile-menu-item.active { color: var(--accent); }
+      .result-source-filters { display: none; }
+      .section-wrap { padding: 24px 12px 80px; }
+      .section-title { font-size: clamp(2rem, 10vw, 3.5rem); margin-bottom: 48px; }
+      .section-sub { font-size: 0.7rem; margin-bottom: 24px; display: none; }
+      .search-row { flex-direction: column; gap: 8px; }
+      .search-bar { border-right: 1px solid var(--border); }
+      .search-bar input { font-size: 0.8rem; padding: 14px 14px; }
+      .search-go-btn { padding: 14px 24px; width: 100%; }
+      .filters { gap: 6px; margin-bottom: 16px; justify-content: center; }
+      .filter-btn { font-size: 0.55rem; padding: 5px 10px; letter-spacing: 1px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; }
+      .card-img-wrap { height: 150px; }
+      .card-img { padding: 12px; }
+      .card-body { padding: 12px; }
+      .card-brand { font-size: 0.5rem; letter-spacing: 2px; }
+      .card-name { font-size: 1.1rem; letter-spacing: 1px; min-height: 2.2em; height: 2.2em; }
+      .card-colorway { font-size: 0.55rem; }
+      .card-meta { font-size: 0.6rem; }
+      .meta-row { font-size: 0.6rem; }
+      .price { font-size: 0.65rem; }
+      .hype-label { font-size: 0.55rem; }
+      .badge { font-size: 0.45rem; padding: 2px 6px; }
+      .status-bar { font-size: 0.55rem; }
+      .resell-stats { grid-template-columns: repeat(2, 1fr); }
+      .resell-table { display: none; }
+      .resell-mobile { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+      .resell-m-card { background: var(--card); padding: 14px; }
+      .resell-m-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+      .resell-m-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; line-height: 1.2; max-width: 65%; }
+      .resell-m-brand { font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+      .resell-m-avg { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--green); }
+      .resell-m-row { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--muted); padding: 4px 0; border-top: 1px solid #1a1a1a; }
+      .resell-m-row span:last-child { color: var(--text); }
+      .resell-m-btns { display: flex; gap: 8px; margin-top: 10px; }
+      .resell-m-btns a { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; padding: 8px; border: 1px solid var(--border); color: var(--text); text-decoration: none; border-radius: 3px; }
+      .resell-m-btns a:hover { border-color: var(--accent); }
+      .auth-check { grid-template-columns: 1fr; }
+      .chat-fab { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 0.5rem; }
+      .chat-fab svg { width: 18px; height: 18px; }
+      .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 70px; height: 60vh; }
+      .chat-input-row input { font-size: 0.8rem; }
+      .price-compare { gap: 4px; }
+      .price-compare a { font-size: 0.55rem; padding: 4px 6px; }
+    }
+    @media (max-width: 380px) {
+      .grid { grid-template-columns: 1fr; }
+      .card-img-wrap { height: 180px; }
+      .nav-tabs { gap: 0; }
+      .nav-tab { padding: 10px 10px; font-size: 0.45rem; }
+      .filter-btn { font-size: 0.5rem; padding: 4px 8px; }
+      .site-footer { flex-direction: column; gap: 8px; padding: 16px; text-align: center; }
+    }
+    /* Release Calendar */
+    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+    .cal-month-nav{display:flex;align-items:center;gap:16px}
+    .cal-month-nav button{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;cursor:pointer;transition:all .15s;letter-spacing:1px}
+    .cal-month-nav button:hover{border-color:var(--accent);color:var(--accent)}
+    .cal-month-label{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:3px;min-width:260px;text-align:center}
+    .cal-month-label span{color:var(--accent)}
+    .cal-view-toggle{display:flex;border:1px solid var(--border)}
+    .cal-view-btn{background:transparent;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;cursor:pointer;transition:all .15s}
+    .cal-view-btn.active{background:var(--accent);color:white}
+    .cal-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+    .cal-filter-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all .15s;white-space:nowrap}
+    .cal-filter-btn:hover{border-color:var(--text);color:var(--text)}
+    .cal-filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(255,60,0,.08)}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:40px}
+    .cal-day-header{background:var(--surface);padding:10px;text-align:center;font-size:.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+    .cal-day{background:var(--bg);min-height:120px;padding:8px;position:relative;transition:background .15s}
+    .cal-day:hover{background:#0e0e0e}
+    .cal-day.other-month{opacity:.3}
+    .cal-day.today{background:rgba(255,60,0,.04)}
+    .cal-day.today::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+    .cal-day-num{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--muted);margin-bottom:4px}
+    .cal-day.today .cal-day-num{color:var(--accent)}
+    .cal-release-pip{font-size:.45rem;padding:2px 5px;margin-bottom:2px;border-radius:2px;cursor:pointer;transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;display:block}
+    .cal-release-pip:hover{transform:translateX(2px);filter:brightness(1.3)}
+    .cal-release-pip.brand-jordan{background:rgba(255,60,0,.15);color:#ff6b3d;border-left:2px solid #ff3c00}
+    .cal-release-pip.brand-nike{background:rgba(255,255,255,.06);color:#ccc;border-left:2px solid #888}
+    .cal-release-pip.brand-adidas{background:rgba(0,200,120,.1);color:#00e676;border-left:2px solid #00e676}
+    .cal-release-pip.brand-collab{background:rgba(200,68,255,.1);color:#cc44ff;border-left:2px solid #cc44ff}
+    .cal-release-pip.brand-other{background:rgba(100,180,255,.1);color:#64b5f6;border-left:2px solid #64b5f6}
+    .cal-more{font-size:.45rem;color:var(--muted);padding:2px 5px;cursor:pointer}
+    .cal-more:hover{color:var(--accent)}
+    .cal-list{display:flex;flex-direction:column;gap:2px}
+    .cal-list-date{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;padding:20px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px;color:var(--muted)}
+    .cal-list-date span{color:var(--accent)}
+    .cal-list-item{display:flex;align-items:center;gap:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);transition:all .15s;cursor:pointer}
+    .cal-list-item:hover{border-color:var(--accent);background:#161616;transform:translateX(4px)}
+    .cal-list-info{flex:1;min-width:0}
+    .cal-list-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .cal-list-meta{font-size:.6rem;color:var(--muted);letter-spacing:.5px;margin-top:2px}
+    .cal-list-sku{font-size:.55rem;color:var(--muted);letter-spacing:1px;margin-top:1px}
+    .cal-list-price{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--green);white-space:nowrap}
+    .cal-list-actions{display:flex;gap:6px;flex-shrink:0}
+    .cal-list-btn{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:1.5px;text-transform:uppercase;padding:6px 12px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
+    .cal-list-btn:hover{border-color:var(--accent);color:var(--accent)}
+    .cal-list-btn.primary{background:var(--accent);border-color:var(--accent);color:white}
+    .cal-list-btn.primary:hover{background:#ff5522}
+    .cal-legend{display:flex;gap:16px;flex-wrap:wrap;padding:16px 0;border-top:1px solid var(--border);margin-top:20px}
+    .cal-legend-item{display:flex;align-items:center;gap:6px;font-size:.55rem;color:var(--muted);letter-spacing:1px}
+    .cal-legend-dot{width:8px;height:8px;border-radius:1px}
+    .cal-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .15s ease}
+    .cal-modal{background:var(--bg);border:1px solid var(--border);max-width:500px;width:100%;max-height:80vh;overflow-y:auto}
+    .cal-modal-head{display:flex;justify-content:space-between;align-items:flex-start;padding:24px 24px 0}
+    .cal-modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+    .cal-modal-close:hover{color:var(--text)}
+    .cal-modal-body{padding:16px 24px 24px}
+    .cal-modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;line-height:1.1}
+    .cal-modal-details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+    .cal-modal-detail label{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+    .cal-modal-detail span{font-family:'Bebas Neue',sans-serif;font-size:1.2rem}
+    .cal-modal-btns{display:flex;gap:8px;margin-top:16px}
+    .cal-modal-btns a{flex:1;text-align:center}
+    .cal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px}
+    .cal-stat{background:var(--bg);padding:16px 20px}
+    .cal-stat-label{font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+    .cal-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px}
+    .cal-stat-val.accent{color:var(--accent)}
+    .cal-stat-val.green{color:var(--green)}
+    @media(max-width:768px){
+      .cal-grid{grid-template-columns:repeat(7,1fr)}.cal-day{min-height:70px;padding:4px}.cal-day-num{font-size:.9rem}.cal-release-pip{font-size:.35rem;padding:1px 3px}
+      .cal-stats{grid-template-columns:repeat(2,1fr)}.cal-list-item{flex-wrap:wrap;gap:10px}.cal-list-actions{width:100%}.cal-list-btn{flex:1;text-align:center}
+      .cal-month-label{font-size:1.6rem;min-width:auto}.cal-header{justify-content:center}
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo" style="text-decoration:none"><span class="sneaky">SNEAKY</span><span class="radar">RADAR</span></a>
+    <div class="nav-tabs">
+      <a class="nav-tab" href="/"><span>📡</span>Drop Radar</a>
+      <a class="nav-tab " href="/releases"><span>📅</span>Releases</a>
+      <a class="nav-tab active" href="/resell"><span>📈</span>Resell Tracker</a>
+      <a class="nav-tab " href="/auth"><span>🔍</span>Auth Guide</a>
+      <a class="nav-tab" href="/blog"><span>📝</span>Blog</a>
+    </div>
+    <button class="hamburger" onclick="document.querySelector('.mobile-menu').style.display=document.querySelector('.mobile-menu').style.display==='flex'?'none':'flex';this.textContent=this.textContent==='☰'?'✕':'☰'">☰</button>
+  </div>
+  <div class="mobile-menu" style="display:none">
+    <a class="mobile-menu-item" href="/" style="text-decoration:none"><span>📡</span>Drop Radar</a>
+    <a class="mobile-menu-item" href="/releases" style="text-decoration:none"><span>📅</span>Releases</a>
+    <a class="mobile-menu-item" href="/resell" style="text-decoration:none"><span>📈</span>Resell Tracker</a>
+    <a class="mobile-menu-item" href="/auth" style="text-decoration:none"><span>🔍</span>Auth Guide</a>
+    <a class="mobile-menu-item" href="/blog" style="text-decoration:none"><span>📝</span>Blog</a>
+  </div>
+  <div class="nav-right">
+    <button class="alert-btn" onclick="window.location.href='/'"><span class="alert-dot"></span> Drop Alerts</button>
+  </div>
+</nav>
+<div id="resell-root"></div>
+<noscript>
+<div style="max-width:900px;margin:0 auto;padding:40px 20px;font-family:sans-serif;color:#f0f0f0;background:#0a0a0a">
+<h1>Sneaker Resell Price Tracker</h1>
+<p>Track sneaker resale prices across 50+ models. Compare retail vs market price, trend direction, and weekly sales volume for Jordans, Yeezys, Dunks, Travis Scott, New Balance, ASICS, and more.</p>
+<p>Models tracked include: Air Jordan 1 Chicago, Jordan 4 Military Blue, Jordan 4 Black Cat, Jordan 11 Space Jam, Travis Scott x Jordan 1, Nike Dunk Low Panda, Yeezy 350 V2, Yeezy Slide, New Balance 990v6, ASICS Gel-1130, Adidas Samba, and many more.</p>
+<p><a href="/">Compare prices on SneakyRadar</a> · <a href="/blog">Read our guides</a> · <a href="/auth">Authentication Guide</a> · <a href="/releases">Release Calendar</a></p>
+</div>
+</noscript>
+<footer class="site-footer">
+  <div class="footer-logo"><span>SNEAKY</span><span class="radar">RADAR</span></div>
+  <div><a href="/blog" style="color:#ff3c00;text-decoration:none">Blog</a> · Prices subject to change. Links may be affiliate links. Not affiliated with any retailer.</div>
+</footer>
+<script>
+const RESELL_DATA = [
+  // === JORDAN ===
+  { brand:"Jordan",name:"Air Jordan 1 Retro High Chicago",retail:"$180",low:"$350",avg:"$420",high:"$520",trend:"+15%",hot:true,vol:"1.8k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 1 High Dark Mocha",retail:"$170",low:"$380",avg:"$493",high:"$580",trend:"+10%",hot:true,vol:"1.4k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 3 White Cement Reimagined",retail:"$200",low:"$210",avg:"$248",high:"$310",trend:"+5%",hot:false,vol:"2.8k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 4 Military Blue",retail:"$215",low:"$310",avg:"$348",high:"$420",trend:"+12%",hot:true,vol:"2.4k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 4 Black Cat",retail:"$190",low:"$280",avg:"$340",high:"$410",trend:"+9%",hot:true,vol:"2.1k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 4 Bred Reimagined",retail:"$210",low:"$290",avg:"$355",high:"$430",trend:"+14%",hot:true,vol:"1.9k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 5 Retro Fire Red",retail:"$208",low:"$174",avg:"$198",high:"$299",trend:"-3%",hot:false,vol:"1.6k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 11 Space Jam",retail:"$225",low:"$320",avg:"$395",high:"$480",trend:"+8%",hot:true,vol:"1.5k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 11 Legend Blue",retail:"$220",low:"$178",avg:"$259",high:"$442",trend:"+2%",hot:false,vol:"1.3k sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 12 Taxi",retail:"$200",low:"$180",avg:"$215",high:"$280",trend:"+1%",hot:false,vol:"980 sales/wk"},
+  { brand:"Jordan",name:"Air Jordan 13 Chicago (2026)",retail:"$215",low:"$240",avg:"$320",high:"$390",trend:"+18%",hot:true,vol:"870 sales/wk"},
+  // === TRAVIS SCOTT ===
+  { brand:"Travis Scott",name:"TS x Jordan 1 Low Reverse Mocha",retail:"$150",low:"$980",avg:"$1163",high:"$1400",trend:"+6%",hot:true,vol:"620 sales/wk"},
+  { brand:"Travis Scott",name:"TS x Fragment x Jordan 1 Low",retail:"$150",low:"$1100",avg:"$1450",high:"$1800",trend:"+4%",hot:true,vol:"410 sales/wk"},
+  { brand:"Travis Scott",name:"TS x Jordan 1 Low Black Phantom",retail:"$150",low:"$350",avg:"$440",high:"$550",trend:"+11%",hot:true,vol:"780 sales/wk"},
+  { brand:"Travis Scott",name:"TS x Air Max 1 Baroque Brown",retail:"$150",low:"$420",avg:"$510",high:"$640",trend:"+22%",hot:true,vol:"890 sales/wk"},
+  // === NIKE ===
+  { brand:"Nike",name:"Dunk Low Panda",retail:"$110",low:"$58",avg:"$85",high:"$110",trend:"-8%",hot:false,vol:"5.1k sales/wk"},
+  { brand:"Nike",name:"Dunk Low Grey Fog",retail:"$110",low:"$90",avg:"$115",high:"$140",trend:"+2%",hot:false,vol:"2.2k sales/wk"},
+  { brand:"Nike",name:"SB Dunk Low Stranger Things",retail:"$120",low:"$250",avg:"$340",high:"$420",trend:"+28%",hot:true,vol:"560 sales/wk"},
+  { brand:"Nike",name:"Air Force 1 Low White",retail:"$110",low:"$75",avg:"$95",high:"$120",trend:"-1%",hot:false,vol:"6.8k sales/wk"},
+  { brand:"Nike",name:"Air Max 95 OG Neon",retail:"$190",low:"$200",avg:"$250",high:"$320",trend:"+7%",hot:true,vol:"1.1k sales/wk"},
+  { brand:"Nike",name:"Air Max 1 Obsidian",retail:"$140",low:"$120",avg:"$148",high:"$180",trend:"+3%",hot:false,vol:"1.4k sales/wk"},
+  { brand:"Nike",name:"Mars Yard 3.0",retail:"$275",low:"$750",avg:"$1075",high:"$1400",trend:"+291%",hot:true,vol:"320 sales/wk"},
+  // === NIKE KOBE ===
+  { brand:"Nike",name:"Kobe 6 Protro Reverse Grinch",retail:"$190",low:"$320",avg:"$410",high:"$520",trend:"+35%",hot:true,vol:"680 sales/wk"},
+  { brand:"Nike",name:"Kobe 8 Protro What The",retail:"$190",low:"$280",avg:"$350",high:"$450",trend:"+25%",hot:true,vol:"540 sales/wk"},
+  { brand:"Nike",name:"Kobe 6 Protro Grinch",retail:"$190",low:"$380",avg:"$470",high:"$580",trend:"+18%",hot:true,vol:"720 sales/wk"},
+  { brand:"Nike",name:"Ja 3 Midnight Navy",retail:"$130",low:"$110",avg:"$138",high:"$175",trend:"+9%",hot:true,vol:"1.6k sales/wk"},
+  // === OFF-WHITE ===
+  { brand:"Nike",name:"Off-White Dunk Low Lot 1",retail:"$170",low:"$800",avg:"$980",high:"$1300",trend:"+18%",hot:true,vol:"340 sales/wk"},
+  { brand:"Nike",name:"Off-White Jordan 4 Sail",retail:"$200",low:"$680",avg:"$820",high:"$1000",trend:"+12%",hot:true,vol:"290 sales/wk"},
+  // === SACAI ===
+  { brand:"Nike",name:"Sacai LD Waffle Green Gusto",retail:"$160",low:"$280",avg:"$360",high:"$440",trend:"+5%",hot:false,vol:"380 sales/wk"},
+  // === ADIDAS ===
+  { brand:"Adidas",name:"Samba OG Cloud White",retail:"$100",low:"$128",avg:"$142",high:"$165",trend:"+8%",hot:true,vol:"3.7k sales/wk"},
+  { brand:"Adidas",name:"Campus 00s Core Black",retail:"$100",low:"$85",avg:"$108",high:"$135",trend:"+4%",hot:false,vol:"3.2k sales/wk"},
+  { brand:"Adidas",name:"Bad Bunny Response CL Brown",retail:"$160",low:"$190",avg:"$245",high:"$310",trend:"+15%",hot:true,vol:"680 sales/wk"},
+  // === YEEZY ===
+  { brand:"Yeezy",name:"350 V2 Zebra",retail:"$230",low:"$200",avg:"$245",high:"$300",trend:"+3%",hot:false,vol:"1.8k sales/wk"},
+  { brand:"Yeezy",name:"350 V2 Bred",retail:"$230",low:"$280",avg:"$330",high:"$390",trend:"+5%",hot:true,vol:"920 sales/wk"},
+  { brand:"Yeezy",name:"Slide Onyx",retail:"$60",low:"$80",avg:"$110",high:"$145",trend:"-4%",hot:false,vol:"3.4k sales/wk"},
+  { brand:"Yeezy",name:"Foam Runner Onyx",retail:"$80",low:"$90",avg:"$120",high:"$155",trend:"-2%",hot:false,vol:"2.1k sales/wk"},
+  { brand:"Yeezy",name:"700 Wave Runner",retail:"$300",low:"$240",avg:"$290",high:"$360",trend:"+2%",hot:false,vol:"1.1k sales/wk"},
+  { brand:"Yeezy",name:"350 V1 Turtle Dove (2022)",retail:"$230",low:"$280",avg:"$350",high:"$440",trend:"+10%",hot:true,vol:"380 sales/wk"},
+  { brand:"Yeezy",name:"750 Light Brown",retail:"$350",low:"$800",avg:"$1100",high:"$1500",trend:"+8%",hot:true,vol:"120 sales/wk"},
+  // === NEW BALANCE ===
+  { brand:"New Balance",name:"990v6 Made in USA Grey",retail:"$199",low:"$195",avg:"$215",high:"$250",trend:"+4%",hot:false,vol:"1.6k sales/wk"},
+  { brand:"New Balance",name:"990v4 Made in USA",retail:"$185",low:"$195",avg:"$208",high:"$240",trend:"+3%",hot:false,vol:"1.2k sales/wk"},
+  { brand:"New Balance",name:"2002R Protection Pack Rain Cloud",retail:"$140",low:"$160",avg:"$195",high:"$240",trend:"+7%",hot:true,vol:"1.5k sales/wk"},
+  { brand:"New Balance",name:"550 White Green",retail:"$110",low:"$95",avg:"$118",high:"$150",trend:"+2%",hot:false,vol:"2.8k sales/wk"},
+  { brand:"New Balance",name:"204L Cream",retail:"$130",low:"$145",avg:"$175",high:"$210",trend:"+20%",hot:true,vol:"680 sales/wk"},
+  // === ASICS ===
+  { brand:"ASICS",name:"Gel-1130 Black Pure Silver",retail:"$110",low:"$130",avg:"$155",high:"$190",trend:"+12%",hot:true,vol:"2.9k sales/wk"},
+  { brand:"ASICS",name:"Gel-Kayano 14 Ivory",retail:"$130",low:"$165",avg:"$182",high:"$210",trend:"+6%",hot:true,vol:"1.8k sales/wk"},
+  { brand:"ASICS",name:"Gel-Kayano 14 Black",retail:"$130",low:"$140",avg:"$165",high:"$200",trend:"+8%",hot:true,vol:"1.4k sales/wk"},
+  // === EMERGING BRANDS ===
+  { brand:"Puma",name:"Speedcat OG Black",retail:"$100",low:"$110",avg:"$138",high:"$170",trend:"+15%",hot:true,vol:"780 sales/wk"},
+  { brand:"Salomon",name:"XT-6 Black Phantom",retail:"$190",low:"$195",avg:"$228",high:"$280",trend:"+12%",hot:true,vol:"620 sales/wk"},
+  { brand:"Mizuno",name:"Wave Prophecy LS Black",retail:"$250",low:"$270",avg:"$320",high:"$390",trend:"+30%",hot:true,vol:"340 sales/wk"},
+  { brand:"Onitsuka Tiger",name:"Mexico 66 Cream Sage",retail:"$110",low:"$125",avg:"$148",high:"$180",trend:"+18%",hot:true,vol:"520 sales/wk"},
+  { brand:"Converse",name:"Shai 001 Black White",retail:"$120",low:"$130",avg:"$158",high:"$195",trend:"+22%",hot:true,vol:"480 sales/wk"},
+];
+
+let resellSortCol = "avg";
+let resellBrandFilter = "All";
+
+function esc(s) { return s == null ? "" : String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function renderResell() {
+  const p = v => parseFloat(v.replace(/[^0-9.]/g,''));
+  const brands = ["All", ...new Set(RESELL_DATA.map(d => d.brand))];
+  const sorted = [...RESELL_DATA]
+    .filter(d => resellBrandFilter === "All" || d.brand === resellBrandFilter)
+    .sort((a,b) => {
+      if (resellSortCol === "avg") return p(b.avg) - p(a.avg);
+      if (resellSortCol === "trend") return parseFloat(b.trend) - parseFloat(a.trend);
+      return 0;
+    });
+
+  document.getElementById("resell-root").innerHTML = `<div class="page"><div class="section-wrap">
+    <div class="section-eyebrow">Market Intelligence</div>
+    <h1 class="section-title"><span class="filled">RESELL</span> <span class="outline">TRACKER</span></h1>
+    <p class="section-sub">Retail vs. market price, trend direction, and weekly sales volume — everything you need to buy, hold, or flip.</p>
+    <div class="resell-stats">
+      <div class="resell-stat"><div class="resell-stat-label">Models Tracked</div><div class="resell-stat-value">52</div><div class="resell-stat-sub">across 12 brands</div></div>
+      <div class="resell-stat"><div class="resell-stat-label">Hottest Model</div><div class="resell-stat-value">TS1</div><div class="resell-stat-sub">Travis Scott Fragment avg $1,450</div></div>
+      <div class="resell-stat"><div class="resell-stat-label">Best Flip</div><div class="resell-stat-value">MY3</div><div class="resell-stat-sub">Mars Yard 3.0 avg +291% ROI</div></div>
+      <div class="resell-stat"><div class="resell-stat-label">Weekly Vol</div><div class="resell-stat-value">68k</div><div class="resell-stat-sub">verified sales tracked this week</div></div>
+    </div>
+    <div class="filters" style="margin-bottom:20px">
+      ${brands.map(b => `<button class="filter-btn ${resellBrandFilter===b?"active":""}" data-brand="${esc(b)}">${esc(b)}</button>`).join("")}
+    </div>
+    <table class="resell-table">
+      <thead><tr>
+        <th>Model</th><th>Retail</th>
+        <th style="color:${resellSortCol==="avg"?"var(--accent2)":"var(--muted)"};cursor:pointer" data-sort="avg">Avg ${resellSortCol==="avg"?"↓":""}</th>
+        <th>Low / High</th>
+        <th style="color:${resellSortCol==="trend"?"var(--accent2)":"var(--muted)"};cursor:pointer" data-sort="trend">Trend ${resellSortCol==="trend"?"↓":""}</th>
+        <th>Volume</th><th>Buy</th>
+      </tr></thead>
+      <tbody>
+        ${sorted.map(d => `<tr>
+          <td><div style="display:flex;align-items:center;gap:10px">${d.hot?`<span class="hot-tag">HOT</span>`:``}<div><div class="resell-brand">${esc(d.brand)}</div><div class="resell-name">${esc(d.name)}</div></div></div></td>
+          <td><span class="resell-price-low">${esc(d.retail)}</span></td>
+          <td><span class="resell-price-avg">${esc(d.avg)}</span></td>
+          <td><span class="resell-price-low">${esc(d.low)}</span><span style="color:var(--border);margin:0 4px">/</span><span class="resell-price-high">${esc(d.high)}</span></td>
+          <td><span class="${d.trend.startsWith("-")?"trend-down":"trend-up"}">${esc(d.trend)}</span></td>
+          <td><span class="vol-tag">${esc(d.vol)}</span></td>
+          <td><div style="display:flex;gap:6px">
+            <a href="https://stockx.com/search?s=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="resell-buy-btn">StockX</a>
+            <a href="https://goat.com/search?query=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="resell-buy-btn">GOAT</a>
+          </div></td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+    <div class="resell-mobile">
+      ${sorted.map(d => `<div class="resell-m-card">
+        <div class="resell-m-top">
+          <div>
+            <div class="resell-m-brand">${d.hot?`<span class="hot-tag" style="margin-right:6px">HOT</span>`:``}${esc(d.brand)}</div>
+            <div class="resell-m-name">${esc(d.name)}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="resell-m-avg">${esc(d.avg)}</div>
+            <div class="${d.trend.startsWith("-")?"trend-down":"trend-up"}" style="font-size:0.65rem">${esc(d.trend)}</div>
+          </div>
+        </div>
+        <div class="resell-m-row"><span>Retail</span><span>${esc(d.retail)}</span></div>
+        <div class="resell-m-row"><span>Range</span><span>${esc(d.low)} — ${esc(d.high)}</span></div>
+        <div class="resell-m-row"><span>Volume</span><span>${esc(d.vol)}</span></div>
+        <div class="resell-m-btns">
+          <a href="https://stockx.com/search?s=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer">StockX</a>
+          <a href="https://goat.com/search?query=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer">GOAT</a>
+        </div>
+      </div>`).join("")}
+    </div>
+  </div></div>`;
+}
+
+document.addEventListener("click", function(e) {
+  const brand = e.target.closest("[data-brand]");
+  if (brand) { resellBrandFilter = brand.dataset.brand; renderResell(); }
+  const sort = e.target.closest("[data-sort]");
+  if (sort) { resellSortCol = sort.dataset.sort; renderResell(); }
+});
+
+renderResell();
+</script>
+</body>
+</html>

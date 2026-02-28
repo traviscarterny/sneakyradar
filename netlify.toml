@@ -1,3 +1,19 @@
+# Standalone pages (clean URLs)
+[[redirects]]
+  from = "/resell"
+  to = "/resell.html"
+  status = 200
+
+[[redirects]]
+  from = "/auth"
+  to = "/auth.html"
+  status = 200
+
+[[redirects]]
+  from = "/releases"
+  to = "/releases.html"
+  status = 200
+
 # Blog clean URLs for new posts
 [[redirects]]
   from = "/blog/best-sneakers-under-100"
@@ -12,4 +28,19 @@
 [[redirects]]
   from = "/blog/how-to-buy-sneakers-retail"
   to = "/blog/how-to-buy-sneakers-retail.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/goat-vs-stockx-fees"
+  to = "/blog/goat-vs-stockx-fees.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/are-yeezy-slides-worth-it"
+  to = "/blog/are-yeezy-slides-worth-it.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/jordan-4-price-history"
+  to = "/blog/jordan-4-price-history.html"
   status = 200
