@@ -44,3 +44,8 @@
   from = "/blog/jordan-4-price-history"
   to = "/blog/jordan-4-price-history.html"
   status = 200
+
+[[redirects]]
+  from = "/collection"
+  to = "/collection.html"
+  status = 200

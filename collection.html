@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2JCYS8398G"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2JCYS8398G');</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sneaker Collection Tracker — Track Your Portfolio Value | SneakyRadar</title>
+<meta name="description" content="Track your sneaker collection's market value in real time. Log shoes, see profit/loss per pair, and monitor your total portfolio worth."/>
+<meta name="keywords" content="sneaker collection tracker, sneaker portfolio, sneaker value tracker, shoe collection worth, sneaker investment"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://www.sneakyradar.com/collection"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Sneaker Collection Tracker — SneakyRadar"/>
+<meta property="og:description" content="Track your sneaker collection's real-time market value. Log shoes, see profit/loss, monitor your portfolio."/>
+<meta property="og:url" content="https://www.sneakyradar.com/collection"/>
+<meta property="og:image" content="https://www.sneakyradar.com/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.sneakyradar.com/og-image.png"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","name":"Sneaker Collection Tracker","description":"Track your sneaker collection's market value in real time.","url":"https://www.sneakyradar.com/collection","isPartOf":{"@type":"WebApplication","name":"SneakyRadar","url":"https://www.sneakyradar.com"}}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--surface:#111;--border:#222;--accent:#ff3c00;--accent2:#00ff94;--text:#f0f0f0;--muted:#555;--card:#141414;--green:#00e676;--purple:#cc44ff;--red:#ff3c00}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:100;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dropDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.page{animation:fadeIn 0.2s ease}
+
+/* Nav */
+.nav{border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px);height:60px}
+.nav-left{display:flex;align-items:center}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:4px;padding-right:32px;border-right:1px solid var(--border);display:flex;align-items:center;text-decoration:none}
+.nav-logo .sneaky{color:var(--text)}.nav-logo .radar{color:var(--accent)}
+.nav-tabs{display:flex;align-items:stretch}
+.nav-tab{display:flex;align-items:center;gap:7px;padding:0 22px;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all 0.15s;border-right:1px solid var(--border);border-bottom:2px solid transparent;background:transparent;border-top:none;border-left:none;font-family:'DM Mono',monospace;text-decoration:none}
+.nav-tab:hover{color:var(--text);background:#111}
+.nav-tab.active{color:var(--text);border-bottom-color:var(--accent);background:#0e0e0e}
+.hamburger{display:none}
+.mobile-menu{display:none}
+.nav-right{display:flex;align-items:center;gap:12px}
+.alert-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:7px}
+.alert-btn:hover{background:var(--accent);color:white}
+.alert-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite}
+
+/* Layout */
+.section-wrap{max-width:1200px;margin:0 auto;padding:60px 40px 100px}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,6rem);line-height:0.9;letter-spacing:2px;margin-bottom:6px}
+.section-title .outline{-webkit-text-stroke:1px var(--text);color:transparent}
+.section-title .filled{color:var(--accent)}
+.section-sub{font-size:0.75rem;color:var(--muted);letter-spacing:0.5px;line-height:1.7;margin-bottom:40px;max-width:520px}
+
+/* Auth */
+.auth-panel{max-width:440px;margin:80px auto;text-align:center;padding:0 20px}
+.auth-panel h2{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;margin-bottom:8px}
+.auth-panel p{color:var(--muted);font-size:0.75rem;margin-bottom:32px;line-height:1.6}
+.auth-form{display:flex;flex-direction:column;gap:12px}
+.auth-input{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.85rem;padding:14px 18px;outline:none;letter-spacing:1px;transition:border-color 0.15s}
+.auth-input:focus{border-color:var(--accent)}
+.auth-input::placeholder{color:var(--muted)}
+.auth-btn{background:var(--accent);color:white;border:none;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;padding:14px;cursor:pointer;transition:background 0.15s}
+.auth-btn:hover{background:#ff5a20}
+.auth-btn:disabled{background:var(--muted);cursor:not-allowed}
+.auth-toggle{color:var(--muted);font-size:0.7rem;margin-top:16px;letter-spacing:1px}
+.auth-toggle a{color:var(--accent);cursor:pointer;text-decoration:none}
+.auth-toggle a:hover{text-decoration:underline}
+.auth-error{color:var(--red);font-size:0.7rem;margin-top:8px;letter-spacing:0.5px}
+.auth-divider{display:flex;align-items:center;gap:16px;margin:20px 0;color:var(--muted);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.google-btn{background:#1a1a1a;border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:1px;padding:12px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:10px}
+.google-btn:hover{background:#222;border-color:var(--muted)}
+.user-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;padding:12px 0;border-bottom:1px solid var(--border)}
+.user-email{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all 0.15s}
+.logout-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px}
+.stat-card{background:var(--card);border:1px solid var(--border);padding:20px;text-align:center}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;margin-bottom:4px}
+.stat-value.green{color:var(--accent2)}.stat-value.red{color:var(--accent)}
+.stat-label{font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+
+/* Add shoe */
+.add-row{display:flex;gap:8px;margin-bottom:32px}
+.add-input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.85rem;padding:14px 18px;outline:none;letter-spacing:1px}
+.add-input:focus{border-color:var(--accent)}
+.add-input::placeholder{color:var(--muted)}
+.add-btn{background:var(--accent);color:white;border:none;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;padding:0 28px;cursor:pointer;transition:background 0.15s;white-space:nowrap}
+.add-btn:hover{background:#ff5a20}
+.add-btn:disabled{background:var(--muted);cursor:not-allowed}
+
+/* Search results dropdown */
+.search-results{position:relative}
+.search-dropdown{position:absolute;top:100%;left:0;right:0;background:#111;border:1px solid var(--border);border-top:none;z-index:200;max-height:400px;overflow-y:auto}
+.search-item{display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;border-bottom:1px solid #1a1a1a;transition:background 0.1s}
+.search-item:hover{background:#1a1a1a}
+.search-item-img{width:56px;height:56px;object-fit:cover;border:1px solid var(--border);background:var(--card)}
+.search-item-info{flex:1}
+.search-item-name{font-size:0.8rem;letter-spacing:0.5px;margin-bottom:2px}
+.search-item-brand{font-size:0.6rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+.search-item-price{font-size:0.75rem;color:var(--accent2);white-space:nowrap}
+
+/* Add form (after selecting shoe) */
+.add-form{background:var(--card);border:1px solid var(--border);padding:24px;margin-bottom:32px;animation:fadeIn 0.2s ease}
+.add-form-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.add-form-img{width:80px;height:80px;object-fit:cover;border:1px solid var(--border)}
+.add-form-info h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px}
+.add-form-info p{font-size:0.6rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+.add-form-fields{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.add-field label{display:block;font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.add-field input,.add-field select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.8rem;padding:10px 14px;outline:none}
+.add-field input:focus,.add-field select:focus{border-color:var(--accent)}
+.add-form-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.add-form-actions button{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;padding:10px 24px;cursor:pointer;border:none;transition:all 0.15s}
+.add-cancel{background:transparent;border:1px solid var(--border)!important;color:var(--muted)}
+.add-cancel:hover{border-color:var(--text)!important;color:var(--text)}
+.add-save{background:var(--accent);color:white}
+.add-save:hover{background:#ff5a20}
+
+/* Collection grid */
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.coll-card{background:var(--card);border:1px solid var(--border);overflow:hidden;transition:border-color 0.15s}
+.coll-card:hover{border-color:var(--muted)}
+.coll-img-wrap{position:relative;aspect-ratio:4/3;background:var(--surface);overflow:hidden}
+.coll-img{width:100%;height:100%;object-fit:cover}
+.coll-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--border)}
+.coll-badge{position:absolute;top:8px;right:8px;font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;font-family:'DM Mono',monospace}
+.coll-badge.profit{background:rgba(0,255,148,0.15);color:var(--accent2);border:1px solid rgba(0,255,148,0.3)}
+.coll-badge.loss{background:rgba(255,60,0,0.15);color:var(--accent);border:1px solid rgba(255,60,0,0.3)}
+.coll-body{padding:16px}
+.coll-brand{font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.coll-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;line-height:1.1;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.coll-size{font-size:0.6rem;color:var(--muted);letter-spacing:1px;margin-bottom:12px}
+.coll-prices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.coll-price-item{text-align:center;padding:8px;background:var(--surface);border:1px solid var(--border)}
+.coll-price-label{font-size:0.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.coll-price-val{font-size:0.85rem;letter-spacing:1px}
+.coll-price-val.green{color:var(--accent2)}.coll-price-val.red{color:var(--accent)}
+.coll-pnl{text-align:center;padding:8px;border:1px solid var(--border)}
+.coll-pnl-label{font-size:0.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.coll-pnl-val{font-size:1rem;font-family:'Bebas Neue',sans-serif;letter-spacing:2px}
+.coll-actions{display:flex;gap:6px;margin-top:12px}
+.coll-action-btn{flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1px;text-transform:uppercase;padding:8px;cursor:pointer;transition:all 0.15s;text-align:center}
+.coll-action-btn:hover{border-color:var(--text);color:var(--text)}
+.coll-action-btn.delete:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Empty state */
+.empty-state{text-align:center;padding:80px 20px}
+.empty-state h3{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;margin-bottom:8px}
+.empty-state p{color:var(--muted);font-size:0.75rem;line-height:1.6;max-width:400px;margin:0 auto 24px}
+
+/* Loading */
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:0.7rem;letter-spacing:2px;text-transform:uppercase}
+
+/* Sort bar */
+.sort-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sort-bar-left{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.sort-bar-right{display:flex;gap:6px}
+.sort-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;transition:all 0.15s}
+.sort-btn:hover,.sort-btn.active{border-color:var(--accent);color:var(--accent)}
+
+/* Responsive */
+@media(max-width:768px){
+  .nav{padding:0 12px;height:50px}
+  .nav-left{width:100%;padding:0;display:flex;align-items:center;justify-content:space-between}
+  .nav-logo{font-size:1.2rem;padding-right:0;border-right:none;padding:10px 0}
+  .nav-tabs{display:none}.nav-right{display:none}
+  .hamburger{display:flex;align-items:center;justify-content:center;background:none;border:1px solid rgba(255,255,255,0.3);color:var(--text);font-size:1.2rem;width:36px;height:36px;cursor:pointer;border-radius:4px;font-family:inherit}
+  .mobile-menu{display:block;position:absolute;top:100%;right:12px;background:rgba(15,15,15,0.98);border:1px solid var(--border);border-radius:6px;z-index:100;min-width:200px;overflow:hidden;backdrop-filter:blur(12px)}
+  .mobile-menu-item{display:flex;align-items:center;gap:8px;padding:14px 18px;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;background:none;width:100%;text-align:left;border-bottom:1px solid var(--border);text-decoration:none}
+  .mobile-menu-item:last-child{border-bottom:none}
+  .mobile-menu-item:hover,.mobile-menu-item.active{color:var(--text);background:rgba(255,255,255,0.05)}
+  .mobile-menu-item.active{color:var(--accent)}
+  .section-wrap{padding:24px 12px 80px}
+  .section-title{font-size:clamp(2rem,10vw,3.5rem);margin-bottom:12px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .add-row{flex-direction:column}
+  .add-form-fields{grid-template-columns:1fr}
+  .collection-grid{grid-template-columns:1fr}
+  .sort-bar{flex-direction:column;gap:10px;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav class="nav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo" style="text-decoration:none"><span class="sneaky">SNEAKY</span><span class="radar">RADAR</span></a>
+    <div class="nav-tabs">
+      <a class="nav-tab" href="/"><span>📡</span>Drop Radar</a>
+      <a class="nav-tab" href="/releases"><span>📅</span>Releases</a>
+      <a class="nav-tab" href="/resell"><span>📈</span>Resell Tracker</a>
+      <a class="nav-tab" href="/auth"><span>🔍</span>Auth Guide</a>
+      <a class="nav-tab active" href="/collection"><span>👟</span>Collection</a>
+      <a class="nav-tab" href="/blog"><span>📝</span>Blog</a>
+    </div>
+    <button class="hamburger" onclick="var m=document.getElementById('mobile-nav');if(m.classList.contains('open')){m.classList.remove('open');m.style.display='none';this.textContent='☰';}else{m.classList.add('open');m.style.display='block';this.textContent='✕';}">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobile-nav" style="display:none">
+    <a class="mobile-menu-item" href="/" style="text-decoration:none"><span>📡</span>Drop Radar</a>
+    <a class="mobile-menu-item" href="/releases" style="text-decoration:none"><span>📅</span>Releases</a>
+    <a class="mobile-menu-item" href="/resell" style="text-decoration:none"><span>📈</span>Resell Tracker</a>
+    <a class="mobile-menu-item" href="/auth" style="text-decoration:none"><span>🔍</span>Auth Guide</a>
+    <a class="mobile-menu-item active" href="/collection" style="text-decoration:none"><span>👟</span>Collection</a>
+    <a class="mobile-menu-item" href="/blog" style="text-decoration:none"><span>📝</span>Blog</a>
+  </div>
+  <div class="nav-right">
+    <button class="alert-btn" onclick="window.location.href='/'"><span class="alert-dot"></span> Drop Alerts</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div id="app"></div>
+</div>
+
+<noscript>
+<div style="max-width:900px;margin:0 auto;padding:40px 20px;font-family:sans-serif;color:#f0f0f0;background:#0a0a0a">
+  <h1>Sneaker Collection Tracker — SneakyRadar</h1>
+  <p>Track your sneaker collection's market value in real time. Log your shoes, see profit and loss per pair, and monitor your total portfolio value. Sign up free to get started.</p>
+  <h2>Features</h2>
+  <p>Add shoes from our database of thousands of sneakers. Track purchase price vs current market value. See total collection worth, total profit/loss, and per-shoe performance. Syncs across all your devices.</p>
+  <p><a href="/">Back to SneakyRadar</a> | <a href="/blog">Blog</a> | <a href="/resell">Resell Tracker</a></p>
+</div>
+</noscript>
+
+<script>
+// =============================================
+// SUPABASE CONFIG
+// =============================================
+// Replace these with your Supabase project credentials
+const SUPABASE_URL = 'https://sjoqbdjkplvpvcrsdjtm.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqb3FiZGprcGx2cHZjcnNkanRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMTExMTQsImV4cCI6MjA4Nzg4NzExNH0.MhHIgita9TvLelzxMSN1TYJhA_AK1U8RX5SXJdSwL6M';
+
+let supabase = null;
+let currentUser = null;
+let collection = [];
+let searchTimeout = null;
+let selectedShoe = null;
+let sortBy = 'date'; // date, value, profit
+
+// Try to initialize Supabase
+try {
+  if (typeof window.supabase !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch(e) {
+  console.log('Supabase not configured yet');
+}
+
+const API_URL = "/.netlify/functions/anthropic";
+const esc = s => s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+const fmt = n => n == null ? '—' : '$' + Number(n).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+function render() {
+  const app = document.getElementById('app');
+
+  // If Supabase isn't configured, show setup instructions
+  if (!supabase) {
+    app.innerHTML = renderSetupGuide();
+    return;
+  }
+
+  if (!currentUser) {
+    app.innerHTML = renderAuth();
+    bindAuthEvents();
+  } else {
+    app.innerHTML = renderCollection();
+    bindCollectionEvents();
+  }
+}
+
+// =============================================
+// SETUP GUIDE (shown when Supabase isn't configured)
+// =============================================
+function renderSetupGuide() {
+  return `<div class="section-wrap">
+    <h2 class="section-title"><span class="filled">COLLECTION</span> <span class="outline">TRACKER</span></h2>
+    <div style="max-width:640px">
+      <div style="background:var(--card);border:1px solid var(--border);padding:32px;margin-bottom:24px">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;margin-bottom:16px;color:var(--accent)">SETUP REQUIRED</h3>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.8;margin-bottom:20px">
+          To enable the collection tracker, you need to connect a free Supabase database. This takes about 5 minutes:
+        </p>
+        <ol style="font-size:0.75rem;color:var(--text);line-height:2.2;padding-left:20px;letter-spacing:0.5px">
+          <li>Go to <a href="https://supabase.com" target="_blank" style="color:var(--accent)">supabase.com</a> and create a free account</li>
+          <li>Create a new project (any name, choose a strong password)</li>
+          <li>Go to <strong>SQL Editor</strong> and run the table creation SQL (below)</li>
+          <li>Go to <strong>Settings → API</strong> and copy your Project URL and anon key</li>
+          <li>Paste them into collection.html replacing YOUR_SUPABASE_URL and YOUR_SUPABASE_ANON_KEY</li>
+          <li>Go to <strong>Authentication → Providers</strong> and enable Email (and optionally Google)</li>
+          <li>Deploy and you're live!</li>
+        </ol>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);padding:24px">
+        <h4 style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;margin-bottom:12px;color:var(--accent2)">SQL TO RUN IN SUPABASE</h4>
+        <pre style="background:var(--surface);border:1px solid var(--border);padding:16px;font-size:0.7rem;overflow-x:auto;color:var(--accent2);line-height:1.8">CREATE TABLE collection (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  shoe_name TEXT NOT NULL,
+  brand TEXT,
+  sku TEXT,
+  colorway TEXT,
+  size TEXT,
+  purchase_price NUMERIC,
+  purchase_date DATE,
+  image_url TEXT,
+  current_price NUMERIC,
+  source TEXT DEFAULT 'stockx',
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable Row Level Security
+ALTER TABLE collection ENABLE ROW LEVEL SECURITY;
+
+-- Users can only see/edit their own shoes
+CREATE POLICY "Users see own shoes" ON collection
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users insert own shoes" ON collection
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users update own shoes" ON collection
+  FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users delete own shoes" ON collection
+  FOR DELETE USING (auth.uid() = user_id);</pre>
+      </div>
+    </div>
+  </div>`;
+}
+
+// =============================================
+// AUTH VIEWS
+// =============================================
+function renderAuth() {
+  return `<div class="auth-panel">
+    <h2><span style="color:var(--accent)">TRACK</span> YOUR COLLECTION</h2>
+    <p>Sign in to log your sneakers, track market values, and see your portfolio performance across all your devices.</p>
+    <div class="auth-form" id="auth-form">
+      <input class="auth-input" id="auth-email" type="email" placeholder="Email address" autocomplete="email"/>
+      <input class="auth-input" id="auth-pass" type="password" placeholder="Password" autocomplete="current-password"/>
+      <button class="auth-btn" id="auth-submit">SIGN IN</button>
+      <div class="auth-error" id="auth-error" style="display:none"></div>
+      <div class="auth-toggle">Don't have an account? <a id="auth-switch">Sign up</a></div>
+      <div class="auth-divider">or</div>
+      <button class="google-btn" id="google-btn">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
+        Continue with Google
+      </button>
+    </div>
+  </div>`;
+}
+
+let isSignUp = false;
+function bindAuthEvents() {
+  const submit = document.getElementById('auth-submit');
+  const emailEl = document.getElementById('auth-email');
+  const passEl = document.getElementById('auth-pass');
+  const errEl = document.getElementById('auth-error');
+  const switchEl = document.getElementById('auth-switch');
+  const googleBtn = document.getElementById('google-btn');
+
+  if (!submit) return;
+
+  switchEl.addEventListener('click', () => {
+    isSignUp = !isSignUp;
+    submit.textContent = isSignUp ? 'SIGN UP' : 'SIGN IN';
+    switchEl.textContent = isSignUp ? 'Sign in instead' : 'Sign up';
+    document.querySelector('.auth-toggle').firstChild.textContent = isSignUp ? 'Already have an account? ' : "Don't have an account? ";
+  });
+
+  submit.addEventListener('click', async () => {
+    const email = emailEl.value.trim();
+    const pass = passEl.value;
+    if (!email || !pass) { errEl.style.display='block'; errEl.textContent='Enter email and password'; return; }
+    if (pass.length < 6) { errEl.style.display='block'; errEl.textContent='Password must be at least 6 characters'; return; }
+    submit.disabled = true; submit.textContent = 'LOADING...'; errEl.style.display='none';
+
+    try {
+      let result;
+      if (isSignUp) {
+        result = await supabase.auth.signUp({ email, password: pass });
+      } else {
+        result = await supabase.auth.signInWithPassword({ email, password: pass });
+      }
+      if (result.error) throw result.error;
+      if (isSignUp && result.data?.user && !result.data.session) {
+        errEl.style.display='block'; errEl.style.color='var(--accent2)';
+        errEl.textContent='Check your email to confirm your account!';
+        submit.disabled = false; submit.textContent = isSignUp ? 'SIGN UP' : 'SIGN IN';
+        return;
+      }
+      currentUser = result.data.user;
+      await loadCollection();
+      render();
+    } catch(e) {
+      errEl.style.display='block'; errEl.textContent = e.message || 'Authentication failed';
+      submit.disabled = false; submit.textContent = isSignUp ? 'SIGN UP' : 'SIGN IN';
+    }
+  });
+
+  // Enter key
+  [emailEl, passEl].forEach(el => el.addEventListener('keydown', e => { if(e.key==='Enter') submit.click(); }));
+
+  googleBtn.addEventListener('click', async () => {
+    try {
+      await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/collection' } });
+    } catch(e) {
+      errEl.style.display='block'; errEl.textContent = e.message || 'Google sign-in failed';
+    }
+  });
+}
+
+// =============================================
+// COLLECTION VIEW
+// =============================================
+function renderCollection() {
+  const totalPaid = collection.reduce((s,c) => s + (Number(c.purchase_price)||0), 0);
+  const totalValue = collection.reduce((s,c) => s + (Number(c.current_price)||Number(c.purchase_price)||0), 0);
+  const totalPnl = totalValue - totalPaid;
+  const pnlPct = totalPaid > 0 ? ((totalPnl / totalPaid) * 100).toFixed(1) : '0.0';
+  const pnlColor = totalPnl >= 0 ? 'green' : 'red';
+
+  const sorted = [...collection].sort((a,b) => {
+    if (sortBy === 'value') return (Number(b.current_price)||0) - (Number(a.current_price)||0);
+    if (sortBy === 'profit') {
+      const pA = (Number(a.current_price)||0) - (Number(a.purchase_price)||0);
+      const pB = (Number(b.current_price)||0) - (Number(b.purchase_price)||0);
+      return pB - pA;
+    }
+    return new Date(b.created_at) - new Date(a.created_at);
+  });
+
+  return `<div class="section-wrap">
+    <div class="user-bar">
+      <span class="user-email">${esc(currentUser.email)}</span>
+      <button class="logout-btn" id="logout-btn">Sign Out</button>
+    </div>
+
+    <h2 class="section-title"><span class="filled">YOUR</span> <span class="outline">COLLECTION</span></h2>
+    <p class="section-sub">Track your sneaker portfolio's real-time market value.</p>
+
+    ${collection.length > 0 ? `
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">${collection.length}</div>
+        <div class="stat-label">Sneakers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${fmt(totalPaid)}</div>
+        <div class="stat-label">Total Paid</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value ${pnlColor}">${fmt(totalValue)}</div>
+        <div class="stat-label">Market Value</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value ${pnlColor}">${totalPnl >= 0 ? '+' : ''}${fmt(totalPnl)} (${pnlPct}%)</div>
+        <div class="stat-label">Profit / Loss</div>
+      </div>
+    </div>` : ''}
+
+    <div class="search-results" id="search-wrap">
+      <div class="add-row">
+        <input class="add-input" id="shoe-search" type="text" placeholder="Search for a shoe to add..." autocomplete="off"/>
+        <button class="add-btn" id="search-btn">SEARCH</button>
+      </div>
+      <div id="search-dropdown" style="display:none"></div>
+    </div>
+
+    <div id="add-form-wrap"></div>
+
+    ${collection.length > 0 ? `
+    <div class="sort-bar">
+      <div class="sort-bar-left">${collection.length} shoe${collection.length!==1?'s':''}</div>
+      <div class="sort-bar-right">
+        <button class="sort-btn ${sortBy==='date'?'active':''}" data-sort="date">Recent</button>
+        <button class="sort-btn ${sortBy==='value'?'active':''}" data-sort="value">Value</button>
+        <button class="sort-btn ${sortBy==='profit'?'active':''}" data-sort="profit">Profit</button>
+      </div>
+    </div>
+    <div class="collection-grid">
+      ${sorted.map(shoe => renderShoeCard(shoe)).join('')}
+    </div>` : `
+    <div class="empty-state">
+      <h3>NO SNEAKERS YET</h3>
+      <p>Search for a shoe above to add it to your collection. Track purchase prices, current market values, and your overall portfolio performance.</p>
+    </div>`}
+  </div>`;
+}
+
+function renderShoeCard(shoe) {
+  const paid = Number(shoe.purchase_price) || 0;
+  const current = Number(shoe.current_price) || paid;
+  const pnl = current - paid;
+  const pnlPct = paid > 0 ? ((pnl / paid) * 100).toFixed(0) : '0';
+  const isProfit = pnl >= 0;
+
+  return `<div class="coll-card" data-id="${shoe.id}">
+    <div class="coll-img-wrap">
+      ${shoe.image_url ? `<img class="coll-img" src="${esc(shoe.image_url)}" alt="${esc(shoe.shoe_name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="coll-img-placeholder" style="display:none">${esc((shoe.shoe_name||'?')[0])}</div>` :
+      `<div class="coll-img-placeholder">${esc((shoe.shoe_name||'?')[0])}</div>`}
+      ${paid > 0 ? `<div class="coll-badge ${isProfit ? 'profit' : 'loss'}">${isProfit ? '+' : ''}${pnlPct}%</div>` : ''}
+    </div>
+    <div class="coll-body">
+      <div class="coll-brand">${esc(shoe.brand || 'Sneaker')}</div>
+      <div class="coll-name">${esc(shoe.shoe_name)}</div>
+      ${shoe.size ? `<div class="coll-size">Size ${esc(shoe.size)}</div>` : ''}
+      <div class="coll-prices">
+        <div class="coll-price-item">
+          <div class="coll-price-label">Paid</div>
+          <div class="coll-price-val">${paid > 0 ? fmt(paid) : '—'}</div>
+        </div>
+        <div class="coll-price-item">
+          <div class="coll-price-label">Market</div>
+          <div class="coll-price-val ${isProfit ? 'green' : 'red'}">${current > 0 ? fmt(current) : '—'}</div>
+        </div>
+      </div>
+      ${paid > 0 ? `<div class="coll-pnl">
+        <div class="coll-pnl-label">Profit / Loss</div>
+        <div class="coll-pnl-val" style="color:${isProfit ? 'var(--accent2)' : 'var(--accent)'}">${isProfit ? '+' : ''}${fmt(pnl)}</div>
+      </div>` : ''}
+      <div class="coll-actions">
+        <a class="coll-action-btn" href="https://stockx.com/search?s=${encodeURIComponent(shoe.shoe_name)}" target="_blank" rel="noopener">StockX</a>
+        <button class="coll-action-btn delete" data-delete="${shoe.id}">Remove</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindCollectionEvents() {
+  // Logout
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    currentUser = null; collection = [];
+    render();
+  });
+
+  // Search
+  const searchInput = document.getElementById('shoe-search');
+  const searchBtn = document.getElementById('search-btn');
+  const dropdown = document.getElementById('search-dropdown');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      const q = searchInput.value.trim();
+      if (q.length < 2) { dropdown.style.display='none'; return; }
+      searchTimeout = setTimeout(() => searchShoes(q), 400);
+    });
+    searchInput.addEventListener('keydown', e => { if(e.key==='Enter') { e.preventDefault(); searchShoes(searchInput.value.trim()); }});
+    searchBtn?.addEventListener('click', () => searchShoes(searchInput.value.trim()));
+
+    // Close dropdown on outside click
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#search-wrap')) dropdown.style.display='none';
+    });
+  }
+
+  // Sort
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      sortBy = btn.dataset.sort;
+      render();
+    });
+  });
+
+  // Delete
+  document.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Remove this shoe from your collection?')) return;
+      const id = btn.dataset.delete;
+      btn.textContent = '...';
+      await supabase.from('collection').delete().eq('id', id);
+      collection = collection.filter(s => s.id !== id);
+      render();
+    });
+  });
+}
+
+// =============================================
+// SEARCH + ADD SHOE
+// =============================================
+async function searchShoes(q) {
+  if (!q || q.length < 2) return;
+  const dropdown = document.getElementById('search-dropdown');
+  dropdown.style.display = 'block';
+  dropdown.innerHTML = '<div class="loading">Searching...</div>';
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ action: 'search_stockx', query: q, limit: 8 })
+    });
+    const data = await res.json();
+    const products = data.products || data.results || [];
+
+    if (products.length === 0) {
+      dropdown.innerHTML = '<div class="loading">No results found</div>';
+      return;
+    }
+
+    dropdown.innerHTML = products.map(p => `
+      <div class="search-item" data-shoe='${esc(JSON.stringify({
+        name: p.name || p.title || '',
+        brand: p.brand || '',
+        sku: p.sku || p.styleId || '',
+        colorway: p.colorway || p.color || '',
+        image: p.image || p.thumbnail || p.media?.thumbUrl || '',
+        price: p.retailPrice || p.price || p.retail || null,
+        market: p.lastSale || p.marketPrice || p.lowestAsk || null
+      }))}'>
+        <img class="search-item-img" src="${esc(p.image || p.thumbnail || p.media?.thumbUrl || '')}" alt="" onerror="this.style.display='none'"/>
+        <div class="search-item-info">
+          <div class="search-item-name">${esc(p.name || p.title || '')}</div>
+          <div class="search-item-brand">${esc(p.brand || '')}</div>
+        </div>
+        <div class="search-item-price">${p.lastSale || p.marketPrice || p.lowestAsk ? fmt(p.lastSale || p.marketPrice || p.lowestAsk) : ''}</div>
+      </div>
+    `).join('');
+
+    // Bind click on each result
+    dropdown.querySelectorAll('.search-item').forEach(item => {
+      item.addEventListener('click', () => {
+        try { selectedShoe = JSON.parse(item.dataset.shoe); } catch(e) { return; }
+        dropdown.style.display = 'none';
+        document.getElementById('shoe-search').value = '';
+        showAddForm();
+      });
+    });
+  } catch(e) {
+    dropdown.innerHTML = '<div class="loading">Search failed — try again</div>';
+  }
+}
+
+function showAddForm() {
+  if (!selectedShoe) return;
+  const wrap = document.getElementById('add-form-wrap');
+  const today = new Date().toISOString().split('T')[0];
+
+  wrap.innerHTML = `<div class="add-form">
+    <div class="add-form-header">
+      ${selectedShoe.image ? `<img class="add-form-img" src="${esc(selectedShoe.image)}" alt="" onerror="this.style.display='none'"/>` : ''}
+      <div class="add-form-info">
+        <h3>${esc(selectedShoe.name)}</h3>
+        <p>${esc(selectedShoe.brand)}${selectedShoe.sku ? ' — ' + esc(selectedShoe.sku) : ''}</p>
+      </div>
+    </div>
+    <div class="add-form-fields">
+      <div class="add-field">
+        <label>Size</label>
+        <input id="add-size" type="text" placeholder="e.g. 10.5"/>
+      </div>
+      <div class="add-field">
+        <label>Purchase Price</label>
+        <input id="add-price" type="number" placeholder="e.g. 180" value="${selectedShoe.price || ''}"/>
+      </div>
+      <div class="add-field">
+        <label>Purchase Date</label>
+        <input id="add-date" type="date" value="${today}"/>
+      </div>
+    </div>
+    <div class="add-form-actions">
+      <button class="add-cancel" id="add-cancel">Cancel</button>
+      <button class="add-save" id="add-save">ADD TO COLLECTION</button>
+    </div>
+  </div>`;
+
+  document.getElementById('add-cancel').addEventListener('click', () => {
+    selectedShoe = null; wrap.innerHTML = '';
+  });
+
+  document.getElementById('add-save').addEventListener('click', async () => {
+    const saveBtn = document.getElementById('add-save');
+    saveBtn.disabled = true; saveBtn.textContent = 'SAVING...';
+
+    const shoe = {
+      user_id: currentUser.id,
+      shoe_name: selectedShoe.name,
+      brand: selectedShoe.brand,
+      sku: selectedShoe.sku,
+      colorway: selectedShoe.colorway,
+      size: document.getElementById('add-size').value.trim(),
+      purchase_price: parseFloat(document.getElementById('add-price').value) || null,
+      purchase_date: document.getElementById('add-date').value || null,
+      image_url: selectedShoe.image,
+      current_price: selectedShoe.market || selectedShoe.price || null,
+      source: 'stockx'
+    };
+
+    const { data, error } = await supabase.from('collection').insert([shoe]).select();
+    if (error) {
+      alert('Failed to save: ' + error.message);
+      saveBtn.disabled = false; saveBtn.textContent = 'ADD TO COLLECTION';
+      return;
+    }
+
+    if (data && data[0]) collection.unshift(data[0]);
+    selectedShoe = null;
+    render();
+  });
+}
+
+// =============================================
+// DATA LOADING
+// =============================================
+async function loadCollection() {
+  if (!supabase || !currentUser) return;
+  const { data, error } = await supabase
+    .from('collection')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+  if (data) collection = data;
+}
+
+// =============================================
+// INIT
+// =============================================
+async function init() {
+  if (!supabase) { render(); return; }
+
+  // Check for existing session
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user) {
+    currentUser = session.user;
+    await loadCollection();
+  }
+
+  // Listen for auth changes (handles OAuth redirect)
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) {
+      currentUser = session.user;
+      await loadCollection();
+      render();
+    }
+  });
+
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
