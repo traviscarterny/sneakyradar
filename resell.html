@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Sneaker Resell Price Tracker — Live Market Prices | SneakyRadar</title>
 <meta name="description" content="Track sneaker resale prices across 50+ models. Compare retail vs market price, trend direction, and weekly sales volume for Jordans, Yeezys, Dunks, and more."/>
-<meta name="keywords" content="sneaker resale prices, sneaker resell tracker, Jordan resale value, Yeezy resell price, sneaker market prices, StockX prices, GOAT prices"/>
+<meta name="keywords" content="sneaker resale prices, sneaker resell tracker, Jordan resale value, Yeezy resell price, sneaker market prices, StockX prices, Nike prices"/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="https://www.sneakyradar.com/resell"/>
 <meta property="og:type" content="website"/>
@@ -544,7 +544,7 @@ function renderResell() {
           <td><span class="vol-tag">${esc(d.vol)}</span></td>
           <td><div style="display:flex;gap:6px">
             <a href="https://stockx.com/search?s=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="resell-buy-btn">StockX</a>
-            <a href="https://goat.com/search?query=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="resell-buy-btn">GOAT</a>
+            <a href="https://www.nike.com/w?q=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer" class="resell-buy-btn">Nike</a>
           </div></td>
         </tr>`).join("")}
       </tbody>
@@ -566,7 +566,7 @@ function renderResell() {
         <div class="resell-m-row"><span>Volume</span><span>${esc(d.vol)}</span></div>
         <div class="resell-m-btns">
           <a href="https://stockx.com/search?s=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer">StockX</a>
-          <a href="https://goat.com/search?query=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer">GOAT</a>
+          <a href="https://www.nike.com/w?q=${encodeURIComponent(d.name)}" target="_blank" rel="noopener noreferrer">Nike</a>
         </div>
       </div>`).join("")}
     </div>
