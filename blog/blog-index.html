@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2JCYS8398G"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2JCYS8398G');</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SneakyRadar Blog — Sneaker Guides, Price Tips & Release News</title>
+<meta name="description" content="Sneaker buying guides, price comparison tips, release calendars, and market analysis from SneakyRadar. Shop smarter across StockX, GOAT, and more."/>
+<link rel="canonical" href="https://www.sneakyradar.com/blog"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='6' x2='32' y2='18' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='32' y1='46' x2='32' y2='58' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='6' y1='32' x2='18' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Cline x1='46' y1='32' x2='58' y2='32' stroke='%23ff3c00' stroke-width='2.5'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='22' fill='%23ffffff' letter-spacing='1'%3ESR%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f0f0f0;font-family:'DM Mono',monospace;font-size:15px;line-height:1.8}
+a{color:#ff3c00;text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:900px;margin:0 auto;padding:24px 20px 80px}
+:root{--accent:#ff3c00;--text:#f0f0f0;--muted:#555;--border:#222}
+.nav{border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px);height:60px}
+.nav-left{display:flex;align-items:center}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:4px;padding-right:32px;border-right:1px solid var(--border);display:flex;align-items:center;text-decoration:none}
+.nav-logo .sneaky{color:var(--text)}
+.nav-logo .radar{color:var(--accent)}
+.nav-tabs{display:flex;align-items:stretch}
+.nav-tab{display:flex;align-items:center;gap:7px;padding:0 22px;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all 0.15s;border-right:1px solid var(--border);border-bottom:2px solid transparent;background:transparent;border-top:none;border-left:none;font-family:'DM Mono',monospace;text-decoration:none}
+.nav-tab:hover{color:var(--text);background:#111;text-decoration:none}
+.nav-tab.active{color:var(--text);border-bottom-color:var(--accent);background:#0e0e0e}
+.hamburger{display:none}
+.mobile-menu{display:none}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4rem);line-height:1;letter-spacing:2px;margin:48px 0 8px}
+h1 .accent{color:#ff3c00}
+.subtitle{font-size:0.75rem;color:#555;margin-bottom:48px}
+
+.posts-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.post-card{background:#111;border:1px solid #222;border-radius:8px;overflow:hidden;transition:border-color 0.2s,transform 0.2s}
+.post-card:hover{border-color:#ff3c00;transform:translateY(-3px)}
+.post-card a{color:#f0f0f0;text-decoration:none;display:block}
+.post-card-img{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid #222}
+.post-card-body{padding:20px}
+.post-card-body h2{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:2px;margin-bottom:8px;line-height:1.2}
+.post-card-body p{color:#888;font-size:0.75rem;margin-bottom:14px;line-height:1.6}
+.post-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{display:inline-block;font-size:0.5rem;letter-spacing:2px;text-transform:uppercase;color:#ff3c00;border:1px solid #ff3c0044;padding:3px 10px;border-radius:3px}
+
+.footer-blog{border-top:1px solid #222;margin-top:60px;padding-top:24px;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#555;text-align:center}
+
+@media(max-width:768px){
+  .nav{padding:0 12px;height:48px;position:relative}
+  .nav-left{width:100%;padding:0;display:flex;align-items:center;justify-content:space-between}
+  .nav-logo{font-size:1.2rem;padding-right:0;border-right:none;padding:10px 0}
+  .nav-tabs{display:none}
+  .hamburger{display:flex;align-items:center;justify-content:center;background:none;border:1px solid rgba(255,255,255,0.3);color:var(--text);font-size:1.2rem;width:36px;height:36px;cursor:pointer;border-radius:4px;font-family:inherit}
+  .mobile-menu{display:block;position:absolute;top:100%;right:12px;background:rgba(15,15,15,0.98);border:1px solid var(--border);border-radius:6px;z-index:100;min-width:200px;overflow:hidden;backdrop-filter:blur(12px)}
+  .mobile-menu-item{display:flex;align-items:center;gap:8px;padding:14px 18px;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;background:none;width:100%;text-align:left;border-bottom:1px solid var(--border)}
+  .mobile-menu-item:last-child{border-bottom:none}
+  .mobile-menu-item:hover,.mobile-menu-item.active{color:var(--text);background:rgba(255,255,255,0.05)}
+  .mobile-menu-item.active{color:var(--accent)}
+}
+@media(max-width:640px){
+  h1{font-size:2.5rem}
+  .wrap{padding:16px 14px 60px}
+  .posts-grid{grid-template-columns:1fr}
+}
+</style>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="SneakyRadar Blog — Sneaker Guides, Price Tips & Release News"/>
+<meta property="og:description" content="Sneaker buying guides, price comparison tips, release calendars, and market analysis from SneakyRadar."/>
+<meta property="og:url" content="https://www.sneakyradar.com/blog"/>
+<meta property="og:image" content="https://www.sneakyradar.com/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.sneakyradar.com/og-image.png"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Blog","name":"SneakyRadar Blog","description":"Sneaker buying guides, price comparison tips, release calendars, and market analysis.","url":"https://www.sneakyradar.com/blog","publisher":{"@type":"Organization","name":"SneakyRadar","url":"https://www.sneakyradar.com"}}
+</script>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-left">
+    <a href="/" class="nav-logo"><span class="sneaky">SNEAKY</span><span class="radar">RADAR</span></a>
+    <div class="nav-tabs">
+      <a class="nav-tab" href="/"><span>📡</span>Drop Radar</a>
+      <a class="nav-tab" href="/releases"><span>📅</span>Releases</a>
+      <a class="nav-tab" href="/resell"><span>📈</span>Resell Tracker</a>
+      <a class="nav-tab" href="/auth"><span>🔍</span>Auth Guide</a>
+      <a class="nav-tab" href="/collection"><span>👟</span>My Collection</a>
+      <a class="nav-tab active" href="/blog"><span>📝</span>Blog</a>
+    </div>
+    <button class="hamburger" onclick="var m=document.getElementById('mobile-nav');if(m.classList.contains('open')){m.classList.remove('open');m.style.display='none';this.textContent='☰';}else{m.classList.add('open');m.style.display='block';this.textContent='✕';}">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobile-nav">
+    <a class="mobile-menu-item" href="/" style="text-decoration:none"><span>📡</span>Drop Radar</a>
+    <a class="mobile-menu-item" href="/releases" style="text-decoration:none"><span>📅</span>Releases</a>
+    <a class="mobile-menu-item" href="/resell" style="text-decoration:none"><span>📈</span>Resell Tracker</a>
+    <a class="mobile-menu-item" href="/auth" style="text-decoration:none"><span>🔍</span>Auth Guide</a>
+    <a class="mobile-menu-item" href="/collection" style="text-decoration:none"><span>👟</span>My Collection</a>
+    <a class="mobile-menu-item" href="/blog" style="text-decoration:none"><span>📝</span>Blog</a>
+  </div>
+</nav>
+<div class="wrap">
+<h1><span class="accent">SNEAKY</span>RADAR BLOG</h1>
+<div class="subtitle">Guides, market analysis, and tips to help you buy smarter.</div>
+
+<div class="posts-grid">
+
+<!-- Jordan Releases 2026 -->
+<div class="post-card">
+<a href="/blog/best-jordan-releases-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<rect width="400" height="225" fill="#ff3c00" opacity="0.08"/>
+<!-- Jordan wings logo inspired shape -->
+<circle cx="200" cy="90" r="50" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.3"/>
+<circle cx="200" cy="90" r="35" fill="none" stroke="#ff3c00" stroke-width="1.5" opacity="0.2"/>
+<path d="M160 90 L200 50 L240 90 L200 130 Z" fill="#ff3c00" opacity="0.15"/>
+<text x="200" y="98" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="36" fill="#ff3c00" font-weight="900">23</text>
+<text x="200" y="170" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="22" fill="#ffffff" letter-spacing="4">AIR JORDAN</text>
+<text x="200" y="198" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ff3c00" letter-spacing="6">2026 RELEASES</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Releases</span><span class="tag">Jordan</span></div>
+<h2>Best Air Jordan Releases 2026: Every Drop, Price & Where to Buy</h2>
+<p>Complete guide to every major Air Jordan release in 2026 — retail prices, resell estimates, and where to find the best deals.</p>
+</div>
+</a>
+</div>
+
+<!-- StockX vs GOAT -->
+<div class="post-card">
+<a href="/blog/sneaker-price-comparison-guide">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Split comparison layout -->
+<rect x="0" y="0" width="195" height="225" fill="#0e1a0e" opacity="0.5"/>
+<rect x="205" y="0" width="195" height="225" fill="#1a0e0e" opacity="0.5"/>
+<line x1="200" y1="20" x2="200" y2="205" stroke="#333" stroke-width="2" stroke-dasharray="6,4"/>
+<!-- Price tags -->
+<rect x="50" y="50" width="100" height="40" rx="6" fill="none" stroke="#00ff94" stroke-width="2"/>
+<text x="100" y="76" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#00ff94">$285</text>
+<rect x="250" y="50" width="100" height="40" rx="6" fill="none" stroke="#ff3c00" stroke-width="2"/>
+<text x="300" y="76" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ff3c00">$312</text>
+<!-- Labels -->
+<text x="100" y="120" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="2">STOCKX</text>
+<text x="200" y="120" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#555">vs</text>
+<text x="300" y="120" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="2">GOAT</text>
+<text x="200" y="170" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ff3c00" letter-spacing="3">PRICE COMPARISON</text>
+<text x="200" y="198" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#666" letter-spacing="2">WHO HAS THE BEST DEALS?</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">Comparison</span></div>
+<h2>StockX vs GOAT 2026: Where to Buy Sneakers for the Best Price</h2>
+<p>Detailed comparison of fees, prices, shipping, and authentication between the two biggest sneaker resale platforms.</p>
+</div>
+</a>
+</div>
+
+<!-- Best Under $150 -->
+<div class="post-card">
+<a href="/blog/best-sneakers-under-150">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<rect width="400" height="225" fill="#00ff94" opacity="0.04"/>
+<!-- Big price tag -->
+<rect x="120" y="30" width="160" height="90" rx="12" fill="none" stroke="#00ff94" stroke-width="3"/>
+<circle cx="145" cy="45" r="8" fill="none" stroke="#00ff94" stroke-width="2"/>
+<text x="200" y="68" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#888">UNDER</text>
+<text x="200" y="104" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="48" fill="#00ff94">$150</text>
+<text x="200" y="160" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="20" fill="#ffffff" letter-spacing="3">BEST SNEAKERS</text>
+<text x="200" y="190" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#666" letter-spacing="2">JORDANS • DUNKS • YEEZYS • MORE</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Deals</span><span class="tag">Budget</span></div>
+<h2>Best Sneakers Under $150 in 2026: Jordans, Dunks, Yeezys & More</h2>
+<p>Great sneakers that won't break the bank — Dunks, Jordans, Yeezys, New Balance, and ASICS all under $150 on resale.</p>
+</div>
+</a>
+</div>
+
+<!-- Resale Guide -->
+<div class="post-card">
+<a href="/blog/best-sneakers-resale-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Profit chart going up -->
+<polyline points="40,180 100,160 160,140 200,90 260,70 320,30 370,20" fill="none" stroke="#00ff94" stroke-width="3" stroke-linecap="round"/>
+<polyline points="40,180 100,160 160,140 200,90 260,70 320,30 370,20 370,180 40,180" fill="#00ff94" opacity="0.06"/>
+<!-- Grid lines -->
+<line x1="40" y1="180" x2="370" y2="180" stroke="#333" stroke-width="1"/>
+<line x1="40" y1="140" x2="370" y2="140" stroke="#222" stroke-width="0.5" stroke-dasharray="4,4"/>
+<line x1="40" y1="100" x2="370" y2="100" stroke="#222" stroke-width="0.5" stroke-dasharray="4,4"/>
+<line x1="40" y1="60" x2="370" y2="60" stroke="#222" stroke-width="0.5" stroke-dasharray="4,4"/>
+<!-- Arrow up -->
+<text x="350" y="55" font-family="Arial Black,Impact,sans-serif" font-size="24" fill="#00ff94">↑</text>
+<text x="200" y="210" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="14" fill="#ff3c00" letter-spacing="4">BEST SNEAKERS FOR RESALE 2026</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Resale</span><span class="tag">Investment</span></div>
+<h2>Best Sneakers to Buy for Resale in 2026</h2>
+<p>Top sneakers with the highest resale margins this year — which pairs to buy and flip for maximum profit.</p>
+</div>
+</a>
+</div>
+
+<!-- Authentication Guide -->
+<div class="post-card">
+<a href="/blog/how-to-authenticate-sneakers">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Magnifying glass -->
+<circle cx="170" cy="95" r="50" fill="none" stroke="#ff3c00" stroke-width="3"/>
+<line x1="205" y1="130" x2="250" y2="175" stroke="#ff3c00" stroke-width="4" stroke-linecap="round"/>
+<!-- Checkmark inside -->
+<polyline points="148,95 163,110 192,78" fill="none" stroke="#00ff94" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- X mark -->
+<text x="310" y="105" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="50" fill="#ff3c00" opacity="0.3">✕</text>
+<text x="200" y="210" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="3">AUTHENTICATION GUIDE</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Auth</span><span class="tag">Guide</span></div>
+<h2>How to Authenticate Sneakers: Real vs Fake Guide 2026</h2>
+<p>Spot fakes like a pro — detailed authentication tips for Jordans, Dunks, Yeezys, and more.</p>
+</div>
+</a>
+</div>
+
+<!-- How StockX Works -->
+<div class="post-card">
+<a href="/blog/how-stockx-works">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- StockX-style bid/ask spread -->
+<rect x="50" y="50" width="130" height="120" rx="8" fill="#141414" stroke="#222" stroke-width="1"/>
+<text x="115" y="75" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#888" letter-spacing="2">LOWEST ASK</text>
+<text x="115" y="115" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="32" fill="#00ff94">$245</text>
+<text x="115" y="155" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#666" letter-spacing="1">SIZE 10</text>
+<rect x="220" y="50" width="130" height="120" rx="8" fill="#141414" stroke="#222" stroke-width="1"/>
+<text x="285" y="75" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#888" letter-spacing="2">HIGHEST BID</text>
+<text x="285" y="115" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="32" fill="#ff3c00">$220</text>
+<text x="285" y="155" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#666" letter-spacing="1">SIZE 10</text>
+<text x="200" y="205" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ffffff" letter-spacing="3">HOW STOCKX WORKS</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">StockX</span></div>
+<h2>How StockX Works: Complete Beginner's Guide 2026</h2>
+<p>Everything you need to know about buying and selling on StockX — fees, shipping, authentication, and tips.</p>
+</div>
+</a>
+</div>
+
+<!-- Yeezy Price Guide -->
+<div class="post-card">
+<a href="/blog/yeezy-price-guide-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<rect width="400" height="225" fill="#ff3c00" opacity="0.03"/>
+<!-- Yeezy stripe pattern -->
+<line x1="0" y1="60" x2="400" y2="20" stroke="#ff3c00" stroke-width="1" opacity="0.15"/>
+<line x1="0" y1="80" x2="400" y2="40" stroke="#ff3c00" stroke-width="1" opacity="0.12"/>
+<line x1="0" y1="100" x2="400" y2="60" stroke="#ff3c00" stroke-width="1" opacity="0.09"/>
+<line x1="0" y1="120" x2="400" y2="80" stroke="#ff3c00" stroke-width="1" opacity="0.06"/>
+<!-- Bold Yeezy text -->
+<text x="200" y="100" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="52" fill="#ffffff" letter-spacing="8">YEEZY</text>
+<text x="200" y="140" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="24" fill="#ff3c00" letter-spacing="4">PRICE GUIDE</text>
+<!-- Price range bar -->
+<rect x="80" y="165" width="240" height="8" rx="4" fill="#222"/>
+<rect x="80" y="165" width="160" height="8" rx="4" fill="#00ff94"/>
+<circle cx="240" cy="169" r="6" fill="#00ff94"/>
+<text x="80" y="198" font-family="Arial,sans-serif" font-size="11" fill="#666">$120</text>
+<text x="320" y="198" text-anchor="end" font-family="Arial,sans-serif" font-size="11" fill="#666">$800+</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Yeezy</span><span class="tag">Prices</span></div>
+<h2>Yeezy Price Guide 2026: Every Model Ranked by Value</h2>
+<p>Complete breakdown of Yeezy prices — which models are below retail, which are climbing, and the best deals right now.</p>
+</div>
+</a>
+</div>
+
+<!-- Nike Dunk Calendar -->
+<div class="post-card">
+<a href="/blog/nike-dunk-release-calendar-2026">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- Calendar grid -->
+<rect x="80" y="30" width="240" height="160" rx="8" fill="#141414" stroke="#282828" stroke-width="1"/>
+<rect x="80" y="30" width="240" height="35" rx="8" fill="#ff3c00"/>
+<rect x="80" y="57" width="240" height="8" fill="#ff3c00"/>
+<text x="200" y="55" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="3">2026</text>
+<!-- Calendar cells -->
+<line x1="114" y1="65" x2="114" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="148" y1="65" x2="148" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="182" y1="65" x2="182" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="216" y1="65" x2="216" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="250" y1="65" x2="250" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="284" y1="65" x2="284" y2="190" stroke="#222" stroke-width="0.5"/>
+<line x1="80" y1="95" x2="320" y2="95" stroke="#222" stroke-width="0.5"/>
+<line x1="80" y1="125" x2="320" y2="125" stroke="#222" stroke-width="0.5"/>
+<line x1="80" y1="155" x2="320" y2="155" stroke="#222" stroke-width="0.5"/>
+<!-- Highlighted drop dates -->
+<circle cx="165" cy="110" r="10" fill="#ff3c00" opacity="0.3"/>
+<text x="165" y="114" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#ff3c00" font-weight="700">12</text>
+<circle cx="250" cy="140" r="10" fill="#ff3c00" opacity="0.3"/>
+<text x="250" y="144" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#ff3c00" font-weight="700">22</text>
+<circle cx="131" cy="170" r="10" fill="#00ff94" opacity="0.3"/>
+<text x="131" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" font-weight="700">7</text>
+<text x="200" y="215" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="14" fill="#ffffff" letter-spacing="3">NIKE DUNK RELEASE CALENDAR</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Releases</span><span class="tag">Dunk</span></div>
+<h2>Nike Dunk Release Calendar 2026: Every Drop Date & Price</h2>
+<p>All confirmed Nike Dunk releases for 2026 with dates, retail prices, and resell predictions.</p>
+</div>
+</a>
+</div>
+
+<!-- New Balance Guide -->
+<div class="post-card">
+<a href="/blog/new-balance-buying-guide">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- NB-inspired N -->
+<text x="200" y="120" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="100" fill="#ff3c00" opacity="0.12">N</text>
+<!-- Model numbers -->
+<text x="100" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ffffff">990</text>
+<text x="100" y="110" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" letter-spacing="1">$184</text>
+<text x="200" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ffffff">2002R</text>
+<text x="200" y="110" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" letter-spacing="1">$139</text>
+<text x="300" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ffffff">550</text>
+<text x="300" y="110" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#00ff94" letter-spacing="1">$109</text>
+<!-- Dividers -->
+<line x1="150" y1="70" x2="150" y2="120" stroke="#333" stroke-width="1"/>
+<line x1="250" y1="70" x2="250" y2="120" stroke="#333" stroke-width="1"/>
+<text x="200" y="160" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="20" fill="#ffffff" letter-spacing="3">NEW BALANCE</text>
+<text x="200" y="188" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="14" fill="#ff3c00" letter-spacing="4">BUYING GUIDE</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">New Balance</span></div>
+<h2>New Balance Buying Guide: 990 vs 2002R vs 550 Compared</h2>
+<p>Which New Balance model is right for you? Comparing comfort, style, price, and resale value across the top models.</p>
+</div>
+</a>
+</div>
+
+<!-- ASICS Comparison -->
+<div class="post-card">
+<a href="/blog/asics-kayano-14-vs-gel-1130">
+<div class="post-card-img">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="225" fill="#111"/>
+<!-- ASICS stripe pattern -->
+<path d="M50 140 L90 80 L130 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.2"/>
+<path d="M60 140 L100 85 L140 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.15"/>
+<path d="M260 140 L300 80 L340 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.2"/>
+<path d="M270 140 L310 85 L350 140" fill="none" stroke="#ff3c00" stroke-width="2" opacity="0.15"/>
+<!-- Model names -->
+<text x="110" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="1">KAYANO</text>
+<text x="110" y="116" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ff3c00">14</text>
+<text x="200" y="105" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#555">vs</text>
+<text x="290" y="90" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="16" fill="#ffffff" letter-spacing="1">GEL</text>
+<text x="290" y="116" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="28" fill="#ff3c00">1130</text>
+<text x="200" y="170" text-anchor="middle" font-family="Arial Black,Impact,sans-serif" font-size="18" fill="#ffffff" letter-spacing="3">ASICS</text>
+<text x="200" y="198" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#666" letter-spacing="2">WHICH SHOULD YOU BUY?</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Comparison</span><span class="tag">ASICS</span></div>
+<h2>ASICS Gel-Kayano 14 vs Gel-1130: Which Should You Buy?</h2>
+<p>Side-by-side comparison of two of the hottest ASICS models — comfort, style, sizing, and where to find the best price.</p>
+</div>
+</a>
+</div>
+
+<div class="post-card">
+<a href="/blog/best-sneakers-under-100">
+<div class="post-card-img" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<rect width="400" height="225" fill="#0e0e0e"/>
+<text x="200" y="90" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="72" fill="#ff3c00" opacity="0.9">$100</text>
+<text x="200" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="18" fill="#666" letter-spacing="4">BUDGET STEALS</text>
+<line x1="120" y1="145" x2="280" y2="145" stroke="#ff3c00" stroke-width="2" opacity="0.4"/>
+<text x="200" y="170" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#444" letter-spacing="2">DUNKS · JORDANS · YEEZYS</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Deals</span><span class="tag">Budget</span></div>
+<h2>Best Sneakers Under $100 in 2026</h2>
+<p>Jordans, Dunks, Yeezys, and New Balance — all under $100 on resale. The best budget sneaker picks right now.</p>
+</div>
+</a>
+</div>
+
+<div class="post-card">
+<a href="/blog/sneaker-release-dates-2026">
+<div class="post-card-img" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<rect width="400" height="225" fill="#0e0e0e"/>
+<text x="200" y="60" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="16" fill="#555" letter-spacing="6">2026</text>
+<text x="200" y="110" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="36" fill="#ff3c00">RELEASE DATES</text>
+<rect x="80" y="130" width="60" height="50" rx="4" fill="none" stroke="#333" stroke-width="1.5"/>
+<text x="110" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#555">MAR</text>
+<text x="110" y="170" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="18" fill="#ff3c00">8</text>
+<rect x="170" y="130" width="60" height="50" rx="4" fill="none" stroke="#333" stroke-width="1.5"/>
+<text x="200" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#555">APR</text>
+<text x="200" y="170" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="18" fill="#ff3c00">12</text>
+<rect x="260" y="130" width="60" height="50" rx="4" fill="none" stroke="#333" stroke-width="1.5"/>
+<text x="290" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#555">MAY</text>
+<text x="290" y="170" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="18" fill="#ff3c00">17</text>
+<text x="200" y="205" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#444" letter-spacing="2">EVERY DROP · EVERY DATE</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Calendar</span><span class="tag">Releases</span></div>
+<h2>Sneaker Release Dates 2026: Complete Calendar</h2>
+<p>Every confirmed Jordan, Nike, Yeezy, New Balance, and ASICS drop date with retail prices and resale predictions.</p>
+</div>
+</a>
+</div>
+
+<div class="post-card">
+<a href="/blog/how-to-buy-sneakers-retail">
+<div class="post-card-img" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<rect width="400" height="225" fill="#0e0e0e"/>
+<text x="200" y="70" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="14" fill="#555" letter-spacing="6">HOW TO COP</text>
+<text x="200" y="115" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="40" fill="#00ff94">RETAIL</text>
+<text x="200" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="14" fill="#666" letter-spacing="3">NOT RESALE</text>
+<line x1="140" y1="165" x2="260" y2="165" stroke="#00ff94" stroke-width="2" opacity="0.4"/>
+<text x="200" y="195" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#444" letter-spacing="2">SNKRS · RAFFLES · RESTOCKS</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">Tips</span></div>
+<h2>How to Buy Sneakers for Retail in 2026</h2>
+<p>SNKRS tips, raffle strategies, in-store tricks, and timing hacks to cop limited sneakers at retail price.</p>
+</div>
+</a>
+</div>
+
+<div class="post-card">
+<a href="/blog/goat-vs-stockx-fees">
+<div class="post-card-img" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<rect width="400" height="225" fill="#0e0e0e"/>
+<text x="130" y="70" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="28" fill="#00ff94">GOAT</text>
+<text x="200" y="70" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="18" fill="#555">vs</text>
+<text x="275" y="70" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="28" fill="#ff3c00">STOCKX</text>
+<line x1="80" y1="90" x2="320" y2="90" stroke="#333" stroke-width="1"/>
+<text x="200" y="120" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="36" fill="#f0f0f0">FEES</text>
+<text x="200" y="155" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#666" letter-spacing="3">BUYER + SELLER BREAKDOWN</text>
+<rect x="100" y="170" width="90" height="20" rx="3" fill="#00ff94" opacity="0.15"/>
+<text x="145" y="184" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="10" fill="#00ff94">GOAT: 9.5%</text>
+<rect x="210" y="170" width="90" height="20" rx="3" fill="#ff3c00" opacity="0.15"/>
+<text x="255" y="184" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="10" fill="#ff3c00">STX: 8-9.5%</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Guide</span><span class="tag">Comparison</span></div>
+<h2>GOAT vs StockX Fees Compared 2026</h2>
+<p>Full fee breakdown for buyers and sellers. Processing fees, shipping, commissions — which platform actually costs less?</p>
+</div>
+</a>
+</div>
+
+<div class="post-card">
+<a href="/blog/are-yeezy-slides-worth-it">
+<div class="post-card-img" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<rect width="400" height="225" fill="#0e0e0e"/>
+<text x="200" y="55" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="14" fill="#555" letter-spacing="6">HONEST REVIEW</text>
+<text x="200" y="100" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="32" fill="#f0f0f0">YEEZY SLIDES</text>
+<text x="200" y="130" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="#ff3c00">WORTH IT?</text>
+<line x1="140" y1="145" x2="260" y2="145" stroke="#ff3c00" stroke-width="2" opacity="0.4"/>
+<text x="110" y="175" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="11" fill="#00ff94">COMFORT 9/10</text>
+<text x="200" y="175" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="11" fill="#ffd200">SIZING: TRICKY</text>
+<text x="300" y="175" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="11" fill="#888">DURABILITY 7/10</text>
+<text x="200" y="205" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#444" letter-spacing="2">ONYX · BONE · SLATE GREY</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Review</span><span class="tag">Yeezy</span></div>
+<h2>Are Yeezy Slides Worth It in 2026?</h2>
+<p>Comfort, sizing, durability, best colorways, and where to find the lowest prices. Honest review with no hype.</p>
+</div>
+</a>
+</div>
+
+<div class="post-card">
+<a href="/blog/jordan-4-price-history">
+<div class="post-card-img" style="background:linear-gradient(135deg,#0a0a0a,#1a1a1a)">
+<svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<rect width="400" height="225" fill="#0e0e0e"/>
+<text x="200" y="50" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="14" fill="#555" letter-spacing="6">MARKET DATA</text>
+<text x="200" y="95" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="38" fill="#f0f0f0">JORDAN 4</text>
+<text x="200" y="125" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="#ff3c00">PRICE HISTORY</text>
+<!-- Mini chart -->
+<polyline points="60,190 100,185 140,175 180,160 220,165 260,150 300,140 340,135" fill="none" stroke="#00ff94" stroke-width="2.5" opacity="0.8"/>
+<circle cx="340" cy="135" r="4" fill="#00ff94"/>
+<text x="60" y="210" font-family="Arial,sans-serif" font-size="9" fill="#555">2020</text>
+<text x="190" y="210" font-family="Arial,sans-serif" font-size="9" fill="#555">2023</text>
+<text x="325" y="210" font-family="Arial,sans-serif" font-size="9" fill="#555">2026</text>
+</svg>
+</div>
+<div class="post-card-body">
+<div class="post-card-tags"><span class="tag">Analysis</span><span class="tag">Jordan</span></div>
+<h2>Jordan 4 Price History: 2020-2026</h2>
+<p>How Military Blue, Bred, Black Cat, and other Jordan 4s have changed in resale value. Winners, losers, and what drives prices.</p>
+</div>
+</a>
+</div>
+
+<p>© 2026 SneakyRadar · <a href="/">Home</a> · Compare sneaker prices across StockX & GOAT</p>
+</div>
+</div>
+<noscript>
+<div style="max-width:900px;margin:0 auto;padding:40px 20px;font-family:sans-serif;color:#f0f0f0;background:#0a0a0a">
+  <h2>SneakyRadar Blog — Sneaker Guides & Price Tips</h2>
+  <p>Sneaker buying guides, price comparison tips, release calendars, and market analysis from SneakyRadar.</p>
+  <ul>
+    <li><a href="/blog/best-jordan-releases-2026">Best Air Jordan Releases 2026</a></li>
+    <li><a href="/blog/sneaker-price-comparison-guide">StockX vs GOAT: Price Comparison</a></li>
+    <li><a href="/blog/best-sneakers-under-150">Best Sneakers Under $150</a></li>
+    <li><a href="/blog/best-sneakers-resale-2026">Best Sneakers for Resale 2026</a></li>
+    <li><a href="/blog/how-to-authenticate-sneakers">How to Authenticate Sneakers</a></li>
+    <li><a href="/blog/how-stockx-works">How StockX Works</a></li>
+    <li><a href="/blog/yeezy-price-guide-2026">Yeezy Price Guide 2026</a></li>
+    <li><a href="/blog/nike-dunk-release-calendar-2026">Nike Dunk Release Calendar 2026</a></li>
+    <li><a href="/blog/new-balance-buying-guide">New Balance Buying Guide</a></li>
+    <li><a href="/blog/asics-kayano-14-vs-gel-1130">ASICS Kayano 14 vs Gel-1130</a></li>
+    <li><a href="/blog/best-sneakers-under-100">Best Sneakers Under $100</a></li>
+    <li><a href="/blog/sneaker-release-dates-2026">Sneaker Release Dates 2026</a></li>
+    <li><a href="/blog/how-to-buy-sneakers-retail">How to Buy Sneakers for Retail</a></li>
+    <li><a href="/blog/goat-vs-stockx-fees">GOAT vs StockX Fees Compared 2026</a></li>
+    <li><a href="/blog/are-yeezy-slides-worth-it">Are Yeezy Slides Worth It?</a></li>
+    <li><a href="/blog/jordan-4-price-history">Jordan 4 Price History</a></li>
+  </ul>
+  <p><a href="/">Back to SneakyRadar</a></p>
+</div>
+</noscript>
+</body>
+</html>
