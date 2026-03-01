@@ -175,6 +175,36 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .nav-logout{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;transition:all 0.15s}
 .nav-logout:hover{border-color:var(--accent);color:var(--accent)}
 
+/* Share button */
+.share-btn{background:var(--accent);color:white;border:none;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;padding:12px 28px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:10px;text-transform:uppercase}
+.share-btn:hover{background:#ff5a20;transform:translateY(-1px)}
+.share-btn svg{width:18px;height:18px;fill:white}
+.title-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:6px}
+.share-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.15s ease}
+.share-modal-box{background:var(--card);border:1px solid var(--border);padding:32px;max-width:500px;width:90%;position:relative}
+.share-modal-box h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;margin-bottom:8px;color:var(--accent)}
+.share-modal-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.6}
+.share-link-row{display:flex;gap:8px}
+.share-link-input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--accent2);font-family:'DM Mono',monospace;font-size:0.8rem;padding:12px 16px;outline:none;letter-spacing:0.5px}
+.share-copy-btn{background:var(--accent);color:white;border:none;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;padding:12px 24px;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.share-copy-btn:hover{background:#ff5a20}
+.share-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+.share-close:hover{color:var(--text)}
+.share-toggle{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.share-toggle label{font-size:0.7rem;color:var(--muted);letter-spacing:0.5px}
+.share-switch{position:relative;width:44px;height:24px;cursor:pointer}
+.share-switch input{opacity:0;width:0;height:0}
+.share-slider{position:absolute;inset:0;background:var(--border);border-radius:24px;transition:0.2s}
+.share-slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:var(--muted);border-radius:50%;transition:0.2s}
+.share-switch input:checked + .share-slider{background:var(--accent)}
+.share-switch input:checked + .share-slider:before{transform:translateX(20px);background:white}
+
+/* Public view */
+.public-banner{background:var(--card);border:1px solid var(--border);padding:16px 24px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.public-banner-text{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.public-banner-cta{background:var(--accent);color:white;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;padding:8px 20px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.public-banner-cta:hover{background:#ff5a20;text-decoration:none}
+
 /* Responsive */
 @media(max-width:768px){
   .nav{padding:0 12px;height:50px}
@@ -254,6 +284,11 @@ let collection = [];
 let searchTimeout = null;
 let selectedShoe = null;
 let sortBy = 'date'; // date, value, profit
+let shareId = null;
+let shareEnabled = false;
+let showShareModal = false;
+let isPublicView = false;
+let publicCollection = [];
 
 // Try to initialize Supabase
 try {
@@ -277,12 +312,19 @@ function render() {
     return;
   }
 
+  // Public view mode
+  if (isPublicView) {
+    app.innerHTML = renderPublicView();
+    return;
+  }
+
   if (!currentUser) {
     app.innerHTML = renderAuth();
     bindAuthEvents();
   } else {
     app.innerHTML = renderCollection();
     bindCollectionEvents();
+    bindShareEvents();
   }
 }
 
@@ -447,8 +489,15 @@ function renderCollection() {
   });
 
   return `<div class="section-wrap">
-    <h2 class="section-title"><span class="filled">YOUR</span> <span class="outline">COLLECTION</span></h2>
+    <div class="title-row">
+      <h2 class="section-title" style="margin-bottom:0"><span class="filled">YOUR</span> <span class="outline">COLLECTION</span></h2>
+      ${collection.length > 0 ? `<button class="share-btn" id="share-btn">
+        <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+        SHARE COLLECTION
+      </button>` : ''}
+    </div>
     <p class="section-sub">Track your sneaker portfolio's real-time market value.</p>
+    ${showShareModal ? renderShareModal() : ''}
 
     ${collection.length > 0 ? `
     <div class="stats-grid">
@@ -540,6 +589,12 @@ function renderShoeCard(shoe) {
 }
 
 function bindCollectionEvents() {
+  // Share button
+  document.getElementById('share-btn')?.addEventListener('click', () => {
+    showShareModal = true;
+    render();
+  });
+
   // Search
   const searchInput = document.getElementById('shoe-search');
   const searchBtn = document.getElementById('search-btn');
@@ -721,6 +776,189 @@ async function loadCollection() {
 }
 
 // =============================================
+// SHARE FUNCTIONS
+// =============================================
+function renderShareModal() {
+  const shareUrl = shareId ? window.location.origin + '/collection?view=' + shareId : '';
+  return `<div class="share-modal" id="share-modal">
+    <div class="share-modal-box">
+      <button class="share-close" id="share-close">&times;</button>
+      <h3>SHARE YOUR COLLECTION</h3>
+      <p>Let anyone view your sneaker collection with a public link. They can see your shoes and portfolio value, but can't edit anything.</p>
+      <div class="share-toggle">
+        <label class="share-switch">
+          <input type="checkbox" id="share-toggle" ${shareEnabled ? 'checked' : ''}/>
+          <span class="share-slider"></span>
+        </label>
+        <label>Public sharing ${shareEnabled ? 'ON' : 'OFF'}</label>
+      </div>
+      ${shareEnabled && shareUrl ? `
+      <div style="margin-top:20px">
+        <div class="share-link-row">
+          <input class="share-link-input" id="share-link" value="${shareUrl}" readonly/>
+          <button class="share-copy-btn" id="share-copy">COPY</button>
+        </div>
+        <p style="margin-top:10px;font-size:0.6rem;color:var(--muted)">Anyone with this link can view your collection</p>
+      </div>` : ''}
+    </div>
+  </div>`;
+}
+
+function bindShareEvents() {
+  document.getElementById('share-close')?.addEventListener('click', () => {
+    showShareModal = false; render();
+  });
+  document.getElementById('share-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'share-modal') { showShareModal = false; render(); }
+  });
+  document.getElementById('share-toggle')?.addEventListener('change', async (e) => {
+    if (e.target.checked) {
+      // Enable sharing - generate share ID if needed
+      if (!shareId) {
+        shareId = Math.random().toString(36).substring(2, 10);
+        // Save share_id to a profiles table
+        await sb.from('profiles').upsert({
+          user_id: currentUser.id,
+          share_id: shareId,
+          share_enabled: true
+        }, { onConflict: 'user_id' });
+      } else {
+        await sb.from('profiles').upsert({
+          user_id: currentUser.id,
+          share_id: shareId,
+          share_enabled: true
+        }, { onConflict: 'user_id' });
+      }
+      shareEnabled = true;
+    } else {
+      // Disable sharing
+      await sb.from('profiles').upsert({
+        user_id: currentUser.id,
+        share_id: shareId,
+        share_enabled: false
+      }, { onConflict: 'user_id' });
+      shareEnabled = false;
+    }
+    render();
+  });
+  document.getElementById('share-copy')?.addEventListener('click', () => {
+    const input = document.getElementById('share-link');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(() => {
+      document.getElementById('share-copy').textContent = 'COPIED!';
+      setTimeout(() => { document.getElementById('share-copy').textContent = 'COPY'; }, 2000);
+    });
+  });
+}
+
+async function loadShareProfile() {
+  if (!sb || !currentUser) return;
+  try {
+    const { data } = await sb.from('profiles').select('*').eq('user_id', currentUser.id).single();
+    if (data) {
+      shareId = data.share_id;
+      shareEnabled = data.share_enabled;
+    }
+  } catch(e) {
+    // No profile yet, that's fine
+  }
+}
+
+async function loadPublicCollection(viewId) {
+  if (!sb) return;
+  try {
+    // Get the profile with this share_id
+    const { data: profile } = await sb.from('profiles').select('*').eq('share_id', viewId).eq('share_enabled', true).single();
+    if (!profile) { publicCollection = []; return; }
+    // Get their collection
+    const { data: shoes } = await sb.from('collection').select('*').eq('user_id', profile.user_id).order('created_at', { ascending: false });
+    publicCollection = shoes || [];
+  } catch(e) {
+    console.error('Public load error:', e);
+    publicCollection = [];
+  }
+}
+
+function renderPublicView() {
+  if (publicCollection.length === 0) {
+    return `<div class="section-wrap">
+      <div class="empty-state">
+        <h3>COLLECTION NOT FOUND</h3>
+        <p>This collection doesn't exist or sharing has been turned off.</p>
+        <a href="/collection" class="public-banner-cta" style="display:inline-block;margin-top:16px">START YOUR OWN</a>
+      </div>
+    </div>`;
+  }
+
+  const totalPaid = publicCollection.reduce((s,c) => s + (Number(c.purchase_price)||0), 0);
+  const totalValue = publicCollection.reduce((s,c) => s + (Number(c.current_price)||Number(c.purchase_price)||0), 0);
+  const totalPnl = totalValue - totalPaid;
+  const pnlPct = totalPaid > 0 ? ((totalPnl / totalPaid) * 100).toFixed(1) : '0.0';
+  const pnlColor = totalPnl >= 0 ? 'green' : 'red';
+
+  return `<div class="section-wrap">
+    <div class="public-banner">
+      <span class="public-banner-text">You're viewing someone's public sneaker collection</span>
+      <a href="/collection" class="public-banner-cta">START YOUR OWN</a>
+    </div>
+    <h2 class="section-title"><span class="filled">SNEAKER</span> <span class="outline">COLLECTION</span></h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">${publicCollection.length}</div>
+        <div class="stat-label">Sneakers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${fmt(totalPaid)}</div>
+        <div class="stat-label">Total Paid</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value ${pnlColor}">${fmt(totalValue)}</div>
+        <div class="stat-label">Market Value</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value ${pnlColor}">${totalPnl >= 0 ? '+' : ''}${fmt(totalPnl)} (${pnlPct}%)</div>
+        <div class="stat-label">Profit / Loss</div>
+      </div>
+    </div>
+    <div class="sort-bar">
+      <div class="sort-bar-left">${publicCollection.length} shoe${publicCollection.length!==1?'s':''}</div>
+    </div>
+    <div class="collection-grid">
+      ${publicCollection.map(shoe => {
+        const paid = Number(shoe.purchase_price) || 0;
+        const current = Number(shoe.current_price) || paid;
+        const pnl = current - paid;
+        const pnlPct = paid > 0 ? ((pnl / paid) * 100).toFixed(0) : '0';
+        const isProfit = pnl >= 0;
+        return `<div class="coll-card">
+          <div class="coll-img-wrap">
+            ${shoe.image_url ? `<img class="coll-img" src="${esc(shoe.image_url)}" alt="${esc(shoe.shoe_name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="coll-img-placeholder" style="display:none">${esc((shoe.shoe_name||'?')[0])}</div>` :
+            `<div class="coll-img-placeholder">${esc((shoe.shoe_name||'?')[0])}</div>`}
+            ${paid > 0 ? `<div class="coll-badge ${isProfit ? 'profit' : 'loss'}">${isProfit ? '+' : ''}${pnlPct}%</div>` : ''}
+          </div>
+          <div class="coll-body">
+            <div class="coll-brand">${esc(shoe.brand || 'Sneaker')}</div>
+            <div class="coll-name">${esc(shoe.shoe_name)}</div>
+            ${shoe.size ? `<div class="coll-size">Size ${esc(shoe.size)}</div>` : ''}
+            <div class="coll-prices">
+              <div class="coll-price-item">
+                <div class="coll-price-label">Paid</div>
+                <div class="coll-price-val">${paid > 0 ? fmt(paid) : '\u2014'}</div>
+              </div>
+              <div class="coll-price-item">
+                <div class="coll-price-label">Market</div>
+                <div class="coll-price-val ${isProfit ? 'green' : 'red'}">${current > 0 ? fmt(current) : '\u2014'}</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+// =============================================
 // INIT
 // =============================================
 function updateNav() {
@@ -744,12 +982,23 @@ function updateNav() {
 async function init() {
   if (!sb) { render(); return; }
 
+  // Check if this is a public view
+  const params = new URLSearchParams(window.location.search);
+  const viewId = params.get('view');
+  if (viewId) {
+    isPublicView = true;
+    await loadPublicCollection(viewId);
+    render();
+    return;
+  }
+
   // Check for existing session FIRST
   try {
     const { data: { session } } = await sb.auth.getSession();
     if (session?.user) {
       currentUser = session.user;
       try { await loadCollection(); } catch(e) { console.error('Load error:', e); }
+      try { await loadShareProfile(); } catch(e) { console.error('Share profile error:', e); }
     }
   } catch(e) {
     console.error('Session error:', e);
@@ -758,19 +1007,22 @@ async function init() {
   updateNav();
   render();
 
-  // Listen for future auth changes (sign in, sign out, token refresh)
-  // Do NOT use async/await here — it causes auth lock timeout
+  // Listen for future auth changes
   sb.auth.onAuthStateChange((event, session) => {
-    console.log('Auth event:', event);
     if (session?.user) {
       currentUser = session.user;
-      loadCollection().catch(e => console.error('Load error:', e)).finally(() => {
+      Promise.all([
+        loadCollection().catch(e => console.error('Load error:', e)),
+        loadShareProfile().catch(e => console.error('Share error:', e))
+      ]).finally(() => {
         updateNav();
         render();
       });
     } else {
       currentUser = null;
       collection = [];
+      shareId = null;
+      shareEnabled = false;
       updateNav();
       render();
     }
