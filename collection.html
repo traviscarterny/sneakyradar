@@ -743,21 +743,7 @@ function updateNav() {
 async function init() {
   if (!sb) { render(); return; }
 
-  // Listen for ALL auth changes
-  sb.auth.onAuthStateChange(async (event, session) => {
-    console.log('Auth event:', event);
-    if (session?.user) {
-      currentUser = session.user;
-      try { await loadCollection(); } catch(e) { console.error('Load error:', e); }
-    } else {
-      currentUser = null;
-      collection = [];
-    }
-    updateNav();
-    render();
-  });
-
-  // Check for existing session
+  // Check for existing session FIRST
   try {
     const { data: { session } } = await sb.auth.getSession();
     if (session?.user) {
@@ -770,6 +756,24 @@ async function init() {
 
   updateNav();
   render();
+
+  // Listen for future auth changes (sign in, sign out, token refresh)
+  // Do NOT use async/await here — it causes auth lock timeout
+  sb.auth.onAuthStateChange((event, session) => {
+    console.log('Auth event:', event);
+    if (session?.user) {
+      currentUser = session.user;
+      loadCollection().catch(e => console.error('Load error:', e)).finally(() => {
+        updateNav();
+        render();
+      });
+    } else {
+      currentUser = null;
+      collection = [];
+      updateNav();
+      render();
+    }
+  });
 }
 
 init();
