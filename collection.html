@@ -169,6 +169,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
 .sort-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;transition:all 0.15s}
 .sort-btn:hover,.sort-btn.active{border-color:var(--accent);color:var(--accent)}
 
+/* Nav user */
+.nav-user{display:flex;align-items:center;gap:12px}
+.nav-user-email{font-size:0.6rem;color:var(--muted);letter-spacing:1px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-logout{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;cursor:pointer;transition:all 0.15s}
+.nav-logout:hover{border-color:var(--accent);color:var(--accent)}
+
 /* Responsive */
 @media(max-width:768px){
   .nav{padding:0 12px;height:50px}
@@ -215,7 +221,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-
     <a class="mobile-menu-item active" href="/collection" style="text-decoration:none"><span>👟</span>My Collection</a>
     <a class="mobile-menu-item" href="/blog" style="text-decoration:none"><span>📝</span>Blog</a>
   </div>
-  <div class="nav-right">
+  <div class="nav-right" id="nav-right-area">
     <button class="alert-btn" onclick="window.location.href='/'"><span class="alert-dot"></span> Drop Alerts</button>
   </div>
 </nav>
@@ -441,11 +447,6 @@ function renderCollection() {
   });
 
   return `<div class="section-wrap">
-    <div class="user-bar">
-      <span class="user-email">${esc(currentUser.email)}</span>
-      <button class="logout-btn" id="logout-btn">Sign Out</button>
-    </div>
-
     <h2 class="section-title"><span class="filled">YOUR</span> <span class="outline">COLLECTION</span></h2>
     <p class="section-sub">Track your sneaker portfolio's real-time market value.</p>
 
@@ -539,13 +540,6 @@ function renderShoeCard(shoe) {
 }
 
 function bindCollectionEvents() {
-  // Logout
-  document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    await sb.auth.signOut();
-    currentUser = null; collection = [];
-    render();
-  });
-
   // Search
   const searchInput = document.getElementById('shoe-search');
   const searchBtn = document.getElementById('search-btn');
@@ -728,25 +722,50 @@ async function loadCollection() {
 // =============================================
 // INIT
 // =============================================
+function updateNav() {
+  const area = document.getElementById('nav-right-area');
+  if (!area) return;
+  if (currentUser) {
+    area.innerHTML = `<div class="nav-user">
+      <span class="nav-user-email">${esc(currentUser.email)}</span>
+      <button class="nav-logout" id="nav-logout">Sign Out</button>
+    </div>`;
+    document.getElementById('nav-logout').addEventListener('click', async () => {
+      await sb.auth.signOut();
+      currentUser = null; collection = [];
+      updateNav(); render();
+    });
+  } else {
+    area.innerHTML = `<button class="alert-btn" onclick="window.location.href='/'"><span class="alert-dot"></span> Drop Alerts</button>`;
+  }
+}
+
 async function init() {
   if (!sb) { render(); return; }
 
-  // Check for existing session
+  // Listen for auth changes FIRST (handles email confirmation redirect with hash token)
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
+      currentUser = session.user;
+      await loadCollection();
+      updateNav();
+      render();
+    }
+    if (event === 'SIGNED_OUT') {
+      currentUser = null; collection = [];
+      updateNav();
+      render();
+    }
+  });
+
+  // Then check for existing session
   const { data: { session } } = await sb.auth.getSession();
   if (session?.user) {
     currentUser = session.user;
     await loadCollection();
   }
 
-  // Listen for auth changes (handles OAuth redirect)
-  sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session?.user) {
-      currentUser = session.user;
-      await loadCollection();
-      render();
-    }
-  });
-
+  updateNav();
   render();
 }
 
