@@ -640,27 +640,34 @@ function bindCollectionEvents() {
 // =============================================
 // SEARCH + ADD SHOE
 // =============================================
-async function searchShoes(q) {
+async function searchShoes(q, page, append) {
+  page = page || 1;
+  append = append || false;
   if (!q || q.length < 2) return;
   const dropdown = document.getElementById('search-dropdown');
   dropdown.style.display = 'block';
-  dropdown.innerHTML = '<div class="loading">Searching...</div>';
+  if (!append) {
+    dropdown.innerHTML = '<div class="loading">Searching...</div>';
+  } else {
+    var lm = dropdown.querySelector('.search-load-more');
+    if (lm) lm.textContent = 'Loading...';
+  }
 
   try {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ action: 'search', query: q, limit: 8 })
+      body: JSON.stringify({ action: 'search', query: q, limit: 20, page: page })
     });
     const data = await res.json();
     const products = data.data || [];
 
-    if (products.length === 0) {
+    if (products.length === 0 && !append) {
       dropdown.innerHTML = '<div class="loading">No results found</div>';
       return;
     }
 
-    dropdown.innerHTML = products.map(p => {
+    var newHtml = products.map(p => {
       const shoeData = {
         name: p.title || p.name || '',
         brand: p.brand || '',
@@ -680,8 +687,26 @@ async function searchShoes(q) {
       </div>`;
     }).join('');
 
+    if (append) {
+      var old = dropdown.querySelector('.search-load-more');
+      if (old) old.remove();
+      dropdown.insertAdjacentHTML('beforeend', newHtml);
+    } else {
+      dropdown.innerHTML = newHtml;
+    }
+
+    // Add load more if full page
+    if (products.length >= 20) {
+      dropdown.insertAdjacentHTML('beforeend', '<div class="search-item search-load-more" style="justify-content:center;color:var(--accent);font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer">LOAD MORE RESULTS</div>');
+      dropdown.querySelector('.search-load-more').addEventListener('click', function() {
+        searchShoes(q, page + 1, true);
+      });
+    }
+
     // Bind click on each result
-    dropdown.querySelectorAll('.search-item').forEach(item => {
+    dropdown.querySelectorAll('.search-item:not(.search-load-more)').forEach(item => {
+      if (item._bound) return;
+      item._bound = true;
       item.addEventListener('click', () => {
         try { selectedShoe = JSON.parse(item.dataset.shoe); } catch(e) { return; }
         dropdown.style.display = 'none';
