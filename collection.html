@@ -595,34 +595,35 @@ async function searchShoes(q) {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ action: 'search_stockx', query: q, limit: 8 })
+      body: JSON.stringify({ action: 'search', query: q, limit: 8 })
     });
     const data = await res.json();
-    const products = data.products || data.results || [];
+    const products = data.data || [];
 
     if (products.length === 0) {
       dropdown.innerHTML = '<div class="loading">No results found</div>';
       return;
     }
 
-    dropdown.innerHTML = products.map(p => `
-      <div class="search-item" data-shoe='${esc(JSON.stringify({
-        name: p.name || p.title || '',
+    dropdown.innerHTML = products.map(p => {
+      const shoeData = {
+        name: p.title || p.name || '',
         brand: p.brand || '',
-        sku: p.sku || p.styleId || '',
-        colorway: p.colorway || p.color || '',
-        image: p.image || p.thumbnail || p.media?.thumbUrl || '',
-        price: p.retailPrice || p.price || p.retail || null,
-        market: p.lastSale || p.marketPrice || p.lowestAsk || null
-      }))}'>
-        <img class="search-item-img" src="${esc(p.image || p.thumbnail || p.media?.thumbUrl || '')}" alt="" onerror="this.style.display='none'"/>
+        sku: p.sku || '',
+        colorway: p.colorway || '',
+        image: p.image || '',
+        price: p.min_price || p.retail_price || null,
+        market: p.avg_price || p.min_price || null
+      };
+      return `<div class="search-item" data-shoe='${JSON.stringify(shoeData).replace(/'/g, "&#39;")}'>
+        <img class="search-item-img" src="${esc(p.image || '')}" alt="" onerror="this.style.display='none'"/>
         <div class="search-item-info">
-          <div class="search-item-name">${esc(p.name || p.title || '')}</div>
+          <div class="search-item-name">${esc(p.title || p.name || '')}</div>
           <div class="search-item-brand">${esc(p.brand || '')}</div>
         </div>
-        <div class="search-item-price">${p.lastSale || p.marketPrice || p.lowestAsk ? fmt(p.lastSale || p.marketPrice || p.lowestAsk) : ''}</div>
-      </div>
-    `).join('');
+        <div class="search-item-price">${p.avg_price ? fmt(p.avg_price) : p.min_price ? fmt(p.min_price) : ''}</div>
+      </div>`;
+    }).join('');
 
     // Bind click on each result
     dropdown.querySelectorAll('.search-item').forEach(item => {
