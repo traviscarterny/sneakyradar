@@ -743,19 +743,18 @@ function updateNav() {
 async function init() {
   if (!sb) { render(); return; }
 
-  // Listen for auth changes
+  // Listen for ALL auth changes
   sb.auth.onAuthStateChange(async (event, session) => {
-    if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
+    console.log('Auth event:', event);
+    if (session?.user) {
       currentUser = session.user;
       try { await loadCollection(); } catch(e) { console.error('Load error:', e); }
-      updateNav();
-      render();
+    } else {
+      currentUser = null;
+      collection = [];
     }
-    if (event === 'SIGNED_OUT') {
-      currentUser = null; collection = [];
-      updateNav();
-      render();
-    }
+    updateNav();
+    render();
   });
 
   // Check for existing session
