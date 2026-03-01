@@ -743,11 +743,11 @@ function updateNav() {
 async function init() {
   if (!sb) { render(); return; }
 
-  // Listen for auth changes FIRST (handles email confirmation redirect with hash token)
+  // Listen for auth changes
   sb.auth.onAuthStateChange(async (event, session) => {
     if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
       currentUser = session.user;
-      await loadCollection();
+      try { await loadCollection(); } catch(e) { console.error('Load error:', e); }
       updateNav();
       render();
     }
@@ -758,11 +758,15 @@ async function init() {
     }
   });
 
-  // Then check for existing session
-  const { data: { session } } = await sb.auth.getSession();
-  if (session?.user) {
-    currentUser = session.user;
-    await loadCollection();
+  // Check for existing session
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session?.user) {
+      currentUser = session.user;
+      try { await loadCollection(); } catch(e) { console.error('Load error:', e); }
+    }
+  } catch(e) {
+    console.error('Session error:', e);
   }
 
   updateNav();
