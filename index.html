@@ -167,9 +167,8 @@
     .price-row { display: flex; align-items: center; gap: 8px; }
     .price-row-store { font-size: 0.6rem; letter-spacing: 1px; color: var(--muted); flex: 1; text-transform: uppercase; }
     .price-row-amount { font-size: 0.75rem; color: #00ff94; min-width: 48px; text-align: right; }
-    .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
-    .price-row-btn:hover { border-color: var(--accent2); color: var(--accent2); }
-    .price-row-btn.best { border-color: var(--accent2); color: #000; background: var(--accent2); }
+    .price-row-btn { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; background: transparent; border: 1px solid #00ff94; color: #00ff94; padding: 3px 9px; cursor: pointer; transition: all 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
+    .price-row-btn:hover { background: #00ff94; color: #000; }
     .loading-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
     .loading-card { background: var(--card); animation: shimmer 1.5s ease-in-out infinite; }
     .loading-img { width: 100%; height: 200px; background: #1a1a1a; border-bottom: 1px solid var(--border); }
@@ -981,8 +980,8 @@ function renderPriceCompare(prices, drop) {
         <span class="price-row-store">${esc(p.store)}</span>
         <span class="price-row-amount">${esc(p.price)}</span>
         <a href="${esc(affLink(p.url,p.storeId))}" target="_blank" rel="noopener noreferrer"
-          class="price-row-btn ${i===0?"best":""}"
-          onclick="event.stopPropagation();trackClick(${JSON.stringify({name:drop.name})},'${esc(p.storeId)}')">${i===0?"Best Deal":"Buy"}</a>
+          class="price-row-btn"
+          onclick="event.stopPropagation();trackClick(${JSON.stringify({name:drop.name})},'${esc(p.storeId)}')">Buy</a>
       </div>`).join("")}
     </div>
   </div>`;
