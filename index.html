@@ -711,8 +711,14 @@ function kicksToDrops(products) {
       });
     }
 
-    // Kicks Crew: populated client-side (Cloudflare blocks server requests)
-    // Placeholder added by enrichKicksCrewClientSide() after render
+    // Kicks Crew: search link with affiliate tag
+    const kcQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
+    prices.push({
+      store: "Kicks Crew",
+      storeId: "kickscrew",
+      price: "Check Price",
+      url: "https://www.kickscrew.com/search?type=product&q=" + kcQuery,
+    });
 
     // Amazon: search link with affiliate tag
     const amzQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
@@ -867,82 +873,8 @@ function render() {
   const root = document.getElementById("root");
   root.innerHTML = renderAlertModal() + renderNav() + renderPage() + renderFooter() + renderChat();
   attachEvents();
-  enrichKicksCrewClientSide();
 }
 
-// --- Client-side Kicks Crew price lookup via proxy (bypasses Cloudflare + CORS) ---
-const _kcCache = {};
-function enrichKicksCrewClientSide() {
-  const cards = document.querySelectorAll(".card[data-sku]");
-  const items = [];
-  const cardMap = {};
-  let count = 0;
-  cards.forEach(card => {
-    if (count >= 12) return;
-    const sku = card.dataset.sku;
-    const name = card.dataset.shoeName;
-    if (!sku && !name) return;
-    if (_kcCache[sku] !== undefined) {
-      // Already cached — inject if we have data
-      if (_kcCache[sku]) injectKCRow(card, _kcCache[sku]);
-      return;
-    }
-    items.push({ sku, title: name });
-    if (!cardMap[sku]) cardMap[sku] = [];
-    cardMap[sku].push(card);
-    count++;
-  });
-  if (!items.length) return;
-
-  fetch(API_URL.replace("/anthropic", "/kickscrew"), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ items })
-  })
-  .then(r => r.json())
-  .then(data => {
-    const matched = new Set();
-    (data.results || []).forEach(r => {
-      if (!r) return;
-      _kcCache[r.sku] = r;
-      matched.add(r.sku);
-      (cardMap[r.sku] || []).forEach(card => injectKCRow(card, r));
-    });
-    // Cache misses
-    items.forEach(item => { if (!matched.has(item.sku)) _kcCache[item.sku] = null; });
-  })
-  .catch(() => {});
-}
-
-function injectKCRow(card, kc) {
-  const rows = card.querySelector(".price-compare-rows");
-  if (!rows || rows.querySelector('[data-store="kickscrew"]')) return;
-  const amazonRow = Array.from(rows.querySelectorAll(".price-row")).find(r => r.textContent.includes("Amazon"));
-  const kcUrl = affLink(kc.url, "kickscrew");
-  const row = document.createElement("div");
-  row.className = "price-row";
-  row.setAttribute("data-store", "kickscrew");
-  row.innerHTML = `<span class="price-row-store">Kicks Crew</span><span class="price-row-amount">$${Math.round(kc.price)}</span><a href="${esc(kcUrl)}" target="_blank" rel="noopener noreferrer" class="price-row-btn" onclick="event.stopPropagation()">Buy</a>`;
-  if (amazonRow) rows.insertBefore(row, amazonRow);
-  else rows.appendChild(row);
-  // Re-sort best deal labels
-  const allRows = rows.querySelectorAll(".price-row");
-  let bestPrice = Infinity, bestRow = null;
-  allRows.forEach(r => {
-    const amt = r.querySelector(".price-row-amount");
-    if (amt) {
-      const val = parseFloat(amt.textContent.replace(/[^0-9.]/g, ""));
-      if (!isNaN(val) && val < bestPrice) { bestPrice = val; bestRow = r; }
-    }
-    r.querySelector(".price-row-btn")?.classList.remove("best");
-    const btn = r.querySelector(".price-row-btn");
-    if (btn && btn.textContent !== "Check Price") btn.textContent = "Buy";
-  });
-  if (bestRow) {
-    const btn = bestRow.querySelector(".price-row-btn");
-    if (btn) { btn.classList.add("best"); btn.textContent = "Best Deal"; }
-  }
-}
 
 function renderNav() {
   const tabs = [
