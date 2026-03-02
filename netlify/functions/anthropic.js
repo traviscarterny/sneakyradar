@@ -169,85 +169,6 @@ async function enrichWithEbay(products) {
 }
 
 // Kicks Crew (Shopify) — search by SKU, return lowest price + product URL
-async function searchKicksCrew(sku, title) {
-  if (!sku && !title) return null;
-  try {
-    var searchTitle = (title || "").replace(/\(.*?\)/g, "").replace(/['"]/g, "").trim();
-    var words = searchTitle.split(/\s+/).slice(0, 6).join(" ");
-    var q = words || sku;
-    var url = "https://www.kickscrew.com/search/suggest.json?q=" + encodeURIComponent(q) + "&resources[type]=product&resources[limit]=5";
-    var controller = new AbortController();
-    var timeout = setTimeout(function() { controller.abort(); }, 4000);
-    var res = await fetch(url, { headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" }, signal: controller.signal });
-    clearTimeout(timeout);
-    console.log("KC search:", q, "status:", res.status);
-    if (!res.ok) {
-      var errText = await res.text();
-      console.log("KC error body:", errText.substring(0, 200));
-      return null;
-    }
-    var d = await res.json();
-    var products = d && d.resources && d.resources.results && d.resources.results.products ? d.resources.results.products : [];
-    console.log("KC products found:", products.length, "for query:", q);
-    if (products.length === 0) return null;
-    // Log first result for debugging
-    if (products[0]) {
-      console.log("KC first result:", products[0].handle, "price:", products[0].price);
-    }
-    var normQ = sku ? normSku(sku) : "";
-    for (var i = 0; i < products.length; i++) {
-      var p = products[i];
-      var pHandle = (p.handle || "").toUpperCase().replace(/-/g, "");
-      if (normQ && pHandle.indexOf(normQ) >= 0) {
-        var price = parseFloat(p.price);
-        if (price && price > 30) {
-          console.log("KC SKU match:", p.handle, price);
-          return { price: price, url: "https://www.kickscrew.com/products/" + p.handle, title: p.title };
-        }
-      }
-    }
-    // Fallback: verify first result shares enough words with our title
-    var first = products[0];
-    var fp = parseFloat(first.price);
-    if (fp && fp > 50) {
-      var titleWords = (title || "").toLowerCase().split(/\s+/);
-      var matchTitle = (first.title || "").toLowerCase();
-      var matchCount = 0;
-      for (var j = 0; j < titleWords.length; j++) {
-        if (titleWords[j].length > 2 && matchTitle.indexOf(titleWords[j]) >= 0) matchCount++;
-      }
-      console.log("KC fallback word match:", matchCount, "for", first.handle);
-      if (matchCount >= 3) {
-        return { price: fp, url: "https://www.kickscrew.com/products/" + first.handle, title: first.title };
-      }
-    }
-    return null;
-  } catch(e) {
-    console.log("KC error:", e.message);
-    return null;
-  }
-}
-
-async function enrichWithKicksCrew(products) {
-  try {
-    var km = 0;
-    var toSearch = products.filter(function(p) { return p.sku; }).slice(0, 10);
-    var results = await Promise.all(toSearch.map(function(p) {
-      return searchKicksCrew(p.sku, p.title);
-    }));
-    for (var i = 0; i < toSearch.length; i++) {
-      if (results[i]) {
-        toSearch[i]._kickscrew = results[i];
-        km++;
-      }
-    }
-    console.log("KicksCrew lookup: " + km + " matched out of " + toSearch.length + " searched");
-    return km;
-  } catch(e) {
-    console.log("enrichWithKicksCrew error (non-fatal):", e.message);
-    return 0;
-  }
-}
 
 function mergeAll(sx, goat, ebay) {
   var goatMap = {};
@@ -354,13 +275,13 @@ exports.handler = async function(event) {
       var end = start + limit;
       var pageProducts = m.products.slice(start, end);
       var em = 0;
-      var kcm = 0;
+      
       if (page <= 1) {
         var enrichResults = await Promise.all([enrichWithEbay(pageProducts)]);
         em = enrichResults[0];
-        kcm = enrichResults[1];
+        
       }
-      console.log("Search: " + q + " page:" + page + " sxQ:" + sxQueries.length + " goatQ:" + goatQueries.length + " | SX:" + allSx.length + " GOAT:" + allGoat.length + " gm:" + m.goatMatched + " eBay:" + em + " KC:" + kcm + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
+      console.log("Search: " + q + " page:" + page + " sxQ:" + sxQueries.length + " goatQ:" + goatQueries.length + " | SX:" + allSx.length + " GOAT:" + allGoat.length + " gm:" + m.goatMatched + " eBay:" + em + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: pageProducts, total: totalProducts, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
@@ -389,8 +310,8 @@ exports.handler = async function(event) {
       m2.products = m2.products.slice(0, lim);
       var enrichTr = await Promise.all([enrichWithEbay(m2.products)]);
       var em2 = enrichTr[0];
-      var kcm2 = enrichTr[1];
-      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " KC:" + kcm2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
+      
+      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em22 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
       return cors(200, { data: m2.products, total: m2.products.length, page: 1 });
     } catch(err) {
       console.error("Trending error:", err.message);
