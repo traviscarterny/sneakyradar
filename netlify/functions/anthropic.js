@@ -168,6 +168,74 @@ async function enrichWithEbay(products) {
   }
 }
 
+// Kicks Crew (Shopify) — search by SKU, return lowest price + product URL
+async function searchKicksCrew(sku, title) {
+  if (!sku) return null;
+  try {
+    var q = sku.replace(/[-\s]/g, "+");
+    var url = "https://www.kickscrew.com/search/suggest.json?q=" + encodeURIComponent(q) + "&resources[type]=product&resources[limit]=3";
+    var controller = new AbortController();
+    var timeout = setTimeout(function() { controller.abort(); }, 4000);
+    var res = await fetch(url, { headers: { "Accept": "application/json" }, signal: controller.signal });
+    clearTimeout(timeout);
+    var d = await res.json();
+    var products = d && d.resources && d.resources.results && d.resources.results.products ? d.resources.results.products : [];
+    if (products.length === 0) return null;
+    // Find best match by SKU in title/handle
+    var normQ = normSku(sku);
+    for (var i = 0; i < products.length; i++) {
+      var p = products[i];
+      var pTitle = (p.title || "").toUpperCase();
+      var pHandle = (p.handle || "").toUpperCase();
+      var pBody = (p.body || "").toUpperCase();
+      if (pTitle.indexOf(normQ) >= 0 || pHandle.indexOf(normQ) >= 0 || pBody.indexOf(normQ) >= 0 || normSku(p.handle).indexOf(normQ) >= 0) {
+        var price = parseFloat(p.price);
+        if (price && price > 50) {
+          return {
+            price: price,
+            url: "https://www.kickscrew.com/products/" + p.handle,
+            title: p.title
+          };
+        }
+      }
+    }
+    // Fallback: use first result if price is reasonable
+    var first = products[0];
+    var fp = parseFloat(first.price);
+    if (fp && fp > 50) {
+      return {
+        price: fp,
+        url: "https://www.kickscrew.com/products/" + first.handle,
+        title: first.title
+      };
+    }
+    return null;
+  } catch(e) {
+    return null;
+  }
+}
+
+async function enrichWithKicksCrew(products) {
+  try {
+    var km = 0;
+    var toSearch = products.filter(function(p) { return p.sku; }).slice(0, 10);
+    var results = await Promise.all(toSearch.map(function(p) {
+      return searchKicksCrew(p.sku, p.title);
+    }));
+    for (var i = 0; i < toSearch.length; i++) {
+      if (results[i]) {
+        toSearch[i]._kickscrew = results[i];
+        km++;
+      }
+    }
+    console.log("KicksCrew lookup: " + km + " matched out of " + toSearch.length + " searched");
+    return km;
+  } catch(e) {
+    console.log("enrichWithKicksCrew error (non-fatal):", e.message);
+    return 0;
+  }
+}
+
 function mergeAll(sx, goat, ebay) {
   var goatMap = {};
   (goat || []).forEach(function(g) { var k = normSku(g.sku); if (k) goatMap[k] = g; });
@@ -273,10 +341,13 @@ exports.handler = async function(event) {
       var end = start + limit;
       var pageProducts = m.products.slice(start, end);
       var em = 0;
+      var kcm = 0;
       if (page <= 1) {
-        em = await enrichWithEbay(pageProducts);
+        var enrichResults = await Promise.all([enrichWithEbay(pageProducts), enrichWithKicksCrew(pageProducts)]);
+        em = enrichResults[0];
+        kcm = enrichResults[1];
       }
-      console.log("Search: " + q + " page:" + page + " sxQ:" + sxQueries.length + " goatQ:" + goatQueries.length + " | SX:" + allSx.length + " GOAT:" + allGoat.length + " gm:" + m.goatMatched + " eBay:" + em + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
+      console.log("Search: " + q + " page:" + page + " sxQ:" + sxQueries.length + " goatQ:" + goatQueries.length + " | SX:" + allSx.length + " GOAT:" + allGoat.length + " gm:" + m.goatMatched + " eBay:" + em + " KC:" + kcm + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: pageProducts, total: totalProducts, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
@@ -303,8 +374,10 @@ exports.handler = async function(event) {
       var m2 = mergeAll(sxD, allG);
       m2.products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       m2.products = m2.products.slice(0, lim);
-      var em2 = await enrichWithEbay(m2.products);
-      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
+      var enrichTr = await Promise.all([enrichWithEbay(m2.products), enrichWithKicksCrew(m2.products)]);
+      var em2 = enrichTr[0];
+      var kcm2 = enrichTr[1];
+      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " KC:" + kcm2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
       return cors(200, { data: m2.products, total: m2.products.length, page: 1 });
     } catch(err) {
       console.error("Trending error:", err.message);
