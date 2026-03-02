@@ -870,103 +870,78 @@ function render() {
   enrichKicksCrewClientSide();
 }
 
-// --- Client-side Kicks Crew price lookup (Cloudflare blocks server requests) ---
+// --- Client-side Kicks Crew price lookup via proxy (bypasses Cloudflare + CORS) ---
 const _kcCache = {};
-async function fetchKCPrice(sku, name) {
-  const cacheKey = sku || name;
-  if (_kcCache[cacheKey]) return _kcCache[cacheKey];
-  try {
-    const words = (name || "").replace(/\(.*?\)/g, "").replace(/['"]/g, "").trim().split(/\s+/).slice(0, 6).join(" ");
-    const q = words || sku;
-    const url = "https://www.kickscrew.com/search/suggest.json?q=" + encodeURIComponent(q) + "&resources[type]=product&resources[limit]=5";
-    const res = await fetch(url);
-    if (!res.ok) { _kcCache[cacheKey] = null; return null; }
-    const d = await res.json();
-    const products = d?.resources?.results?.products || [];
-    if (!products.length) { _kcCache[cacheKey] = null; return null; }
-    // Match by SKU in handle
-    const normQ = (sku || "").toUpperCase().replace(/[-\s]/g, "");
-    if (normQ) {
-      for (const p of products) {
-        const h = (p.handle || "").toUpperCase().replace(/-/g, "");
-        if (h.indexOf(normQ) >= 0) {
-          const price = parseFloat(p.price);
-          if (price > 30) {
-            const result = { price, url: "https://www.kickscrew.com/products/" + p.handle };
-            _kcCache[cacheKey] = result;
-            return result;
-          }
-        }
-      }
-    }
-    // Fallback: word match
-    const first = products[0];
-    const fp = parseFloat(first.price);
-    if (fp > 50) {
-      const titleWords = (name || "").toLowerCase().split(/\s+/);
-      const matchTitle = (first.title || "").toLowerCase();
-      let matchCount = 0;
-      for (const w of titleWords) { if (w.length > 2 && matchTitle.includes(w)) matchCount++; }
-      if (matchCount >= 3) {
-        const result = { price: fp, url: "https://www.kickscrew.com/products/" + first.handle };
-        _kcCache[cacheKey] = result;
-        return result;
-      }
-    }
-    _kcCache[cacheKey] = null;
-    return null;
-  } catch(e) {
-    _kcCache[cacheKey] = null;
-    return null;
-  }
-}
-
 function enrichKicksCrewClientSide() {
   const cards = document.querySelectorAll(".card[data-sku]");
-  // Process up to 10 visible cards
+  const items = [];
+  const cardMap = {};
   let count = 0;
   cards.forEach(card => {
-    if (count >= 10) return;
+    if (count >= 12) return;
     const sku = card.dataset.sku;
     const name = card.dataset.shoeName;
     if (!sku && !name) return;
+    if (_kcCache[sku] !== undefined) {
+      // Already cached — inject if we have data
+      if (_kcCache[sku]) injectKCRow(card, _kcCache[sku]);
+      return;
+    }
+    items.push({ sku, title: name });
+    if (!cardMap[sku]) cardMap[sku] = [];
+    cardMap[sku].push(card);
     count++;
-    fetchKCPrice(sku, name).then(kc => {
-      if (!kc) return;
-      const rows = card.querySelector(".price-compare-rows");
-      if (!rows) return;
-      // Check if KC row already exists
-      if (rows.querySelector('[data-store="kickscrew"]')) return;
-      // Find Amazon row to insert before it
-      const amazonRow = rows.querySelector('.price-row-store')
-        ? Array.from(rows.querySelectorAll('.price-row')).find(r => r.textContent.includes('Amazon'))
-        : null;
-      const kcUrl = affLink(kc.url, "kickscrew");
-      const row = document.createElement("div");
-      row.className = "price-row";
-      row.setAttribute("data-store", "kickscrew");
-      row.innerHTML = `<span class="price-row-store">Kicks Crew</span><span class="price-row-amount">$${Math.round(kc.price)}</span><a href="${esc(kcUrl)}" target="_blank" rel="noopener noreferrer" class="price-row-btn" onclick="event.stopPropagation()">Buy</a>`;
-      if (amazonRow) rows.insertBefore(row, amazonRow);
-      else rows.appendChild(row);
-      // Re-sort: find the best deal and update button labels
-      const allRows = rows.querySelectorAll(".price-row");
-      let bestPrice = Infinity, bestRow = null;
-      allRows.forEach(r => {
-        const amt = r.querySelector(".price-row-amount");
-        if (amt) {
-          const val = parseFloat(amt.textContent.replace(/[^0-9.]/g, ""));
-          if (!isNaN(val) && val < bestPrice) { bestPrice = val; bestRow = r; }
-        }
-        r.querySelector(".price-row-btn")?.classList.remove("best");
-        const btn = r.querySelector(".price-row-btn");
-        if (btn) btn.textContent = "Buy";
-      });
-      if (bestRow) {
-        const btn = bestRow.querySelector(".price-row-btn");
-        if (btn) { btn.classList.add("best"); btn.textContent = "Best Deal"; }
-      }
-    });
   });
+  if (!items.length) return;
+
+  fetch(API_URL.replace("/anthropic", "/kickscrew"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ items })
+  })
+  .then(r => r.json())
+  .then(data => {
+    const matched = new Set();
+    (data.results || []).forEach(r => {
+      if (!r) return;
+      _kcCache[r.sku] = r;
+      matched.add(r.sku);
+      (cardMap[r.sku] || []).forEach(card => injectKCRow(card, r));
+    });
+    // Cache misses
+    items.forEach(item => { if (!matched.has(item.sku)) _kcCache[item.sku] = null; });
+  })
+  .catch(() => {});
+}
+
+function injectKCRow(card, kc) {
+  const rows = card.querySelector(".price-compare-rows");
+  if (!rows || rows.querySelector('[data-store="kickscrew"]')) return;
+  const amazonRow = Array.from(rows.querySelectorAll(".price-row")).find(r => r.textContent.includes("Amazon"));
+  const kcUrl = affLink(kc.url, "kickscrew");
+  const row = document.createElement("div");
+  row.className = "price-row";
+  row.setAttribute("data-store", "kickscrew");
+  row.innerHTML = `<span class="price-row-store">Kicks Crew</span><span class="price-row-amount">$${Math.round(kc.price)}</span><a href="${esc(kcUrl)}" target="_blank" rel="noopener noreferrer" class="price-row-btn" onclick="event.stopPropagation()">Buy</a>`;
+  if (amazonRow) rows.insertBefore(row, amazonRow);
+  else rows.appendChild(row);
+  // Re-sort best deal labels
+  const allRows = rows.querySelectorAll(".price-row");
+  let bestPrice = Infinity, bestRow = null;
+  allRows.forEach(r => {
+    const amt = r.querySelector(".price-row-amount");
+    if (amt) {
+      const val = parseFloat(amt.textContent.replace(/[^0-9.]/g, ""));
+      if (!isNaN(val) && val < bestPrice) { bestPrice = val; bestRow = r; }
+    }
+    r.querySelector(".price-row-btn")?.classList.remove("best");
+    const btn = r.querySelector(".price-row-btn");
+    if (btn && btn.textContent !== "Check Price") btn.textContent = "Buy";
+  });
+  if (bestRow) {
+    const btn = bestRow.querySelector(".price-row-btn");
+    if (btn) { btn.classList.add("best"); btn.textContent = "Best Deal"; }
+  }
 }
 
 function renderNav() {
