@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="impact-site-verification" value="856dfcd9-4b11-4914-be47-6cc1cf78b7e9">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2JCYS8398G"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-2JCYS8398G');</script>
   <meta charset="UTF-8" />
@@ -472,7 +473,7 @@ const AFFILIATE = {
   hibbett:     { tag: "YOUR_HIBBETT_CODE", param: "ref" },
   champssports:{ tag: "YOUR_CHAMPS_CODE",  param: "AID" },
   eastbay:     { tag: "YOUR_EASTBAY_CODE", param: "AID" },
-  kickscrew:   { tag: "YOUR_KC_CODE",      param: "ref" },
+  kickscrew:   { tag: "sneakyradar",        param: "irclickid" },
 };
 function affLink(url, sourceId) {
   if (!url) return "#";
@@ -649,6 +650,7 @@ const ALL_SOURCES = [
   {id:"stockx",label:"StockX",url:"stockx.com",color:"#00ff94"},
   {id:"nike",label:"Nike",url:"nike.com",color:"#ffffff"},
   {id:"ebay",label:"eBay",url:"ebay.com",color:"#e53238"},
+  {id:"kickscrew",label:"Kicks Crew",url:"kickscrew.com",color:"#00c2ff"},
   {id:"amazon",label:"Amazon",url:"amazon.com",color:"#ff9900"},
 ];
 
@@ -709,6 +711,16 @@ function kicksToDrops(products) {
       });
     }
 
+    // Kicks Crew: real prices from Shopify API
+    if (p._kickscrew && p._kickscrew.price) {
+      prices.push({
+        store: "Kicks Crew",
+        storeId: "kickscrew",
+        price: `$${Math.round(p._kickscrew.price)}`,
+        url: p._kickscrew.url || "https://www.kickscrew.com",
+      });
+    }
+
     // Amazon: search link with affiliate tag
     const amzQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
     prices.push({
@@ -729,6 +741,7 @@ function kicksToDrops(products) {
     const sourceNames = ["StockX"];
     if (p._nike) sourceNames.push("Nike");
     if (p._ebay) sourceNames.push("eBay");
+    if (p._kickscrew) sourceNames.push("Kicks Crew");
     sourceNames.push("Amazon");
 
     return {
