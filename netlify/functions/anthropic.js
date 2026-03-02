@@ -170,10 +170,13 @@ async function enrichWithEbay(products) {
 
 // Kicks Crew (Shopify) — search by SKU, return lowest price + product URL
 async function searchKicksCrew(sku, title) {
-  if (!sku) return null;
+  if (!sku && !title) return null;
   try {
-    var q = sku.replace(/[-\s]/g, "+");
-    var url = "https://www.kickscrew.com/search/suggest.json?q=" + encodeURIComponent(q) + "&resources[type]=product&resources[limit]=3";
+    // Search by product title — Shopify suggest works best with names, not SKUs
+    var searchTitle = (title || "").replace(/\(.*?\)/g, "").replace(/['"]/g, "").trim();
+    var words = searchTitle.split(/\s+/).slice(0, 6).join(" ");
+    var q = words || sku;
+    var url = "https://www.kickscrew.com/search/suggest.json?q=" + encodeURIComponent(q) + "&resources[type]=product&resources[limit]=5";
     var controller = new AbortController();
     var timeout = setTimeout(function() { controller.abort(); }, 4000);
     var res = await fetch(url, { headers: { "Accept": "application/json" }, signal: controller.signal });
@@ -181,33 +184,31 @@ async function searchKicksCrew(sku, title) {
     var d = await res.json();
     var products = d && d.resources && d.resources.results && d.resources.results.products ? d.resources.results.products : [];
     if (products.length === 0) return null;
-    // Find best match by SKU in title/handle
-    var normQ = normSku(sku);
+    // Best match: SKU appears in handle (kickscrew puts SKU in their slugs)
+    var normQ = sku ? normSku(sku) : "";
     for (var i = 0; i < products.length; i++) {
       var p = products[i];
-      var pTitle = (p.title || "").toUpperCase();
-      var pHandle = (p.handle || "").toUpperCase();
-      var pBody = (p.body || "").toUpperCase();
-      if (pTitle.indexOf(normQ) >= 0 || pHandle.indexOf(normQ) >= 0 || pBody.indexOf(normQ) >= 0 || normSku(p.handle).indexOf(normQ) >= 0) {
+      var pHandle = (p.handle || "").toUpperCase().replace(/-/g, "");
+      if (normQ && pHandle.indexOf(normQ) >= 0) {
         var price = parseFloat(p.price);
-        if (price && price > 50) {
-          return {
-            price: price,
-            url: "https://www.kickscrew.com/products/" + p.handle,
-            title: p.title
-          };
+        if (price && price > 30) {
+          return { price: price, url: "https://www.kickscrew.com/products/" + p.handle, title: p.title };
         }
       }
     }
-    // Fallback: use first result if price is reasonable
+    // Fallback: verify first result shares enough words with our title
     var first = products[0];
     var fp = parseFloat(first.price);
     if (fp && fp > 50) {
-      return {
-        price: fp,
-        url: "https://www.kickscrew.com/products/" + first.handle,
-        title: first.title
-      };
+      var titleWords = (title || "").toLowerCase().split(/\s+/);
+      var matchTitle = (first.title || "").toLowerCase();
+      var matchCount = 0;
+      for (var j = 0; j < titleWords.length; j++) {
+        if (titleWords[j].length > 2 && matchTitle.indexOf(titleWords[j]) >= 0) matchCount++;
+      }
+      if (matchCount >= 3) {
+        return { price: fp, url: "https://www.kickscrew.com/products/" + first.handle, title: first.title };
+      }
     }
     return null;
   } catch(e) {
