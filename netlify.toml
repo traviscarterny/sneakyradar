@@ -1,3 +1,9 @@
+# Sneaker detail pages (SEO)
+[[redirects]]
+  from = "/sneaker/*"
+  to = "/sneaker.html"
+  status = 200
+
 # Standalone pages (clean URLs)
 [[redirects]]
   from = "/resell"
