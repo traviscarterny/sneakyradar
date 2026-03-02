@@ -356,7 +356,7 @@ exports.handler = async function(event) {
       var em = 0;
       var kcm = 0;
       if (page <= 1) {
-        var enrichResults = await Promise.all([enrichWithEbay(pageProducts), enrichWithKicksCrew(pageProducts)]);
+        var enrichResults = await Promise.all([enrichWithEbay(pageProducts)]);
         em = enrichResults[0];
         kcm = enrichResults[1];
       }
@@ -387,7 +387,7 @@ exports.handler = async function(event) {
       var m2 = mergeAll(sxD, allG);
       m2.products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       m2.products = m2.products.slice(0, lim);
-      var enrichTr = await Promise.all([enrichWithEbay(m2.products), enrichWithKicksCrew(m2.products)]);
+      var enrichTr = await Promise.all([enrichWithEbay(m2.products)]);
       var em2 = enrichTr[0];
       var kcm2 = enrichTr[1];
       console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " KC:" + kcm2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
