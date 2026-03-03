@@ -1537,6 +1537,9 @@ function attachEvents() {
 
 // ===== GLOBAL CLICK HANDLER =====
 document.addEventListener("click", function(e) {
+  // Let actual links (buy buttons, affiliate links) work normally
+  const link = e.target.closest("a[href]");
+  if (link && link.href && !link.dataset.action) return;
   const btn = e.target.closest("[data-action]");
   if (!btn) return;
   const action = btn.dataset.action;
