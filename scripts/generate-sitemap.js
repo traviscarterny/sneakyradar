@@ -1,10 +1,17 @@
+Syntax error on line 73 — the `\n` in the XML string got written literally instead of as an escape. The script I generated via Python mangled the newlines. Let me give you a fixed version.
+
+Go to `scripts/generate-sitemap.js` on GitHub, click the pencil icon to edit, and replace the entire contents with this: 
+
+That's the same error from before — you need to update the file first. Go to your repo on GitHub, navigate to `scripts/generate-sitemap.js`, click the pencil icon to edit, **delete everything**, and paste this exact code:
+
+```javascript
 const KICKS_KEY = process.env.KICKSDB_API_KEY;
 const fs = require('fs');
 const path = require('path');
 
 function nameToSlug(name) {
   if (!name) return '';
-  return name.toLowerCase().replace(/[‘’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
 async function kicksSearch(query, limit) {
@@ -70,21 +77,22 @@ async function main() {
     if (slug && !seen.has(slug)) seen.set(slug, slug);
   });
   console.log('Products: ' + allProducts.length + ', unique: ' + seen.size);
-  var xml = '<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-';
+  var lines = [];
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>');
+  lines.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
   staticPages.forEach(function(p) {
-    xml += '  <url><loc>' + p.loc + '</loc><lastmod>' + today + '</lastmod><changefreq>' + p.freq + '</changefreq><priority>' + p.priority + '</priority></url>
-';
+    lines.push('  <url><loc>' + p.loc + '</loc><lastmod>' + today + '</lastmod><changefreq>' + p.freq + '</changefreq><priority>' + p.priority + '</priority></url>');
   });
   seen.forEach(function(slug) {
-    xml += '  <url><loc>https://www.sneakyradar.com/sneaker/' + encodeURIComponent(slug) + '</loc><lastmod>' + today + '</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-';
+    lines.push('  <url><loc>https://www.sneakyradar.com/sneaker/' + encodeURIComponent(slug) + '</loc><lastmod>' + today + '</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>');
   });
-  xml += '</urlset>
-';
+  lines.push('</urlset>');
+  var xml = lines.join('\n') + '\n';
   var outPath = path.join(__dirname, '..', 'sitemap.xml');
   fs.writeFileSync(outPath, xml);
   console.log('Wrote sitemap.xml: ' + (staticPages.length + seen.size) + ' URLs');
 }
 main().catch(function(e) { console.error(e); process.exit(1); });
+```
+
+Commit it, then re-run the workflow.
