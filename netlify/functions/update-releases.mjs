@@ -24,7 +24,10 @@ export default async (req) => {
     var sources = [
       "https://justfreshkicks.com/air-jordan-sneaker-releases-2026/",
       "https://justfreshkicks.com/nike-release-dates/",
-      "https://www.kickscrew.com/blogs/sneakernews/air-jordan-release-dates"
+      "https://justfreshkicks.com/adidas-release-dates/",
+      "https://justfreshkicks.com/new-balance-release-dates/",
+      "https://sneakerbardetroit.com/sneaker-release-dates/",
+      "https://www.nicekicks.com/sneaker-release-dates/"
     ];
     
     var allContent = "";
@@ -61,7 +64,7 @@ export default async (req) => {
     }
 
     // Trim to fit in Claude's context
-    if (allContent.length > 60000) allContent = allContent.substring(0, 60000);
+    if (allContent.length > 90000) allContent = allContent.substring(0, 90000);
 
     // Step 2: Have Claude parse the HTML into structured JSON
     console.log("Sending " + allContent.length + " chars to Claude for parsing...");
@@ -74,11 +77,11 @@ export default async (req) => {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 8000,
+        max_tokens: 16000,
         system: "You are a JSON API. Extract sneaker release data from the provided HTML. Output ONLY a valid JSON array. No markdown, no explanation, no backticks. Start with [ end with ].",
         messages: [{ 
           role: "user", 
-          content: "Extract ALL sneaker releases from this HTML. For each release return: {\"name\":\"full sneaker name with colorway in quotes\",\"sku\":\"style code or TBD\",\"date\":\"YYYY-MM-DD\",\"price\":200,\"brand\":\"Jordan or Nike or Adidas or New Balance or Other\",\"color\":\"colorway description\",\"collab\":true/false}. Only include releases with dates in 2026. If a date says March 2026 but no specific day, use the 1st. Return ONLY a JSON array.\n\nHTML:\n" + allContent
+          content: "Extract ALL sneaker releases from this HTML. Include ALL brands: Jordan, Nike, Adidas, New Balance, ASICS, Puma, Converse, Reebok, Salomon, and any collabs. For each release return: {\"name\":\"full sneaker name with colorway in quotes\",\"sku\":\"style code or TBD\",\"date\":\"YYYY-MM-DD\",\"price\":200,\"brand\":\"Jordan or Nike or Adidas or New Balance or ASICS or Puma or Other\",\"color\":\"colorway description\",\"collab\":true/false}. Only include releases with dates in 2026. If a date says March 2026 but no specific day, use the 1st. Include Nike signature shoes (Ja, Book, Sabrina, LeBron, KD, GT Cut), Nike lifestyle (Dunk, Air Max, Air Force 1), Adidas (Yeezy, Bad Bunny, AE1), New Balance collabs, and everything else. Return ONLY a JSON array.\n\nHTML:\n" + allContent
         }]
       })
     });
@@ -202,5 +205,5 @@ export default async (req) => {
 };
 
 export const config = {
-  schedule: "0 8 * * 1"  // Every Monday at 8 AM UTC
+  schedule: "0 8 * * 1,4"  // Every Monday and Thursday at 8 AM UTC
 };
