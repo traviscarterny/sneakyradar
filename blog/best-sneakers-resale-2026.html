@@ -20,6 +20,11 @@ a{color:#ff3c00;text-decoration:none}a:hover{text-decoration:underline}
 .nav-bar{border-bottom:1px solid #222;padding:16px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px)}
 .nav-bar .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px}.nav-bar .logo .s{color:#ff3c00}.nav-bar .logo .r{color:#f0f0f0}
 .nav-bar .back{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:#555;border:1px solid #333;padding:6px 14px;border-radius:3px}.nav-bar .back:hover{color:#f0f0f0;border-color:#555;text-decoration:none}
+.nav-links{display:flex;gap:6px;margin-left:auto}
+.nav-link{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#666;padding:6px 10px;text-decoration:none;transition:color 0.15s}
+.nav-link:hover{color:#f0f0f0}
+.nav-link.active{color:#ff3c00}
+@media(max-width:600px){.nav-links{display:none}}
 .breadcrumb{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:24px;margin-top:32px}.breadcrumb a{color:#555}.breadcrumb a:hover{color:#ff3c00}
 h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4rem);line-height:1;letter-spacing:2px;margin-bottom:8px}h1 .accent{color:#ff3c00}
 .meta{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:40px}
@@ -84,13 +89,13 @@ p{margin-bottom:20px;color:#ccc}
 <meta property="og:title" content="Best Sneakers to Buy for Resale 2026"/>
 <meta property="og:description" content="Top sneakers for resale profit in 2026. Ranked by margin with real market data from StockX and GOAT."/>
 <meta property="og:url" content="https://www.sneakyradar.com/blog/best-sneakers-resale-2026"/>
-<meta property="og:image" content="https://www.sneakyradar.com/og-image.png"/>
+<meta property="og:image" content="https://www.sneakyradar.com/blog/og/best-sneakers-resale-2026.png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Best Sneakers to Buy for Resale 2026"/>
 <meta name="twitter:description" content="Top sneakers for resale profit in 2026. Ranked by margin with real market data from StockX and GOAT."/>
-<meta name="twitter:image" content="https://www.sneakyradar.com/og-image.png"/>
+<meta name="twitter:image" content="https://www.sneakyradar.com/blog/og/best-sneakers-resale-2026.png"/>
 
 <script type="application/ld+json">
 {
@@ -136,7 +141,14 @@ p{margin-bottom:20px;color:#ccc}
 <body>
 <div class="nav-bar">
 <a href="/" class="logo"><span class="s">SNEAKY</span><span class="r">RADAR</span></a>
-<a href="/blog" class="back">← Blog</a>
+<div class="nav-links">
+<a href="/" class="nav-link">Drops</a>
+<a href="/resell" class="nav-link">Resell</a>
+<a href="/releases" class="nav-link">Releases</a>
+<a href="/auth" class="nav-link">Auth</a>
+<a href="/collection" class="nav-link">Collection</a>
+<a href="/blog" class="nav-link active">Blog</a>
+</div>
 </div>
 <div class="wrap">
 <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Best Sneakers Resale 2026</div>
