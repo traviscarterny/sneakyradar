@@ -133,8 +133,7 @@
     .pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
     .error-msg { margin: 0 0 24px; padding: 16px 20px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; letter-spacing: 1px; line-height: 1.6; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .grid > a { display: flex; flex-direction: column; }
-    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; min-width: 0; }
+    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; }
     .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.3s; z-index: 2; }
     .card:hover { background: #1a1a1a; }
     .card:hover::before { height: 100%; }
@@ -995,10 +994,11 @@ function renderPriceCompare(prices, drop) {
   </div>`;
 }
 
+
 // --- Drop Card ---
 function renderDropCard(drop, i) {
   const slug = nameToSlug(drop.name);
-  return `<a class="card ${drop.sponsored?"sponsored":""}" href="/sneaker/${encodeURIComponent(slug)}" data-sku="${esc(drop.sku||"")}" data-shoe-name="${esc(drop.name||"")}" style="text-decoration:none;color:inherit">
+  return `<div class="card ${drop.sponsored?"sponsored":""}" data-action="card-detail" data-slug="${encodeURIComponent(slug)}" data-sku="${esc(drop.sku||"")}" data-shoe-name="${esc(drop.name||"")}" style="cursor:pointer">
     ${drop.sponsored ? `<div class="sponsor-banner"><span>${esc(drop.sponsorLabel||"Featured")}</span><span style="font-size:0.45rem;opacity:0.6">Sponsored</span></div>` : ""}
     ${renderDropImage(drop)}
     <div class="card-body">
@@ -1015,7 +1015,7 @@ function renderDropCard(drop, i) {
       ${drop.hype ? `<div class="hype-bar"><div class="hype-fill" style="width:${drop.hype}%"></div></div><div class="hype-label"><span>Hype Index</span><span>${drop.hype}/100</span></div>` : ""}
       ${renderPriceCompare(drop.prices, drop)}
     </div>
-  </a>`;
+  </div>`;
 }
 
 // --- Drops Page ---
@@ -1545,6 +1545,10 @@ document.addEventListener("click", function(e) {
     else { searchQuery = cat.query; doSearch(cat.query); }
   }
   else if (action === "load-more") { doLoadMore(); }
+  else if (action === "card-detail") {
+    const slug = btn.dataset.slug;
+    if (slug) window.location.href = "/sneaker/" + slug;
+  }
   else if (action === "drop-click") {
     const url = btn.dataset.url;
     if (url) window.open(affLink(url, btn.dataset.source), "_blank");
