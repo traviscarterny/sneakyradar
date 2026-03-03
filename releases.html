@@ -574,10 +574,12 @@ function renderReleases() {
       </div>
     </div>
     <div class="cal-filters">${bOpts.map(b => `<button class="cal-filter-btn${releasesBrandFilter===b?" active":""}" data-brand-filter="${b}">${b}</button>`).join("")}</div>
-    <div style="max-width:100%;margin:0 0 24px;display:flex;border:1px solid var(--border);background:var(--surface)">
-      <input id="rel-search" type="text" placeholder="Search releases... (e.g. Ja 3, Travis Scott, Dunk)" value="${esc(releasesSearch)}" style="flex:1;background:transparent;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem;padding:12px 16px;outline:none;letter-spacing:.5px">
-      ${releasesSearch ? '<button data-clear-search style="background:transparent;border:none;border-left:1px solid var(--border);color:var(--muted);font-family:DM Mono,monospace;font-size:.75rem;padding:0 14px;cursor:pointer">✕</button>' : ''}
-      <button data-search-go style="background:var(--accent);color:#fff;border:none;font-family:Bebas Neue,sans-serif;font-size:1rem;letter-spacing:3px;padding:0 28px;cursor:pointer">SEARCH</button>
+    <div style="display:flex;max-width:100%;margin:0 0 24px">
+      <div style="flex:1;display:flex;background:#f0f0f0;border-radius:6px 0 0 6px">
+        <input id="rel-search" type="text" placeholder="Search brand, colorway, silhouette..." value="${esc(releasesSearch)}" style="flex:1;background:transparent;border:none;color:#0a0a0a;font-family:'DM Mono',monospace;font-size:.85rem;font-weight:700;padding:16px 20px;outline:none;letter-spacing:1px;border-radius:6px 0 0 6px">
+        ${releasesSearch ? '<button data-clear-search style="background:transparent;border:none;color:#777;font-family:DM Mono,monospace;font-size:.85rem;padding:0 14px;cursor:pointer">✕</button>' : ''}
+      </div>
+      <button data-search-go style="background:var(--accent);color:#fff;border:none;font-family:Bebas Neue,sans-serif;font-size:1.1rem;letter-spacing:3px;padding:0 32px;cursor:pointer;transition:background .15s">SEARCH</button>
     </div>
     ${releasesView === "calendar" ? calendarHtml : `<div class="cal-list">${listHtml}</div>`}
     <div class="cal-legend">
