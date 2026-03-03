@@ -1060,6 +1060,7 @@ function renderDropsPage() {
     {label: "NIKE SLIDES", query: "Nike Slide", group: "nike"},
     {label: "NIKE VOMERO", query: "Nike Vomero", group: "nike"},
     {label: "NIKE P-6000", query: "Nike P-6000", group: "nike"},
+    {label: "DRIPPY CUSTOM", query: "", group: "nike", isDrippy: true},
     {label: "---", group: "div2"},
     {label: "YEEZY BOOST", query: "Yeezy Boost", group: "yeezy"},
     {label: "YEEZY", query: "YZY", group: "yeezy"},
@@ -1082,6 +1083,7 @@ function renderDropsPage() {
     {label: "AMIRI", query: "Amiri sneakers", group: "designer"},
     {label: "BOTTEGA VENETA", query: "Bottega Veneta sneakers", group: "designer"},
     {label: "RICK OWENS", query: "Rick Owens sneakers", group: "designer"},
+    {label: "DRIPPY CUSTOM", query: "", group: "designer", isDrippy: true},
     {label: "---", group: "div4"},
     {label: "NEW BALANCE", query: "New Balance", group: "other"},
     {label: "ASICS", query: "Asics", group: "other"},
@@ -1169,7 +1171,9 @@ function renderDropsPage() {
     </div>
     <div style="text-align:center;margin-top:16px;margin-bottom:6px;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent)">Categories</div>
     <div class="filters">
-      ${CATEGORY_SEARCHES.map((cat,idx) => cat.label === "---"
+      ${CATEGORY_SEARCHES.map((cat,idx) => cat.isDrippy
+        ? `<a href="https://xpuvo.com/g/5q4v2tbfvw68ffd5397611c83c348e/?ulp=https%3A%2F%2Fdrippycustom.com" target="_blank" rel="noopener" style="display:inline-block;padding:6px 14px;border-radius:6px;font-size:0.65rem;font-weight:700;letter-spacing:1px;text-decoration:none;background:#e040fb;color:#fff;text-transform:uppercase;margin:2px">DRIPPY CUSTOM ↗</a>`
+        : cat.label === "---"
         ? `<div style="width:100%;height:1px;background:var(--accent);margin:6px 0;opacity:0.4"></div>`
         : `<button class="filter-btn ${activeCategory===cat.label?"active":""}" data-action="category" data-idx="${idx}">${esc(cat.label)}</button>`
       ).join("")}
