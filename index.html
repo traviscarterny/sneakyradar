@@ -133,7 +133,8 @@
     .pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
     .error-msg { margin: 0 0 24px; padding: 16px 20px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; letter-spacing: 1px; line-height: 1.6; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+    .grid > a { display: flex; flex-direction: column; }
+    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; min-width: 0; }
     .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.3s; z-index: 2; }
     .card:hover { background: #1a1a1a; }
     .card:hover::before { height: 100%; }
