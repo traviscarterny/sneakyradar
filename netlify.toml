@@ -105,3 +105,8 @@
   from = "/blog/yeezy-price-guide-2026"
   to = "/blog/yeezy-price-guide-2026.html"
   status = 200
+
+[[redirects]]
+  from = "/blog/sneaker-price-study-2026"
+  to = "/blog/sneaker-price-study-2026.html"
+  status = 200
