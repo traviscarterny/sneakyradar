@@ -474,6 +474,7 @@ const AFFILIATE = {
   champssports:{ tag: "YOUR_CHAMPS_CODE",  param: "AID" },
   eastbay:     { tag: "YOUR_EASTBAY_CODE", param: "AID" },
   kickscrew:   { tag: "sneakyradar",        param: "irclickid" },
+  drippy:      { tag: "",                   param: "" },
 };
 function affLink(url, sourceId) {
   if (!url) return "#";
@@ -652,6 +653,7 @@ const ALL_SOURCES = [
   {id:"ebay",label:"eBay",url:"ebay.com",color:"#e53238"},
   {id:"kickscrew",label:"Kicks Crew",url:"kickscrew.com",color:"#00c2ff"},
   {id:"amazon",label:"Amazon",url:"amazon.com",color:"#ff9900"},
+  {id:"drippy",label:"Drippy Custom",url:"drippycustom.com",color:"#e040fb"},
 ];
 
 const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
@@ -727,6 +729,15 @@ function kicksToDrops(products) {
       storeId: "amazon",
       price: "Check Price",
       url: "https://www.amazon.com/s?k=" + amzQuery + "&tag=sneakyradar-20",
+    });
+
+    // Drippy Custom: search link for custom sneakers
+    const drippyQuery = encodeURIComponent((p.title || p.name || ""));
+    prices.push({
+      store: "Drippy Custom",
+      storeId: "drippy",
+      price: "Check Price",
+      url: "https://xpuvo.com/g/5q4v2tbfvw68ffd5397611c83c348e/?ulp=" + encodeURIComponent("https://drippycustom.com/search?type=product&q=" + drippyQuery),
     });
 
     // Use alternate release_date if StockX doesn't have one
