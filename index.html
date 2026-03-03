@@ -474,7 +474,6 @@ const AFFILIATE = {
   champssports:{ tag: "YOUR_CHAMPS_CODE",  param: "AID" },
   eastbay:     { tag: "YOUR_EASTBAY_CODE", param: "AID" },
   kickscrew:   { tag: "sneakyradar",        param: "irclickid" },
-  drippy:      { tag: "",                   param: "" },
 };
 function affLink(url, sourceId) {
   if (!url) return "#";
@@ -653,7 +652,6 @@ const ALL_SOURCES = [
   {id:"ebay",label:"eBay",url:"ebay.com",color:"#e53238"},
   {id:"kickscrew",label:"Kicks Crew",url:"kickscrew.com",color:"#00c2ff"},
   {id:"amazon",label:"Amazon",url:"amazon.com",color:"#ff9900"},
-  {id:"drippy",label:"Drippy Custom",url:"drippycustom.com",color:"#e040fb"},
 ];
 
 const BRAND_FILTERS = ["All","Nike","Jordan","Adidas","New Balance","ASICS","Puma","Reebok","On Running"];
@@ -731,14 +729,7 @@ function kicksToDrops(products) {
       url: "https://www.amazon.com/s?k=" + amzQuery + "&tag=sneakyradar-20",
     });
 
-    // Drippy Custom: search link for custom sneakers
-    const drippyQuery = encodeURIComponent((p.title || p.name || ""));
     prices.push({
-      store: "Drippy Custom",
-      storeId: "drippy",
-      price: "Check Price",
-      url: "https://xpuvo.com/g/5q4v2tbfvw68ffd5397611c83c348e/?ulp=" + encodeURIComponent("https://drippycustom.com/search?type=product&q=" + drippyQuery),
-    });
 
     // Use alternate release_date if StockX doesn't have one
     const releaseDate = p.release_date || null;
@@ -888,7 +879,7 @@ function esc(s) {
 // --- Rendering ---
 function render() {
   const root = document.getElementById("root");
-  root.innerHTML = renderAlertModal() + renderNav() + renderPage() + renderFooter() + renderChat();
+  root.innerHTML = renderAlertModal() + renderNav() + renderPage() + renderDrippyFeatured() + renderFooter() + renderChat();
   attachEvents();
 }
 
@@ -931,6 +922,10 @@ function renderPage() {
   if (activePage === "resell") return renderResellPage();
   if (activePage === "auth") return renderAuthPage();
   return "";
+}
+
+function renderDrippyFeatured() {
+  return '<div style="max-width:1200px;margin:40px auto 0;padding:0 40px"><div style="background:linear-gradient(135deg,rgba(224,64,251,0.08),rgba(224,64,251,0.02));border:1px solid rgba(224,64,251,0.2);border-radius:16px;padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px"><div style="flex:1;min-width:240px"><div style="font-family:Bebas Neue,sans-serif;font-size:1.6rem;letter-spacing:2px;color:#e040fb;margin-bottom:4px">DRIPPY CUSTOM</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.7);line-height:1.6;max-width:400px">Premium handpainted custom sneakers. Air Force 1s, Jordan 1s, Dunks &amp; more — made to order with your design.</div></div><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><input id="drippy-search" type="text" placeholder="Search custom designs..." style="background:rgba(255,255,255,0.06);border:1px solid rgba(224,64,251,0.3);border-radius:8px;padding:10px 16px;color:#fff;font-size:0.8rem;width:220px;outline:none" /><a id="drippy-search-btn" href="https://xpuvo.com/g/5q4v2tbfvw68ffd5397611c83c348e/?ulp=https%3A%2F%2Fdrippycustom.com" target="_blank" rel="noopener" style="background:#e040fb;color:#fff;padding:10px 24px;border-radius:8px;font-size:0.75rem;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;white-space:nowrap">Shop Drippy</a></div></div></div>';
 }
 
 function renderFooter() {
@@ -1493,6 +1488,22 @@ function renderChat() {
 
 // ===== EVENT DELEGATION =====
 function attachEvents() {
+  // Drippy Custom search
+  var drippyInput = document.getElementById("drippy-search");
+  var drippyBtn = document.getElementById("drippy-search-btn");
+  function updateDrippyLink() {
+    var q = drippyInput ? drippyInput.value.trim() : "";
+    var base = "https://xpuvo.com/g/5q4v2tbfvw68ffd5397611c83c348e/?ulp=";
+    if (q) {
+      drippyBtn.href = base + encodeURIComponent("https://drippycustom.com/search?type=product&q=" + q);
+    } else {
+      drippyBtn.href = base + encodeURIComponent("https://drippycustom.com");
+    }
+  }
+  if (drippyInput) {
+    drippyInput.addEventListener("input", updateDrippyLink);
+    drippyInput.addEventListener("keydown", function(e) { if (e.key === "Enter") { updateDrippyLink(); drippyBtn.click(); } });
+  }
   // Search input enter key
   const si = document.getElementById("search-input");
   if (si) {
