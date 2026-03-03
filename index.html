@@ -133,7 +133,7 @@
     .pulse-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
     .error-msg { margin: 0 0 24px; padding: 16px 20px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; letter-spacing: 1px; line-height: 1.6; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    .card { background: var(--card); transition: background 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: inherit; }
     .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--accent); transition: height 0.3s; z-index: 2; }
     .card:hover { background: #1a1a1a; }
     .card:hover::before { height: 100%; }
@@ -970,7 +970,7 @@ function renderAlertModal() {
 function renderDropImage(drop) {
   const src = (drop.image && drop.image !== "null") ? drop.image : null;
   const alt = esc((drop.brand ? drop.brand + " " : "") + drop.name);
-  return `<div class="card-img-wrap" data-action="drop-click" data-url="${esc(drop.sourceUrl||"")}" data-source="${esc((drop.source||"").toLowerCase())}">
+  return `<div class="card-img-wrap" >
     ${src ? `<img class="card-img" src="${esc(src)}" alt="${alt}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'card-img-placeholder\'>${esc((drop.name||"?")[0].toUpperCase())}</div>'+this.parentNode.querySelector('.card-source-tag')?.outerHTML||''"/>` : `<div class="card-img-placeholder">${esc((drop.name||"?")[0].toUpperCase())}</div>`}
     ${drop.source ? `<div class="card-source-tag">${esc(drop.source)}</div>` : ""}
   </div>`;
@@ -996,13 +996,14 @@ function renderPriceCompare(prices, drop) {
 
 // --- Drop Card ---
 function renderDropCard(drop, i) {
-  return `<div class="card ${drop.sponsored?"sponsored":""}" data-sku="${esc(drop.sku||"")}" data-shoe-name="${esc(drop.name||"")}">
+  const slug = nameToSlug(drop.name);
+  return `<a class="card ${drop.sponsored?"sponsored":""}" href="/sneaker/${encodeURIComponent(slug)}" data-sku="${esc(drop.sku||"")}" data-shoe-name="${esc(drop.name||"")}" style="text-decoration:none;color:inherit">
     ${drop.sponsored ? `<div class="sponsor-banner"><span>${esc(drop.sponsorLabel||"Featured")}</span><span style="font-size:0.45rem;opacity:0.6">Sponsored</span></div>` : ""}
     ${renderDropImage(drop)}
     <div class="card-body">
       ${drop.badge ? `<div class="badge ${BADGE_MAP[drop.badge]||"badge-upcoming"}">${BADGE_LABELS[drop.badge]||esc(drop.badge)}</div>` : ""}
       <div class="card-brand">${esc(drop.brand)}</div>
-      <a class="card-name" href="/sneaker/${encodeURIComponent(nameToSlug(drop.name))}" onclick="event.stopPropagation();">${esc(drop.name)}</a>
+      <div class="card-name">${esc(drop.name)}</div>
       ${drop.colorway ? `<div class="card-colorway">${esc(drop.colorway)}</div>` : ""}
       <div class="card-meta">
         <div class="meta-row"><span class="meta-label">Release</span><span class="meta-value">${esc(drop.date||"TBD")}</span></div>
@@ -1013,7 +1014,7 @@ function renderDropCard(drop, i) {
       ${drop.hype ? `<div class="hype-bar"><div class="hype-fill" style="width:${drop.hype}%"></div></div><div class="hype-label"><span>Hype Index</span><span>${drop.hype}/100</span></div>` : ""}
       ${renderPriceCompare(drop.prices, drop)}
     </div>
-  </div>`;
+  </a>`;
 }
 
 // --- Drops Page ---
