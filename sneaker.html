@@ -164,6 +164,13 @@
 <body>
 <div class="grain"></div>
 <div id="root"></div>
+<noscript>
+  <div style="max-width:700px;margin:80px auto;padding:20px;font-family:sans-serif;color:#f0f0f0;text-align:center">
+    <h1 style="font-size:1.5rem;margin-bottom:12px">SneakyRadar — Sneaker Price Comparison</h1>
+    <p style="color:#999;margin-bottom:20px">JavaScript is required to compare sneaker prices across StockX, eBay, Nike, Amazon and more.</p>
+    <p><a href="https://www.sneakyradar.com" style="color:#00ff94">Go to SneakyRadar homepage</a></p>
+  </div>
+</noscript>
 
 <script>
 const API_URL = "/.netlify/functions/anthropic";
@@ -279,21 +286,32 @@ function updateMeta(drop) {
   // Update structured data
   var ldEl = document.getElementById("ld-json");
   if (ldEl) {
-    var ld = {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": drop.name,
-      "description": desc,
-      "url": url,
-      "brand": {"@type": "Brand", "name": drop.brand},
-      "sku": drop.sku || "",
-      "image": drop.image || "https://www.sneakyradar.com/og-image.png",
-    };
+    var ld = [
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": drop.name,
+        "description": desc,
+        "url": url,
+        "brand": {"@type": "Brand", "name": drop.brand},
+        "sku": drop.sku || "",
+        "image": drop.image || "https://www.sneakyradar.com/og-image.png",
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.sneakyradar.com"},
+          {"@type": "ListItem", "position": 2, "name": drop.brand || "Sneakers", "item": "https://www.sneakyradar.com/?search=" + encodeURIComponent(drop.brand || "")},
+          {"@type": "ListItem", "position": 3, "name": drop.name, "item": url}
+        ]
+      }
+    ];
     // Add offers if we have price data
     if (drop.prices && drop.prices.length > 0) {
       var numericPrices = drop.prices.filter(function(p) { return p.price && p.price.startsWith("$"); }).map(function(p) { return parseFloat(p.price.replace("$","")); });
       if (numericPrices.length > 0) {
-        ld.offers = {
+        ld[0].offers = {
           "@type": "AggregateOffer",
           "priceCurrency": "USD",
           "lowPrice": Math.min.apply(null, numericPrices),
