@@ -439,6 +439,7 @@ let monthOffset = 0;
 let releasesView = "list";
 let releasesBrandFilter = "ALL";
 let releasesSel = null;
+let releasesSearch = "";
 let releases = [];
 
 function esc(s) { return s == null ? "" : String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
@@ -449,12 +450,19 @@ function renderReleases() {
   const mn = vd.toLocaleString('default', {month: 'long'});
   const yr = vd.getFullYear();
   const bOpts = ["ALL","JORDAN","NIKE","ADIDAS","COLLAB"];
+  const searchLower = releasesSearch.toLowerCase().trim();
   const filtered = releases.filter(r => {
-    if (releasesBrandFilter === "ALL") return true;
-    if (releasesBrandFilter === "COLLAB") return r.collab;
-    return r.brand.toUpperCase() === releasesBrandFilter;
+    if (releasesBrandFilter === "ALL") {}
+    else if (releasesBrandFilter === "COLLAB") { if (!r.collab) return false; }
+    else { if (r.brand.toUpperCase() !== releasesBrandFilter) return false; }
+    if (searchLower) {
+      const hay = (r.name + " " + r.brand + " " + r.color + " " + r.sku).toLowerCase();
+      return hay.includes(searchLower);
+    }
+    return true;
   });
   const monthRels = filtered.filter(r => {
+    if (searchLower) return true; // show all months when searching
     const d = new Date(r.date + "T00:00:00");
     return d.getMonth() === vd.getMonth() && d.getFullYear() === vd.getFullYear();
   }).sort((a,b) => new Date(a.date) - new Date(b.date));
@@ -506,7 +514,7 @@ function renderReleases() {
   let listHtml = "";
   if (releasesView === "list") {
     if (monthRels.length === 0) {
-      listHtml = `<div style="text-align:center;padding:60px 0;color:var(--muted);font-size:.75rem;letter-spacing:1px">No releases scheduled for this month</div>`;
+      listHtml = `<div style="text-align:center;padding:60px 0;color:var(--muted);font-size:.75rem;letter-spacing:1px">${searchLower ? 'No releases found for "' + esc(releasesSearch) + '"' : 'No releases scheduled for this month'}</div>`;
     } else {
       listHtml = Object.keys(grouped).sort().map(ds => {
         const d = new Date(ds + "T00:00:00");
@@ -566,6 +574,10 @@ function renderReleases() {
       </div>
     </div>
     <div class="cal-filters">${bOpts.map(b => `<button class="cal-filter-btn${releasesBrandFilter===b?" active":""}" data-brand-filter="${b}">${b}</button>`).join("")}</div>
+    <div style="max-width:100%;margin:0 0 24px;display:flex;border:1px solid var(--border);background:var(--surface)">
+      <input id="rel-search" type="text" placeholder="Search releases... (e.g. Ja 3, Travis Scott, Dunk)" value="${esc(releasesSearch)}" style="flex:1;background:transparent;border:none;color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem;padding:12px 16px;outline:none;letter-spacing:.5px">
+      ${releasesSearch ? '<button data-clear-search style="background:transparent;border:none;color:var(--muted);font-family:DM Mono,monospace;font-size:.75rem;padding:0 14px;cursor:pointer">✕ CLEAR</button>' : ''}
+    </div>
     ${releasesView === "calendar" ? calendarHtml : `<div class="cal-list">${listHtml}</div>`}
     <div class="cal-legend">
       <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#ff3c00"></div> JORDAN</div>
@@ -588,6 +600,18 @@ document.addEventListener("click", function(e) {
   const rel = e.target.closest("[data-rel-idx]");
   if (rel) { releasesSel = parseInt(rel.dataset.relIdx); renderReleases(); }
   if (e.target.closest("[data-modal-close]")) { releasesSel = null; renderReleases(); }
+  if (e.target.closest("[data-clear-search]")) { releasesSearch = ""; renderReleases(); var si = document.getElementById("rel-search"); if(si) si.focus(); }
+});
+
+document.addEventListener("input", function(e) {
+  if (e.target.id === "rel-search") {
+    releasesSearch = e.target.value;
+    if (releasesSearch) releasesView = "list"; // force list view when searching
+    renderReleases();
+    // Keep cursor position after re-render
+    var si = document.getElementById("rel-search");
+    if (si) { si.focus(); si.setSelectionRange(si.value.length, si.value.length); }
+  }
 });
 
 // Load releases data
