@@ -1,10 +1,10 @@
 {
-  "updated": "2026-03-02T08:03:20.227Z",
+  "updated": "2026-03-05T08:03:00.203Z",
   "source": "auto",
-  "count": 27,
+  "count": 32,
   "releases": [
     {
-      "name": "Teyana Taylor x Air Jordan 3",
+      "name": "Teyana Taylor x Air Jordan 3 \"Fire Red\"",
       "sku": "IF3097-300",
       "date": "2026-03-07",
       "price": 280,
@@ -244,6 +244,51 @@
       "price": 200,
       "brand": "Jordan",
       "color": "Black/Muslin",
+      "collab": false
+    },
+    {
+      "name": "SP5DER x adidas Superstar",
+      "sku": "KJ7021",
+      "date": "2026-03-03",
+      "price": 150,
+      "brand": "Adidas",
+      "color": "Core Black/Silver Metallic",
+      "collab": true
+    },
+    {
+      "name": "SP5DER x adidas Superstar",
+      "sku": "KJ7005",
+      "date": "2026-03-03",
+      "price": 150,
+      "brand": "Adidas",
+      "color": "Red/Core Black-Silver Metallic",
+      "collab": true
+    },
+    {
+      "name": "Nike LeBron 23 \"Good Intentions\"",
+      "sku": "IB9557-601",
+      "date": "2026-03-03",
+      "price": 235,
+      "brand": "Nike",
+      "color": "Hyper Pink-Black-Voltage Green-Alabaster",
+      "collab": false
+    },
+    {
+      "name": "Nike Ja 3 \"Murray State\"",
+      "sku": "HF2793-004",
+      "date": "2026-03-05",
+      "price": 125,
+      "brand": "Nike",
+      "color": "Pure Platinum/Lightning-Dusty Cactus-Deep Royal Blue",
+      "collab": false
+    },
+    {
+      "name": "Nike Air Max 95 OG \"Neon\"",
+      "sku": "HM4740-001",
+      "date": "2026-03-05",
+      "price": 190,
+      "brand": "Nike",
+      "color": "Black/Cool Grey-Neon Yellow",
       "collab": false
     }
   ]
