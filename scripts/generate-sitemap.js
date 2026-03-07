@@ -4,7 +4,7 @@ const path = require('path');
 
 function nameToSlug(name) {
   if (!name) return '';
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return name.toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
 async function kicksSearch(query, limit) {
@@ -42,47 +42,80 @@ async function main() {
     { loc: 'https://www.sneakyradar.com/blog/goat-vs-stockx-fees', priority: '0.7', freq: 'monthly' },
     { loc: 'https://www.sneakyradar.com/blog/are-yeezy-slides-worth-it', priority: '0.7', freq: 'monthly' },
     { loc: 'https://www.sneakyradar.com/blog/jordan-4-price-history', priority: '0.7', freq: 'monthly' },
+    { loc: 'https://www.sneakyradar.com/blog/sneaker-price-study-2026', priority: '0.8', freq: 'monthly' },
   ];
   var queries = [
-    'Jordan 1 Retro', 'Jordan 3 Retro', 'Jordan 4 Retro', 'Jordan 5 Retro',
-    'Jordan 6 Retro', 'Jordan 11 Retro', 'Jordan 12 Retro', 'Jordan 13 Retro',
-    'Nike Dunk Low', 'Nike Dunk High', 'Nike Air Max 1', 'Nike Air Max 90',
-    'Nike Air Max 95', 'Nike Air Max 97', 'Nike Air Force 1', 'Nike SB Dunk',
-    'Yeezy Boost 350', 'Yeezy Boost 700', 'Yeezy Slide', 'Yeezy Foam Runner',
-    'New Balance 550', 'New Balance 2002R', 'New Balance 990', 'New Balance 993',
-    'Adidas Samba', 'Adidas Gazelle', 'Adidas Campus',
-    'ASICS Gel-Kayano 14', 'ASICS Gel-1130',
-    'Puma Suede', 'Nike Blazer Mid', 'Nike Vomero 5',
+    'Jordan 1 Retro','Jordan 3 Retro','Jordan 4 Retro','Jordan 5 Retro',
+    'Jordan 6 Retro','Jordan 11 Retro','Jordan 12 Retro','Jordan 13 Retro',
+    'Nike Dunk Low','Nike Dunk High','Nike Air Max 1','Nike Air Max 90',
+    'Nike Air Max 95','Nike Air Max 97','Nike Air Force 1','Nike SB Dunk',
+    'Yeezy Boost 350','Yeezy Boost 700','Yeezy Slide','Yeezy Foam Runner',
+    'New Balance 550','New Balance 2002R','New Balance 990','New Balance 993',
+    'Adidas Samba','Adidas Gazelle','Adidas Campus',
+    'ASICS Gel-Kayano 14','ASICS Gel-1130',
+    'Puma Suede','Nike Blazer Mid','Nike Vomero 5',
   ];
   console.log('Fetching ' + queries.length + ' queries...');
   var allProducts = [];
   var BATCH = 8;
   for (var i = 0; i < queries.length; i += BATCH) {
     var batch = queries.slice(i, i + BATCH);
-    console.log('  Batch ' + (Math.floor(i / BATCH) + 1) + '/' + Math.ceil(queries.length / BATCH));
+    console.log('  Batch ' + (Math.floor(i/BATCH)+1) + '/' + Math.ceil(queries.length/BATCH));
     var results = await Promise.all(batch.map(function(q) { return kicksSearch(q, 100); }));
     results.forEach(function(p) { allProducts = allProducts.concat(p); });
   }
-  var seen = new Map();
+
+  // Build unique sneaker map with full metadata
+  var sneakerMeta = {};
   allProducts.forEach(function(p) {
     var name = p.title || p.name || '';
     var slug = nameToSlug(name);
-    if (slug && !seen.has(slug)) seen.set(slug, slug);
+    if (!slug || sneakerMeta[slug]) return;
+
+    var brand = '';
+    if (/jordan/i.test(name) || /jordan/i.test(p.brand || '')) brand = 'Jordan';
+    else if (/yeezy/i.test(name)) brand = 'Yeezy';
+    else if (/nike/i.test(name) || /nike/i.test(p.brand || '')) brand = 'Nike';
+    else if (/adidas/i.test(name) || /adidas/i.test(p.brand || '')) brand = 'Adidas';
+    else if (/new balance/i.test(name)) brand = 'New Balance';
+    else if (/asics/i.test(name)) brand = 'ASICS';
+    else if (/puma/i.test(name)) brand = 'Puma';
+    else brand = p.brand || 'Other';
+
+    var colorway = p.colorway || '';
+    var sku = p.sku || p.styleId || '';
+    var retail = p.retailPrice || 0;
+    var image = (p.image && p.image.original) || (p.media && p.media.imageUrl) || '';
+
+    sneakerMeta[slug] = {
+      n: name,
+      b: brand,
+      c: colorway,
+      s: sku,
+      r: retail,
+      i: image
+    };
   });
-  console.log('Products: ' + allProducts.length + ', unique: ' + seen.size);
-  var lines = [];
-  lines.push('<?xml version="1.0" encoding="UTF-8"?>');
-  lines.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+
+  var slugCount = Object.keys(sneakerMeta).length;
+  console.log('Products: ' + allProducts.length + ', unique slugs: ' + slugCount);
+
+  // Write sneaker-meta.json (used by edge function for SEO)
+  var metaPath = path.join(__dirname, '..', 'sneaker-meta.json');
+  fs.writeFileSync(metaPath, JSON.stringify(sneakerMeta));
+  console.log('Wrote sneaker-meta.json: ' + slugCount + ' sneakers (' + Math.round(fs.statSync(metaPath).size / 1024) + 'KB)');
+
+  // Write sitemap.xml
+  var xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   staticPages.forEach(function(p) {
-    lines.push('  <url><loc>' + p.loc + '</loc><lastmod>' + today + '</lastmod><changefreq>' + p.freq + '</changefreq><priority>' + p.priority + '</priority></url>');
+    xml += '  <url><loc>' + p.loc + '</loc><lastmod>' + today + '</lastmod><changefreq>' + p.freq + '</changefreq><priority>' + p.priority + '</priority></url>\n';
   });
-  seen.forEach(function(slug) {
-    lines.push('  <url><loc>https://www.sneakyradar.com/sneaker/' + encodeURIComponent(slug) + '</loc><lastmod>' + today + '</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>');
+  Object.keys(sneakerMeta).forEach(function(slug) {
+    xml += '  <url><loc>https://www.sneakyradar.com/sneaker/' + encodeURIComponent(slug) + '</loc><lastmod>' + today + '</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>\n';
   });
-  lines.push('</urlset>');
-  var xml = lines.join('\n') + '\n';
+  xml += '</urlset>\n';
   var outPath = path.join(__dirname, '..', 'sitemap.xml');
   fs.writeFileSync(outPath, xml);
-  console.log('Wrote sitemap.xml: ' + (staticPages.length + seen.size) + ' URLs');
+  console.log('Wrote sitemap.xml: ' + (staticPages.length + slugCount) + ' URLs');
 }
 main().catch(function(e) { console.error(e); process.exit(1); });
