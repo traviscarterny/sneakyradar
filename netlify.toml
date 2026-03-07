@@ -1,4 +1,6 @@
 # Sneaker detail pages (SEO)
+# Static /sneaker/{slug}/index.html files are served first (unique meta tags)
+# This wildcard catches unknown slugs as fallback
 [[redirects]]
   from = "/sneaker/*"
   to = "/sneaker.html"
