@@ -122,7 +122,7 @@ async function searchEbaySku(token, sku, title, minPrice, camp) {
     var h = { "Authorization": "Bearer " + token, "Content-Type": "application/json", "X-EBAY-C-MARKETPLACE-ID": "EBAY_US" };
     if (camp) h["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + camp;
     var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(sku) +
-      "&filter=conditionIds:{1000|1500},price:[80..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=5";
+      "&filter=conditionIds:{1000|1500},price:[80..800],priceCurrency:USD,deliveryCountry:US,buyingOptions:{FIXED_PRICE}&limit=10";
     var res = await fetch(url, { headers: h });
     var d = await res.json();
     console.log("eBay SKU lookup:", sku, "status:", res.status, "total:", d.total || 0, "items:", (d.itemSummaries || []).length, d.warnings ? "warnings:" + JSON.stringify(d.warnings).substring(0,200) : "", d.errors ? "errors:" + JSON.stringify(d.errors).substring(0,200) : "");
