@@ -1182,6 +1182,7 @@ function renderDropsPage() {
     ${dropsLoading && steps.length > 0 ? `<div class="progress-steps">
       ${steps.map(s => `<div class="progress-step"><div class="step-dot ${s.status}"></div><span class="step-label ${s.status}">${s.status==="done" ? `✓ ${esc(s.label)}${s.count!=null?` (${s.count})`:""}` : s.status==="active" ? `scanning ${esc(s.label)}...` : esc(s.label)}</span></div>`).join("")}
     </div>` : ""}
+    <div id="results-top"></div>
     <div class="status-bar">
       <div class="pulse-dot"></div>
       ${dropsLoading ? "Scanning all sources..." : `${filtered.length} drops tracked`}
@@ -1606,6 +1607,30 @@ document.addEventListener("click", function(e) {
 });
 
 // ===== ASYNC ACTIONS =====
+let skipNextScroll = true;
+
+function scrollToResults() {
+  if (skipNextScroll) { skipNextScroll = false; return; }
+  setTimeout(() => {
+    const el = document.getElementById("results-top");
+    if (!el) return;
+    const targetY = el.getBoundingClientRect().top + window.scrollY - 80;
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    if (Math.abs(distance) < 50) return;
+    const duration = 1200;
+    let start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      const ease = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+      window.scrollTo(0, startY + distance * ease);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, 200);
+}
+
 async function doSearch(q) {
   dropsLoading = true; dropsError = null; steps = [{label:"Searching all sources",status:"active"}];
   dropsPage = 1; hasMore = true; lastQuery = q !== "" ? q : "__trending__";
@@ -1635,6 +1660,7 @@ async function doSearch(q) {
   }
   dropsLoading = false;
   render();
+  scrollToResults();
 }
 
 async function doLoadMore() {
