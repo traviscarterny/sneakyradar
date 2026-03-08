@@ -1,3 +1,10 @@
+# OG image headers for Twitter/social crawlers
+[[headers]]
+  for = "/og-image.png"
+  [headers.values]
+    Content-Type = "image/png"
+    Cache-Control = "public, max-age=86400"
+
 # Sneaker detail pages (SEO)
 # Static /sneaker/{slug}/index.html files are served first (unique meta tags)
 # This wildcard catches unknown slugs as fallback
