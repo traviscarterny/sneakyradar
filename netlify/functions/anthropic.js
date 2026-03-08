@@ -122,9 +122,10 @@ async function searchEbaySku(token, sku, title, minPrice, camp) {
     var h = { "Authorization": "Bearer " + token, "Content-Type": "application/json", "X-EBAY-C-MARKETPLACE-ID": "EBAY_US" };
     if (camp) h["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + camp;
     var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(sku) +
-      "&category_ids=93427&filter=conditionIds:{1000|1500},price:[80..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=5";
+      "&filter=conditionIds:{1000|1500},price:[80..],deliveryCountry:US,buyingOptions:{FIXED_PRICE}&sort=price&limit=5";
     var res = await fetch(url, { headers: h });
     var d = await res.json();
+    console.log("eBay SKU lookup:", sku, "status:", res.status, "total:", d.total || 0, "items:", (d.itemSummaries || []).length, d.warnings ? "warnings:" + JSON.stringify(d.warnings).substring(0,200) : "", d.errors ? "errors:" + JSON.stringify(d.errors).substring(0,200) : "");
     if (!d.itemSummaries || d.itemSummaries.length === 0) return null;
     for (var i = 0; i < d.itemSummaries.length; i++) {
       var it = d.itemSummaries[i];
@@ -138,8 +139,10 @@ async function searchEbaySku(token, sku, title, minPrice, camp) {
         authenticity: it.qualifiedPrograms ? it.qualifiedPrograms.indexOf("AUTHENTICITY_GUARANTEE") >= 0 : false
       };
     }
+    console.log("eBay SKU", sku, "had", d.itemSummaries.length, "results but all filtered out (junk/price)");
     return null;
   } catch(e) {
+    console.log("eBay SKU error:", sku, e.message);
     return null;
   }
 }
@@ -311,7 +314,7 @@ exports.handler = async function(event) {
       var enrichTr = await Promise.all([enrichWithEbay(m2.products)]);
       var em2 = enrichTr[0];
       
-      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em22 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
+      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
       return cors(200, { data: m2.products, total: m2.products.length, page: 1 });
     } catch(err) {
       console.error("Trending error:", err.message);
