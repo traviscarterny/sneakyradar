@@ -701,15 +701,14 @@ function kicksToDrops(products) {
       url: "https://www.nike.com/w?q=" + nikeQuery,
     });
 
-    // eBay: real prices from Browse API
-    if (p._ebay && p._ebay.price) {
-      prices.push({
-        store: p._ebay.authenticity ? "eBay ✓" : "eBay",
-        storeId: "ebay",
-        price: `$${Math.round(p._ebay.price)}`,
-        url: p._ebay.url || "https://www.ebay.com",
-      });
-    }
+    // eBay: search link (affiliate params added by affLink)
+    const ebayQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
+    prices.push({
+      store: "eBay",
+      storeId: "ebay",
+      price: "Check Price",
+      url: "https://www.ebay.com/sch/i.html?_nkw=" + ebayQuery + "&_sacat=93427&LH_BIN=1&LH_ItemCondition=1000|1500",
+    });
 
     // Kicks Crew: search link with affiliate tag
     const kcQuery = encodeURIComponent((p.title || p.name || "") + " " + (p.sku || ""));
@@ -739,7 +738,7 @@ function kicksToDrops(products) {
     // Build source label
     const sourceNames = ["StockX"];
     if (p._nike) sourceNames.push("Nike");
-    if (p._ebay) sourceNames.push("eBay");
+    sourceNames.push("eBay");
     sourceNames.push("Amazon");
 
     return {
