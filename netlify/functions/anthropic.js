@@ -75,101 +75,6 @@ function normSku(s) {
   return s ? s.replace(/[\s\-\/]/g, "").toUpperCase() : "";
 }
 
-// eBay OAuth
-var ebayToken = null;
-var ebayTokenExpiry = 0;
-
-async function getEbayToken() {
-  var cid = process.env.EBAY_CLIENT_ID;
-  var cs = process.env.EBAY_CLIENT_SECRET;
-  if (!cid || !cs) return null;
-  if (ebayToken && Date.now() < ebayTokenExpiry) return ebayToken;
-  try {
-    var creds = Buffer.from(cid + ":" + cs).toString("base64");
-    var res = await fetch("https://api.ebay.com/identity/v1/oauth2/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded", "Authorization": "Basic " + creds },
-      body: "grant_type=client_credentials&scope=https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope"
-    });
-    var d = await res.json();
-    if (d.access_token) {
-      ebayToken = d.access_token;
-      ebayTokenExpiry = Date.now() + ((d.expires_in || 7200) - 300) * 1000;
-      return ebayToken;
-    }
-    console.log("eBay token error:", JSON.stringify(d).substring(0, 200));
-    return null;
-  } catch(e) {
-    console.log("eBay token fetch error:", e.message);
-    return null;
-  }
-}
-
-var EBAY_JUNK_WORDS = ["box only","empty box","replacement box","shoe box only","no shoes","laces only","insole","keychain","charm","sticker","patch","pin","socks","poster","card","trading card","lot of","bulk","wholesale","display","stand","shoe tree","cleaning kit","air freshener","deodorizer","custom painted"];
-
-function isEbayJunk(title) {
-  var t = (title || "").toLowerCase();
-  for (var i = 0; i < EBAY_JUNK_WORDS.length; i++) {
-    if (t.indexOf(EBAY_JUNK_WORDS[i]) >= 0) return true;
-  }
-  if (t.indexOf("used") >= 0 || t.indexOf("worn") >= 0 || t.indexOf("pre-owned") >= 0 || t.indexOf("preowned") >= 0 || t.indexOf("beater") >= 0 || t.indexOf("vnds") >= 0) return true;
-  return false;
-}
-
-async function searchEbaySku(token, sku, title, minPrice, camp) {
-  if (!token || !sku) return null;
-  try {
-    var h = { "Authorization": "Bearer " + token, "Content-Type": "application/json", "X-EBAY-C-MARKETPLACE-ID": "EBAY_US" };
-    if (camp) h["X-EBAY-C-ENDUSERCTX"] = "affiliateCampaignId=" + camp;
-    var url = "https://api.ebay.com/buy/browse/v1/item_summary/search?q=" + encodeURIComponent(sku) +
-      "&filter=conditionIds:{1000|1500},price:[80..800],priceCurrency:USD,deliveryCountry:US,buyingOptions:{FIXED_PRICE}&limit=10";
-    var res = await fetch(url, { headers: h });
-    var d = await res.json();
-    console.log("eBay SKU lookup:", sku, "status:", res.status, "total:", d.total || 0, "items:", (d.itemSummaries || []).length, d.warnings ? "warnings:" + JSON.stringify(d.warnings).substring(0,200) : "", d.errors ? "errors:" + JSON.stringify(d.errors).substring(0,200) : "");
-    if (!d.itemSummaries || d.itemSummaries.length === 0) return null;
-    for (var i = 0; i < d.itemSummaries.length; i++) {
-      var it = d.itemSummaries[i];
-      if (isEbayJunk(it.title)) continue;
-      var price = parseFloat(it.price ? it.price.value : "0");
-      if (minPrice && price < minPrice * 0.35) continue;
-      return {
-        price: price,
-        priceLabel: "From $" + Math.round(price),
-        url: camp ? (it.itemAffiliateWebUrl || it.itemWebUrl) : it.itemWebUrl,
-        authenticity: it.qualifiedPrograms ? it.qualifiedPrograms.indexOf("AUTHENTICITY_GUARANTEE") >= 0 : false
-      };
-    }
-    console.log("eBay SKU", sku, "had", d.itemSummaries.length, "results but all filtered out (junk/price)");
-    return null;
-  } catch(e) {
-    console.log("eBay SKU error:", sku, e.message);
-    return null;
-  }
-}
-
-async function enrichWithEbay(products) {
-  try {
-    var token = await getEbayToken();
-    if (!token) return 0;
-    var camp = process.env.EBAY_CAMPAIGN_ID || "";
-    var em = 0;
-    var toSearch = products.filter(function(p) { return p.sku; }).slice(0, 10);
-    var results = await Promise.all(toSearch.map(function(p) {
-      return searchEbaySku(token, p.sku, p.title, p.min_price || p.avg_price, camp);
-    }));
-    for (var i = 0; i < toSearch.length; i++) {
-      if (results[i]) {
-        toSearch[i]._ebay = results[i];
-        em++;
-      }
-    }
-    console.log("eBay per-SKU lookup: " + em + " matched out of " + toSearch.length + " searched");
-    return em;
-  } catch(e) {
-    console.log("enrichWithEbay error (non-fatal):", e.message);
-    return 0;
-  }
-}
 
 // Kicks Crew (Shopify) — search by SKU, return lowest price + product URL
 
@@ -277,14 +182,7 @@ exports.handler = async function(event) {
       var start = (page - 1) * limit;
       var end = start + limit;
       var pageProducts = m.products.slice(start, end);
-      var em = 0;
-      
-      if (page <= 1) {
-        var enrichResults = await Promise.all([enrichWithEbay(pageProducts)]);
-        em = enrichResults[0];
-        
-      }
-      console.log("Search: " + q + " page:" + page + " sxQ:" + sxQueries.length + " goatQ:" + goatQueries.length + " | SX:" + allSx.length + " GOAT:" + allGoat.length + " gm:" + m.goatMatched + " eBay:" + em + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
+      console.log("Search: " + q + " page:" + page + " sxQ:" + sxQueries.length + " goatQ:" + goatQueries.length + " | SX:" + allSx.length + " GOAT:" + allGoat.length + " gm:" + m.goatMatched + " total:" + totalProducts + " returning:" + pageProducts.length + " | " + (Date.now() - t0) + "ms");
       return cors(200, { data: pageProducts, total: totalProducts, page: page });
     } catch(err) {
       console.error("Search error:", err.message);
@@ -311,10 +209,7 @@ exports.handler = async function(event) {
       var m2 = mergeAll(sxD, allG);
       m2.products.sort(function(a, b) { return (b.weekly_orders || 0) - (a.weekly_orders || 0); });
       m2.products = m2.products.slice(0, lim);
-      var enrichTr = await Promise.all([enrichWithEbay(m2.products)]);
-      var em2 = enrichTr[0];
-      
-      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " eBay:" + em2 + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
+      console.log("Trending: SX:" + sxD.length + " GOAT:" + allG.length + " gm:" + m2.goatMatched + " merged:" + m2.products.length + " | " + (Date.now() - t1) + "ms");
       return cors(200, { data: m2.products, total: m2.products.length, page: 1 });
     } catch(err) {
       console.error("Trending error:", err.message);
