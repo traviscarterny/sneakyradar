@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-05T08:03:15.353Z",
+  "updated": "2026-03-09T08:02:27.279Z",
   "source": "auto",
   "count": 32,
   "releases": [
@@ -178,7 +178,7 @@
       "name": "Air Jordan 3 \"Brazil\"",
       "sku": "IV4871-400",
       "date": "2026-05-16",
-      "price": 200,
+      "price": 210,
       "brand": "Jordan",
       "color": "Racer Blue/Lucky Green-Blue Void-Varsity Maize",
       "collab": false
@@ -214,7 +214,7 @@
       "name": "Air Jordan 3 OG \"World's Best Dad\"",
       "sku": "IF4396-103",
       "date": "2026-05-30",
-      "price": 200,
+      "price": 210,
       "brand": "Jordan",
       "color": "Sail/Black-University Red-Pale Ivory-Palomino",
       "collab": false
@@ -241,7 +241,7 @@
       "name": "Air Jordan 15 23RE \"Black Muslin\"",
       "sku": "IV7637-100",
       "date": "2026-06-06",
-      "price": 200,
+      "price": 215,
       "brand": "Jordan",
       "color": "Black/Muslin",
       "collab": false
@@ -265,15 +265,6 @@
       "collab": true
     },
     {
-      "name": "Nike LeBron 23 \"Good Intentions\"",
-      "sku": "IB9557-601",
-      "date": "2026-03-03",
-      "price": 235,
-      "brand": "Nike",
-      "color": "Hyper Pink-Black-Voltage Green-Alabaster",
-      "collab": false
-    },
-    {
       "name": "Nike Ja 3 \"Murray State\"",
       "sku": "HF2793-004",
       "date": "2026-03-05",
@@ -289,6 +280,15 @@
       "price": 190,
       "brand": "Nike",
       "color": "Black/Cool Grey-Neon Yellow",
+      "collab": false
+    },
+    {
+      "name": "Nike Air Griffey Max 1 \"Varsity Royal\"",
+      "sku": "DJ5161-400",
+      "date": "2026-03-06",
+      "price": 180,
+      "brand": "Nike",
+      "color": "Varsity Royal/Volt-Black",
       "collab": false
     }
   ]
