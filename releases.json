@@ -1,7 +1,7 @@
 {
-  "updated": "2026-03-12T08:01:31.619Z",
+  "updated": "2026-03-12T08:01:45.987Z",
   "source": "auto",
-  "count": 31,
+  "count": 30,
   "releases": [
     {
       "name": "Air Jordan 40 \"Copper\"",
@@ -196,7 +196,7 @@
       "name": "Air Jordan 3 \"Brazil\"",
       "sku": "IV4871-400",
       "date": "2026-05-16",
-      "price": 200,
+      "price": 210,
       "brand": "Jordan",
       "color": "Racer Blue/Lucky Green-Blue Void-Varsity Maize",
       "collab": false
@@ -232,7 +232,7 @@
       "name": "Air Jordan 3 OG \"World's Best Dad\"",
       "sku": "IF4396-103",
       "date": "2026-05-30",
-      "price": 200,
+      "price": 210,
       "brand": "Jordan",
       "color": "Sail/Black-University Red-Pale Ivory-Palomino",
       "collab": false
@@ -254,15 +254,6 @@
       "brand": "Adidas",
       "color": "Red/Core Black-Silver Metallic",
       "collab": true
-    },
-    {
-      "name": "Nike Ja 3 \"Murray State\"",
-      "sku": "HF2793-004",
-      "date": "2026-03-05",
-      "price": 125,
-      "brand": "Nike",
-      "color": "Pure Platinum/Lightning-Dusty Cactus-Deep Royal Blue",
-      "collab": false
     },
     {
       "name": "Nike Air Max 95 OG \"Neon\"",
