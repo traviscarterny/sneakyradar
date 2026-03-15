@@ -356,6 +356,11 @@
     .cal-list-date{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;padding:20px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px;color:var(--muted)}
     .cal-list-date span{color:var(--accent)}
     .cal-list-item{display:flex;align-items:center;gap:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);transition:all .15s;cursor:pointer}
+    .cal-list-img{width:72px;height:72px;flex-shrink:0;background:#1a1a1a;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+    .cal-list-img img{width:100%;height:100%;object-fit:contain;padding:6px}
+    .cal-list-img .img-placeholder{font-family:'Bebas Neue',sans-serif;font-size:.6rem;color:var(--muted);letter-spacing:2px;text-align:center;padding:4px}
+    .cal-modal-img{width:100%;aspect-ratio:16/9;background:#1a1a1a;border:1px solid var(--border);border-radius:6px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+    .cal-modal-img img{width:100%;height:100%;object-fit:contain;padding:16px}
     .cal-list-item:hover{border-color:var(--accent);background:#161616;transform:translateX(4px)}
     .cal-list-info{flex:1;min-width:0}
     .cal-list-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -521,6 +526,7 @@ function renderReleases() {
         return `<div>
           <div class="cal-list-date"><span>${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span> — ${d.toLocaleDateString('en-US',{weekday:'long'})}</div>
           ${grouped[ds].map((r,j) => `<div class="cal-list-item" data-rel-idx="${releases.indexOf(r)}">
+            <div class="cal-list-img" data-rel-img="${esc(r.sku || r.name)}"></div>
             <div class="cal-list-info"><div class="cal-list-name">${esc(r.name)}</div><div class="cal-list-meta">${esc(r.brand)} · ${esc(r.color)}</div><div class="cal-list-sku">${esc(r.sku)}</div></div>
             <div class="cal-list-price">$${r.price}</div>
             <div class="cal-list-actions"><a class="cal-list-btn primary" href="/?search=${encodeURIComponent(r.name)}" onclick="event.stopPropagation()">Compare Prices</a></div>
@@ -536,6 +542,7 @@ function renderReleases() {
     modalHtml = `<div class="cal-modal-overlay" data-modal-close><div class="cal-modal" onclick="event.stopPropagation()">
       <div class="cal-modal-head"><div style="font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent)">${esc(sel.brand)}${sel.collab?" · COLLAB":""}</div><button class="cal-modal-close" data-modal-close>✕</button></div>
       <div class="cal-modal-body">
+        <div class="cal-modal-img" data-rel-img="${esc(sel.sku || sel.name)}"></div>
         <div class="cal-modal-title">${esc(sel.name)}</div>
         <div class="cal-modal-details">
           <div class="cal-modal-detail"><label>Release Date</label><span>${fmtDate(sel.date)}</span></div>
@@ -627,6 +634,34 @@ fetch("/releases.json").then(r => {if(!r.ok)throw new Error("no file");return r.
     }).catch(() => {});
 });
 
+renderReleases();
+
+// Load sneaker images for release items
+var imgCache = {};
+function loadRelImages() {
+  document.querySelectorAll("[data-rel-img]").forEach(function(el) {
+    var q = el.getAttribute("data-rel-img");
+    if (!q || el.querySelector("img")) return;
+    el.innerHTML = '<div class="img-placeholder">Loading...</div>';
+    if (imgCache[q]) {
+      el.innerHTML = '<img src="' + imgCache[q] + '" alt="' + q + '">';
+      return;
+    }
+    fetch("/.netlify/functions/anthropic", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"search",query:q,limit:1})})
+      .then(function(r){return r.json()})
+      .then(function(j){
+        if(j.data&&j.data[0]&&j.data[0].image){
+          imgCache[q] = j.data[0].image;
+          el.innerHTML = '<img src="' + j.data[0].image + '" alt="' + q + '">';
+        } else {
+          el.innerHTML = '<div class="img-placeholder">—</div>';
+        }
+      }).catch(function(){el.innerHTML = '<div class="img-placeholder">—</div>';});
+  });
+}
+// Wrap renderReleases to auto-load images after each render
+var _origRender = renderReleases;
+renderReleases = function() { _origRender(); setTimeout(loadRelImages, 100); };
 renderReleases();
 </script>
 </body>
