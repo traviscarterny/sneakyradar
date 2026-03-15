@@ -6,8 +6,6 @@
     Cache-Control = "public, max-age=86400"
 
 # Sneaker detail pages (SEO)
-# Static /sneaker/{slug}/index.html files are served first (unique meta tags)
-# This wildcard catches unknown slugs as fallback
 [[redirects]]
   from = "/sneaker/*"
   to = "/sneaker.html"
@@ -29,7 +27,15 @@
   to = "/releases.html"
   status = 200
 
-# Blog clean URLs for new posts
+[[redirects]]
+  from = "/collection"
+  to = "/collection.html"
+  status = 200
+
+# =============================================
+# Blog — Original 17 posts
+# =============================================
+
 [[redirects]]
   from = "/blog/best-sneakers-under-100"
   to = "/blog/best-sneakers-under-100.html"
@@ -58,11 +64,6 @@
 [[redirects]]
   from = "/blog/jordan-4-price-history"
   to = "/blog/jordan-4-price-history.html"
-  status = 200
-
-[[redirects]]
-  from = "/collection"
-  to = "/collection.html"
   status = 200
 
 [[redirects]]
@@ -118,4 +119,116 @@
 [[redirects]]
   from = "/blog/sneaker-price-study-2026"
   to = "/blog/sneaker-price-study-2026.html"
+  status = 200
+
+# =============================================
+# Blog — Price guides (10 posts)
+# =============================================
+
+[[redirects]]
+  from = "/blog/march-sneaker-drops-2026"
+  to = "/blog/march-sneaker-drops-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/jordan-11-gamma-blue-price"
+  to = "/blog/jordan-11-gamma-blue-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/air-max-95-neon-price-guide"
+  to = "/blog/air-max-95-neon-price-guide.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/best-sneakers-under-200"
+  to = "/blog/best-sneakers-under-200.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/jordan-4-lakers-price"
+  to = "/blog/jordan-4-lakers-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/sneaker-prices-march-2026"
+  to = "/blog/sneaker-prices-march-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/off-white-jordan-1-alaska-price"
+  to = "/blog/off-white-jordan-1-alaska-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/sneaker-sizing-guide-2026"
+  to = "/blog/sneaker-sizing-guide-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/how-to-save-money-on-sneakers"
+  to = "/blog/how-to-save-money-on-sneakers.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/jordan-13-chicago-price"
+  to = "/blog/jordan-13-chicago-price.html"
+  status = 200
+
+# =============================================
+# Blog — Collection tracker (3 posts)
+# =============================================
+
+[[redirects]]
+  from = "/blog/best-sneaker-collection-trackers-2026"
+  to = "/blog/best-sneaker-collection-trackers-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/how-to-track-sneaker-collection-value"
+  to = "/blog/how-to-track-sneaker-collection-value.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/sneakers-as-investments-2026"
+  to = "/blog/sneakers-as-investments-2026.html"
+  status = 200
+
+# =============================================
+# Blog — GSC keyword targets (7 posts)
+# =============================================
+
+[[redirects]]
+  from = "/blog/jordan-4-black-cat-price"
+  to = "/blog/jordan-4-black-cat-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/jordan-11-cool-grey-price"
+  to = "/blog/jordan-11-cool-grey-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/valentines-day-jordan-4-price"
+  to = "/blog/valentines-day-jordan-4-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/jordan-12-black-taxi-price"
+  to = "/blog/jordan-12-black-taxi-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/nike-dunk-abominable-snowman-price"
+  to = "/blog/nike-dunk-abominable-snowman-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/jordan-4-white-cement-price"
+  to = "/blog/jordan-4-white-cement-price.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/sneaker-release-calendar-2026"
+  to = "/blog/sneaker-release-calendar-2026.html"
   status = 200
