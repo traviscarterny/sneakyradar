@@ -1,7 +1,7 @@
 {
-  "updated": "2026-03-12T08:01:45.987Z",
+  "updated": "2026-03-16T08:01:23.723Z",
   "source": "auto",
-  "count": 30,
+  "count": 31,
   "releases": [
     {
       "name": "Air Jordan 40 \"Copper\"",
@@ -256,22 +256,31 @@
       "collab": true
     },
     {
-      "name": "Nike Air Max 95 OG \"Neon\"",
-      "sku": "HM4740-001",
+      "name": "Nike Ja 3 \"Murray State\"",
+      "sku": "HF2793-004",
       "date": "2026-03-05",
-      "price": 190,
+      "price": 125,
       "brand": "Nike",
-      "color": "Black/Cool Grey-Neon Yellow",
+      "color": "Pure Platinum/Lightning-Dusty Cactus-Deep Royal Blue",
       "collab": false
     },
     {
-      "name": "Nike Air Griffey Max 1 \"Varsity Royal\"",
-      "sku": "DJ5161-400",
-      "date": "2026-03-06",
-      "price": 180,
+      "name": "Supreme x Nike SB Air Max CB 94 Low",
+      "sku": "IM4283-700",
+      "date": "2026-03-05",
+      "price": 145,
       "brand": "Nike",
-      "color": "Varsity Royal/Volt-Black",
-      "collab": false
+      "color": "Metallic Gold/Black-Varsity Red",
+      "collab": true
+    },
+    {
+      "name": "Supreme x Nike SB Air Max CB 94 Low",
+      "sku": "IM4283-100",
+      "date": "2026-03-05",
+      "price": 145,
+      "brand": "Nike",
+      "color": "White/Gum Light Brown-Varsity Red",
+      "collab": true
     }
   ]
 }
