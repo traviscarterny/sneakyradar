@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-23T08:02:07.649Z",
+  "updated": "2026-03-23T08:02:23.886Z",
   "source": "auto",
   "count": 31,
   "releases": [
@@ -196,7 +196,7 @@
       "name": "Air Jordan 3 \"Brazil\"",
       "sku": "IV4871-400",
       "date": "2026-05-16",
-      "price": 210,
+      "price": 0,
       "brand": "Jordan",
       "color": "Racer Blue/Lucky Green-Blue Void-Varsity Maize",
       "collab": false
@@ -232,7 +232,7 @@
       "name": "Air Jordan 3 OG \"World's Best Dad\"",
       "sku": "IF4396-103",
       "date": "2026-05-30",
-      "price": 210,
+      "price": 0,
       "brand": "Jordan",
       "color": "Sail/Black-University Red-Pale Ivory-Palomino",
       "collab": false
