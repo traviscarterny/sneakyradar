@@ -1,7 +1,7 @@
 {
-  "updated": "2026-03-23T08:02:23.886Z",
+  "updated": "2026-03-26T08:04:11.659Z",
   "source": "auto",
-  "count": 31,
+  "count": 30,
   "releases": [
     {
       "name": "Air Jordan 40 \"Copper\"",
@@ -33,7 +33,7 @@
     {
       "name": "Air Jordan 13 \"Chicago\"",
       "sku": "414571-102",
-      "date": "2026-03-13",
+      "date": "2026-03-14",
       "price": 215,
       "brand": "Jordan",
       "color": "White/Black-True Red",
@@ -47,15 +47,6 @@
       "brand": "Jordan",
       "color": "Fir/Gorge Green-Cement Grey-Fire Red",
       "collab": true
-    },
-    {
-      "name": "Jordan Jumpman Jack \"Green Spark\"",
-      "sku": "IM9113-300",
-      "date": "2026-03-14",
-      "price": 205,
-      "brand": "Jordan",
-      "color": "Green Spark/Vapor Green-Black",
-      "collab": false
     },
     {
       "name": "Air Jordan 1 Low OG \"Floral Swoosh\"",
@@ -85,21 +76,30 @@
       "collab": true
     },
     {
-      "name": "Off-White x Air Jordan 1 High OG \"Alaska\"",
-      "sku": "AA3834-100",
-      "date": "2026-03-28",
-      "price": 230,
-      "brand": "Jordan",
-      "color": "White/White",
-      "collab": true
-    },
-    {
       "name": "Air Jordan 3 OG \"Spring is in the Air\"",
       "sku": "IF4396-100",
       "date": "2026-03-28",
       "price": 210,
       "brand": "Jordan",
       "color": "Sail/Jade Aura-Aura-Iced Carmine-Muslin-Iris Whisper",
+      "collab": false
+    },
+    {
+      "name": "Jordan Jumpman Jack \"Green Spark\"",
+      "sku": "IM9113-300",
+      "date": "2026-03-28",
+      "price": 205,
+      "brand": "Jordan",
+      "color": "Green Spark/Vapor Green-Black",
+      "collab": false
+    },
+    {
+      "name": "Air Jordan 1 Low MM V3 \"Suit & Tie\"",
+      "sku": "IR7554-001",
+      "date": "2026-03-31",
+      "price": 140,
+      "brand": "Jordan",
+      "color": "Black/White",
       "collab": false
     },
     {
@@ -110,6 +110,15 @@
       "brand": "Jordan",
       "color": "Pearl Pink/Pink Bloom-Pink Glow-Hyper Orange",
       "collab": false
+    },
+    {
+      "name": "Off-White x Air Jordan 1 High OG \"Alaska\"",
+      "sku": "AA3834-100",
+      "date": "2026-04-03",
+      "price": 230,
+      "brand": "Jordan",
+      "color": "White/White",
+      "collab": true
     },
     {
       "name": "Air Jordan 3 WMNS \"Orange Citrus\"",
@@ -196,7 +205,7 @@
       "name": "Air Jordan 3 \"Brazil\"",
       "sku": "IV4871-400",
       "date": "2026-05-16",
-      "price": 0,
+      "price": 225,
       "brand": "Jordan",
       "color": "Racer Blue/Lucky Green-Blue Void-Varsity Maize",
       "collab": false
@@ -218,24 +227,6 @@
       "brand": "Jordan",
       "color": "Muslin/Shy Pink-Sail-University Red",
       "collab": true
-    },
-    {
-      "name": "Air Jordan 12 \"Bloodline\"",
-      "sku": "CT8013-001",
-      "date": "2026-05-23",
-      "price": 205,
-      "brand": "Jordan",
-      "color": "Black/Varsity Red",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 3 OG \"World's Best Dad\"",
-      "sku": "IF4396-103",
-      "date": "2026-05-30",
-      "price": 0,
-      "brand": "Jordan",
-      "color": "Sail/Black-University Red-Pale Ivory-Palomino",
-      "collab": false
     },
     {
       "name": "SP5DER x adidas Superstar",
