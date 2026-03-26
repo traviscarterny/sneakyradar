@@ -1,7 +1,7 @@
 {
-  "updated": "2026-03-26T08:04:11.659Z",
+  "updated": "2026-03-26T08:04:27.798Z",
   "source": "auto",
-  "count": 30,
+  "count": 31,
   "releases": [
     {
       "name": "Air Jordan 40 \"Copper\"",
@@ -99,7 +99,7 @@
       "date": "2026-03-31",
       "price": 140,
       "brand": "Jordan",
-      "color": "Black/White",
+      "color": "TBD",
       "collab": false
     },
     {
@@ -163,6 +163,15 @@
       "price": 215,
       "brand": "Jordan",
       "color": "Black/Multi-Color-Multi-Color",
+      "collab": false
+    },
+    {
+      "name": "Air Jordan 6 WMNS \"Neutral Olive\"",
+      "sku": "IR2009-133",
+      "date": "2026-04-01",
+      "price": 215,
+      "brand": "Jordan",
+      "color": "Sail/Neutral Olive-Fir-Light Khaki",
       "collab": false
     },
     {
