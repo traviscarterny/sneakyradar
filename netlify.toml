@@ -232,3 +232,32 @@
   from = "/blog/sneaker-release-calendar-2026"
   to = "/blog/sneaker-release-calendar-2026.html"
   status = 200
+
+# =============================================
+# Blog — Batch 4: GSC keyword targets (5 posts)
+# =============================================
+
+[[redirects]]
+  from = "/blog/new-balance-2002r-vs-990"
+  to = "/blog/new-balance-2002r-vs-990.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/best-sneakers-under-150-2026"
+  to = "/blog/best-sneakers-under-150-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/nike-vomero-5-price-guide"
+  to = "/blog/nike-vomero-5-price-guide.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/sneaker-price-alerts-2026"
+  to = "/blog/sneaker-price-alerts-2026.html"
+  status = 200
+
+[[redirects]]
+  from = "/blog/kobe-bryant-air-force-1-persian-violet"
+  to = "/blog/kobe-bryant-air-force-1-persian-violet.html"
+  status = 200
