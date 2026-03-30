@@ -114,7 +114,7 @@ p{margin-bottom:20px;color:#ccc}
 <h1>SNEAKER PRICES <span class="accent">MARCH 2026</span></h1>
 <div class="meta">Updated Mar 2026 · Prices from StockX, GOAT, eBay & Amazon</div>
 
-<div class="sneaker-img hero" data-sneaker="Air Jordan 11 Retro Gamma Blue" data-img="https://images.stockx.com/images/Air-Jordan-11-Retro-Gamma-Blue-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color">March 2026 Price Report</div>
+<div class="sneaker-img hero" data-sneaker="Air Jordan 11 Gamma Blue">March 2026 Price Report</div>
 
 
 <p>Every month, we track price movements across the sneaker resale market. March 2026 brought a wave of releases that shook up pricing for older models. Here's what moved, what dropped, and where the deals are right now.</p>
@@ -127,7 +127,7 @@ p{margin-bottom:20px;color:#ccc}
 
 <div class="shoe-list">
 <div class="shoe-item">
-<div class="sneaker-img wide" data-sneaker="Air Jordan 4 Retro Military Blue" data-img="https://images.stockx.com/images/Air-Jordan-4-Retro-Military-Blue-2024-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color">Jordan 4 Military Blue — Below Retail</div>
+<div class="sneaker-img wide" data-sneaker="Air Jordan 4 Military Blue">Jordan 4 Military Blue — Below Retail</div>
 <h3><a href="/?search=Jordan+4+Military+Blue" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">Air Jordan 4 "Military Blue"</a></h3>
 <div class="details">
 <div>Retail: <span>$215</span></div>
@@ -138,7 +138,7 @@ p{margin-bottom:20px;color:#ccc}
 </div>
 
 <div class="shoe-item">
-<div class="sneaker-img wide" data-sneaker="Yeezy Boost 350 V2 Onyx" data-img="https://images.stockx.com/images/adidas-Yeezy-Boost-350-V2-Onyx-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color">Yeezy 350 V2 Onyx — Steady Decline</div>
+<div class="sneaker-img wide" data-sneaker="Yeezy Boost 350 V2 Onyx">Yeezy 350 V2 Onyx — Steady Decline</div>
 <h3><a href="/?search=Yeezy+350+V2+Onyx" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">adidas Yeezy Boost 350 V2 "Onyx"</a></h3>
 <div class="details">
 <div>Retail: <span>$230</span></div>
@@ -149,7 +149,7 @@ p{margin-bottom:20px;color:#ccc}
 </div>
 
 <div class="shoe-item">
-<div class="sneaker-img wide" data-sneaker="Nike Dunk Low Panda" data-img="https://images.stockx.com/images/Nike-Dunk-Low-Retro-White-Black-2021-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color">Nike Dunk Low Panda — All-Time Low</div>
+<div class="sneaker-img wide" data-sneaker="Nike Dunk Low Panda">Nike Dunk Low Panda — All-Time Low</div>
 <h3><a href="/?search=Nike+Dunk+Low+Panda" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">Nike Dunk Low "Panda"</a></h3>
 <div class="details">
 <div>Retail: <span>$115</span></div>
@@ -164,7 +164,7 @@ p{margin-bottom:20px;color:#ccc}
 
 <div class="shoe-list">
 <div class="shoe-item">
-<div class="sneaker-img wide" data-sneaker="Jordan 1 Retro High Off-White Alaska" data-img="https://www.theshitbot.com/wp-content/uploads/2026/02/alaska.png">Off-White x Jordan 1 Alaska — Pre-Release Hype</div>
+<div class="sneaker-img wide" data-sneaker="Off-White Air Jordan 1 Alaska">Off-White x Jordan 1 Alaska — Pre-Release Hype</div>
 <h3><a href="/?search=Off+White+Jordan+1+Alaska" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">Virgil Abloh Archive x Air Jordan 1 "Alaska"</a></h3>
 <div class="details">
 <div>Retail: <span>$230</span></div>
@@ -175,7 +175,7 @@ p{margin-bottom:20px;color:#ccc}
 </div>
 
 <div class="shoe-item">
-<div class="sneaker-img wide" data-sneaker="Teyana Taylor Air Jordan 3" data-img="https://cdn.sanity.io/images/pu5wtzfc/production/3d97ef083d571444486eba7b2887c4e57afabc68-3000x1874.jpg/teyana-taylor-air-jordan-3-concrete-rose-if3097-300.jpg?w=700&amp;h=437&amp;auto=format"Teyana Taylor Air Jordan 3"h=437data-sneaker="Teyana Taylor Air Jordan 3"auto=format">Teyana Taylor x Jordan 3 — Strong Debut</div>
+<div class="sneaker-img wide" data-sneaker="Teyana Taylor Air Jordan 3">Teyana Taylor x Jordan 3 — Strong Debut</div>
 <h3><a href="/?search=Teyana+Taylor+Jordan+3" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">Teyana Taylor x Air Jordan 3 "Concrete Rose"</a></h3>
 <div class="details">
 <div>Retail: <span>$280</span></div>
@@ -215,25 +215,37 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll(".sneaker-img").forEach(function(el) {
     var label = el.textContent.trim();
     el.setAttribute("data-label", label);
-    el.innerHTML = '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e0e0e 0%,#161616 50%,#0e0e0e 100%)"></div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="position:absolute;opacity:0.06;width:70%;max-width:300px"><circle cx="100" cy="100" r="90" fill="none" stroke="#ff3c00" stroke-width="1.5"/><circle cx="100" cy="100" r="60" fill="none" stroke="#ff3c00" stroke-width="1"/><circle cx="100" cy="100" r="30" fill="none" stroke="#ff3c00" stroke-width="0.8"/><line x1="100" y1="5" x2="100" y2="195" stroke="#ff3c00" stroke-width="0.5"/><line x1="5" y1="100" x2="195" y2="100" stroke="#ff3c00" stroke-width="0.5"/></svg><span style="position:relative;z-index:1;padding:0 24px;text-align:center;line-height:1.3;font-family:Bebas Neue,sans-serif;font-size:1.2rem;letter-spacing:3px;color:#ff3c00;text-shadow:0 0 30px rgba(255,60,0,0.3)">' + label + '</span>';
+    el.innerHTML = '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e0e0e 0%,#161616 50%,#0e0e0e 100%)"></div>' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="position:absolute;opacity:0.06;width:70%;max-width:300px">' +
+      '<circle cx="100" cy="100" r="90" fill="none" stroke="#ff3c00" stroke-width="1.5"/>' +
+      '<circle cx="100" cy="100" r="60" fill="none" stroke="#ff3c00" stroke-width="1"/>' +
+      '<circle cx="100" cy="100" r="30" fill="none" stroke="#ff3c00" stroke-width="0.8"/>' +
+      '<line x1="100" y1="5" x2="100" y2="195" stroke="#ff3c00" stroke-width="0.5"/>' +
+      '<line x1="5" y1="100" x2="195" y2="100" stroke="#ff3c00" stroke-width="0.5"/></svg>' +
+      '<span style="position:relative;z-index:1;padding:0 24px;text-align:center;line-height:1.3;font-family:Bebas Neue,sans-serif;font-size:1.2rem;letter-spacing:3px;color:#ff3c00;text-shadow:0 0 30px rgba(255,60,0,0.3)">' + label + '</span>';
   });
-  document.querySelectorAll("[data-sneaker]").forEach(function(el) {
-    var hardcoded = el.getAttribute("data-img");
+
+  document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
     var q = el.getAttribute("data-sneaker");
-    function loadImg(src) {
-      var img = document.createElement("img");
-      img.src = src; img.alt = q;
-      img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#111;padding:16px;border-radius:8px;";
-      img.onload = function() { el.innerHTML = ""; el.style.position = "relative"; el.appendChild(img); };
-    }
-    if (hardcoded) {
-      loadImg(hardcoded);
-    } else {
-      fetch("/.netlify/functions/anthropic", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"search",query:q,limit:1})})
-        .then(function(r){return r.json()})
-        .then(function(j){if(j.data&&j.data[0]&&j.data[0].image)loadImg(j.data[0].image)})
-        .catch(function(e){console.log("img load fail:",q)});
-    }
+    try {
+      var r = await fetch("/.netlify/functions/anthropic", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({action: "search", query: q, limit: 1})
+      });
+      var j = await r.json();
+      if (j.data && j.data[0] && j.data[0].image) {
+        var img = document.createElement("img");
+        img.src = j.data[0].image;
+        img.alt = q;
+        img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#111;padding:16px;border-radius:8px;";
+        img.onload = function() {
+          el.innerHTML = "";
+          el.style.position = "relative";
+          el.appendChild(img);
+        };
+      }
+    } catch(e) { console.log("img load fail:", q); }
   });
 });
 </script>

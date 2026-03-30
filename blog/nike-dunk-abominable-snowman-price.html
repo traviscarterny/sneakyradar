@@ -106,7 +106,7 @@ p{margin-bottom:20px;color:#ccc}
 <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Dunk Abominable Snowman</div>
 <h1>NIKE DUNK <span class="accent">ABOMINABLE SNOWMAN</span></h1>
 <div class="meta">Updated Mar 2026 · Prices from StockX, GOAT, eBay & Amazon</div>
-<div class="sneaker-img hero" data-sneaker="Nike Dunk Low Abominable Snowman" data-img="https://images.stockx.com/images/Nike-Dunk-Low-Abominable-Snowman-GS-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color">Nike Dunk Abominable Snowman</div>
+<div class="sneaker-img hero" data-sneaker="Nike Dunk Low Abominable Snowman">Nike Dunk Abominable Snowman</div>
 
 <p>The Nike Dunk Low Abominable Snowman brings a fun, furry twist to the classic Dunk silhouette. White faux fur covers the upper with icy blue accents, inspired by the mythical snow creature. Here's what they cost.</p>
 
@@ -118,7 +118,7 @@ p{margin-bottom:20px;color:#ccc}
 
 <div class="shoe-list">
 <div class="shoe-item">
-<div class="sneaker-img wide" data-sneaker="Nike Dunk Low Abominable Snowman" data-img="https://images.stockx.com/images/Nike-Dunk-Low-Abominable-Snowman-GS-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color">Nike Dunk Low "Abominable Snowman"</div>
+<div class="sneaker-img wide" data-sneaker="Nike Dunk Low Abominable Snowman">Nike Dunk Low "Abominable Snowman"</div>
 <h3><a href="/?search=Nike+Dunk+Abominable+Snowman" style="color:inherit;text-decoration:none;border-bottom:1px dashed #333">Nike Dunk Low "Abominable Snowman"</a></h3>
 <div class="details">
 <div>Retail: <span>$125</span></div>
@@ -140,7 +140,7 @@ p{margin-bottom:20px;color:#ccc}
 
 <h2>DESIGN DETAILS</h2>
 
-<div class="sneaker-img wide" data-sneaker="Nike Dunk Low Abominable Snowman" data-img="https://images.stockx.com/images/Nike-Dunk-Low-Abominable-Snowman-GS-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color">Unique Furry Texture</div>
+<div class="sneaker-img wide" data-sneaker="Nike Dunk Low Yeti">Unique Furry Texture</div>
 
 <p>What makes the Abominable Snowman Dunk stand out is the full faux fur upper. Unlike standard leather or suede Dunks, the textured material gives these a completely different look and feel. The icy blue accents on the Swoosh, tongue, and outsole complete the winter theme.</p>
 
@@ -178,23 +178,18 @@ document.addEventListener("DOMContentLoaded", function() {
     el.setAttribute("data-label", label);
     el.innerHTML = '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#0e0e0e 0%,#161616 50%,#0e0e0e 100%)"></div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="position:absolute;opacity:0.06;width:70%;max-width:300px"><circle cx="100" cy="100" r="90" fill="none" stroke="#ff3c00" stroke-width="1.5"/><circle cx="100" cy="100" r="60" fill="none" stroke="#ff3c00" stroke-width="1"/><circle cx="100" cy="100" r="30" fill="none" stroke="#ff3c00" stroke-width="0.8"/><line x1="100" y1="5" x2="100" y2="195" stroke="#ff3c00" stroke-width="0.5"/><line x1="5" y1="100" x2="195" y2="100" stroke="#ff3c00" stroke-width="0.5"/></svg><span style="position:relative;z-index:1;padding:0 24px;text-align:center;line-height:1.3;font-family:Bebas Neue,sans-serif;font-size:1.2rem;letter-spacing:3px;color:#ff3c00;text-shadow:0 0 30px rgba(255,60,0,0.3)">' + label + '</span>';
   });
-  document.querySelectorAll("[data-sneaker]").forEach(function(el) {
-    var hardcoded = el.getAttribute("data-img");
+  document.querySelectorAll("[data-sneaker]").forEach(async function(el) {
     var q = el.getAttribute("data-sneaker");
-    function loadImg(src) {
-      var img = document.createElement("img");
-      img.src = src; img.alt = q;
-      img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#111;padding:16px;border-radius:8px;";
-      img.onload = function() { el.innerHTML = ""; el.style.position = "relative"; el.appendChild(img); };
-    }
-    if (hardcoded) {
-      loadImg(hardcoded);
-    } else {
-      fetch("/.netlify/functions/anthropic", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"search",query:q,limit:1})})
-        .then(function(r){return r.json()})
-        .then(function(j){if(j.data&&j.data[0]&&j.data[0].image)loadImg(j.data[0].image)})
-        .catch(function(e){console.log("img load fail:",q)});
-    }
+    try {
+      var r = await fetch("/.netlify/functions/anthropic", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"search",query:q,limit:1})});
+      var j = await r.json();
+      if (j.data && j.data[0] && j.data[0].image) {
+        var img = document.createElement("img");
+        img.src = j.data[0].image; img.alt = q;
+        img.style.cssText = "width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;background:#111;padding:16px;border-radius:8px;";
+        img.onload = function() { el.innerHTML = ""; el.style.position = "relative"; el.appendChild(img); };
+      }
+    } catch(e) { console.log("img load fail:", q); }
   });
 });
 </script>
