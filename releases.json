@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-13T08:04:36.951Z",
+  "updated": "2026-04-13T08:04:52.828Z",
   "source": "auto",
   "count": 32,
   "releases": [
@@ -193,6 +193,15 @@
       "collab": true
     },
     {
+      "name": "Palace x Nike Air Max 95",
+      "sku": "IQ7708-095",
+      "date": "2026-04-10",
+      "price": 200,
+      "brand": "Nike",
+      "color": "Metallic Silver/Aluminum/Black",
+      "collab": true
+    },
+    {
       "name": "Pharrell x adidas VIRGINIA Vario Flat Earther",
       "sku": "KI7669",
       "date": "2026-04-11",
@@ -209,6 +218,15 @@
       "brand": "Adidas",
       "color": "Chalk White/Core Black-Chalk White",
       "collab": true
+    },
+    {
+      "name": "Air Jordan 1 High OG \"Flight Club\"",
+      "sku": "II9811-001",
+      "date": "2026-04-11",
+      "price": 185,
+      "brand": "Jordan",
+      "color": "Black/Sail/Gum Medium Brown/University Red",
+      "collab": false
     },
     {
       "name": "adidas Anthony Edwards 2 \"Glow\"",
@@ -263,24 +281,6 @@
       "brand": "Nike",
       "color": "Summit White/Birch-Pine Green-University Gold",
       "collab": true
-    },
-    {
-      "name": "Palace x Nike Air Max 95",
-      "sku": "IQ7708-095",
-      "date": "2026-04-10",
-      "price": 200,
-      "brand": "Nike",
-      "color": "Metallic Silver/Aluminum/Black",
-      "collab": true
-    },
-    {
-      "name": "Air Jordan 1 High OG \"Flight Club\"",
-      "sku": "II9811-001",
-      "date": "2026-04-11",
-      "price": 185,
-      "brand": "Jordan",
-      "color": "Black/Sail/Gum Medium Brown/University Red",
-      "collab": false
     },
     {
       "name": "Nike Air Max 90 \"Ultramarine\"",
