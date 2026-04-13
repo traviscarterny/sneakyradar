@@ -1,7 +1,7 @@
 {
-  "updated": "2026-04-09T08:03:27.927Z",
+  "updated": "2026-04-13T08:04:36.951Z",
   "source": "auto",
-  "count": 34,
+  "count": 32,
   "releases": [
     {
       "name": "Nike Sabrina 3 \"What The\"",
@@ -148,15 +148,6 @@
       "collab": false
     },
     {
-      "name": "Nike Air Force 1 Low \"Stadium Green\"",
-      "sku": "IB6834-300",
-      "date": "2026-04-10",
-      "price": 130,
-      "brand": "Nike",
-      "color": "Stadium Green/Laser Orange-Bright Crimson",
-      "collab": false
-    },
-    {
       "name": "Ja Morant x Nike Air Force 1 Low \"Denim\"",
       "sku": "IQ9773-400",
       "date": "2026-04-10",
@@ -247,8 +238,8 @@
       "collab": false
     },
     {
-      "name": "Nike Kobe 11 Elite Protro \"Fade To Black\"",
-      "sku": "IM4260-001",
+      "name": "Nike Kobe 11 EM Protro \"Mamba Day\"",
+      "sku": "IU4902-900",
       "date": "2026-04-13",
       "price": 200,
       "brand": "Nike",
@@ -256,8 +247,8 @@
       "collab": false
     },
     {
-      "name": "Nike Kobe 11 EM Protro \"Mamba Day\"",
-      "sku": "IU4902-900",
+      "name": "Nike Kobe 11 Elite Protro \"Fade To Black\"",
+      "sku": "IM4260-001",
       "date": "2026-04-13",
       "price": 220,
       "brand": "Nike",
@@ -265,49 +256,40 @@
       "collab": false
     },
     {
-      "name": "GOLF le FLEUR x Converse 1908 Jogger \"Yarrow\"",
-      "sku": "A21430C",
-      "date": "2026-04-07",
-      "price": 105,
-      "brand": "Other",
-      "color": "Yarrow/Plume/Brown",
-      "collab": true
-    },
-    {
-      "name": "GOLF le FLEUR x Converse 1908 Jogger \"Green Glow\"",
-      "sku": "A21431C",
-      "date": "2026-04-07",
-      "price": 105,
-      "brand": "Other",
-      "color": "Green Glow/Nutria/Deep Dive",
-      "collab": true
-    },
-    {
-      "name": "GOLF le FLEUR x Converse 1908 Jogger \"Cameo Blue\"",
-      "sku": "A21432C",
-      "date": "2026-04-07",
-      "price": 105,
-      "brand": "Other",
-      "color": "Cameo Blue/Deep Dive/Brown",
-      "collab": true
-    },
-    {
-      "name": "GOLF le FLEUR x Converse 1908 Jogger \"Foggy Dew\"",
-      "sku": "A21433C",
-      "date": "2026-04-07",
-      "price": 105,
-      "brand": "Other",
-      "color": "Foggy Dew/Mirage Gray",
-      "collab": true
-    },
-    {
       "name": "Tom Sachs x NikeCraft General Purpose Shoe \"Bricolage\"",
       "sku": "DA6672-100",
-      "date": "2026-04-08",
-      "price": 125,
+      "date": "2026-04-14",
+      "price": 110,
       "brand": "Nike",
-      "color": "Summit White/Birch/Pine Green/University Gold",
+      "color": "Summit White/Birch-Pine Green-University Gold",
       "collab": true
+    },
+    {
+      "name": "Palace x Nike Air Max 95",
+      "sku": "IQ7708-095",
+      "date": "2026-04-10",
+      "price": 200,
+      "brand": "Nike",
+      "color": "Metallic Silver/Aluminum/Black",
+      "collab": true
+    },
+    {
+      "name": "Air Jordan 1 High OG \"Flight Club\"",
+      "sku": "II9811-001",
+      "date": "2026-04-11",
+      "price": 185,
+      "brand": "Jordan",
+      "color": "Black/Sail/Gum Medium Brown/University Red",
+      "collab": false
+    },
+    {
+      "name": "Nike Air Max 90 \"Ultramarine\"",
+      "sku": "IU0767-001",
+      "date": "2026-04-14",
+      "price": 150,
+      "brand": "Nike",
+      "color": "Light Base Grey/Sport Royal/Coconut Milk/White/Platinum Tint/Siren Red",
+      "collab": false
     }
   ]
 }
