@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-16T08:03:08.825Z",
+  "updated": "2026-04-16T08:03:32.883Z",
   "source": "auto",
   "count": 44,
   "releases": [
@@ -379,7 +379,7 @@
       "price": 205,
       "brand": "Jordan",
       "color": "Black/Metallic Gold/Pearl White",
-      "collab": false
+      "collab": true
     },
     {
       "name": "WNBA x Nike Dunk Low WMNS \"30th Anniversary\"",
