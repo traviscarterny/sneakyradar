@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-16T08:03:32.883Z",
+  "updated": "2026-04-20T08:03:56.676Z",
   "source": "auto",
   "count": 44,
   "releases": [
@@ -352,7 +352,7 @@
       "price": 160,
       "brand": "Nike",
       "color": "Metallic Silver/Light Crimson/Chalk/Metallic Silver",
-      "collab": false
+      "collab": true
     },
     {
       "name": "Vans Old Skool 36 Pearlized Pack \"Vintage Cocoa Brown\"",
