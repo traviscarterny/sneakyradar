@@ -1,10 +1,10 @@
 {
-  "updated": "2026-04-23T08:03:09.077Z",
+  "updated": "2026-04-23T08:03:24.377Z",
   "source": "auto",
   "count": 33,
   "releases": [
     {
-      "name": "Air Jordan 3 \"Spring Flowers\" (GS)",
+      "name": "Air Jordan 3 \"Spring Flowers\"",
       "sku": "II0599-600",
       "date": "2026-04-01",
       "price": 155,
@@ -294,7 +294,7 @@
     {
       "name": "Nike Moon Shoe \"Soft Pearl\"",
       "sku": "II0407-001",
-      "date": "2026-04-02",
+      "date": "2026-04-01",
       "price": 200,
       "brand": "Nike",
       "color": "Soft Pearl/Black",
