@@ -1,7 +1,7 @@
 {
-  "updated": "2026-04-23T08:03:24.377Z",
+  "updated": "2026-04-27T08:01:33.985Z",
   "source": "auto",
-  "count": 33,
+  "count": 19,
   "releases": [
     {
       "name": "Air Jordan 3 \"Spring Flowers\"",
@@ -58,6 +58,15 @@
       "collab": false
     },
     {
+      "name": "Air Jordan 4028 \"Black/Metallic Gold\"",
+      "sku": "IR2085-001",
+      "date": "2026-04-24",
+      "price": 205,
+      "brand": "Jordan",
+      "color": "Black/Metallic Gold-Pearl White",
+      "collab": false
+    },
+    {
       "name": "Air Jordan 5 OG \"White Metallic\"",
       "sku": "HQ7978-103",
       "date": "2026-04-25",
@@ -85,165 +94,30 @@
       "collab": false
     },
     {
-      "name": "Air Jordan 4 \"Toro Bravo\"",
-      "sku": "FQ8138-600",
-      "date": "2026-05-02",
-      "price": 220,
+      "name": "Air Jordan 4 GS \"Infrared 23\"",
+      "sku": "II1271-001",
+      "date": "2026-05-01",
+      "price": 165,
       "brand": "Jordan",
-      "color": "Fire Red/White-Black-Cement Grey",
+      "color": "Black/Bright Mango-Barely Volt-Infrared 23",
       "collab": false
     },
     {
-      "name": "Air Jordan 11 Low \"Mother's Day\"",
-      "sku": "AH7860-102",
-      "date": "2026-05-02",
+      "name": "Air Jordan 11 Low TD Cleat \"Black Patent\"",
+      "sku": "IQ8113-001",
+      "date": "2026-05-01",
       "price": 195,
       "brand": "Jordan",
-      "color": "White/Metallic Gold-Team Gold",
+      "color": "Black/Anthracite-Metallic Silver",
       "collab": false
-    },
-    {
-      "name": "Nigel Sylvester x Air Jordan 4",
-      "sku": "IQ8055-100",
-      "date": "2026-05-09",
-      "price": 230,
-      "brand": "Jordan",
-      "color": "Sail/Cinnabar-Black",
-      "collab": true
     },
     {
       "name": "Air Jordan 1 Low OG \"Banned\"",
       "sku": "IW6276-001",
-      "date": "2026-05-16",
+      "date": "2026-05-02",
       "price": 145,
       "brand": "Jordan",
       "color": "Black/Black-Varsity Red-Summit White",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 3 \"Brazil\"",
-      "sku": "IV4871-400",
-      "date": "2026-05-16",
-      "price": 225,
-      "brand": "Jordan",
-      "color": "Racer Blue/Lucky Green-Blue Void-Varsity Maize",
-      "collab": false
-    },
-    {
-      "name": "Travis Scott x Air Jordan 1 Low OG",
-      "sku": "IQ7604-101",
-      "date": "2026-05-22",
-      "price": 155,
-      "brand": "Jordan",
-      "color": "Sail/Tropical Pink-Shy Pink-Muslin",
-      "collab": true
-    },
-    {
-      "name": "Travis Scott x Air Jordan 1 Low OG",
-      "sku": "IQ7604-100",
-      "date": "2026-05-22",
-      "price": 155,
-      "brand": "Jordan",
-      "color": "Muslin/Shy Pink-Sail-University Red",
-      "collab": true
-    },
-    {
-      "name": "Air Jordan 12 \"Bloodline\"",
-      "sku": "CT8013-001",
-      "date": "2026-05-23",
-      "price": 215,
-      "brand": "Jordan",
-      "color": "Black/Varsity Red",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 3 OG \"World's Best Dad\"",
-      "sku": "IF4396-103",
-      "date": "2026-05-30",
-      "price": 200,
-      "brand": "Jordan",
-      "color": "Sail/Black-University Red-Pale Ivory-Palomino",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 4014 \"Ferrari\"",
-      "sku": "IR2082-600",
-      "date": "2026-03-01",
-      "price": 200,
-      "brand": "Jordan",
-      "color": "Challenge Red/Black-Vibrant Yellow",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 15 23RE \"Black Muslin\"",
-      "sku": "IV7637-100",
-      "date": "2026-06-06",
-      "price": 200,
-      "brand": "Jordan",
-      "color": "Black/Muslin",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 3 OG \"Bin 23\"",
-      "sku": "IO7744-600",
-      "date": "2026-06-09",
-      "price": 350,
-      "brand": "Jordan",
-      "color": "Team Red/Metallic Gold-Burgundy Crush-Coconut Milk",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 5 \"Black/University Blue\"",
-      "sku": "DD0587-008",
-      "date": "2026-06-20",
-      "price": 215,
-      "brand": "Jordan",
-      "color": "Black/University Blue-White",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 7 \"Miro\"",
-      "sku": "IQ6573-100",
-      "date": "2026-06-27",
-      "price": 200,
-      "brand": "Jordan",
-      "color": "White/Metallic Gold-Sport Red-Varsity Royal",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 5 \"Sunset\"",
-      "sku": "IV5678-102",
-      "date": "2026-07-01",
-      "price": 215,
-      "brand": "Jordan",
-      "color": "White/Sunset-Fire Red-Black",
-      "collab": false
-    },
-    {
-      "name": "Free The Youth x Air Jordan 16",
-      "sku": "IV7638-001",
-      "date": "2026-07-17",
-      "price": 250,
-      "brand": "Jordan",
-      "color": "Metallic Silver/Picante Red-Total Orange",
-      "collab": true
-    },
-    {
-      "name": "Air Jordan 3 \"True Blue\"",
-      "sku": "IF4396-102",
-      "date": "2026-07-18",
-      "price": 230,
-      "brand": "Jordan",
-      "color": "White/Varsity Red-True Blue-Cement Grey-Anthracite",
-      "collab": false
-    },
-    {
-      "name": "Air Jordan 4 \"Comic\"",
-      "sku": "IO2362-100",
-      "date": "2026-07-25",
-      "price": 220,
-      "brand": "Jordan",
-      "color": "White/Neutral Grey-Fire Pink-Light Arctic Pink-Muslin",
       "collab": false
     },
     {
