@@ -1,268 +1,277 @@
 {
-  "updated": "2026-04-30T08:01:37.063Z",
+  "updated": "2026-05-04T08:03:50.432Z",
   "source": "auto",
-  "count": 44,
+  "count": 45,
   "releases": [
     {
-      "name": "Nike Sabrina 3 \"What The\"",
-      "sku": "IO7845-300",
-      "date": "2026-04-01",
-      "price": 145,
-      "brand": "Nike",
-      "color": "Igloo/Blue Crystal-Light Atomic Pink-Hot Lava",
-      "collab": false
-    },
-    {
-      "name": "Nike Mind 001 \"Sail\"",
-      "sku": "HQ4307-100",
-      "date": "2026-04-02",
-      "price": 95,
-      "brand": "Nike",
-      "color": "Sail/Hyper Crimson-Black-Metallic Platinum",
-      "collab": false
-    },
-    {
-      "name": "Nike Mind 001 \"Geode Teal\"",
-      "sku": "HQ4307-301",
-      "date": "2026-04-02",
-      "price": 95,
-      "brand": "Nike",
-      "color": "Geode Teal/Metallic Cool Grey-Light Menta-Canary-White",
-      "collab": false
-    },
-    {
-      "name": "Nike Mind 001 \"Team Red\"",
-      "sku": "HQ4307-601",
-      "date": "2026-04-02",
-      "price": 95,
-      "brand": "Nike",
-      "color": "Team Red/University Red-Midnight Navy-Chrome",
-      "collab": false
-    },
-    {
-      "name": "Converse SHAI 001 \"Camo\"",
-      "sku": "A19839C",
-      "date": "2026-04-02",
-      "price": 130,
-      "brand": "Other",
-      "color": "Camo",
-      "collab": false
-    },
-    {
-      "name": "Nike Moon Shoe \"Soft Pearl\"",
-      "sku": "II0407-001",
-      "date": "2026-04-03",
-      "price": 105,
-      "brand": "Nike",
-      "color": "Soft Pearl/Black",
-      "collab": false
-    },
-    {
-      "name": "Nike LeBron 23 \"Shoe Bag\"",
-      "sku": "IV5647-800",
-      "date": "2026-04-03",
-      "price": 200,
-      "brand": "Nike",
-      "color": "Safety Orange/Metallic Gold-Wolf Grey",
-      "collab": false
-    },
-    {
-      "name": "Fragment x Nike Air Liquid Max",
-      "sku": "IQ8601-001",
-      "date": "2026-04-03",
-      "price": 225,
-      "brand": "Nike",
-      "color": "Black/Anthracite",
-      "collab": true
-    },
-    {
-      "name": "Nike LeBron 23 \"Good Intentions\"",
-      "sku": "IB9557-601",
-      "date": "2026-04-03",
-      "price": 235,
-      "brand": "Nike",
-      "color": "Hyper Pink-Black-Voltage Green-Alabaster",
-      "collab": false
-    },
-    {
-      "name": "adidas Anthony Edwards 2 \"Antlanta\"",
-      "sku": "JQ9495",
-      "date": "2026-04-04",
-      "price": 130,
-      "brand": "Adidas",
-      "color": "Equipment Green/Core Black-Warm Vanilla",
-      "collab": false
-    },
-    {
-      "name": "adidas Anthony Edwards 2 \"Easter\"",
-      "sku": "JQ9505",
-      "date": "2026-04-05",
-      "price": 130,
-      "brand": "Adidas",
-      "color": "Almost Yellow/Bliss Lilac-Flash Aqua",
-      "collab": false
-    },
-    {
-      "name": "Melitta Baumeister x Nike Pegasus Premium",
-      "sku": "IQ7336-700",
-      "date": "2026-04-08",
-      "price": 230,
-      "brand": "Nike",
-      "color": "Volt/Cyber-Off White-Black",
-      "collab": true
-    },
-    {
-      "name": "Melitta Baumeister x Nike Vomero Premium",
-      "sku": "IQ7166-800",
-      "date": "2026-04-08",
-      "price": 240,
-      "brand": "Nike",
-      "color": "Total Orange/Hyper Crimson-Orange Chalk-Black",
-      "collab": true
-    },
-    {
-      "name": "Nike Air Force 1 Patent \"Topaz Gold\"",
-      "sku": "IO4489-700",
-      "date": "2026-04-09",
-      "price": 120,
-      "brand": "Nike",
-      "color": "Topaz Gold/Pine Green-Light Laser Orange-Midas Gold",
-      "collab": false
-    },
-    {
-      "name": "Nike Air Force 1 Patent \"Dark Team Red\"",
-      "sku": "IO4489-601",
-      "date": "2026-04-09",
-      "price": 120,
-      "brand": "Nike",
-      "color": "Dark Team Red/Challenge Red-University Gold-Safety Orange",
-      "collab": false
-    },
-    {
-      "name": "Nike Air Force 1 Patent \"Mystic Navy\"",
-      "sku": "IO4489-400",
-      "date": "2026-04-09",
-      "price": 120,
-      "brand": "Nike",
-      "color": "Mystic Navy/Light Liquid Lime-Grape Ice-Light Violet Ore",
-      "collab": false
-    },
-    {
-      "name": "Ja Morant x Nike Air Force 1 Low \"Denim\"",
-      "sku": "IQ9773-400",
-      "date": "2026-04-10",
-      "price": 130,
-      "brand": "Nike",
-      "color": "Light Armory Blue/Metallic Silver-White",
-      "collab": true
-    },
-    {
-      "name": "Jurassic Park x Nike Ja 3 \"Raptor\"",
-      "sku": "IU7240-001",
-      "date": "2026-04-10",
-      "price": 135,
-      "brand": "Nike",
-      "color": "Anthracite/Yellow Ochre-Bright Crimson",
-      "collab": true
-    },
-    {
-      "name": "Jurassic Park x Nike Ja 3 \"Explorer\"",
-      "sku": "IU7240-300",
-      "date": "2026-04-10",
-      "price": 135,
-      "brand": "Nike",
-      "color": "Green Spark/University Red-Dynamic Yellow-Black",
-      "collab": true
-    },
-    {
-      "name": "Nike LeBron 23 \"For The Record\"",
-      "sku": "IB9557-100",
-      "date": "2026-04-10",
-      "price": 235,
-      "brand": "Nike",
-      "color": "White/Black",
-      "collab": false
-    },
-    {
-      "name": "Hellstar x adidas Superstar \"Hazy Orange\"",
-      "sku": "LA1501",
-      "date": "2026-04-10",
-      "price": 200,
-      "brand": "Adidas",
-      "color": "Hazy Orange/Silver Metallic-Core Black",
-      "collab": true
-    },
-    {
-      "name": "Pharrell x adidas VIRGINIA Vario Flat Earther",
-      "sku": "KI7669",
-      "date": "2026-04-11",
-      "price": 140,
-      "brand": "Adidas",
-      "color": "Chalk White/Green-Chalk White",
-      "collab": true
-    },
-    {
-      "name": "Pharrell x adidas VIRGINIA Vario Flat Earther",
-      "sku": "KI7668",
-      "date": "2026-04-11",
-      "price": 140,
-      "brand": "Adidas",
-      "color": "Chalk White/Core Black-Chalk White",
-      "collab": true
-    },
-    {
-      "name": "adidas Anthony Edwards 2 \"Glow\"",
-      "sku": "JR1572",
-      "date": "2026-04-12",
-      "price": 130,
-      "brand": "Adidas",
-      "color": "Core Black/Lime Burst",
-      "collab": false
-    },
-    {
-      "name": "adidas Harden Vol. 10 \"Marathon\"",
-      "sku": "KK3100",
-      "date": "2026-04-12",
+      "name": "Jalen Williams x adidas Harden Vol. 10 \"Core White/Core Black\"",
+      "sku": "KZ7544",
+      "date": "2026-05-01",
       "price": 160,
       "brand": "Adidas",
-      "color": "Royal Blue/Cream White-Royal Blue",
+      "color": "Core White/Core Black",
+      "collab": true
+    },
+    {
+      "name": "Nike Air DT Max 96 Low \"Black/Metallic Gold-White\"",
+      "sku": "IF5478-001",
+      "date": "2026-05-01",
+      "price": 170,
+      "brand": "Nike",
+      "color": "Black/Metallic Gold-White",
       "collab": false
     },
     {
-      "name": "Nike Kobe 9 Elite Low EM Protro \"Steam\"",
-      "sku": "IH1401-003",
-      "date": "2026-04-13",
+      "name": "Nike Air Zoom Huarache 2K4 \"White/Varsity Red-Black\"",
+      "sku": "IV3782-100",
+      "date": "2026-05-01",
       "price": 190,
       "brand": "Nike",
-      "color": "Light Silver/Summit White-Steam",
+      "color": "White/Varsity Red-Black",
       "collab": false
     },
     {
-      "name": "Nike Kobe 11 EM Protro \"Mamba Day\"",
-      "sku": "IU4902-900",
-      "date": "2026-04-13",
+      "name": "Nike Kobe 3 Low Protro \"Mambacita\"",
+      "sku": "IQ3916-100",
+      "date": "2026-05-01",
       "price": 200,
       "brand": "Nike",
-      "color": "Black/Metallic Gold",
+      "color": "White/Black-Metallic Gold",
       "collab": false
     },
     {
-      "name": "Nike Kobe 11 Elite Protro \"Fade To Black\"",
-      "sku": "IM4260-001",
-      "date": "2026-04-13",
-      "price": 220,
+      "name": "Nike A'Two \"Pink Beam\"",
+      "sku": "IH1135-600",
+      "date": "2026-05-02",
+      "price": 145,
       "brand": "Nike",
-      "color": "Black/Metallic Gold",
+      "color": "Pink Beam/Black",
       "collab": false
     },
     {
-      "name": "Tom Sachs x NikeCraft General Purpose Shoe \"Bricolage\"",
-      "sku": "DA6672-100",
-      "date": "2026-04-14",
-      "price": 110,
+      "name": "Nike Ja 3 \"Uncle Phil\"",
+      "sku": "IH1097-400",
+      "date": "2026-05-04",
+      "price": 135,
       "brand": "Nike",
-      "color": "Summit White/Birch-Pine Green-University Gold",
+      "color": "Blue Chill/Fire Red-Zitron-Blue Legend",
+      "collab": false
+    },
+    {
+      "name": "Nike GT Cut 4 \"Rob Dillingham\" PE",
+      "sku": "IR1829-001",
+      "date": "2026-05-04",
+      "price": 210,
+      "brand": "Nike",
+      "color": "Metallic Silver/Iron Grey",
+      "collab": false
+    },
+    {
+      "name": "Patta x Nike Mercurial Vapor 16 Elite FG \"Chrome/Black-White\"",
+      "sku": "IQ3365-001",
+      "date": "2026-05-05",
+      "price": 320,
+      "brand": "Nike",
+      "color": "Chrome/Black-White",
       "collab": true
+    },
+    {
+      "name": "Patta x Nike Mercurial Vapor 16 Elite FG \"Chrome/White-Noise Aqua\"",
+      "sku": "IQ3365-002",
+      "date": "2026-05-05",
+      "price": 320,
+      "brand": "Nike",
+      "color": "Chrome/White-Noise Aqua",
+      "collab": true
+    },
+    {
+      "name": "Reebok ICECREAM Board Flip \"Pink Lemonade\"",
+      "sku": "100267090",
+      "date": "2026-05-06",
+      "price": 150,
+      "brand": "Other",
+      "color": "Red/Pink-Yellow",
+      "collab": true
+    },
+    {
+      "name": "Reebok ICECREAM Board Flip \"Watermelon\"",
+      "sku": "100271140",
+      "date": "2026-05-06",
+      "price": 150,
+      "brand": "Other",
+      "color": "Watermelon/Pink",
+      "collab": true
+    },
+    {
+      "name": "Jurassic Park x Nike Ja 3 \"Cloud Island\"",
+      "sku": "IU7240-002",
+      "date": "2026-05-07",
+      "price": 145,
+      "brand": "Nike",
+      "color": "Metallic Silver/White-Baltic Blue-Black",
+      "collab": true
+    },
+    {
+      "name": "Nike Air Max 95 Big Bubble \"Slate\"",
+      "sku": "IH7855-100",
+      "date": "2026-05-07",
+      "price": 190,
+      "brand": "Nike",
+      "color": "White/Emerald Green-Lake Blue-French Blue-Obsidian-Black",
+      "collab": false
+    },
+    {
+      "name": "Nike Air Max 1000.2 \"Black/White\"",
+      "sku": "JF3484-001",
+      "date": "2026-05-07",
+      "price": 200,
+      "brand": "Nike",
+      "color": "Black/White",
+      "collab": false
+    },
+    {
+      "name": "Nike Sabrina 3 \"WNBA 30th Anniversary\"",
+      "sku": "IH1125-100",
+      "date": "2026-05-08",
+      "price": 135,
+      "brand": "Nike",
+      "color": "Sail/Atom Red-Photo Blue-Team Navy",
+      "collab": false
+    },
+    {
+      "name": "Nike Book 2 \"WNBA 30th Anniversary\"",
+      "sku": "IR6333-100",
+      "date": "2026-05-08",
+      "price": 145,
+      "brand": "Nike",
+      "color": "White/Fireberry-Light Photo Blue-Midnight Navy",
+      "collab": false
+    },
+    {
+      "name": "Nike A'Two \"WNBA 30th Anniversary\"",
+      "sku": "IH1137-001",
+      "date": "2026-05-08",
+      "price": 155,
+      "brand": "Nike",
+      "color": "Black/Multi-Color-Metallic Silver",
+      "collab": false
+    },
+    {
+      "name": "Nike Kobe 9 Elite Low EM Protro \"WNBA\"",
+      "sku": "IM6119-800",
+      "date": "2026-05-08",
+      "price": 190,
+      "brand": "Nike",
+      "color": "Orange Frost/Brilliant Orange-Summit White-Ice Peach",
+      "collab": false
+    },
+    {
+      "name": "Nike LeBron 23 \"Old Glory\"",
+      "sku": "IB9562-103",
+      "date": "2026-05-08",
+      "price": 210,
+      "brand": "Nike",
+      "color": "Pale Ivory/University Red-Midnight Navy-Metallic Gold",
+      "collab": false
+    },
+    {
+      "name": "Nike GT Cut 4 \"WNBA 30th Anniversary\"",
+      "sku": "II7530-400",
+      "date": "2026-05-08",
+      "price": 210,
+      "brand": "Nike",
+      "color": "Light Photo Blue/Ember Glow-Multi-Color-Sail",
+      "collab": false
+    },
+    {
+      "name": "Nike Air Foamposite Pro \"Voltage\"",
+      "sku": "HF0794-002",
+      "date": "2026-05-08",
+      "price": 240,
+      "brand": "Nike",
+      "color": "Black/Voltage Yellow",
+      "collab": false
+    },
+    {
+      "name": "Bluetile x Nike SB Dunk Low",
+      "sku": "IQ1323-001",
+      "date": "2026-05-12",
+      "price": 135,
+      "brand": "Nike",
+      "color": "Black/White-Campfire Orange-Marina",
+      "collab": true
+    },
+    {
+      "name": "Converse SHAI 001 Premium \"Ink\"",
+      "sku": "A23978C",
+      "date": "2026-05-14",
+      "price": 150,
+      "brand": "Other",
+      "color": "Ink",
+      "collab": false
+    },
+    {
+      "name": "PUMA MB.05 Lo \"Flourish\"",
+      "sku": "312753-01",
+      "date": "2026-05-15",
+      "price": 120,
+      "brand": "Puma",
+      "color": "Fluro Green Pes/Fluro Yellow Pes",
+      "collab": false
+    },
+    {
+      "name": "Nike Air Max 1 \"San Diego Padres\"",
+      "sku": "IQ2847-400",
+      "date": "2026-05-15",
+      "price": 150,
+      "brand": "Nike",
+      "color": "Dark Obsidian/Coconut Milk-Fireberry-Magma Orange",
+      "collab": false
+    },
+    {
+      "name": "Nike Air Griffey Max 1 \"Freshwater\"",
+      "sku": "DD8558-100",
+      "date": "2026-05-15",
+      "price": 170,
+      "brand": "Nike",
+      "color": "White/Black-Fresh Water-Varsity Red",
+      "collab": false
+    },
+    {
+      "name": "adidas Harden Vol. 10 \"Hi-Res Yellow\"",
+      "sku": "JR1602",
+      "date": "2026-05-16",
+      "price": 160,
+      "brand": "Adidas",
+      "color": "Hi-Res Yellow/Core Black-Lucid Orange",
+      "collab": false
+    },
+    {
+      "name": "Nike Zoom Hyperflight \"DMV\"",
+      "sku": "IX0704-600",
+      "date": "2026-05-22",
+      "price": 170,
+      "brand": "Nike",
+      "color": "Hyper Pink/Black-Metallic Silver",
+      "collab": false
+    },
+    {
+      "name": "Nike LeBron 23 \"Dreams And Nightmares\"",
+      "sku": "IF0695-001",
+      "date": "2026-05-26",
+      "price": 235,
+      "brand": "Nike",
+      "color": "Metallic Silver/Dusty Cactus-Black-Multi-Color",
+      "collab": false
+    },
+    {
+      "name": "Nike KD 19 \"Bright Ceramic\"",
+      "sku": "IH1117-800",
+      "date": "2026-05-29",
+      "price": 155,
+      "brand": "Nike",
+      "color": "Bright Ceramic/University Gold-Stadium Green",
+      "collab": false
     },
     {
       "name": "UNDEFEATED x Converse Chuck 70 \"Los Angeles Dodgers\"",
@@ -394,7 +403,7 @@
       "name": "Kids Air Jordan 4 \"Black/Infrared 23\"",
       "sku": "II1271-001",
       "date": "2026-05-01",
-      "price": 120,
+      "price": 0,
       "brand": "Jordan",
       "color": "Black/Bright Mango/Barely Volt/Infrared 23",
       "collab": false
